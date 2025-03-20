@@ -10,7 +10,7 @@ import wandb
 
 class DecimaModel(BaseModel):
 
-    def __init__(self, n_tasks: int, replicate: int = 0, mask=True):
+    def __init__(self, n_tasks: int, replicate: int = 0, mask=True, init_borzoi=True):
         self.mask = mask
         model = BorzoiModel(
             crop_len=5120,
@@ -31,13 +31,14 @@ class DecimaModel(BaseModel):
             final_pool_func=None,
         )
 
-        # Load state dict
-        api = wandb.Api(overrides={'base_url':"https://genentech.wandb.io"})
-        art = api.artifact(f'grelu/borzoi/human_state_dict_fold{replicate}:latest')
-        with TemporaryDirectory() as d:
-            art.download(d)
-            state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
-        model.load_state_dict(state_dict)
+        if init_borzoi:
+            # Load state dict
+            api = wandb.Api(overrides={'base_url':"https://genentech.wandb.io"})
+            art = api.artifact(f'grelu/borzoi/human_state_dict_fold{replicate}:latest')
+            with TemporaryDirectory() as d:
+                art.download(d)
+                state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
+            model.load_state_dict(state_dict)
 
         # Change head
         head = ConvHead(n_tasks=n_tasks, in_channels=1920, pool_func="avg")
