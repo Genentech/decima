@@ -2,6 +2,8 @@
 The LightningModel class.
 """
 
+import os
+import sys
 import warnings
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
@@ -11,25 +13,23 @@ import pandas as pd
 import pytorch_lightning as pl
 import torch
 from einops import rearrange
+from grelu.lightning.metrics import MSE, PearsonCorrCoef
+from grelu.sequence.format import strings_to_one_hot
+from grelu.utils import get_aggfunc, get_compare_func, make_list
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torchmetrics import MetricCollection
 
-from grelu.lightning.metrics import MSE, PearsonCorrCoef
-from grelu.sequence.format import strings_to_one_hot
-from grelu.utils import get_aggfunc, get_compare_func, make_list
-
-import os, sys
+# print(os.path.dirname(__file__))
 sys.path.append(os.path.dirname(__file__))
-sys.path.insert(0, '/code/decima/src/decima')
+# sys.path.insert(0, '/code/decima/src/decima')
 
 from decima_model import DecimaModel
 from loss import TaskWisePoissonMultinomialLoss
-from read_hdf5 import VariantDataset
 from metrics import DiseaseLfcMSE
-
+from read_hdf5 import VariantDataset
 
 default_train_params = {
     "lr": 4e-5,
@@ -39,9 +39,9 @@ default_train_params = {
     "logger": "csv",
     "save_dir": ".",
     "max_epochs": 1,
-    "accumulate_grad_batches":1,
+    "accumulate_grad_batches": 1,
     "total_weight": 1e-4,
-    "disease_weight":1e-2,
+    "disease_weight": 1e-2,
 }
 
 
@@ -79,9 +79,8 @@ class LightningModel(pl.LightningModule):
 
         # Set up loss function
         self.loss = TaskWisePoissonMultinomialLoss(
-                total_weight=self.train_params["total_weight"],
-                debug=True
-                )
+            total_weight=self.train_params["total_weight"], debug=True
+        )
         self.val_losses = []
         self.test_losses = []
 
@@ -97,7 +96,7 @@ class LightningModel(pl.LightningModule):
                 ),
                 "disease_lfc_mse": DiseaseLfcMSE(
                     pairs=self.train_params["pairs"], average=False
-                )
+                ),
             }
         )
         self.val_metrics = metrics.clone(prefix="val_")
@@ -105,7 +104,6 @@ class LightningModel(pl.LightningModule):
 
         # Initialize prediction transform
         self.reset_transform()
-        
 
     def format_input(self, x: Union[Tuple[Tensor, Tensor], Tensor]) -> Tensor:
         """
@@ -149,7 +147,9 @@ class LightningModel(pl.LightningModule):
         x, y = batch
         logits = self.forward(x, logits=True)
         loss = self.loss(logits, y)
-        self.log("train_loss", loss, logger=True, on_step=True, on_epoch=True, prog_bar=True)
+        self.log(
+            "train_loss", loss, logger=True, on_step=True, on_epoch=True, prog_bar=True
+        )
         return loss
 
     def validation_step(self, batch: Tensor, batch_idx: int) -> Tensor:
@@ -316,14 +316,14 @@ class LightningModel(pl.LightningModule):
             PyTorch Lightning Trainer
         """
         torch.set_float32_matmul_precision("medium")
-        
+
         # Set up logging
         logger = self.parse_logger()
 
         # Set up trainer
         trainer = pl.Trainer(
             max_epochs=self.train_params["max_epochs"],
-            accelerator='gpu',
+            accelerator="gpu",
             devices=make_list(self.train_params["devices"]),
             logger=logger,
             callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
@@ -422,8 +422,8 @@ class LightningModel(pl.LightningModule):
         # Convert predictions to numpy array
         preds = preds.detach().cpu().numpy()
 
-        if dataset.n_alleles==2:
-            preds = preds[:, :, 1, :] - preds[:, :, 0, :] # BNT
+        if dataset.n_alleles == 2:
+            preds = preds[:, :, 1, :] - preds[:, :, 0, :]  # BNT
         else:
             preds = preds.squeeze(2)  # B N T
 

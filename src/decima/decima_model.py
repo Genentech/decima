@@ -1,11 +1,12 @@
-import torch
-from torch import nn
-from grelu.model.models import BorzoiModel, BaseModel
-from grelu.model.heads import ConvHead
-from grelu.resources import get_artifact
-from tempfile import TemporaryDirectory
 from pathlib import Path
+from tempfile import TemporaryDirectory
+
+import torch
 import wandb
+from grelu.model.heads import ConvHead
+from grelu.model.models import BaseModel, BorzoiModel
+from grelu.resources import get_artifact
+from torch import nn
 
 
 class DecimaModel(BaseModel):
@@ -33,8 +34,9 @@ class DecimaModel(BaseModel):
 
         if init_borzoi:
             # Load state dict
-            api = wandb.Api(overrides={'base_url':"https://genentech.wandb.io"})
-            art = api.artifact(f'grelu/borzoi/human_state_dict_fold{replicate}:latest')
+            wandb.login(host="https://api.wandb.ai/", anonymous="must")
+            api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
+            art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
             with TemporaryDirectory() as d:
                 art.download(d)
                 state_dict = torch.load(Path(d) / f"fold{replicate}.h5")

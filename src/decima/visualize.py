@@ -1,8 +1,10 @@
+import os
+import sys
+
 import numpy as np
 import pandas as pd
 import plotnine as p9
 
-import os, sys
 src_dir = os.path.dirname(__file__)
 sys.path.append(src_dir)
 
@@ -13,8 +15,8 @@ from scipy.ndimage import gaussian_filter1d
 
 def plot_logo(motif, rc=False, figsize=(2, 1)):
     m = np.array(motif.frequencies).T
-    ic = 2+(m*np.log2(m)).sum(0)
-    m = m*np.expand_dims(ic, 0)
+    ic = 2 + (m * np.log2(m)).sum(0)
+    m = m * np.expand_dims(ic, 0)
     if rc:
         m = np.flip(m, (0, 1))
     return plot_attributions(m, figsize=figsize)
@@ -51,7 +53,7 @@ def plot_gene_scatter(
         + p9.ggtitle(gene)
         + p9.xlab("True expression")
         + p9.ylab("Predicted expression")
-        + p9.theme(plot_title = p9.element_text(face = "italic"))
+        + p9.theme(plot_title=p9.element_text(face="italic"))
     )
 
     # Compute correlation
@@ -71,7 +73,7 @@ def plot_gene_scatter(
 def plot_track_scatter(
     ad,
     track,
-    off_track = None,
+    off_track=None,
     show_corr=True,
     show_abline=False,
     size=0.1,
@@ -92,8 +94,7 @@ def plot_track_scatter(
     if off_track is not None:
         df["true"] = df["true"] - ad[off_track, :].X.squeeze()
         df["pred"] = df["pred"] - ad[off_track, :].layers["preds"].squeeze()
-        
-    
+
     # Make plot
     g = (
         p9.ggplot(df, p9.aes(x="true", y="pred"))
@@ -106,7 +107,7 @@ def plot_track_scatter(
         g = g + p9.xlab("True expression") + p9.ylab("Predicted expression")
     else:
         g = g + p9.xlab("True log FC") + p9.ylab("Predicted log FC")
-    
+
     # Compute correlation
     if show_corr:
         corr = np.round(df.corr().iloc[0, 1], 2)
@@ -121,7 +122,17 @@ def plot_track_scatter(
     return g
 
 
-def plot_marker_box(gene, ad, marker_features, label_name='label', split_col=None, split_values=None, order=None, include_preds=True, fill=True):   
+def plot_marker_box(
+    gene,
+    ad,
+    marker_features,
+    label_name="label",
+    split_col=None,
+    split_values=None,
+    order=None,
+    include_preds=True,
+    fill=True,
+):
 
     # Get criteria to filter
     if isinstance(marker_features, list):
@@ -129,16 +140,19 @@ def plot_marker_box(gene, ad, marker_features, label_name='label', split_col=Non
     filter_df = pd.DataFrame(marker_features)
 
     # Collect observations for this gene
-    to_plot = pd.DataFrame({
-        "True": ad[:, gene].X.squeeze(),
-        "Predicted": ad[:, gene].layers["preds"].squeeze(), 
-        label_name: "Other",
-    }, index=ad.obs.index)
+    to_plot = pd.DataFrame(
+        {
+            "True": ad[:, gene].X.squeeze(),
+            "Predicted": ad[:, gene].layers["preds"].squeeze(),
+            label_name: "Other",
+        },
+        index=ad.obs.index,
+    )
 
     # Get matching observations
-    labels = filter_df.apply(lambda row: '_'.join(row.dropna()), axis=1).tolist()
-    for i in range(len(filter_df)):    
-        match = match_criteria(df=ad.obs, filter_df = filter_df.iloc[[i]].copy())
+    labels = filter_df.apply(lambda row: "_".join(row.dropna()), axis=1).tolist()
+    for i in range(len(filter_df)):
+        match = match_criteria(df=ad.obs, filter_df=filter_df.iloc[[i]].copy())
         to_plot.loc[match, label_name] = labels[i]
 
     # Choose background organs
@@ -146,47 +160,82 @@ def plot_marker_box(gene, ad, marker_features, label_name='label', split_col=Non
         to_plot[split_col] = ad.obs[split_col].tolist()
         split_values = split_values or to_plot[split_col].unique()
         for spl in split_values:
-            to_plot.loc[(to_plot[split_col]==spl) & (to_plot[label_name]=="Other"), label_name] = f'Other {spl}'
+            to_plot.loc[
+                (to_plot[split_col] == spl) & (to_plot[label_name] == "Other"),
+                label_name,
+            ] = f"Other {spl}"
         to_plot = to_plot.iloc[:, :3]
 
     if include_preds:
-        
+
         # Reorder the factor levels based on the median value
         to_plot = to_plot.melt(id_vars=label_name)
         if order is None:
-            order = to_plot.groupby(label_name)['value'].median().sort_values(ascending=False).index.tolist()
-        to_plot[label_name] = pd.Categorical(to_plot[label_name], categories = order)
-    
+            order = (
+                to_plot.groupby(label_name)["value"]
+                .median()
+                .sort_values(ascending=False)
+                .index.tolist()
+            )
+        to_plot[label_name] = pd.Categorical(to_plot[label_name], categories=order)
+
         # Plot
-        to_plot.variable = pd.Categorical(to_plot.variable, categories=['True', 'Predicted'])
+        to_plot.variable = pd.Categorical(
+            to_plot.variable, categories=["True", "Predicted"]
+        )
         g = (
-            p9.ggplot(to_plot, p9.aes(x="variable", y="value", fill=label_name)) 
-            + p9.geom_boxplot(outlier_size=0.1) + p9.theme_classic() 
+            p9.ggplot(to_plot, p9.aes(x="variable", y="value", fill=label_name))
+            + p9.geom_boxplot(outlier_size=0.1)
+            + p9.theme_classic()
             + p9.theme(figure_size=(3, 2.5))
-            + p9.ggtitle(gene) + p9.ylab("Expression")
-            + p9.theme(plot_title = p9.element_text(face = "italic"))
-            + p9.theme(axis_title_x = p9.element_blank())
+            + p9.ggtitle(gene)
+            + p9.ylab("Expression")
+            + p9.theme(plot_title=p9.element_text(face="italic"))
+            + p9.theme(axis_title_x=p9.element_blank())
         )
 
     else:
         # Reorder the factor levels based on the median value
         if order is None:
-            order = to_plot.groupby(label_name)['True'].median().sort_values(ascending=False).index.tolist()
-        to_plot[label_name] = pd.Categorical(to_plot[label_name], categories = order)
-    
+            order = (
+                to_plot.groupby(label_name)["True"]
+                .median()
+                .sort_values(ascending=False)
+                .index.tolist()
+            )
+        to_plot[label_name] = pd.Categorical(to_plot[label_name], categories=order)
+
         # Plot
         if fill:
             g = p9.ggplot(to_plot, p9.aes(x=label_name, y="True", fill=label_name))
         else:
-            g = p9.ggplot(to_plot, p9.aes(x=label_name, y="True")) 
+            g = p9.ggplot(to_plot, p9.aes(x=label_name, y="True"))
         g = (
             g
-            + p9.geom_boxplot(outlier_size=0.1) + p9.theme_classic() 
+            + p9.geom_boxplot(outlier_size=0.1)
+            + p9.theme_classic()
             + p9.theme(figure_size=(3, 2.5))
             + p9.ylab("Measured Expression")
             + p9.ggtitle(gene)
-            + p9.theme(plot_title = p9.element_text(face = "italic"))
-            + p9.theme(axis_title_x = p9.element_blank())
+            + p9.theme(plot_title=p9.element_text(face="italic"))
+            + p9.theme(axis_title_x=p9.element_blank())
             + p9.theme(axis_text_x=p9.element_text(rotation=60, hjust=1))
         )
+    return g
+
+
+def plot_attribution_peaks(attr, tss_pos):
+    to_plot = pd.DataFrame(
+        {
+            "distance from TSS": [x - tss_pos for x in range(attr.shape[1])],
+            "attribution": attr.mean(0),
+        }
+    )
+    g = (
+        p9.ggplot(to_plot, p9.aes(x="distance from TSS", y="attribution"))
+        + p9.geom_line()
+        + p9.theme_classic()
+        + p9.theme(figure_size=(6, 2))
+    )
+
     return g

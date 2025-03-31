@@ -41,7 +41,5 @@ class TaskWisePoissonMultinomialLoss(nn.Module):
         # Combine
         loss = multinomial_term + poisson_term
         if self.debug:
-            print(
-                f"Multinomial: {multinomial_term}, Poisson: {poisson_term}"
-            )
+            print(f"Multinomial: {multinomial_term}, Poisson: {poisson_term}")
         return loss

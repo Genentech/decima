@@ -15,8 +15,8 @@ def write_hdf5(file, ad, pad=0):
         print("Writing metadata")
         f.create_dataset("pad", shape=(), data=pad)
         f.create_dataset("seq_len", shape=(), data=seq_len)
-        padded_seq_len = seq_len + 2*pad
-        f.create_dataset("padded_seq_len", shape=(), data = padded_seq_len)
+        padded_seq_len = seq_len + 2 * pad
+        f.create_dataset("padded_seq_len", shape=(), data=padded_seq_len)
 
         # Tasks
         print("Writing tasks")
@@ -24,7 +24,7 @@ def write_hdf5(file, ad, pad=0):
         f.create_dataset("tasks", shape=tasks.shape, data=tasks)
 
         # Genes
-        arr = np.array(ad.var[['dataset']].reset_index())
+        arr = np.array(ad.var[["dataset"]].reset_index())
         print(f"Writing genes array of shape: {arr.shape}")
         f.create_dataset("genes", shape=arr.shape, data=arr)
 
