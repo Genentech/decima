@@ -5,12 +5,10 @@ import torch
 import wandb
 from grelu.model.heads import ConvHead
 from grelu.model.models import BaseModel, BorzoiModel
-from grelu.resources import get_artifact
 from torch import nn
 
 
 class DecimaModel(BaseModel):
-
     def __init__(self, n_tasks: int, replicate: int = 0, mask=True, init_borzoi=True):
         self.mask = mask
         model = BorzoiModel(
@@ -50,10 +48,6 @@ class DecimaModel(BaseModel):
         # Add a channel for the gene mask
         if self.mask:
             weight = self.embedding.conv_tower.blocks[0].conv.weight
-            new_layer = nn.Conv1d(
-                5, 512, kernel_size=(15,), stride=(1,), padding="same"
-            )
-            new_weight = nn.Parameter(
-                torch.cat([weight, new_layer.weight[:, [-1], :]], axis=1)
-            )
+            new_layer = nn.Conv1d(5, 512, kernel_size=(15,), stride=(1,), padding="same")
+            new_weight = nn.Parameter(torch.cat([weight, new_layer.weight[:, [-1], :]], axis=1))
             self.embedding.conv_tower.blocks[0].conv.weight = new_weight

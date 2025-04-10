@@ -18,7 +18,6 @@ def match_criteria(df, filter_df):
 
 
 def marker_zscores(ad, key="cell_type", layer=None):
-
     E = ad.X if layer is None else ad.layers[layer]
     z = zscore(E, axis=0)
 
@@ -34,16 +33,13 @@ def marker_zscores(ad, key="cell_type", layer=None):
 def compare_marker_zscores(ad, key="cell_type"):
     marker_df_obs = marker_zscores(ad, key)
     marker_df_pred = marker_zscores(ad, key, layer="preds")
-    marker_df = marker_df_pred.merge(
-        marker_df_obs, on=["gene", key], suffixes=("_pred", "_obs")
-    )
+    marker_df = marker_df_pred.merge(marker_df_obs, on=["gene", key], suffixes=("_pred", "_obs"))
     return marker_df
 
 
 def compute_marker_metrics(marker_df, key="cell_type", tp_cutoff=1):
     df_list = []
     for k in set(marker_df[key]):
-
         # get celltype data
         curr_marker_df = marker_df[marker_df[key] == k].copy()
 

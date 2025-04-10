@@ -2,13 +2,10 @@ from grelu.sequence.utils import get_unique_length, reverse_complement
 
 
 def process_variants(variants, ad, min_from_end=0):
-
     # Match to gene intervals
     orig_len = len(variants)
     variants = variants[variants.gene.isin(ad.var_names)]
-    print(
-        f"dropped {orig_len - len(variants)} variants because the gene was not found in ad.var"
-    )
+    print(f"dropped {orig_len - len(variants)} variants because the gene was not found in ad.var")
     variants = variants.merge(
         ad.var[["start", "end", "strand", "gene_mask_start"]],
         left_on="gene",
@@ -25,13 +22,8 @@ def process_variants(variants, ad, min_from_end=0):
     # Filter by relative position
     orig_len = len(variants)
     interval_len = get_unique_length(ad.var)
-    variants = variants[
-        (variants.rel_pos > min_from_end)
-        & (variants.rel_pos < interval_len - min_from_end)
-    ]
-    print(
-        f"dropped {orig_len - len(variants)} variants because the variant did not fit in the interval"
-    )
+    variants = variants[(variants.rel_pos > min_from_end) & (variants.rel_pos < interval_len - min_from_end)]
+    print(f"dropped {orig_len - len(variants)} variants because the variant did not fit in the interval")
 
     # Reverse complement the alleles for - strand genes
     variants["ref_tx"] = variants.apply(

@@ -7,15 +7,13 @@ import pandas as pd
 import torch
 from grelu.io.genome import read_sizes
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
-from grelu.sequence.utils import get_unique_length, resize
+from grelu.sequence.utils import get_unique_length
 from tqdm import tqdm
 
 
 def merge_transcripts(gtf):
     # Get gene-level columns
-    genes = gtf[
-        ["chrom", "start", "end", "strand", "gene_id", "gene_type", "gene_name"]
-    ].copy()
+    genes = gtf[["chrom", "start", "end", "strand", "gene_id", "gene_type", "gene_name"]].copy()
 
     # Aggregate all features from the same gene
     genes = genes.groupby("gene_name").agg(lambda x: list(set(x)))
@@ -31,10 +29,7 @@ def merge_transcripts(gtf):
     return genes
 
 
-def var_to_intervals(
-    ad, chr_end_pad=10000, genome="hg38", seq_len=524288, crop_coords=163840
-):
-
+def var_to_intervals(ad, chr_end_pad=10000, genome="hg38", seq_len=524288, crop_coords=163840):
     sizes = read_sizes(genome)
 
     # Calculate interval size
@@ -43,28 +38,18 @@ def var_to_intervals(
     )
 
     # Create intervals around + strand genes
-    ad.var.loc[ad.var.strand == "+", "start"] = (
-        ad.var.loc[ad.var.strand == "+", "gene_start"] - crop_coords
-    )
-    ad.var.loc[ad.var.strand == "+", "end"] = (
-        ad.var.loc[ad.var.strand == "+", "start"] + seq_len
-    )
+    ad.var.loc[ad.var.strand == "+", "start"] = ad.var.loc[ad.var.strand == "+", "gene_start"] - crop_coords
+    ad.var.loc[ad.var.strand == "+", "end"] = ad.var.loc[ad.var.strand == "+", "start"] + seq_len
 
     # Create interval around - strand genes
-    ad.var.loc[ad.var.strand == "-", "end"] = (
-        ad.var.loc[ad.var.strand == "-", "gene_end"] + crop_coords
-    )
-    ad.var.loc[ad.var.strand == "-", "start"] = (
-        ad.var.loc[ad.var.strand == "-", "end"] - seq_len
-    )
+    ad.var.loc[ad.var.strand == "-", "end"] = ad.var.loc[ad.var.strand == "-", "gene_end"] + crop_coords
+    ad.var.loc[ad.var.strand == "-", "start"] = ad.var.loc[ad.var.strand == "-", "end"] - seq_len
 
     # shift sequences with start < 0
     crossing_start = ad.var.start < chr_end_pad
     ad.var.loc[crossing_start, "start"] = chr_end_pad
     ad.var.loc[crossing_start, "end"] = ad.var.loc[crossing_start, "start"] + seq_len
-    print(
-        f"{np.sum(crossing_start)} intervals extended beyond the chromosome start and have been shifted"
-    )
+    print(f"{np.sum(crossing_start)} intervals extended beyond the chromosome start and have been shifted")
 
     # shift sequences with end > chromosome size
     crossing_end = 0
@@ -74,34 +59,26 @@ def var_to_intervals(
         crossing_end += drop.sum()
         ad.var.loc[drop, "end"] = max_end
         ad.var.loc[drop, "start"] = ad.var.loc[drop, "end"] - seq_len
-    print(
-        f"{crossing_end} intervals extended beyond the chromosome end and have been shifted"
-    )
+    print(f"{crossing_end} intervals extended beyond the chromosome end and have been shifted")
 
     # gene start position on output sequence
     ad.var.loc[ad.var.strand == "+", "gene_mask_start"] = (
-        ad.var.loc[ad.var.strand == "+", "gene_start"]
-        - ad.var.loc[ad.var.strand == "+", "start"]
+        ad.var.loc[ad.var.strand == "+", "gene_start"] - ad.var.loc[ad.var.strand == "+", "start"]
     )
     ad.var.loc[ad.var.strand == "-", "gene_mask_start"] = (
-        ad.var.loc[ad.var.strand == "-", "end"]
-        - ad.var.loc[ad.var.strand == "-", "gene_end"]
+        ad.var.loc[ad.var.strand == "-", "end"] - ad.var.loc[ad.var.strand == "-", "gene_end"]
     )
     ad.var.gene_mask_start = ad.var.gene_mask_start.astype(int)
     ad.var.gene_length = ad.var.gene_length.astype(int)
 
     # Get gene end position on sequence
-    ad.var["gene_mask_end"] = (ad.var.gene_mask_start + ad.var.gene_length).apply(
-        lambda x: min(seq_len, x)
-    )
+    ad.var["gene_mask_end"] = (ad.var.gene_mask_start + ad.var.gene_length).apply(lambda x: min(seq_len, x))
     ad.var.gene_mask_end = ad.var.gene_mask_end.astype(int)
 
     # Drop intervals with less than crop_coords upstream bases
     drop = ad.var.gene_mask_start < crop_coords
     ad = ad[:, ~drop]
-    print(
-        f"{np.sum(drop)} intervals did not extend far enough upstream of the TSS and have been dropped"
-    )
+    print(f"{np.sum(drop)} intervals did not extend far enough upstream of the TSS and have been dropped")
 
     # Check length
     assert get_unique_length(ad.var) == seq_len
@@ -109,7 +86,6 @@ def var_to_intervals(
 
 
 def assign_borzoi_folds(ad, splits):
-
     # Extract gene intervals
     genes = ad.var.reset_index().rename(columns={"index": "gene_name"})
 
@@ -207,9 +183,7 @@ def match_cellranger_2024(ad, genes24):
             gene_id = genes24.gene_id[genes24.index == gene].values[0]
             if gene_id not in ad.var.gene_id.tolist():
                 for col in ad.var.columns:
-                    ad.var.loc[gene, col] = genes24.loc[
-                        genes24.index == gene, col
-                    ].values[0]
+                    ad.var.loc[gene, col] = genes24.loc[genes24.index == gene, col].values[0]
                 matched += 1
 
     print(f"{matched} genes matched.")
@@ -225,9 +199,7 @@ def match_ref_ad(ad, ref_ad):
             gene_id = ref_ad.var.gene_id[ref_ad.var.index == gene].values[0]
             if gene_id not in ad.var.gene_id.tolist():
                 for col in ad.var.columns:
-                    ad.var.loc[gene, col] = ref_ad.var.loc[
-                        ref_ad.var.index == gene, col
-                    ].values[0]
+                    ad.var.loc[gene, col] = ref_ad.var.loc[ref_ad.var.index == gene, col].values[0]
                 matched += 1
 
     print(f"{matched} genes matched.")
@@ -265,19 +237,10 @@ def load_ncbi_string(string):
                 for annot in r["annotations"]:
                     if "assembly_name" in annot:
                         if annot["assembly_name"] == "GRCh38.p14":
-                            curr_dict["start"] = annot["genomic_locations"][0][
-                                "genomic_range"
-                            ]["begin"]
-                            curr_dict["end"] = annot["genomic_locations"][0][
-                                "genomic_range"
-                            ]["end"]
+                            curr_dict["start"] = annot["genomic_locations"][0]["genomic_range"]["begin"]
+                            curr_dict["end"] = annot["genomic_locations"][0]["genomic_range"]["end"]
                             curr_dict["strand"] = (
-                                "-"
-                                if annot["genomic_locations"][0]["genomic_range"][
-                                    "orientation"
-                                ]
-                                == "minus"
-                                else "+"
+                                "-" if annot["genomic_locations"][0]["genomic_range"]["orientation"] == "minus" else "+"
                             )
 
                 out.append(curr_dict)
@@ -285,11 +248,7 @@ def load_ncbi_string(string):
                 print(i)
 
         out = pd.DataFrame(out)
-        out = out[
-            out.gene_name.isin(
-                out.gene_name.value_counts()[out.gene_name.value_counts() == 1].index
-            )
-        ]
+        out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts() == 1].index)]
         return out
 
 
@@ -307,7 +266,6 @@ def match_ncbi(ad, ncbi):
 
 
 def make_inputs(gene, ad):
-
     assert gene in ad.var_names, f"{gene} is not in the anndata object"
     row = ad.var.loc[gene]
 

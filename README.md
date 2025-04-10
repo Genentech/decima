@@ -1,12 +1,22 @@
+[![PyPI-Server](https://img.shields.io/pypi/v/decima.svg)](https://pypi.org/project/decima/)
+![Unit tests](https://github.com/genentech/decima/actions/workflows/run-tests.yml/badge.svg)
+
 # Decima
 
 ## Introduction
 Decima is a Python library to train sequence models on single-cell RNA-seq data.
 
-![Figure](fig1.png)
+![Figure](assets/fig1.png)
 
 ## Weights
 Weights of the trained Decima models (4 replicates) are now available at https://zenodo.org/records/15092691. See the tutorial for how to load and use these.
 
 ## Preprint
 Please cite https://www.biorxiv.org/content/10.1101/2024.10.09.617507v3. Also see https://github.com/Genentech/decima-applications for all the code used to train and apply models in this preprint.
+
+<!-- biocsetup-notes -->
+
+## Note
+
+This project has been set up using [BiocSetup](https://github.com/biocpy/biocsetup)
+and [PyScaffold](https://pyscaffold.org/).

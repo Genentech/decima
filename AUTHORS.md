@@ -1,6 +1,4 @@
-============
-Contributors
-============
+# Contributors
 
 * Avantia Lal <lal.avantika@gene.com>
 * Alexander Karollus <alexander.karollus@tum.de>

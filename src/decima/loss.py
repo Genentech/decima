@@ -4,7 +4,6 @@ from torch import Tensor, nn
 
 
 class TaskWisePoissonMultinomialLoss(nn.Module):
-
     def __init__(
         self,
         total_weight: float = 1,
@@ -17,7 +16,6 @@ class TaskWisePoissonMultinomialLoss(nn.Module):
         self.debug = debug
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
-
         input = torch.exp(input).squeeze(-1)  # B, T
         target = target.squeeze(-1)  # B, T
 
@@ -25,9 +23,7 @@ class TaskWisePoissonMultinomialLoss(nn.Module):
         total_input = input.sum(axis=-1)  # B,
 
         # total count poisson loss, mean across targets
-        poisson_term = F.poisson_nll_loss(
-            total_input, total_target, log_input=False, reduction="mean"
-        )  # B
+        poisson_term = F.poisson_nll_loss(total_input, total_target, log_input=False, reduction="mean")  # B
         poisson_term = self.total_weight * poisson_term  # B,
 
         # Get multinomial probabilities

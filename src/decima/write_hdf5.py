@@ -5,12 +5,10 @@ from grelu.sequence.utils import get_unique_length
 
 
 def write_hdf5(file, ad, pad=0):
-
     # Calculate seq_len
     seq_len = get_unique_length(ad.var)
 
     with h5py.File(file, "w") as f:
-
         # Metadata
         print("Writing metadata")
         f.create_dataset("pad", shape=(), data=pad)
