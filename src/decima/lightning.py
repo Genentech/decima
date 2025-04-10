@@ -2,34 +2,23 @@
 The LightningModel class.
 """
 
-import os
-import sys
-import warnings
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
 import numpy as np
-import pandas as pd
 import pytorch_lightning as pl
 import torch
+from decima_model import DecimaModel
 from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
-from grelu.sequence.format import strings_to_one_hot
-from grelu.utils import get_aggfunc, get_compare_func, make_list
+from grelu.utils import make_list
+from loss import TaskWisePoissonMultinomialLoss
+from metrics import DiseaseLfcMSE
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torchmetrics import MetricCollection
-
-# print(os.path.dirname(__file__))
-sys.path.append(os.path.dirname(__file__))
-# sys.path.insert(0, '/code/decima/src/decima')
-
-from decima_model import DecimaModel
-from loss import TaskWisePoissonMultinomialLoss
-from metrics import DiseaseLfcMSE
-from read_hdf5 import VariantDataset
 
 default_train_params = {
     "lr": 4e-5,
@@ -57,9 +46,7 @@ class LightningModel(pl.LightningModule):
             training.
     """
 
-    def __init__(
-        self, model_params: dict, train_params: dict = {}, data_params: dict = {}
-    ) -> None:
+    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}) -> None:
         super().__init__()
 
         self.save_hyperparameters(ignore=["model"])
@@ -78,9 +65,7 @@ class LightningModel(pl.LightningModule):
         self.model = DecimaModel(**{k: v for k, v in self.model_params.items()})
 
         # Set up loss function
-        self.loss = TaskWisePoissonMultinomialLoss(
-            total_weight=self.train_params["total_weight"], debug=True
-        )
+        self.loss = TaskWisePoissonMultinomialLoss(total_weight=self.train_params["total_weight"], debug=True)
         self.val_losses = []
         self.test_losses = []
 
@@ -91,12 +76,8 @@ class LightningModel(pl.LightningModule):
         metrics = MetricCollection(
             {
                 "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
-                "pearson": PearsonCorrCoef(
-                    num_outputs=self.model.head.n_tasks, average=False
-                ),
-                "disease_lfc_mse": DiseaseLfcMSE(
-                    pairs=self.train_params["pairs"], average=False
-                ),
+                "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+                "disease_lfc_mse": DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False),
             }
         )
         self.val_metrics = metrics.clone(prefix="val_")
@@ -147,9 +128,7 @@ class LightningModel(pl.LightningModule):
         x, y = batch
         logits = self.forward(x, logits=True)
         loss = self.loss(logits, y)
-        self.log(
-            "train_loss", loss, logger=True, on_step=True, on_epoch=True, prog_bar=True
-        )
+        self.log("train_loss", loss, logger=True, on_step=True, on_epoch=True, prog_bar=True)
         return loss
 
     def validation_step(self, batch: Tensor, batch_idx: int) -> Tensor:
@@ -228,9 +207,7 @@ class LightningModel(pl.LightningModule):
                 save_dir=self.train_params["save_dir"],
             )
         elif self.train_params["logger"] == "csv":
-            logger = CSVLogger(
-                name=self.train_params["name"], save_dir=self.train_params["save_dir"]
-            )
+            logger = CSVLogger(name=self.train_params["name"], save_dir=self.train_params["save_dir"])
         else:
             raise NotImplementedError
         return logger
@@ -342,9 +319,7 @@ class LightningModel(pl.LightningModule):
             self.val_metrics.reset()
 
         # Add data parameters
-        self.data_params["tasks"] = train_dataset.tasks.reset_index(
-            names="name"
-        ).to_dict(orient="list")
+        self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
 
         for attr, value in self._get_dataset_attrs(train_dataset):
             self.data_params["train_" + attr] = value
@@ -463,8 +438,4 @@ class LightningModel(pl.LightningModule):
         else:
             raise TypeError("Input must be a list, string or integer")
         if invert:
-            return [
-                i
-                for i in range(self.model_params["n_tasks"])
-                if i not in make_list(tasks)
-            ]
+            return [i for i in range(self.model_params["n_tasks"]) if i not in make_list(tasks)]

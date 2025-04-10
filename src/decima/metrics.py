@@ -1,11 +1,9 @@
 import torch
 from grelu.lightning.metrics import MSE
-from torch import nn, tensor
 from torchmetrics import Metric
 
 
 class DiseaseLfcMSE(Metric):
-
     def __init__(self, pairs, average: bool = True) -> None:
         super().__init__()
         self.mse = MSE(num_outputs=1, average=False)

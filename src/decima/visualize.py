@@ -9,8 +9,7 @@ src_dir = os.path.dirname(__file__)
 sys.path.append(src_dir)
 
 from evaluate import match_criteria
-from grelu.visualize import plot_attributions, plot_tracks
-from scipy.ndimage import gaussian_filter1d
+from grelu.visualize import plot_attributions
 
 
 def plot_logo(motif, rc=False, figsize=(2, 1)):
@@ -34,7 +33,6 @@ def plot_gene_scatter(
     corrx=None,
     corry=None,
 ):
-
     # Extract data
     df = pd.DataFrame(
         {
@@ -82,7 +80,6 @@ def plot_track_scatter(
     corrx=None,
     corry=None,
 ):
-
     # Extract data
     df = pd.DataFrame(
         {
@@ -133,7 +130,6 @@ def plot_marker_box(
     include_preds=True,
     fill=True,
 ):
-
     # Get criteria to filter
     if isinstance(marker_features, list):
         marker_features = ad.var.loc[gene, marker_features].to_dict()
@@ -167,22 +163,14 @@ def plot_marker_box(
         to_plot = to_plot.iloc[:, :3]
 
     if include_preds:
-
         # Reorder the factor levels based on the median value
         to_plot = to_plot.melt(id_vars=label_name)
         if order is None:
-            order = (
-                to_plot.groupby(label_name)["value"]
-                .median()
-                .sort_values(ascending=False)
-                .index.tolist()
-            )
+            order = to_plot.groupby(label_name)["value"].median().sort_values(ascending=False).index.tolist()
         to_plot[label_name] = pd.Categorical(to_plot[label_name], categories=order)
 
         # Plot
-        to_plot.variable = pd.Categorical(
-            to_plot.variable, categories=["True", "Predicted"]
-        )
+        to_plot.variable = pd.Categorical(to_plot.variable, categories=["True", "Predicted"])
         g = (
             p9.ggplot(to_plot, p9.aes(x="variable", y="value", fill=label_name))
             + p9.geom_boxplot(outlier_size=0.1)
@@ -197,12 +185,7 @@ def plot_marker_box(
     else:
         # Reorder the factor levels based on the median value
         if order is None:
-            order = (
-                to_plot.groupby(label_name)["True"]
-                .median()
-                .sort_values(ascending=False)
-                .index.tolist()
-            )
+            order = to_plot.groupby(label_name)["True"].median().sort_values(ascending=False).index.tolist()
         to_plot[label_name] = pd.Categorical(to_plot[label_name], categories=order)
 
         # Plot

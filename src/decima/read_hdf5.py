@@ -143,7 +143,6 @@ class HDF5Dataset(Dataset):
         return torch.Tensor(self.dataset["labels"][idx])
 
     def __getitem__(self, idx):
-
         # Augment
         seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
 
@@ -200,17 +199,12 @@ class VariantDataset(Dataset):
         # Map each variant to the corresponding gene in the h5 file
         if ad is None:
             assert self.h5_file is not None
-            gene_map = {
-                gene: get_gene_idx(self.h5_file, gene)
-                for gene in self.variants.gene.unique()
-            }
+            gene_map = {gene: get_gene_idx(self.h5_file, gene) for gene in self.variants.gene.unique()}
             self.dataset = h5py.File(self.h5_file, "r")
             self.pad = self.dataset["pad"]
         else:
             gene_map = {gene: i for i, gene in enumerate(self.variants.gene.unique())}
-            seqs, masks = list(
-                zip(*[make_inputs(gene, ad) for gene in gene_map.keys()])
-            )
+            seqs, masks = list(zip(*[make_inputs(gene, ad) for gene in gene_map.keys()]))
             self.dataset = {
                 "sequences": torch.stack(seqs),
                 "masks": torch.vstack(masks),
@@ -235,25 +229,16 @@ class VariantDataset(Dataset):
         return torch.Tensor(seq)
 
     def __getitem__(self, idx):
-
         # Get indices
-        seq_idx, augment_idx, allele_idx = _split_overall_idx(
-            idx, (self.n_seqs, self.n_augmented, self.n_alleles)
-        )
+        seq_idx, augment_idx, allele_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented, self.n_alleles))
 
         # Extract the sequence
         variant = self.variants.iloc[seq_idx]
         seq = self.extract_seq(int(variant.gene_idx))
 
         if self.test_ref:  # check that ref is actually present
-            assert ["A", "C", "G", "T"][
-                seq[:4, variant.rel_pos + self.pad].argmax()
-            ] == variant.ref_tx, (
-                variant.ref_tx
-                + "_vs_"
-                + seq[:4, variant.rel_pos + self.pad]
-                + "__"
-                + str(seq_idx)
+            assert ["A", "C", "G", "T"][seq[:4, variant.rel_pos + self.pad].argmax()] == variant.ref_tx, (
+                variant.ref_tx + "_vs_" + seq[:4, variant.rel_pos + self.pad] + "__" + str(seq_idx)
             )
 
         # Insert the allele

@@ -1,11 +1,10 @@
 import os
 import sys
-from collections import defaultdict
 
 import numpy as np
 import pandas as pd
 import torch
-from captum.attr import InputXGradient, Saliency
+from captum.attr import InputXGradient
 from grelu.interpret.motifs import scan_sequences
 from grelu.sequence.format import convert_input_type
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
@@ -65,16 +64,10 @@ def find_attr_peaks(attr, tss_pos=None, n=5, min_dist=6):
     return peaks.reset_index(drop=True)
 
 
-def scan_attributions(
-    seq, attr, motifs, peaks, names=None, pthresh=1e-3, rc=True, window=18
-):
+def scan_attributions(seq, attr, motifs, peaks, names=None, pthresh=1e-3, rc=True, window=18):
     # Attributions and sequences
-    peak_attrs = np.stack(
-        [attr[:, peak - window // 2 : peak + window // 2] for peak in peaks.peak]
-    )
-    peak_seqs = torch.stack(
-        [seq[:, peak - window // 2 : peak + window // 2] for peak in peaks.peak]
-    )
+    peak_attrs = np.stack([attr[:, peak - window // 2 : peak + window // 2] for peak in peaks.peak])
+    peak_seqs = torch.stack([seq[:, peak - window // 2 : peak + window // 2] for peak in peaks.peak])
 
     # Scan
     results = scan_sequences(
@@ -86,6 +79,4 @@ def scan_attributions(
         attrs=peak_attrs,
     )
     results.sequence = results.sequence.astype(int)
-    return results.merge(
-        peaks.reset_index(drop=True), left_on="sequence", right_index=True
-    )
+    return results.merge(peaks.reset_index(drop=True), left_on="sequence", right_index=True)
