@@ -8,17 +8,18 @@ from typing import Callable, List, Optional, Tuple, Union
 import numpy as np
 import pytorch_lightning as pl
 import torch
-from decima_model import DecimaModel
 from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
 from grelu.utils import make_list
-from loss import TaskWisePoissonMultinomialLoss
-from metrics import DiseaseLfcMSE
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torchmetrics import MetricCollection
+
+from .decima_model import DecimaModel
+from .loss import TaskWisePoissonMultinomialLoss
+from .metrics import DiseaseLfcMSE
 
 default_train_params = {
     "lr": 4e-5,
@@ -357,7 +358,7 @@ class LightningModel(pl.LightningModule):
     def predict_on_dataset(
         self,
         dataset: Callable,
-        devices: int = 0,
+        devices: Optional[int] = None,
         num_workers: int = 1,
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
@@ -368,8 +369,12 @@ class LightningModel(pl.LightningModule):
 
         Args:
             dataset: Dataset object that yields one-hot encoded sequences
-            devices: Device IDs to use
+            
+            devices: Number of devices to use, 
+                e.g. machine has 4 gpu's but only want to use 2 for predictions
+
             num_workers: Number of workers for data loader
+            
             batch_size: Batch size for data loader
 
         Returns:
@@ -381,7 +386,16 @@ class LightningModel(pl.LightningModule):
             num_workers=num_workers,
             batch_size=batch_size,
         )
-        trainer = pl.Trainer(accelerator="gpu", devices=make_list(devices), logger=None)
+        accelerator = "auto"
+        if devices is None:
+            devices = "auto" # use all devices
+            # device = "cuda" if torch.cuda.is_available() else "cpu"
+            accelerator = "gpu" if torch.cuda.is_available() else "auto"
+
+        if accelerator == "auto":
+            trainer = pl.Trainer(accelerator=accelerator, logger=None)
+        else:
+            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=None)
 
         # Predict
         preds = torch.concat(trainer.predict(self, dataloader)).squeeze(-1)

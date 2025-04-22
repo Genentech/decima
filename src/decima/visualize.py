@@ -1,15 +1,9 @@
-import os
-import sys
-
 import numpy as np
 import pandas as pd
 import plotnine as p9
-
-src_dir = os.path.dirname(__file__)
-sys.path.append(src_dir)
-
-from evaluate import match_criteria
 from grelu.visualize import plot_attributions
+
+from .evaluate import match_criteria
 
 
 def plot_logo(motif, rc=False, figsize=(2, 1)):
