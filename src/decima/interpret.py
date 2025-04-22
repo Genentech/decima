@@ -14,7 +14,7 @@ def attributions(
     gene,
     tasks,
     model,
-    device,
+    device=None,
     h5_file=None,
     inputs=None,
     off_tasks=None,
@@ -40,7 +40,10 @@ def attributions(
         model.add_transform(Aggregate(tasks=tasks, task_aggfunc="mean", model=model))
 
     model = model.eval()
-    device = torch.device(device)
+    if device is None:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    else:
+        device = torch.device(device)
 
     attributer = method(model.to(device))
     with torch.no_grad():
