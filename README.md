@@ -14,6 +14,20 @@ Weights of the trained Decima models (4 replicates) are now available at https:/
 ## Preprint
 Please cite https://www.biorxiv.org/content/10.1101/2024.10.09.617507v3. Also see https://github.com/Genentech/decima-applications for all the code used to train and apply models in this preprint.
 
+## Installation
+
+Install the package from PyPI,
+
+```sh
+pip install decima
+```
+
+Or if you want to be on the cutting edge,
+
+```sh
+pip install git+https://github.com/genentech/decima.git@main
+```
+
 <!-- biocsetup-notes -->
 
 ## Note
