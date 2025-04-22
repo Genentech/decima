@@ -1,6 +1,3 @@
-import os
-import sys
-
 import h5py
 import numpy as np
 import pandas as pd
@@ -9,8 +6,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.format import BASE_TO_INDEX_HASH, indices_to_one_hot
 from torch.utils.data import Dataset
 
-sys.path.append(os.path.dirname(__file__))
-from preprocess import make_inputs
+from .preprocess import make_inputs
 
 
 def count_genes(h5_file, key=None):

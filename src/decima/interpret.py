@@ -1,6 +1,3 @@
-import os
-import sys
-
 import numpy as np
 import pandas as pd
 import torch
@@ -10,9 +7,7 @@ from grelu.sequence.format import convert_input_type
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
 from scipy.signal import find_peaks
 
-src_dir = f"{os.path.dirname(__file__)}/../src/decima/"
-sys.path.append(src_dir)
-from read_hdf5 import extract_gene_data
+from .read_hdf5 import extract_gene_data
 
 
 def attributions(

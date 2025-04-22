@@ -8,17 +8,18 @@ from typing import Callable, List, Optional, Tuple, Union
 import numpy as np
 import pytorch_lightning as pl
 import torch
-from decima_model import DecimaModel
 from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
 from grelu.utils import make_list
-from loss import TaskWisePoissonMultinomialLoss
-from metrics import DiseaseLfcMSE
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torchmetrics import MetricCollection
+
+from .decima_model import DecimaModel
+from .loss import TaskWisePoissonMultinomialLoss
+from .metrics import DiseaseLfcMSE
 
 default_train_params = {
     "lr": 4e-5,
