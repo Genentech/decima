@@ -266,3 +266,124 @@ class VariantDataset(Dataset):
         seq = _extract_center(seq, seq_len=self.padded_seq_len)
         seq = self.augmenter(seq=seq, idx=augment_idx)
         return seq
+
+
+from copy import deepcopy
+
+class PatientVariantDataset(Dataset):
+    def __init__(
+        self,
+        gene_variants,
+        key='dataset1',
+        h5_file=None,
+        ad=None,
+        seq_len=524288,
+        max_seq_shift=0,
+    ):
+        super().__init__()
+
+
+        # Save data params
+        self.seq_len = seq_len
+        self.h5_file = h5_file
+
+        self.key = key
+
+        # Process variants and store gene-level genotype info
+        self.gene_variants =  gene_variants
+     
+        self.gene_index = index_genes(self.h5_file, key=self.key)
+
+        self.n_seqs = len(self.gene_index)
+        # Setup base sequences
+        if ad is None:
+            '''assert h5_file is not None
+            self.gene_map = {
+                gene: get_gene_idx(h5_file, gene)
+                for gene in self.gene_variants.keys()
+            }'''
+            self.dataset = h5py.File(h5_file, "r")
+            self.pad = 0
+        else:
+            '''self.gene_map = {gene: i for i, gene in enumerate(self.gene_variants.keys())}
+            seqs, masks = list(
+                zip(*[make_inputs(gene, ad) for gene in self.gene_map.keys()])
+            )
+            self.dataset = {
+                "sequences": torch.stack(seqs),
+                "masks": torch.vstack(masks),
+            }'''
+            self.pad = 0
+
+        # Save augmentation params
+        self.max_seq_shift = max_seq_shift
+        self.augmenter = Augmenter(
+            rc=False,
+            max_seq_shift=self.max_seq_shift,
+            max_pair_shift=0,
+            seq_len=self.seq_len,
+            label_len=None,
+            mode="serial",
+        )
+        self.n_augmented = len(self.augmenter)
+
+        self.genes = list(self.gene_variants.keys())
+
+    def __len__(self):
+        return len(self.genes) * self.n_augmented
+
+    def close(self):
+        self.dataset.close()
+
+    def extract_seq(self, idx):
+        seq = self.dataset["sequences"][idx]
+        if self.h5_file is not None:
+            seq = indices_to_one_hot(seq)  # 4, L
+        mask = self.dataset["masks"][[idx]]  # 1, L
+        seq = np.concatenate([seq, mask])  # 5, L
+        return torch.Tensor(seq)
+    
+    def extract_label(self, idx):
+        return torch.Tensor(self.dataset["labels"][idx])
+
+    def __getitem__(self, idx):
+        # Get gene and augment indices
+        seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
+        
+        gene_idx = self.gene_index[seq_idx]
+
+        gene = self.genes[gene_idx]
+        seq1 = self.extract_seq(gene_idx)
+        variants = self.gene_variants[gene]
+        
+        # Get base sequence
+        #seq1 = self.extract_seq(self.gene_map[gene])
+        seq2 = deepcopy(seq1)
+
+
+        #print(seq1.shape, seq2.shape)
+        #print(seq1.shape, seq2.shape)
+        
+        # Apply variants based on genotype
+
+        for ref_pos, alt, genotype in variants:
+            pos = ref_pos + self.pad
+            
+            if genotype == 1:
+                # One copy mutated
+                seq2 = mutate(seq2, alt, int(pos))
+            elif genotype == 2:
+                # Both copies mutated
+                seq1 = mutate(seq1, alt, int(pos))
+                seq2 = mutate(seq2, alt, int(pos))
+                
+        # Augment sequences
+        #seq1 = _extract_center(seq1, seq_len=self.seq_len)
+        #seq2 = _extract_center(seq2, seq_len=self.seq_len)
+        
+        seq1 = self.augmenter(seq=seq1, idx=augment_idx)
+        seq2 = self.augmenter(seq=seq2, idx=augment_idx)
+
+        label = self.extract_label(gene_idx)
+        
+        return seq1, seq2, label
