@@ -1,42 +1,49 @@
-import argparse
+"""Finetune the Decima model.
+
+Usage:
+  decima_train.py [options]
+
+Options:
+  --name=<name>         Project name.
+  --dir=<dir>           Data directory path.
+  --lr=<lr>             Learning rate [default: 0.001].
+  --weight=<weight>     Weight parameter.
+  --grad=<grad>         Gradient accumulation steps.
+  --replicate=<rep>     Replication number [default: 0].
+  --bs=<bs>             Batch size [default: 4].
+  -h --help             Show this help message and exit.
+"""
+
 import os
-import sys
 
 import anndata
 import wandb
-
-src_dir = f"{os.path.dirname(__file__)}/../src/decima/"
-sys.path.append(src_dir)
+from docopt import docopt
 from lightning import LightningModel
 from read_hdf5 import HDF5Dataset
 
-# Parse arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("--name", type=str)
-parser.add_argument("--dir", type=str)
-parser.add_argument("--lr", type=float)
-parser.add_argument("--weight", type=float)
-parser.add_argument("--grad", type=int)
-parser.add_argument("--replicate", type=int, default=0)
-parser.add_argument("--bs", type=int, default=4)
-args = parser.parse_args()
-
 
 def main():
-    wandb.login(host="https://genentech.wandb.io")
-    run = wandb.init(project="decima", dir=args.name, name=args.name)
+    args = docopt(__doc__)
 
-    # Get paths
-    data_dir = args.dir
+    name = args["--name"]
+    data_dir = args["--dir"]
+    lr = float(args["--lr"])
+    weight = float(args["--weight"])
+    grad = int(args["--grad"])
+    replicate = int(args["--replicate"])
+    batch_size = int(args["--bs"])
+
+    wandb.login(host="https://genentech.wandb.io")
+    run = wandb.init(project="decima", dir=name, name=name)
+
     matrix_file = os.path.join(data_dir, "aggregated.h5ad")
     h5_file = os.path.join(data_dir, "data.h5")
     print(f"Data paths: {matrix_file}, {h5_file}")
 
-    # Load data
     print("Reading anndata")
     ad = anndata.read_h5ad(matrix_file)
 
-    # Make datasets
     print("Making dataset objects")
     train_dataset = HDF5Dataset(
         h5_file=h5_file,
@@ -48,37 +55,32 @@ def main():
     )
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
-    # Make param dicts
     train_params = {
         "optimizer": "adam",
-        "batch_size": args.bs,
+        "batch_size": batch_size,
         "num_workers": 16,
         "devices": 0,
         "logger": "wandb",
         "save_dir": data_dir,
         "max_epochs": 15,
-        "lr": args.lr,
-        "total_weight": args.weight,
-        "accumulate_grad_batches": args.grad,
+        "lr": lr,
+        "total_weight": weight,
+        "accumulate_grad_batches": grad,
         "loss": "poisson_multinomial",
         "pairs": ad.uns["disease_pairs"].values,
     }
     model_params = {
         "n_tasks": ad.shape[0],
-        "replicate": args.replicate,
+        "replicate": replicate,
     }
-
     print(f"train_params: {train_params}")
     print(f"model_params: {model_params}")
 
-    # Make model
     print("Initializing model")
     model = LightningModel(model_params=model_params, train_params=train_params)
 
-    # Fine-tune model
     print("Training")
     model.train_on_dataset(train_dataset, val_dataset)
-
     train_dataset.close()
     val_dataset.close()
     run.finish()
