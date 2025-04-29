@@ -20,7 +20,8 @@ import anndata
 import wandb
 from docopt import docopt
 from lightning import LightningModel
-from read_hdf5 import HDF5Dataset
+
+from decima.data.read_hdf5 import HDF5Dataset
 
 
 def main():

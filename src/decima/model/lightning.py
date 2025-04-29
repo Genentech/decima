@@ -369,12 +369,12 @@ class LightningModel(pl.LightningModule):
 
         Args:
             dataset: Dataset object that yields one-hot encoded sequences
-            
-            devices: Number of devices to use, 
+
+            devices: Number of devices to use,
                 e.g. machine has 4 gpu's but only want to use 2 for predictions
 
             num_workers: Number of workers for data loader
-            
+
             batch_size: Batch size for data loader
 
         Returns:
@@ -388,7 +388,7 @@ class LightningModel(pl.LightningModule):
         )
         accelerator = "auto"
         if devices is None:
-            devices = "auto" # use all devices
+            devices = "auto"  # use all devices
             # device = "cuda" if torch.cuda.is_available() else "cpu"
             accelerator = "gpu" if torch.cuda.is_available() else "auto"
 

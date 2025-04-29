@@ -244,8 +244,8 @@ def load_ncbi_string(string):
                             )
 
                 out.append(curr_dict)
-            except:
-                print(i)
+            except Exception as e:
+                print(i, str(e))
 
         out = pd.DataFrame(out)
         out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts() == 1].index)]

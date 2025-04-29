@@ -20,7 +20,8 @@ import numpy as np
 import torch
 from docopt import docopt
 from lightning import LightningModel
-from read_hdf5 import HDF5Dataset, list_genes
+
+from decima.data.read_hdf5 import HDF5Dataset, list_genes
 
 # TODO: input can be just a h5ad file rather than a combination of h5 and matrix file.
 
