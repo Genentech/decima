@@ -7,7 +7,7 @@ from grelu.sequence.format import convert_input_type
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
 from scipy.signal import find_peaks
 
-from .read_hdf5 import extract_gene_data
+from ..data.read_hdf5 import extract_gene_data
 
 
 def attributions(

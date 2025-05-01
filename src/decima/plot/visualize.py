@@ -3,7 +3,7 @@ import pandas as pd
 import plotnine as p9
 from grelu.visualize import plot_attributions
 
-from .evaluate import match_criteria
+from ..tools.evaluate import match_criteria
 
 
 def plot_logo(motif, rc=False, figsize=(2, 1)):
