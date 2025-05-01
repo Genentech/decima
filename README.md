@@ -1,5 +1,6 @@
 [![PyPI-Server](https://img.shields.io/pypi/v/decima.svg)](https://pypi.org/project/decima/)
 ![Unit tests](https://github.com/genentech/decima/actions/workflows/run-tests.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/870361048.svg)](https://doi.org/10.5281/zenodo.15319897)
 
 # Decima
 
