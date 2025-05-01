@@ -1,0 +1,101 @@
+decima package
+==============
+
+Submodules
+----------
+
+decima.decima\_model module
+---------------------------
+
+.. automodule:: decima.decima_model
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.evaluate module
+----------------------
+
+.. automodule:: decima.evaluate
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.interpret module
+-----------------------
+
+.. automodule:: decima.interpret
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.lightning module
+-----------------------
+
+.. automodule:: decima.lightning
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.loss module
+------------------
+
+.. automodule:: decima.loss
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.metrics module
+---------------------
+
+.. automodule:: decima.metrics
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.preprocess module
+------------------------
+
+.. automodule:: decima.preprocess
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.read\_hdf5 module
+------------------------
+
+.. automodule:: decima.read_hdf5
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.variant module
+---------------------
+
+.. automodule:: decima.variant
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.visualize module
+-----------------------
+
+.. automodule:: decima.visualize
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.write\_hdf5 module
+-------------------------
+
+.. automodule:: decima.write_hdf5
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,7 @@
+decima
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   decima

@@ -1,0 +1,578 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="License" href="license.html" /><link rel="prev" title="Decima" href="readme.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>Contributing - decima 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">decima 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">decima 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Overview</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">Module Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/decima.html">decima package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/contributing.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h1>
+<p>Welcome to <code class="docutils literal notranslate"><span class="pre">decima</span></code> contributor’s guide.</p>
+<p>This document focuses on getting any potential contributor familiarized with
+the development processes, but <a class="reference external" href="https://opensource.guide/how-to-contribute">other kinds of contributions</a> are also appreciated.</p>
+<p>If you are new to using <a class="reference external" href="https://git-scm.com">git</a> or have never collaborated in a project previously,
+please have a look at <a class="reference external" href="http://www.contribution-guide.org/">contribution-guide.org</a>. Other resources are also
+listed in the excellent <a class="reference external" href="https://github.com/freecodecamp/how-to-contribute-to-open-source">guide created by FreeCodeCamp</a> <a class="footnote-reference brackets" href="#contrib1" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>Please notice, all users and contributors are expected to be <strong>open,
+considerate, reasonable, and respectful</strong>. When in doubt,
+<a class="reference external" href="https://www.python.org/psf/conduct/">Python Software Foundation’s Code of Conduct</a> is a good reference in terms of
+behavior guidelines.</p>
+<section id="issue-reports">
+<h2>Issue Reports<a class="headerlink" href="#issue-reports" title="Link to this heading">¶</a></h2>
+<p>If you experience bugs or general issues with <code class="docutils literal notranslate"><span class="pre">decima</span></code>, please have a look
+on the <a class="reference external" href="https://github.com/%3CUSERNAME%3E/decima/issues">issue tracker</a>.
+If you don’t see anything useful there, please feel free to fire an issue report.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Please don’t forget to include the closed issues in your search.
+Sometimes a solution was already reported, and the problem is considered
+<strong>solved</strong>.</p>
+</div>
+<p>New issue reports should include information about your programming environment
+(e.g., operating system, Python version) and steps to reproduce the problem.
+Please try also to simplify the reproduction steps to a very minimal example
+that still illustrates the problem you are facing. By removing other factors,
+you help us to identify the root cause of the issue.</p>
+</section>
+<section id="documentation-improvements">
+<h2>Documentation Improvements<a class="headerlink" href="#documentation-improvements" title="Link to this heading">¶</a></h2>
+<p>You can help improve <code class="docutils literal notranslate"><span class="pre">decima</span></code> docs by making them more readable and coherent, or
+by adding missing information and correcting mistakes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">decima</span></code> documentation uses <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a> as its main documentation compiler.
+This means that the docs are kept in the same repository as the project code, and
+that any documentation update is done in the same way was a code contribution.</p>
+<p>When working on documentation changes in your local machine, you can
+compile them using <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>and use Python’s built-in web server for a preview in your web browser
+(<code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">http</span><span class="o">.</span><span class="n">server</span> <span class="o">--</span><span class="n">directory</span> <span class="s1">&#39;docs/_build/html&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="code-contributions">
+<h2>Code Contributions<a class="headerlink" href="#code-contributions" title="Link to this heading">¶</a></h2>
+<section id="submit-an-issue">
+<h3>Submit an issue<a class="headerlink" href="#submit-an-issue" title="Link to this heading">¶</a></h3>
+<p>Before you work on any non-trivial code contribution it’s best to first create
+a report in the <a class="reference external" href="https://github.com/%3CUSERNAME%3E/decima/issues">issue tracker</a> to start a discussion on the subject.
+This often provides additional considerations and avoids unnecessary work.</p>
+</section>
+<section id="create-an-environment">
+<h3>Create an environment<a class="headerlink" href="#create-an-environment" title="Link to this heading">¶</a></h3>
+<p>Before you start coding, we recommend creating an isolated <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual environment</a>
+to avoid any problems with your installed Python packages.
+This can easily be done via either <a class="reference external" href="https://virtualenv.pypa.io/en/stable/">virtualenv</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">VENV</span><span class="o">&gt;</span>
+<span class="n">source</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">VENV</span><span class="o">&gt;/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>or <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">decima</span> <span class="n">python</span><span class="o">=</span><span class="mi">3</span> <span class="n">six</span> <span class="n">virtualenv</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">cov</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">decima</span>
+</pre></div>
+</div>
+</section>
+<section id="clone-the-repository">
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Create an user account on GitHub if you do not already have one.</p></li>
+<li><p>Fork the project <a class="reference external" href="https://github.com/%3CUSERNAME%3E/decima">repository</a>: click on the <em>Fork</em> button near the top of the
+page. This creates a copy of the code under your account on GitHub.</p></li>
+<li><p>Clone this copy to your local disk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">YourLogin</span><span class="o">/</span><span class="n">decima</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">decima</span>
+</pre></div>
+</div>
+</li>
+<li><p>You should run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">pip</span> <span class="n">setuptools</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>to be able to import the package under development in the Python REPL.</p>
+</li>
+<li><p>Install <a class="reference external" href="https://pre-commit.com/">pre-commit</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">decima</span></code> comes with a lot of hooks configured to automatically help the
+developer to check the code being written.</p>
+</li>
+</ol>
+</section>
+<section id="implement-your-changes">
+<h3>Implement your changes<a class="headerlink" href="#implement-your-changes" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Create a branch to hold your changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
+</pre></div>
+</div>
+<p>and start making changes. Never work on the main branch!</p>
+</li>
+<li><p>Start your work on this branch. Don’t forget to add <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html">docstrings</a> to new
+functions, modules and classes, especially if they are part of public APIs.</p></li>
+<li><p>Add yourself to the list of contributors in <code class="docutils literal notranslate"><span class="pre">AUTHORS.rst</span></code>.</p></li>
+<li><p>When you’re done editing, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">add</span> <span class="o">&lt;</span><span class="n">MODIFIED</span> <span class="n">FILES</span><span class="o">&gt;</span>
+<span class="n">git</span> <span class="n">commit</span>
+</pre></div>
+</div>
+<p>to record your changes in <a class="reference external" href="https://git-scm.com">git</a>.</p>
+<p>Please make sure to see the validation messages from <a class="reference external" href="https://pre-commit.com/">pre-commit</a> and fix
+any eventual issues.
+This should automatically use <a class="reference external" href="https://flake8.pycqa.org/en/stable/">flake8</a>/<a class="reference external" href="https://pypi.org/project/black/">black</a> to check/fix the code style
+in a way that is compatible with the project.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Don’t forget to add unit tests and documentation in case your
+contribution adds an additional feature and is not just a bugfix.</p>
+<p>Moreover, writing a <a class="reference external" href="https://chris.beams.io/posts/git-commit">descriptive commit message</a> is highly recommended.
+In case of doubt, you can check the commit history with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">graph</span> <span class="o">--</span><span class="n">decorate</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="n">oneline</span> <span class="o">--</span><span class="n">abbrev</span><span class="o">-</span><span class="n">commit</span> <span class="o">--</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>to look for recurring communication patterns.</p>
+</div>
+</li>
+<li><p>Please check that your changes don’t break any unit tests with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span>
+</pre></div>
+</div>
+<p>(after having installed <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tox</span></code> or <code class="docutils literal notranslate"><span class="pre">pipx</span></code>).</p>
+<p>You can also use <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> to run several other pre-configured tasks in the
+repository. Try <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-av</span></code> to see a list of the available checks.</p>
+</li>
+</ol>
+</section>
+<section id="submit-your-contribution">
+<h3>Submit your contribution<a class="headerlink" href="#submit-your-contribution" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>If everything works fine, push your local branch to the remote server with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span>
+</pre></div>
+</div>
+</li>
+<li><p>Go to the web page of your fork and click “Create pull request”
+to send your changes for review.</p>
+</li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h3>
+<p>The following tips can be used when facing problems to build or test the
+package:</p>
+<ol class="arabic">
+<li><p>Make sure to fetch all the tags from the upstream <a class="reference external" href="https://github.com/%3CUSERNAME%3E/decima">repository</a>.
+The command <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">describe</span> <span class="pre">--abbrev=0</span> <span class="pre">--tags</span></code> should return the version you
+are expecting. If you are trying to run CI scripts in a fork repository,
+make sure to push all the tags.
+You can also try to remove all the egg files or the complete egg folder, i.e.,
+<code class="docutils literal notranslate"><span class="pre">.eggs</span></code>, as well as the <code class="docutils literal notranslate"><span class="pre">*.egg-info</span></code> folders in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder or
+potentially in the root of your project.</p></li>
+<li><p>Sometimes <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> misses out when new dependencies are added, especially to
+<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and <code class="docutils literal notranslate"><span class="pre">docs/requirements.txt</span></code>. If you find any problems with
+missing dependencies when running a command with <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a>, try to recreate the
+<code class="docutils literal notranslate"><span class="pre">tox</span></code> environment using the <code class="docutils literal notranslate"><span class="pre">-r</span></code> flag. For example, instead of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>Try running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">e</span> <span class="n">docs</span>
+</pre></div>
+</div>
+</li>
+<li><p>Make sure to have a reliable <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> installation that uses the correct
+Python version (e.g., 3.7+). When in doubt you can run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span> <span class="o">--</span><span class="n">version</span>
+<span class="c1"># OR</span>
+<span class="n">which</span> <span class="n">tox</span>
+</pre></div>
+</div>
+<p>If you have trouble and are seeing weird errors upon running <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a>, you can
+also try to create a dedicated <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual environment</a> with a <a class="reference external" href="https://tox.readthedocs.io/en/stable/">tox</a> binary
+freshly installed. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
+<span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pip</span> <span class="n">install</span> <span class="n">tox</span>
+<span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">tox</span> <span class="o">-</span><span class="n">e</span> <span class="nb">all</span>
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference external" href="https://docs.pytest.org/en/stable/usage.html#dropping-to-pdb-python-debugger-at-the-start-of-a-test">Pytest can drop you</a> in an interactive session in the case an error occurs.
+In order to do that you need to pass a <code class="docutils literal notranslate"><span class="pre">--pdb</span></code> option (for example by
+running <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">--</span> <span class="pre">-k</span> <span class="pre">&lt;NAME</span> <span class="pre">OF</span> <span class="pre">THE</span> <span class="pre">FALLING</span> <span class="pre">TEST&gt;</span> <span class="pre">--pdb</span></code>).
+You can also setup breakpoints manually instead of using the <code class="docutils literal notranslate"><span class="pre">--pdb</span></code> option.</p></li>
+</ol>
+</section>
+</section>
+<section id="maintainer-tasks">
+<h2>Maintainer tasks<a class="headerlink" href="#maintainer-tasks" title="Link to this heading">¶</a></h2>
+<section id="releases">
+<h3>Releases<a class="headerlink" href="#releases" title="Link to this heading">¶</a></h3>
+<p>If you are part of the group of maintainers and have correct user permissions
+on <a class="reference external" href="https://pypi.org/">PyPI</a>, the following steps can be used to release a new version for
+<code class="docutils literal notranslate"><span class="pre">decima</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Make sure all unit tests are successful.</p></li>
+<li><p>Tag the current commit on the main branch with a release tag, e.g., <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>.</p></li>
+<li><p>Push the new tag to the upstream <a class="reference external" href="https://github.com/%3CUSERNAME%3E/decima">repository</a>,
+e.g., <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">upstream</span> <span class="pre">v1.2.3</span></code></p></li>
+<li><p>Clean up the <code class="docutils literal notranslate"><span class="pre">dist</span></code> and <code class="docutils literal notranslate"><span class="pre">build</span></code> folders with <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">clean</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">dist</span> <span class="pre">build</span></code>)
+to avoid confusion with old builds and Sphinx docs.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">build</span></code> and check that the files in <code class="docutils literal notranslate"><span class="pre">dist</span></code> have
+the correct version (no <code class="docutils literal notranslate"><span class="pre">.dirty</span></code> or <a class="reference external" href="https://git-scm.com">git</a> hash) according to the <a class="reference external" href="https://git-scm.com">git</a> tag.
+Also check the sizes of the distributions, if they are too big (e.g., &gt;
+500KB), unwanted clutter may have been accidentally included.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">publish</span> <span class="pre">--</span> <span class="pre">--repository</span> <span class="pre">pypi</span></code> and check that everything was
+uploaded to <a class="reference external" href="https://pypi.org/">PyPI</a> correctly.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="contrib1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">1</a><span class="fn-bracket">]</span></span>
+<p>Even though, these resources focus on open source projects and
+communities, the general ideas behind collaborating with other developers
+to collectively create software are general and can be applied to all sorts
+of environments, including private companies and proprietary code bases.</p>
+</aside>
+</aside>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="license.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">License</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="readme.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Decima</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Contributing</a><ul>
+<li><a class="reference internal" href="#issue-reports">Issue Reports</a></li>
+<li><a class="reference internal" href="#documentation-improvements">Documentation Improvements</a></li>
+<li><a class="reference internal" href="#code-contributions">Code Contributions</a><ul>
+<li><a class="reference internal" href="#submit-an-issue">Submit an issue</a></li>
+<li><a class="reference internal" href="#create-an-environment">Create an environment</a></li>
+<li><a class="reference internal" href="#clone-the-repository">Clone the repository</a></li>
+<li><a class="reference internal" href="#implement-your-changes">Implement your changes</a></li>
+<li><a class="reference internal" href="#submit-your-contribution">Submit your contribution</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#maintainer-tasks">Maintainer tasks</a><ul>
+<li><a class="reference internal" href="#releases">Releases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>
