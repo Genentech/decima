@@ -1,24 +1,10 @@
-"""Make predictions for all genes using an HDF5 file created by Decima's ``write_hdf5.py``.
-
-Usage:
-  decima_predict.py [options]
-
-Options:
-  --device=<device>             Which GPU to use.
-  --ckpts=<ckpts>...            Path to the model checkpoint(s).
-  --h5_file=<file>              Path to h5 file indexed by genes.
-  --matrix_file=<file>          Path to h5ad file containing genes to predict.
-  --out_file=<file>             Output file path.
-  --max_seq_shift=<shift>       Maximum jitter for augmentation [default: 0].
-  -h --help                     Show this help message and exit.
-"""
+"""Make predictions for all genes using an HDF5 file created by Decima's ``write_hdf5.py``."""
 
 import os
-
+import click
 import anndata
 import numpy as np
 import torch
-from docopt import docopt
 from lightning import LightningModel
 
 from decima.data.read_hdf5 import HDF5Dataset, list_genes
@@ -26,20 +12,19 @@ from decima.data.read_hdf5 import HDF5Dataset, list_genes
 # TODO: input can be just a h5ad file rather than a combination of h5 and matrix file.
 
 
-def main():
-    args = docopt(__doc__)
-
-    device_id = int(args["--device"])
-    ckpts = args["--ckpts"]
-    h5_file = args["--h5_file"]
-    matrix_file = args["--matrix_file"]
-    out_file = args["--out_file"]
-    max_seq_shift = int(args["--max_seq_shift"])
-
+@click.command()
+@click.option('--device', type=int, help='Which GPU to use.')
+@click.option('--ckpts', multiple=True, required=True, help='Path to the model checkpoint(s).')
+@click.option('--h5_file', required=True, help='Path to h5 file indexed by genes.')
+@click.option('--matrix_file', required=True, help='Path to h5ad file containing genes to predict.')
+@click.option('--out_file', required=True, help='Output file path.')
+@click.option('--max_seq_shift', default=0, help='Maximum jitter for augmentation.')
+def predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
+    """Make predictions for all genes."""
     torch.set_float32_matmul_precision("medium")
 
     # TODO: device is unused, set the device appropriately
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(device_id)
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(device)
     device = torch.device(0)
 
     print("Loading anndata")
@@ -85,7 +70,3 @@ def main():
 
     print("Saved")
     ad.write_h5ad(out_file)
-
-
-if __name__ == "__main__":
-    main()
