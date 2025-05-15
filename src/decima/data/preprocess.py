@@ -266,6 +266,15 @@ def match_ncbi(ad, ncbi):
 
 
 def make_inputs(gene, ad):
+    import warnings
+    warnings.warn(
+        "make_inputs() is deprecated and will be removed in a future version. "
+        "Please use the DecimaResult.prepare_one_hot() directly instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+
+    print(f"Making inputs for {gene}")
     assert gene in ad.var_names, f"{gene} is not in the anndata object"
     row = ad.var.loc[gene]
 
