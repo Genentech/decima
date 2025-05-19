@@ -1,5 +1,5 @@
 import click
-from decima.utils.download import download_decima_data
+from decima.hub.download import download_decima_data
 
 
 @click.command()

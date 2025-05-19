@@ -5,7 +5,7 @@ import torch
 import pandas as pd
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
-from decima.utils.resources import load_decima_metadata, load_decima_model
+from decima.hub import load_decima_metadata, load_decima_model
 from decima.model.lightning import LightningModel
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.interpret.attribution import Attribution, attributions

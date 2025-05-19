@@ -1,6 +1,6 @@
 import logging
 import genomepy
-from decima.utils.resources import load_decima_model, load_decima_metadata
+from decima.hub import login_wandb, load_decima_model, load_decima_metadata
 
 
 logger = logging.getLogger("decima")
@@ -27,6 +27,7 @@ def download_decima_metadata():
 
 def download_decima_data():
     """Download all required data for Decima."""
+    login_wandb()
     download_hg38()
     download_decima_weights()
     download_decima_metadata()

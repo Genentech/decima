@@ -1,7 +1,7 @@
 import pytest
 import anndata
 from decima.model.lightning import LightningModel
-from decima.utils.resources import load_decima_model, load_decima_metadata
+from decima.hub import load_decima_model, load_decima_metadata
 
 
 def test_load_decima_model():
