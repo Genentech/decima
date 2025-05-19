@@ -1,47 +1,115 @@
 from typing import List, Optional, Union
-from dataclasses import dataclass
-import torch
 import anndata
-import pandas as pd
 import numpy as np
-from grelu.visualize import plot_attributions
+import torch
+import pandas as pd
+from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
-from decima.data.preprocess import make_inputs
+from decima.utils.resources import load_decima_metadata, load_decima_model
 from decima.model.lightning import LightningModel
-from decima.plot.visualize import plot_attribution_peaks
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.interpret.attribution import Attribution, attributions
-from decima.interpret.ism import ism # TODO: implement ism
-
+# from decima.interpret.ism import ism # TODO: implement ism
 
 
 class DecimaResult:
+    """
+    Container for Decima results and model predictions.
+
+    This class provides a unified interface for loading pre-trained Decima models and
+    associated metadata, making predictions, and performing attribution analyses.
+
+    The DecimaResult object contains:
+        - An AnnData object with gene expression and metadata
+        - A trained model for making predictions
+        - Methods for attribution analysis and interpretation
+
+    Args:
+        anndata: AnnData object containing gene expression data and metadata
+
+    Examples:
+        >>> # Load default pre-trained model and metadata
+        >>> result = DecimaResult.load()
+        >>> result.load_model(
+        ...     rep=0
+        ... )
+        >>> # Perform attribution analysis
+        >>> attributions = result.attributions(
+        ...     output_dir="attrs_SP1I_classical_monoctypes",
+        ...     gene="SPI1",
+        ...     tasks='cell_type == "classical monocyte"',
+        ... )
+
+    Properties:
+        model: Decima model
+        genes: List of gene names
+        cells: List of cell names
+        cell_metadata: Cell metadata
+        gene_metadata: Gene metadata
+        shape: Shape of the expression matrix
+        attributions: Attributions for a gene
+    """
 
     def __init__(self, anndata):
-        # TODO: allow creating anndata from scratch for given genes and cells and predictions
         self.anndata: anndata.AnnData = anndata
         self._model = None
-    
+
     @classmethod
-    def load(cls, anndata_path):
-        return cls(anndata.read_h5ad(anndata_path))
+    def load(cls, anndata_path: Optional[Union[str, anndata.AnnData]] = None):
+        """Load a DecimaResult object from an anndata file or a path to an anndata file.
+
+        Args:
+            anndata_path: Path to anndata file or anndata object
+
+        Returns:
+            DecimaResult object
+
+        Examples:
+            >>> result = DecimaResult.load()  # Load default decima metadata
+            >>> result = DecimaResult.load(
+            ...     "path/to/anndata.h5ad"
+            ... )  # Load custom anndata object from file
+        """
+        if anndata_path is None:
+            return cls(load_decima_metadata())
+        elif isinstance(anndata_path, str):
+            return cls(anndata.read_h5ad(anndata_path))
+        elif isinstance(anndata_path, anndata.AnnData):
+            return cls(anndata_path)
+        else:
+            raise ValueError(f"Invalid anndata path: {anndata_path}")
 
     @property
     def model(self):
+        """Decima model."""
         if self._model is None:
             self.load_model()
         return self._model
 
-    def load_model(self, model_path: Optional[str] = None, device: str = "cpu"):
+    def load_model(self, model: Optional[Union[str, int]] = 0, device: str = "cpu"):
         """Load the trained model from a checkpoint path.
-        
+
         Args:
-            model_path: Path to model checkpoint. If None, uses self.model_path
+            model: Path to model checkpoint or replicate number (0-3) for pre-trained models
+            device: Device to load model on
+
+        Returns:
+            self
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> result.load_model()  # Load default model (rep0)
+            >>> result.load_model(
+            ...     model="path/to/checkpoint.ckpt"
+            ... )
+            >>> result.load_model(
+            ...     model=2
+            ... )
         """
-        if model_path is None:
-            raise NotImplementedError("Default model is not implemented yet.")
-        path = model_path # TODO: or use model from wandb
-        self._model = LightningModel.load_from_checkpoint(path, device=device)
+        if model in {0, 1, 2, 3}:
+            self._model = load_decima_model(rep=model, device=device)
+        else:
+            self._model = LightningModel.load_from_checkpoint(model, map_location=device)
         self._model.eval()
         return self
 
@@ -81,58 +149,80 @@ class DecimaResult:
 
     def predicted_expression_matrix(self, genes: Optional[List[str]] = None) -> pd.DataFrame:
         """Get predicted expression matrix for all or specific genes.
-        
+
         Args:
             genes: Optional list of genes to get predictions for. If None, returns all genes.
-            
+
         Returns:
             pd.DataFrame: Predicted expression matrix (cells x genes)
         """
         if genes is None:
-            return pd.DataFrame(self.anndata.layers['preds'], index=self.cells, columns=self.genes)
+            return pd.DataFrame(self.anndata.layers["preds"], index=self.cells, columns=self.genes)
         else:
-            return pd.DataFrame(self.anndata[:, genes].layers['preds'], index=self.cells, columns=genes)
+            return pd.DataFrame(self.anndata[:, genes].layers["preds"], index=self.cells, columns=genes)
 
     def prepare_one_hot(self, gene: str) -> torch.Tensor:
-        # TODO: move make_inputs to here and deprecate it
-        return make_inputs(gene, self.anndata)
+        """Prepare one-hot encoding for a gene.
+
+        Args:
+            gene: Gene name
+
+        Returns:
+            torch.Tensor: One-hot encoding of the gene
+        """
+        assert gene in self.genes, f"{gene} is not in the anndata object"
+        row = self.gene_metadata.loc[gene]
+
+        seq = strings_to_one_hot(intervals_to_strings(row, genome="hg38"))
+
+        mask = np.zeros(shape=(1, 524288))
+        mask[0, row.gene_mask_start : row.gene_mask_end] += 1
+        mask = torch.from_numpy(mask).float()
+
+        return seq, mask
 
     def attributions(
-        self, 
-        gene: str, 
-        cells: Optional[List[str]] = None, 
-        constract_cells: Optional[List[str]] = None, 
+        self,
+        gene: str,
+        tasks: Optional[List[str]] = None,
+        off_tasks: Optional[List[str]] = None,
         transform: str = "specificity",
         n_peaks: int = 10,
-        min_dist: int = 6
+        min_dist: int = 6,
     ) -> Attribution:
         """Get attributions for a specific gene.
 
         Args:
             gene: Gene name
-            cells: List of cells to use as on task
-            constract_cells: List of cells to use as off task
+            tasks: List of cells to use as on task
+            off_tasks: List of cells to use as off task
             transform: Attribution transform method
             n_peaks: Number of peaks to find
             min_dist: Minimum distance between peaks
-            
+
         Returns:
             Attribution: Container with inputs, predictions, attribution scores and TSS position
         """
-        if isinstance(cells, str):
-            cells = self.query_cells(cells)
+        if tasks is None:
+            tasks = self.cell_metadata.index.tolist()
+        elif isinstance(tasks, str):
+            tasks = self.query_cells(tasks)
 
-        if isinstance(constract_cells, str):
-            constract_cells = self.query_cells(constract_cells)
+        if isinstance(off_tasks, str):
+            off_tasks = self.query_cells(off_tasks)
 
         one_hot_seq, gene_mask = self.prepare_one_hot(gene)
         inputs = torch.vstack([one_hot_seq, gene_mask])
 
         attrs = attributions(
-            gene=gene, inputs=inputs, model=self._model, device=self.model.device, 
-            tasks=cells,
-            off_tasks=constract_cells,
-            transform=transform)
+            gene=gene,
+            inputs=inputs,
+            model=self._model,
+            device=self.model.device,
+            tasks=tasks,
+            off_tasks=off_tasks,
+            transform=transform,
+        )
 
         gene_meta = self.gene_metadata.loc[gene]
         return Attribution(
@@ -142,8 +232,11 @@ class DecimaResult:
             chrom=gene_meta.chrom,
             start=gene_meta.start,
             end=gene_meta.end,
+            gene_start=gene_meta.gene_start,
+            gene_end=gene_meta.gene_end,
+            strand=gene_meta.strand,
             n_peaks=n_peaks,
-            min_dist=min_dist
+            min_dist=min_dist,
         )
 
     def query_cells(self, query: str):

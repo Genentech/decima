@@ -1,1 +1,1 @@
-from .result import DecimaResult
+from decima.core.result import DecimaResult

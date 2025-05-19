@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 from dataclasses import dataclass
 import pandas as pd
 
@@ -6,7 +6,7 @@ import pandas as pd
 @dataclass
 class GeneMetadata:
     """Metadata for a gene in the dataset.
-    
+
     Attributes:
         name: Gene name
         chrom: Chromosome where the gene is located
@@ -29,6 +29,7 @@ class GeneMetadata:
         pearson: Pearson correlation
         size_factor_pearson: Size factor Pearson correlation
     """
+
     name: str
     chrom: str
     start: int
@@ -51,18 +52,18 @@ class GeneMetadata:
     size_factor_pearson: float
 
     @classmethod
-    def from_series(cls, name: str, series: pd.Series) -> 'GeneMetadata':
+    def from_series(cls, name: str, series: pd.Series) -> "GeneMetadata":
         """Create GeneMetadata from a pandas Series."""
         data = series.to_dict()
-        data['name'] = name
-        data['fold'] = [f.strip() for f in data['fold'].strip('[]').replace("'", "").split(',')]
+        data["name"] = name
+        data["fold"] = [f.strip() for f in data["fold"].strip("[]").replace("'", "").split(",")]
         return cls(**data)
 
 
 @dataclass
 class CellMetadata:
     """Metadata for a cell in the dataset.
-    
+
     Attributes:
         name: Cell identifier
         cell_type: Detailed cell type
@@ -82,6 +83,7 @@ class CellMetadata:
         val_pearson: Pearson correlation in validation set
         test_pearson: Pearson correlation in test set
     """
+
     name: str
     cell_type: str
     tissue: str
@@ -101,8 +103,8 @@ class CellMetadata:
     test_pearson: float
 
     @classmethod
-    def from_series(cls, name: str, series: pd.Series) -> 'CellMetadata':
+    def from_series(cls, name: str, series: pd.Series) -> "CellMetadata":
         """Create CellMetadata from a pandas Series."""
         data = series.to_dict()
-        data['name'] = name
+        data["name"] = name
         return cls(**data)

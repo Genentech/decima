@@ -5,20 +5,20 @@ import click
 import anndata
 import numpy as np
 import torch
-from lightning import LightningModel
-
-from decima.data.read_hdf5 import HDF5Dataset, list_genes
+from decima.model.lightning import LightningModel
+from decima.data.read_hdf5 import list_genes
+from decima.data.dataset import HDF5Dataset
 
 # TODO: input can be just a h5ad file rather than a combination of h5 and matrix file.
 
 
 @click.command()
-@click.option('--device', type=int, help='Which GPU to use.')
-@click.option('--ckpts', multiple=True, required=True, help='Path to the model checkpoint(s).')
-@click.option('--h5_file', required=True, help='Path to h5 file indexed by genes.')
-@click.option('--matrix_file', required=True, help='Path to h5ad file containing genes to predict.')
-@click.option('--out_file', required=True, help='Output file path.')
-@click.option('--max_seq_shift', default=0, help='Maximum jitter for augmentation.')
+@click.option("--device", type=int, help="Which GPU to use.")
+@click.option("--ckpts", multiple=True, required=True, help="Path to the model checkpoint(s).")
+@click.option("--h5_file", required=True, help="Path to h5 file indexed by genes.")
+@click.option("--matrix_file", required=True, help="Path to h5ad file containing genes to predict.")
+@click.option("--out_file", required=True, help="Output file path.")
+@click.option("--max_seq_shift", default=0, help="Maximum jitter for augmentation.")
 def predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
     """Make predictions for all genes."""
     torch.set_float32_matmul_precision("medium")

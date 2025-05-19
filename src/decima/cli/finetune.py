@@ -4,18 +4,18 @@ import os
 import click
 import anndata
 import wandb
-from lightning import LightningModel
-from decima.data.read_hdf5 import HDF5Dataset
+from decima.model.lightning import LightningModel
+from decima.data.dataset import HDF5Dataset
 
 
 @click.command()
-@click.option('--name', required=True, help='Project name')
-@click.option('--dir', required=True, help='Data directory path')
-@click.option('--lr', default=0.001, type=float, help='Learning rate')
-@click.option('--weight', required=True, type=float, help='Weight parameter')
-@click.option('--grad', required=True, type=int, help='Gradient accumulation steps')
-@click.option('--replicate', default=0, type=int, help='Replication number')
-@click.option('--bs', default=4, type=int, help='Batch size')
+@click.option("--name", required=True, help="Project name")
+@click.option("--dir", required=True, help="Data directory path")
+@click.option("--lr", default=0.001, type=float, help="Learning rate")
+@click.option("--weight", required=True, type=float, help="Weight parameter")
+@click.option("--grad", required=True, type=int, help="Gradient accumulation steps")
+@click.option("--replicate", default=0, type=int, help="Replication number")
+@click.option("--bs", default=4, type=int, help="Batch size")
 def finetune(name, dir, lr, weight, grad, replicate, bs):
     """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")

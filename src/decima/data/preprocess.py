@@ -4,9 +4,8 @@ import anndata
 import bioframe as bf
 import numpy as np
 import pandas as pd
-import torch
 from grelu.io.genome import read_sizes
-from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
+from grelu.sequence.format import intervals_to_strings
 from grelu.sequence.utils import get_unique_length
 from tqdm import tqdm
 
@@ -266,25 +265,7 @@ def match_ncbi(ad, ncbi):
 
 
 def make_inputs(gene, ad):
-    import warnings
-    warnings.warn(
+    raise DeprecationWarning(
         "make_inputs() is deprecated and will be removed in a future version. "
-        "Please use the DecimaResult.prepare_one_hot() directly instead.",
-        DeprecationWarning,
-        stacklevel=2
+        "Please use the DecimaResult.prepare_one_hot() directly instead."
     )
-
-    print(f"Making inputs for {gene}")
-    assert gene in ad.var_names, f"{gene} is not in the anndata object"
-    row = ad.var.loc[gene]
-
-    print("One-hot encoding sequence")
-    seq = intervals_to_strings(row, genome="hg38")
-    seq = strings_to_one_hot(seq)
-
-    print("Making gene mask")
-    mask = np.zeros(shape=(1, 524288))
-    mask[0, row.gene_mask_start : row.gene_mask_end] += 1
-    mask = torch.Tensor(mask)
-
-    return seq, mask
