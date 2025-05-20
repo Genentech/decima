@@ -22,7 +22,7 @@ from decima import predict_save_attributions
     help="Model to use for attribution analysis either replicate number of path to the model.",
 )
 @click.option("--device", type=str, required=False, default="cpu", help="Device to use for attribution analysis.")
-def attributions(output_dir, gene, tasks, off_tasks, model, device):
+def cli_attributions(output_dir, gene, tasks, off_tasks, model, device):
     """
     Generate and save attribution analysis results for a gene.
 

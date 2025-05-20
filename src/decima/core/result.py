@@ -5,8 +5,8 @@ import torch
 import pandas as pd
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
-from decima.hub import load_decima_metadata, load_decima_model
-from decima.model.lightning import LightningModel
+from decima.model import load_model
+from decima.hub import load_decima_metadata
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.interpret.attribution import Attribution, attributions
 # from decima.interpret.ism import ism # TODO: implement ism
@@ -106,10 +106,7 @@ class DecimaResult:
             ...     model=2
             ... )
         """
-        if model in {0, 1, 2, 3}:
-            self._model = load_decima_model(rep=model, device=device)
-        else:
-            self._model = LightningModel.load_from_checkpoint(model, map_location=device)
+        self._model = load_model(model=model, device=device)
         self._model.eval()
         return self
 

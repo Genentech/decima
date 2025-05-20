@@ -2,10 +2,11 @@ import logging
 import click
 
 # from decima.cli.finetune import finetune
-from decima.cli.predict_genes import predict_genes
-from decima.cli.download import download
-from decima.cli.attributions import attributions
-from decima.cli.query_cell import query_cell
+from decima.cli.predict_genes import cli_predict_genes
+from decima.cli.download import cli_download
+from decima.cli.attributions import cli_attributions
+from decima.cli.query_cell import cli_query_cell
+from decima.cli.variant import cli_predict_variant_effect
 
 
 logger = logging.getLogger("decima")
@@ -26,10 +27,11 @@ def main():
 
 
 # main.add_command(finetune)
-main.add_command(predict_genes)
-main.add_command(download)
-main.add_command(attributions)
-main.add_command(query_cell)
+main.add_command(cli_predict_genes, name="predict-genes")
+main.add_command(cli_download, name="download")
+main.add_command(cli_attributions, name="attributions")
+main.add_command(cli_query_cell, name="query-cell")
+main.add_command(cli_predict_variant_effect, name="predict-variant-effect")
 
 if __name__ == "__main__":
     main()
