@@ -105,7 +105,7 @@ class DecimaResult:
             ...     model=2
             ... )
         """
-        self._model = load_decima_model(model, device=device)
+        self._model = load_decima_model(model=model, device=device)
         self._model.eval()
         return self
 

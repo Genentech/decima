@@ -1,11 +1,25 @@
+import anndata
 from grelu.sequence.utils import get_unique_length, reverse_complement
+from decima.core import DecimaResult
 
 
-def process_variants(variants, ad, min_from_end=0):
+def process_variants(variants, ad=None, min_from_end=0):
     # Match to gene intervals
+
+    if ad is None:
+        result = DecimaResult.load()
+    elif isinstance(ad, str):
+        result = DecimaResult.load(ad)
+    elif isinstance(ad, anndata.AnnData):
+        result = DecimaResult(ad)
+    else:
+        raise ValueError(f"Invalid ad: {ad} (must be None, str, or anndata.AnnData)")
+
+    # TODO: overlap with gene intervals
     orig_len = len(variants)
-    variants = variants[variants.gene.isin(ad.var_names)]
+    variants = variants[variants.gene.isin(result.genes)]
     print(f"dropped {orig_len - len(variants)} variants because the gene was not found in ad.var")
+
     variants = variants.merge(
         ad.var[["start", "end", "strand", "gene_mask_start"]],
         left_on="gene",
@@ -21,7 +35,7 @@ def process_variants(variants, ad, min_from_end=0):
 
     # Filter by relative position
     orig_len = len(variants)
-    interval_len = get_unique_length(ad.var)
+    interval_len = get_unique_length(result.anndata.var)
     variants = variants[(variants.rel_pos > min_from_end) & (variants.rel_pos < interval_len - min_from_end)]
     print(f"dropped {orig_len - len(variants)} variants because the variant did not fit in the interval")
 
