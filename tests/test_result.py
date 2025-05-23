@@ -37,6 +37,20 @@ def test_metadata_access():
     cell, gene = 'agg_0', 'STRADA'
 
     gene_meta = result.get_gene_metadata(gene)
+    assert gene_meta.chrom == 'chr17'
+    assert gene_meta.strand == '-'
+    assert gene_meta.gene_type == 'protein_coding'
+    assert gene_meta.start == 63381538
+    assert gene_meta.end == 63905826
+    assert gene_meta.gene_start == 63682336
+    assert gene_meta.gene_end == 63741986
+    assert gene_meta.gene_length == 59650
+    assert gene_meta.gene_mask_start == 163840
+    assert gene_meta.gene_mask_end == 223490
+    assert gene_meta.frac_N == 0.0
+    assert gene_meta.fold == ['fold1']
+    assert gene_meta.dataset == 'train'
+
     assert isinstance(gene_meta, GeneMetadata)
 
     cell_meta = result.get_cell_metadata(cell)

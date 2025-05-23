@@ -6,7 +6,6 @@ import pandas as pd
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
 from decima.hub import load_decima_metadata, load_decima_model
-from decima.model.lightning import LightningModel
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.interpret.attribution import Attribution, attributions
 # from decima.interpret.ism import ism # TODO: implement ism
@@ -106,10 +105,7 @@ class DecimaResult:
             ...     model=2
             ... )
         """
-        if model in {0, 1, 2, 3}:
-            self._model = load_decima_model(rep=model, device=device)
-        else:
-            self._model = LightningModel.load_from_checkpoint(model, map_location=device)
+        self._model = load_decima_model(model, device=device)
         self._model.eval()
         return self
 
@@ -187,8 +183,10 @@ class DecimaResult:
         tasks: Optional[List[str]] = None,
         off_tasks: Optional[List[str]] = None,
         transform: str = "specificity",
-        n_peaks: int = 10,
-        min_dist: int = 6,
+        threshold: float = 5e-4,
+        min_seqlet_len: int = 4,
+        max_seqlet_len: int = 25,
+        additional_flanks: int = 0,
     ) -> Attribution:
         """Get attributions for a specific gene.
 
@@ -215,13 +213,12 @@ class DecimaResult:
         inputs = torch.vstack([one_hot_seq, gene_mask])
 
         attrs = attributions(
-            gene=gene,
             inputs=inputs,
-            model=self._model,
-            device=self.model.device,
+            model=self.model,
             tasks=tasks,
             off_tasks=off_tasks,
             transform=transform,
+            device=self.model.device,
         )
 
         gene_meta = self.gene_metadata.loc[gene]
@@ -232,11 +229,11 @@ class DecimaResult:
             chrom=gene_meta.chrom,
             start=gene_meta.start,
             end=gene_meta.end,
-            gene_start=gene_meta.gene_start,
-            gene_end=gene_meta.gene_end,
             strand=gene_meta.strand,
-            n_peaks=n_peaks,
-            min_dist=min_dist,
+            threshold=threshold,
+            min_seqlet_len=min_seqlet_len,
+            max_seqlet_len=max_seqlet_len,
+            additional_flanks=additional_flanks,
         )
 
     def query_cells(self, query: str):
