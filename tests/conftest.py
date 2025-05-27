@@ -5,6 +5,8 @@ from decima.hub import login_wandb
 
 import pytest
 
+from decima.hub.download import download_hg38
+
 def pytest_addoption(parser):
     """Adds a --run-long-running option to pytest."""
     parser.addoption(
@@ -32,7 +34,7 @@ def pytest_collection_modifyitems(config, items):
 
 
 login_wandb()
-
+download_hg38()
 
 device = "cpu"
 if torch.cuda.is_available():
