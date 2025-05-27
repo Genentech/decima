@@ -7,6 +7,8 @@ from decima.core.result import DecimaResult
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.model.decima_model import DecimaModel
 
+from decima.constants import DECIMA_CONTEXT_SIZE
+
 from conftest import device
 
 
@@ -16,6 +18,7 @@ def test_load_result():
     assert result.anndata.shape == (8856, 18457)
 
 
+@pytest.mark.long_running
 def test_model_loading():
     result = DecimaResult.load()
 
@@ -71,6 +74,7 @@ def test_predictions():
     assert all(g in preds.columns for g in genes)
 
 
+@pytest.mark.long_running
 def test_attributions():
     result = DecimaResult.load()
     result.load_model(device=device)
@@ -88,5 +92,5 @@ def test_one_hot_preparation():
 
     one_hot, gene_mask = result.prepare_one_hot(gene)
     assert isinstance(one_hot, torch.Tensor)
-    assert one_hot.shape == (4, 524288)
-    assert gene_mask.shape == (1, 524288)
+    assert one_hot.shape == (4, DECIMA_CONTEXT_SIZE)
+    assert gene_mask.shape == (1, DECIMA_CONTEXT_SIZE)

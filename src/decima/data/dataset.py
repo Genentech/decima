@@ -7,6 +7,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 
 from decima.data.read_hdf5 import indices_to_one_hot, _extract_center, get_gene_idx, mutate
 from decima.core.result import DecimaResult
+from decima.constants import DECIMA_CONTEXT_SIZE
 
 
 class HDF5Dataset(Dataset):
@@ -15,7 +16,7 @@ class HDF5Dataset(Dataset):
         key,
         h5_file,
         ad=None,
-        seq_len=524288,
+        seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
         seed=0,
         augment_mode="random",
@@ -101,7 +102,7 @@ class VariantDataset(Dataset):
         variants,
         h5_file=None,
         ad=None,
-        seq_len=524288,
+        seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
         test_ref=False,
     ):

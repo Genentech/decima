@@ -9,6 +9,8 @@ from grelu.sequence.format import intervals_to_strings
 from grelu.sequence.utils import get_unique_length
 from tqdm import tqdm
 
+from decima.constants import DECIMA_CONTEXT_SIZE
+
 
 def merge_transcripts(gtf):
     # Get gene-level columns
@@ -28,7 +30,7 @@ def merge_transcripts(gtf):
     return genes
 
 
-def var_to_intervals(ad, chr_end_pad=10000, genome="hg38", seq_len=524288, crop_coords=163840):
+def var_to_intervals(ad, chr_end_pad=10000, genome="hg38", seq_len=DECIMA_CONTEXT_SIZE, crop_coords=163840):
     sizes = read_sizes(genome)
 
     # Calculate interval size

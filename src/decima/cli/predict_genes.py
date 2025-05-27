@@ -5,6 +5,7 @@ import click
 import anndata
 import numpy as np
 import torch
+from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.model.lightning import LightningModel
 from decima.data.read_hdf5 import list_genes
 from decima.data.dataset import HDF5Dataset
@@ -36,7 +37,7 @@ def predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
         key=None,
         h5_file=h5_file,
         ad=ad,
-        seq_len=524288,
+        seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=max_seq_shift,
     )
 

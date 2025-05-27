@@ -7,7 +7,8 @@ result = DecimaResult.load()
 
 df = list()
 
-for i in ['CD68', 'SPI1', 'CD14']:
+# for i in ['CD68', 'SPI1', 'CD14']:
+for i in ['CD68', 'SPI1']:
     seq, _ = result.prepare_one_hot(i)
     seq = one_hot_to_strings(seq)
     gene = result.gene_metadata.loc[i]
@@ -24,4 +25,4 @@ df.to_csv("tests/data/seqs.csv")
 
 with open("tests/data/seqs.fasta", "w") as f:
     for row in df.itertuples():
-        f.write(f">{row.Index}|gene_start={row.gene_mask_start}|gene_end={row.gene_mask_end}\n{row.seq}\n")
+        f.write(f">{row.Index}|gene_mask_start={row.gene_mask_start}|gene_mask_end={row.gene_mask_end}\n{row.seq}\n")

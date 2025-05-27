@@ -5,9 +5,9 @@ import torch
 import pandas as pd
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
+from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
-from decima.interpret.attribution import Attribution, attributions
 # from decima.interpret.ism import ism # TODO: implement ism
 
 
@@ -171,7 +171,7 @@ class DecimaResult:
 
         seq = strings_to_one_hot(intervals_to_strings(row, genome="hg38"))
 
-        mask = np.zeros(shape=(1, 524288))
+        mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE))
         mask[0, row.gene_mask_start : row.gene_mask_end] += 1
         mask = torch.from_numpy(mask).float()
 
@@ -183,11 +183,12 @@ class DecimaResult:
         tasks: Optional[List[str]] = None,
         off_tasks: Optional[List[str]] = None,
         transform: str = "specificity",
+        method: str = "inputxgradient",
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,
         max_seqlet_len: int = 25,
         additional_flanks: int = 0,
-    ) -> Attribution:
+    ):
         """Get attributions for a specific gene.
 
         Args:
@@ -195,31 +196,29 @@ class DecimaResult:
             tasks: List of cells to use as on task
             off_tasks: List of cells to use as off task
             transform: Attribution transform method
+            method: Attribution method
             n_peaks: Number of peaks to find
             min_dist: Minimum distance between peaks
 
         Returns:
             Attribution: Container with inputs, predictions, attribution scores and TSS position
         """
-        if tasks is None:
-            tasks = self.cell_metadata.index.tolist()
-        elif isinstance(tasks, str):
-            tasks = self.query_cells(tasks)
-
-        if isinstance(off_tasks, str):
-            off_tasks = self.query_cells(off_tasks)
+        tasks, off_tasks = self.query_tasks(tasks, off_tasks)
 
         one_hot_seq, gene_mask = self.prepare_one_hot(gene)
         inputs = torch.vstack([one_hot_seq, gene_mask])
 
+        from decima.interpret.attributions import Attribution, attributions  # to avoid circular import
+
         attrs = attributions(
-            inputs=inputs,
+            inputs=inputs.unsqueeze(0),
             model=self.model,
             tasks=tasks,
             off_tasks=off_tasks,
             transform=transform,
             device=self.model.device,
-        )
+            method=method,
+        ).squeeze(0)
 
         gene_meta = self.gene_metadata.loc[gene]
         return Attribution(
@@ -238,6 +237,17 @@ class DecimaResult:
 
     def query_cells(self, query: str):
         return self.cell_metadata.query(query).index.tolist()
+
+    def query_tasks(self, tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
+        if tasks is None:
+            tasks = self.cell_metadata.index.tolist()
+        elif isinstance(tasks, str):
+            tasks = self.query_cells(tasks)
+
+        if isinstance(off_tasks, str):
+            off_tasks = self.query_cells(off_tasks)
+
+        return tasks, off_tasks
 
     @property
     def shape(self) -> tuple:

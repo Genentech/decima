@@ -5,11 +5,19 @@ import pyBigWig
 import numpy as np
 import pandas as pd
 from grelu.sequence.format import strings_to_one_hot
-from decima.interpret.attribution import Attribution
+from captum.attr import Saliency, InputXGradient, IntegratedGradients
+from decima.interpret.attributions import Attribution
 from decima import predict_save_attributions
+from decima.interpret.attributions import get_attribution_method
+from decima.constants import DECIMA_CONTEXT_SIZE
 
 from conftest import device
 
+
+def test_get_attribution_method():
+    assert get_attribution_method("saliency") == Saliency
+    assert get_attribution_method("inputxgradient") == InputXGradient
+    assert get_attribution_method("integratedgradients") == IntegratedGradients
 
 @pytest.fixture
 def attributions():
@@ -31,8 +39,6 @@ def attributions():
         chrom="chr1",
         start=1000,
         end=1500,
-        gene_start=1350,
-        gene_end=1375,
         strand="+",
         threshold=1e-2,
     )
@@ -77,6 +83,28 @@ def test_Attribution_peaks_to_bed(attributions):
     assert row["score"] > 2
     assert row["strand"] == "."
 
+    attributions._strand = "-"
+    df_peaks = attributions.peaks_to_bed()
+    assert df_peaks.iloc[0]["strand"] == "."
+    assert row["start"] == 1360
+    assert row["end"] == 1364
+
+
+@pytest.mark.long_running
+def test_Attribution_from_seq(tmp_path):
+    attributions = Attribution.from_seq(
+        inputs='A' * DECIMA_CONTEXT_SIZE,
+        gene_mask_start=0,
+        gene_mask_end=DECIMA_CONTEXT_SIZE,
+    )
+    bigwig_path = tmp_path / "test.bigwig"
+    attributions.save_bigwig(str(bigwig_path))
+    bw = pyBigWig.open(str(bigwig_path))
+    attrs = bw.values("custom", 0, DECIMA_CONTEXT_SIZE)
+    assert len(attrs) == DECIMA_CONTEXT_SIZE
+    assert np.sum(attrs) < 1 # no expression for AAAAAAAAAA...
+    bw.close()
+
 
 def test_Attribution_save_bigwig(attributions, tmp_path):
     bigwig_path = tmp_path / "test.bigwig"
@@ -89,15 +117,68 @@ def test_Attribution_save_bigwig(attributions, tmp_path):
     assert attrs[0] == pytest.approx(40_000)
     bw.close()
 
-
-def test_predict_save_attributions(tmp_path):
+@pytest.mark.long_running
+def test_predict_save_attributions_single_gene(tmp_path):
     output_dir = tmp_path / "SPI1"
-    predict_save_attributions(str(output_dir), "SPI1", "cell_type == 'classical monocyte'", device=device)
+    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], tasks="cell_type == 'classical monocyte'", device=device)
 
     assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks.png").exists()
-    assert (output_dir / "attributions.bigwig").exists()
-    assert (output_dir / "attributions.npz").exists()
-    assert (output_dir / "attributions_seq_logos").is_dir()
+    assert (output_dir / "peaks_plots").is_dir()
+    assert (output_dir / "attributions.h5").exists()
     assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.log").exists()
+    assert (output_dir / "qc.warnings.log").exists()
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_single_gene_saliency(tmp_path):
+    output_dir = tmp_path / "SPI1"
+    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="saliency", tasks="cell_type == 'classical monocyte'", device=device)
+
+    assert (output_dir / "peaks.bed").exists()
+    assert (output_dir / "peaks_plots").is_dir()
+    assert (output_dir / "attributions.h5").exists()
+    assert (output_dir / "motifs.tsv").exists()
+    assert (output_dir / "qc.warnings.log").exists()
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_single_gene_inputxgradient(tmp_path):
+    output_dir = tmp_path / "SPI1"
+    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="inputxgradient", tasks="cell_type == 'classical monocyte'", device=device)
+
+    assert (output_dir / "peaks.bed").exists()
+    assert (output_dir / "peaks_plots").is_dir()
+    assert (output_dir / "attributions.h5").exists()
+    assert (output_dir / "motifs.tsv").exists()
+    assert (output_dir / "qc.warnings.log").exists()
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_single_gene_integratedgradients(tmp_path):
+    output_dir = tmp_path / "SPI1"
+    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="integratedgradients", tasks="cell_type == 'classical monocyte'", device=device)
+
+    assert (output_dir / "peaks.bed").exists()
+    assert (output_dir / "peaks_plots").is_dir()
+    assert (output_dir / "attributions.h5").exists()
+    assert (output_dir / "motifs.tsv").exists()
+    assert (output_dir / "qc.warnings.log").exists()
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_multiple_genes(tmp_path):
+    output_dir = tmp_path / "SPI1_CD68"
+    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1", "CD68"], tasks="cell_type == 'classical monocyte'", device=device)
+
+    assert (output_dir / "peaks.bed").exists()
+    assert (output_dir / "peaks_plots").is_dir()
+    assert (output_dir / "attributions.h5").exists()
+    assert (output_dir / "motifs.tsv").exists()
+    assert (output_dir / "qc.warnings.log").exists()
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_seqs(tmp_path):
+    output_dir = tmp_path / "seqs"
+    seqs = pd.read_csv('tests/data/seqs.csv', index_col=0)
+    predict_save_attributions(output_dir=str(output_dir), seqs=seqs, tasks="cell_type == 'classical monocyte'", device=device)

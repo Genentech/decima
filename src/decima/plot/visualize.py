@@ -2,18 +2,8 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 import bioframe as bf
-from grelu.visualize import plot_attributions
 
 from ..tools.evaluate import match_criteria
-
-
-def plot_seqlogo(motif, rc=False, figsize=(2, 1)):
-    m = np.array(motif.frequencies).T
-    ic = 2 + (m * np.log2(m)).sum(0)
-    m = m * np.expand_dims(ic, 0)
-    if rc:
-        m = np.flip(m, (0, 1))
-    return plot_attributions(m, figsize=figsize)
 
 
 def plot_gene_scatter(
