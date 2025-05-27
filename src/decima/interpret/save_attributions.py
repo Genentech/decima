@@ -215,8 +215,8 @@ def predict_save_attributions(
 
     if seqs is not None:
         logger.info("Saving sequences...")
-        for attrs in tqdm(attributions, desc="Saving sequences..."):
-            fasta_path = str(output_dir / "seqs.fasta")
-            with open(fasta_path, "w") as f:
+        fasta_path = str(output_dir / "seqs.fasta")
+        with open(fasta_path, "w") as f:
+            for attrs in tqdm(attributions, desc="Saving sequences..."):
                 f.write(attrs.fasta_str())
-            Faidx(fasta_path, build_index=True)
+        Faidx(fasta_path, build_index=True)

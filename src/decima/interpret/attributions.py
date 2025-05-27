@@ -464,7 +464,7 @@ class Attribution:
         """
         Get attribution scores as a fasta string.
         """
-        seq = convert_input_type(self.inputs[:4], "strings")[0]
+        seq = convert_input_type(self.inputs[:4], "strings")
         name = self.gene or "custom"
         return f">{name}\n{seq}\n"
 
