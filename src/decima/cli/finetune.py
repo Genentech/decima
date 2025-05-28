@@ -1,45 +1,28 @@
-"""Finetune the Decima model.
-
-Usage:
-  decima_train.py [options]
-
-Options:
-  --name=<name>         Project name.
-  --dir=<dir>           Data directory path.
-  --lr=<lr>             Learning rate [default: 0.001].
-  --weight=<weight>     Weight parameter.
-  --grad=<grad>         Gradient accumulation steps.
-  --replicate=<rep>     Replication number [default: 0].
-  --bs=<bs>             Batch size [default: 4].
-  -h --help             Show this help message and exit.
-"""
+"""Finetune the Decima model."""
 
 import os
-
+import click
 import anndata
 import wandb
-from docopt import docopt
-from lightning import LightningModel
-
-from decima.data.read_hdf5 import HDF5Dataset
+from decima.model.lightning import LightningModel
+from decima.data.dataset import HDF5Dataset
 
 
-def main():
-    args = docopt(__doc__)
-
-    name = args["--name"]
-    data_dir = args["--dir"]
-    lr = float(args["--lr"])
-    weight = float(args["--weight"])
-    grad = int(args["--grad"])
-    replicate = int(args["--replicate"])
-    batch_size = int(args["--bs"])
-
+@click.command()
+@click.option("--name", required=True, help="Project name")
+@click.option("--dir", required=True, help="Data directory path")
+@click.option("--lr", default=0.001, type=float, help="Learning rate")
+@click.option("--weight", required=True, type=float, help="Weight parameter")
+@click.option("--grad", required=True, type=int, help="Gradient accumulation steps")
+@click.option("--replicate", default=0, type=int, help="Replication number")
+@click.option("--bs", default=4, type=int, help="Batch size")
+def finetune(name, dir, lr, weight, grad, replicate, bs):
+    """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")
     run = wandb.init(project="decima", dir=name, name=name)
 
-    matrix_file = os.path.join(data_dir, "aggregated.h5ad")
-    h5_file = os.path.join(data_dir, "data.h5")
+    matrix_file = os.path.join(dir, "aggregated.h5ad")
+    h5_file = os.path.join(dir, "data.h5")
     print(f"Data paths: {matrix_file}, {h5_file}")
 
     print("Reading anndata")
@@ -58,11 +41,11 @@ def main():
 
     train_params = {
         "optimizer": "adam",
-        "batch_size": batch_size,
+        "batch_size": bs,
         "num_workers": 16,
         "devices": 0,
         "logger": "wandb",
-        "save_dir": data_dir,
+        "save_dir": dir,
         "max_epochs": 15,
         "lr": lr,
         "total_weight": weight,
@@ -85,7 +68,3 @@ def main():
     train_dataset.close()
     val_dataset.close()
     run.finish()
-
-
-if __name__ == "__main__":
-    main()
