@@ -20,7 +20,7 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--matrix_file", required=True, help="Path to h5ad file containing genes to predict.")
 @click.option("--out_file", required=True, help="Output file path.")
 @click.option("--max_seq_shift", default=0, help="Maximum jitter for augmentation.")
-def predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
+def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
     """Make predictions for all genes."""
     torch.set_float32_matmul_precision("medium")
 

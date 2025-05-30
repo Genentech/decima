@@ -1,4 +1,3 @@
-import warnings
 import torch
 import numpy as np
 import pandas as pd
@@ -103,24 +102,24 @@ class VariantDataset(Dataset):
     def __init__(
         self,
         variants,
-        h5_file=None,
-        ad=None,
+        anndata=None,
         seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
         test_ref=False,
         include_cols=None,
+        gene_col=None,
         min_from_end=0,
         max_dist_tss=float("inf"),
     ):
         super().__init__()
 
         self.seq_len = seq_len
-        self.h5_file = h5_file
-        self.result = self._load_metadata(h5_file, ad)
+        self.result = DecimaResult.load(anndata)
 
         self.variants = self._overlap_genes(
-            variants, include_cols=include_cols, min_from_end=min_from_end, max_dist_tss=max_dist_tss
+            variants, include_cols=include_cols, gene_col=gene_col, min_from_end=min_from_end, max_dist_tss=max_dist_tss
         )
+
         self.n_seqs = len(self.variants)
         self.n_alleles = 2
         self.test_ref = test_ref
@@ -139,40 +138,57 @@ class VariantDataset(Dataset):
         self.padded_seq_len = self.seq_len + (2 * self.max_seq_shift)
 
     @staticmethod
-    def _load_metadata(h5_file=None, ad=None):
-        if ad is None:
-            return DecimaResult.load(h5_file)
-        else:
-            if h5_file is not None:
-                warnings.warn("h5_file is ignored when ad is provided")
-            return DecimaResult(ad)
+    def overlap_genes(
+        df_variants, df_genes, gene_col=None, include_cols=None, min_from_end=0, max_dist_tss=float("inf")
+    ):
+        include_cols = include_cols or list()
 
-    @staticmethod
-    def overlap_genes(df_variants, df_genes, include_cols=None, min_from_end=0, max_dist_tss=float("inf")):
         df_variants = df_variants.copy()
         df_variants["start"] = df_variants.pos
         df_variants["end"] = df_variants["start"] + 1
 
-        df = bioframe.overlap(df_genes, df_variants, how="inner", suffixes=("_gene", ""))
+        if gene_col is not None:
+            assert gene_col in df_variants.columns, f"Gene column {gene_col} not found in variants"
+
+            missing = df_variants[~df_variants[gene_col].isin(set(df_genes["gene"]))]
+            if len(missing) > 0:
+                raise ValueError(f"Some genes in {gene_col} are not in the result: {missing[gene_col].unique()}")
+
+            df_variants = df_variants.rename(columns={gene_col: "gene"})
+            df = df_variants.merge(df_genes, how="left", on="gene", suffixes=("", "_gene"))
+        else:
+            df = bioframe.overlap(df_genes, df_variants, how="inner", suffixes=("_gene", ""))
+
+        df = df.rename(
+            columns={
+                "start": "start_variant",
+                "end": "end_variant",
+                "gene_gene": "gene",
+                "start_gene": "start",
+                "end_gene": "end",
+                "strand_gene": "strand",
+                "gene_mask_start_gene": "gene_mask_start",
+                "gene_mask_end_gene": "gene_mask_end",
+            }
+        )
 
         df["rel_pos"] = df.apply(
-            lambda row: row.pos - row.start_gene if row.strand_gene == "+" else row.end_gene - row.pos,
+            lambda row: row.pos - row.start if row.strand == "+" else row.end - row.pos,
             axis=1,
         )
         df["rel_pos_end"] = df.apply(
-            lambda row: row.end_gene - row.pos if row.strand_gene == "+" else row.pos - row.start_gene,
+            lambda row: row.end - row.pos if row.strand == "+" else row.pos - row.start,
             axis=1,
         )
         df["ref_tx"] = df.apply(
-            lambda row: row.ref if row.strand_gene == "+" else reverse_complement(row.ref),
+            lambda row: row.ref if row.strand == "+" else reverse_complement(row.ref),
             axis=1,
         )
         df["alt_tx"] = df.apply(
-            lambda row: row.alt if row.strand_gene == "+" else reverse_complement(row.alt),
+            lambda row: row.alt if row.strand == "+" else reverse_complement(row.alt),
             axis=1,
         )
-        # Get distance from TSS
-        df["tss_dist"] = df.rel_pos - df.gene_mask_start_gene
+        df["tss_dist"] = df.rel_pos - df.gene_mask_start
 
         df = df[(df.rel_pos > min_from_end) & (df.rel_pos_end > min_from_end) & (df.tss_dist.abs() < max_dist_tss)]
 
@@ -182,32 +198,26 @@ class VariantDataset(Dataset):
                 "pos",
                 "ref",
                 "alt",
-                "gene_gene",
-                "start_gene",
-                "end_gene",
-                "strand_gene",
-                "gene_mask_start_gene",
+                "gene",
+                "start",
+                "end",
+                "strand",
+                "gene_mask_start",
+                "gene_mask_end",
                 "rel_pos",
                 "ref_tx",
                 "alt_tx",
                 "tss_dist",
-                *(include_cols or list()),
+                *include_cols,
             ]
-        ].rename(
-            columns={
-                "gene_gene": "gene",
-                "start_gene": "start",
-                "end_gene": "end",
-                "strand_gene": "strand",
-                "gene_mask_start_gene": "gene_mask_start",
-            }
-        )
+        ]
 
-    def _overlap_genes(self, variants, include_cols=None, min_from_end=0, max_dist_tss=float("inf")):
+    def _overlap_genes(self, variants, include_cols=None, gene_col=None, min_from_end=0, max_dist_tss=float("inf")):
         return self.overlap_genes(
             variants,
             self.result.gene_metadata.reset_index(names=["gene"]),
             include_cols=include_cols,
+            gene_col=gene_col,
             min_from_end=min_from_end,
             max_dist_tss=max_dist_tss,
         )
@@ -234,8 +244,8 @@ class VariantDataset(Dataset):
         else:
             seq = mutate(seq, variant.ref_tx, variant.rel_pos)
 
-        input = torch.vstack([seq, mask])
+        inputs = torch.vstack([seq, mask])
         # Augment the sequence
-        input = _extract_center(input, seq_len=self.padded_seq_len)
-        input = self.augmenter(seq=input, idx=augment_idx)
-        return input
+        inputs = _extract_center(inputs, seq_len=self.padded_seq_len)
+        inputs = self.augmenter(seq=inputs, idx=augment_idx)
+        return inputs

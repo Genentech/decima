@@ -1,0 +1,12 @@
+vcf_content = """##fileformat=VCFv4.2
+##contig=<ID=chr1,length=248956422>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+chr1	1000018	.	G	A	.	PASS	.
+chr1	1002308	.	T	C	.	PASS	.
+chr1	109727471	.	A	C	.	PASS	.
+chr1	109728286	.	T	G	.	PASS	.
+chr1	109728807	.	T	G	.	PASS	.
+"""
+
+with open("tests/data/test.vcf", "w") as f:
+    f.write(vcf_content)

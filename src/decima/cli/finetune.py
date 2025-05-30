@@ -16,7 +16,7 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--grad", required=True, type=int, help="Gradient accumulation steps")
 @click.option("--replicate", default=0, type=int, help="Replication number")
 @click.option("--bs", default=4, type=int, help="Batch size")
-def finetune(name, dir, lr, weight, grad, replicate, bs):
+def cli_finetune(name, dir, lr, weight, grad, replicate, bs):
     """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")
     run = wandb.init(project="decima", dir=name, name=name)

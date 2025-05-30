@@ -31,7 +31,7 @@ main.add_command(cli_predict_genes, name="predict-genes")
 main.add_command(cli_download, name="download")
 main.add_command(cli_attributions, name="attributions")
 main.add_command(cli_query_cell, name="query-cell")
-main.add_command(cli_predict_variant_effect, name="predict-variant-effect")
+main.add_command(cli_predict_variant_effect, name="vep")
 
 if __name__ == "__main__":
     main()

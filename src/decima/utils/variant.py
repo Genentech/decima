@@ -4,6 +4,7 @@ from decima.core import DecimaResult
 
 
 def process_variants(variants, ad=None, min_from_end=0):
+    raise DeprecationWarning("process_variants is deprecated. Use `VariantDataset.overlap_genes` instead.")
     # Match to gene intervals
 
     if ad is None:

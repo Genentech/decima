@@ -30,7 +30,7 @@ from decima import predict_save_attributions
 @click.option("--plot_seqlogo", is_flag=True, help="Generate sequence logo plots for peaks")
 @click.option("--seqlogo_window", type=int, default=50, help="Window size for sequence logo plots")
 @click.option("--dpi", type=int, default=100, help="DPI for attribution plots")
-def attributions(
+def cli_attributions(
     output_dir, genes, seqs, tasks, off_tasks, model, method, device, plot_peaks, plot_seqlogo, seqlogo_window, dpi
 ):
     """
