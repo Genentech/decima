@@ -3,13 +3,16 @@ import numpy as np
 import pandas as pd
 import h5py
 import bioframe
-from torch.utils.data import Dataset
+from more_itertools import flatten
+from torch.utils.data import Dataset, default_collate
 from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
 from decima.constants import DECIMA_CONTEXT_SIZE
-from decima.data.read_hdf5 import index_genes, indices_to_one_hot, _extract_center, mutate
+from decima.data.read_hdf5 import index_genes, indices_to_one_hot, _extract_center
 from decima.core.result import DecimaResult
+
+from decima.model.metrics import WarningType
 
 
 class HDF5Dataset(Dataset):
@@ -105,11 +108,11 @@ class VariantDataset(Dataset):
         anndata=None,
         seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
-        test_ref=False,
         include_cols=None,
         gene_col=None,
         min_from_end=0,
-        max_dist_tss=float("inf"),
+        max_distance=float("inf"),
+        max_distance_type="tss",
     ):
         super().__init__()
 
@@ -117,12 +120,16 @@ class VariantDataset(Dataset):
         self.result = DecimaResult.load(anndata)
 
         self.variants = self._overlap_genes(
-            variants, include_cols=include_cols, gene_col=gene_col, min_from_end=min_from_end, max_dist_tss=max_dist_tss
+            variants,
+            include_cols=include_cols,
+            gene_col=gene_col,
+            min_from_end=min_from_end,
+            max_distance=max_distance,
+            max_distance_type=max_distance_type,
         )
 
         self.n_seqs = len(self.variants)
         self.n_alleles = 2
-        self.test_ref = test_ref
 
         # Save augmentation params
         self.max_seq_shift = max_seq_shift
@@ -139,7 +146,13 @@ class VariantDataset(Dataset):
 
     @staticmethod
     def overlap_genes(
-        df_variants, df_genes, gene_col=None, include_cols=None, min_from_end=0, max_dist_tss=float("inf")
+        df_variants,
+        df_genes,
+        gene_col=None,
+        include_cols=None,
+        min_from_end=0,
+        max_distance=float("inf"),
+        max_distance_type="tss",
     ):
         include_cols = include_cols or list()
 
@@ -190,7 +203,14 @@ class VariantDataset(Dataset):
         )
         df["tss_dist"] = df.rel_pos - df.gene_mask_start
 
-        df = df[(df.rel_pos > min_from_end) & (df.rel_pos_end > min_from_end) & (df.tss_dist.abs() < max_dist_tss)]
+        df = df[(df.rel_pos > min_from_end) & (df.rel_pos_end > min_from_end)]  # & (df.tss_dist.abs() < max_dist_tss)
+
+        if max_distance_type == "tss":
+            df = df[df.tss_dist.abs() < max_distance]
+        elif max_distance_type == "gene":
+            raise NotImplementedError("max_distance_type == 'gene' is not implemented yet.")
+        else:
+            raise ValueError(f"Invalid max_distance_type: {max_distance_type}. Must be 'tss'.")
 
         return df[
             [
@@ -212,40 +232,63 @@ class VariantDataset(Dataset):
             ]
         ]
 
-    def _overlap_genes(self, variants, include_cols=None, gene_col=None, min_from_end=0, max_dist_tss=float("inf")):
+    def _overlap_genes(
+        self,
+        variants,
+        include_cols=None,
+        gene_col=None,
+        min_from_end=0,
+        max_distance=float("inf"),
+        max_distance_type="tss",
+    ):
         return self.overlap_genes(
             variants,
             self.result.gene_metadata.reset_index(names=["gene"]),
             include_cols=include_cols,
             gene_col=gene_col,
             min_from_end=min_from_end,
-            max_dist_tss=max_dist_tss,
+            max_distance=max_distance,
+            max_distance_type=max_distance_type,
         )
 
     def __len__(self):
         return self.n_seqs * self.n_augmented * self.n_alleles
 
-    def close(self):
-        self.dataset.close()
+    def validate_allele_seq(self, gene, variant):
+        seq = self.result.gene_sequence(gene)
+        return (seq[variant.rel_pos] == variant.ref_tx) or (seq[variant.rel_pos] == variant.alt_tx)
 
     def __getitem__(self, idx):
         seq_idx, augment_idx, allele_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented, self.n_alleles))
 
         variant = self.variants.iloc[seq_idx]
-        seq, mask = self.result.prepare_one_hot(variant.gene)
 
-        if self.test_ref:  # check that ref is actually present
-            assert ["A", "C", "G", "T"][seq[:4, variant.rel_pos].argmax()] == variant.ref_tx, (
-                variant.ref_tx + "_vs_" + seq[:4, variant.rel_pos] + "__" + str(seq_idx)
-            )
+        warnings = list()
+        if not self.validate_allele_seq(variant.gene, variant):
+            warnings.append(WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME)
 
         if allele_idx:
-            seq = mutate(seq, variant.alt_tx, variant.rel_pos)
+            seq, mask = self.result.prepare_one_hot(
+                variant.gene,
+                variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.ref, "alt": variant.alt}],
+            )
         else:
-            seq = mutate(seq, variant.ref_tx, variant.rel_pos)
+            seq, mask = self.result.prepare_one_hot(
+                variant.gene,
+                variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],
+            )
 
         inputs = torch.vstack([seq, mask])
-        # Augment the sequence
+
         inputs = _extract_center(inputs, seq_len=self.padded_seq_len)
         inputs = self.augmenter(seq=inputs, idx=augment_idx)
-        return inputs
+        return {
+            "seq": inputs,
+            "warning": warnings,
+        }
+
+    def collate_fn(self, batch):
+        return {
+            "seq": default_collate([i["seq"] for i in batch]),
+            "warning": list(flatten([b["warning"] for b in batch])),
+        }

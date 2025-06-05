@@ -1,22 +1,14 @@
+import torch
 import numpy as np
 import pandas as pd
 import pytest
 from decima.core.result import DecimaResult
 from decima.data.dataset import VariantDataset
-from decima.vep import predict_variant_effect, predict_variant_effect_save, predict_vcf_variant_effect_save
+from decima.model.metrics import WarningType
+from decima.vep import _predict_variant_effect, predict_variant_effect
 from decima.utils.io import read_vcf_chunks
 
 from conftest import device
-
-
-@pytest.fixture
-def df_variant():
-    return pd.DataFrame({
-        "chrom": ["chr1", "chr1", "chr1", "chr1", "chr1"],
-        "pos": [1000018, 1002308, 109727471, 109728286, 109728807],
-        "ref": ["G", "T", "A", "T", "T"],
-        "alt": ["A", "C", "C", "G", "G"],
-    })
 
 
 def test_read_vcf_chunks():
@@ -38,11 +30,12 @@ def test_VariantDataset_overlap_genes(df_variant):
     })
 
     df = VariantDataset.overlap_genes(df_variant, df_genes)
+
     pd.testing.assert_frame_equal(df, pd.DataFrame({
         "chrom": ["chr1", "chr1", "chr1", "chr1", "chr1"],
         "pos": [1000018, 1002308, 109727471, 109728286, 109728807],
-        "ref": ["G", "T", "A", "T", "T"],
-        "alt": ["A", "C", "C", "G", "G"],
+        "ref": ["G", "T", "A", "TTT", "T"],
+        "alt": ["A", "C", "C", "G", "GG"],
         "gene": ["ISG15", "ISG15", "GSTM3", "GSTM3", "GSTM3"],
         "start": [837298, 837298, 109380590, 109380590, 109380590],
         "end": [1361586, 1361586, 109904878, 109904878, 109904878],
@@ -50,8 +43,8 @@ def test_VariantDataset_overlap_genes(df_variant):
         "gene_mask_start": [163840, 163840, 163840, 163840, 163840],
         "gene_mask_end": [164840, 164840, 164840, 164840, 164840],
         "rel_pos": [162720, 165010, 177407, 176592, 176071],
-        "ref_tx": ["G", "T", "T", "A", "A"],
-        "alt_tx": ["A", "C", "G", "C", "C"],
+        "ref_tx": ["G", "T", "T", "AAA", "A"],
+        "alt_tx": ["A", "C", "G", "C", "CC"],
         "tss_dist": [-1120, 1170, 13567, 12752, 12231],
     }))
 
@@ -80,18 +73,48 @@ def test_VariantDataset(df_variant):
     dataset = VariantDataset(df_variant)
 
     assert isinstance(dataset.result, DecimaResult)
-
     assert dataset.variants.columns.tolist() == [
         "chrom", "pos", "ref", "alt", "gene", "start", "end", "strand",
         "gene_mask_start", "gene_mask_end", "rel_pos", "ref_tx", "alt_tx", "tss_dist"
     ]
 
-    assert len(dataset) == 82 * 2
-    assert dataset[0].shape == (5, 524288)
+    assert dataset[2]["warning"] == []
+    assert dataset[3]["warning"] == []
+    assert dataset[2]["warning"] == []
+    assert dataset[10]["warning"] == []
+    assert dataset[30]["warning"] == []
+    assert dataset[88]["warning"] == [WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME]
 
-    rows, cols = np.where(dataset[0] != dataset[1])
-    assert rows.tolist() == [1, 3] # C > T
-    assert cols.tolist() == [40725, 40725] # should be the same for both
+    assert len(dataset) == 82 * 2
+    assert dataset[0]['seq'].shape == (5, 524288)
+
+    rows, cols = np.where(dataset[2]['seq'] != dataset[3]['seq'])
+    assert rows.tolist() == [0, 2] # A > G
+    assert cols.tolist() == [38435, 38435] # should be the same for both
+
+    for i in range(len(dataset)):
+        assert dataset[i]['seq'].shape == (5, 524288)
+
+    rows, cols = np.where(dataset[162]['seq'] != dataset[163]['seq'])
+    assert cols.min() == 505705 # the positions before should not be effected.
+    assert cols.shape[0] > 10_000 # remaining most bp should be different due to shifting.
+
+
+@pytest.mark.long_running
+def test_VariantDataset_dataloader(df_variant):
+
+    dataset = VariantDataset(df_variant)
+    dl = torch.utils.data.DataLoader(dataset, batch_size=64, num_workers=0, collate_fn=dataset.collate_fn)
+    batches = iter(dl)
+
+    batch = next(batches)
+    assert batch["seq"].shape == (64, 5, 524288)
+    assert batch["warning"] == []
+
+    batch = next(batches)
+    assert batch["seq"].shape == (64, 5, 524288)
+    assert len(batch["warning"]) > 0
+    assert WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME in batch["warning"]
 
 
 @pytest.mark.long_running
@@ -100,9 +123,12 @@ def test_predict_variant_effect(df_variant):
     query = "cell_type == 'CD8-positive, alpha-beta T cell'"
     cells = DecimaResult.load().query_cells(query)
 
-    df = predict_variant_effect(df_variant, tasks=query, device=device, max_dist_tss=5000)
+    df, warnings, num_variants = _predict_variant_effect(df_variant, tasks=query, device=device, max_distance=5000)
+    assert num_variants == 4
 
     assert df.shape == (4, 273)
+    assert warnings['unknown'] == 0
+    assert warnings['allele_mismatch_with_reference_genome'] == 0
     assert df.columns.tolist() == [
         'chrom', 'pos', 'ref', 'alt', 'gene', 'start', 'end', 'strand',
         'gene_mask_start', 'gene_mask_end', 'rel_pos', 'ref_tx', 'alt_tx', 'tss_dist',
@@ -116,20 +142,22 @@ def test_predict_variant_effect(df_variant):
 @pytest.mark.long_running
 def test_predict_variant_effect_save(df_variant, tmp_path):
     output_file = tmp_path / "test_predictions.parquet"
+    warnings_file = tmp_path / "test_predictions.parquet.warnings.log"
 
     query = "cell_type == 'CD8-positive, alpha-beta T cell'"
     cells = DecimaResult.load().query_cells(query)
 
-    predict_variant_effect_save(
+    predict_variant_effect(
         df_variant,
-        str(output_file),
+        output_pq=str(output_file),
         tasks=query,
         device=device,
-        max_dist_tss=5000,
+        max_distance=5000,
         chunksize=5
     )
 
     assert output_file.exists()
+    assert not warnings_file.exists()
 
     df_saved = pd.read_parquet(output_file)
 
@@ -148,17 +176,22 @@ def test_predict_variant_effect_save(df_variant, tmp_path):
 
 
 @pytest.mark.long_running
-def test_predict_vcf_variant_effect_save(tmp_path):
+def test_predict_variant_effect_vcf(tmp_path):
 
     output_file = tmp_path / "test_predictions.parquet"
-    predict_vcf_variant_effect_save(
-        "tests/data/test.vcf",
-        str(output_file),
-        device=device,
-        max_dist_tss=20000,
-    )
+    warnings_file = tmp_path / "test_predictions.parquet.warnings.log"
 
+    predict_variant_effect(
+        "tests/data/test.vcf",
+        output_pq=str(output_file),
+        device=device,
+        max_distance=20000,
+    )
     assert output_file.exists()
 
     df_saved = pd.read_parquet(output_file)
     assert df_saved.shape == (12, 8870)
+
+    with open(warnings_file, 'r') as f:
+        warnings = f.read()
+        assert "allele_mismatch_with_reference_genome: 6 / 12" in warnings

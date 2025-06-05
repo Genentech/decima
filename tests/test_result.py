@@ -94,3 +94,13 @@ def test_one_hot_preparation():
     assert isinstance(one_hot, torch.Tensor)
     assert one_hot.shape == (4, DECIMA_CONTEXT_SIZE)
     assert gene_mask.shape == (1, DECIMA_CONTEXT_SIZE)
+
+
+def test_DecimaResult_prepare_one_hot_indel():
+    result = DecimaResult.load()
+    gene = 'STRADA'
+
+    one_hot, gene_mask = result.prepare_one_hot(gene, variants=[{"chrom": "chr17", "pos": 63682336, "ref": "CCCCC", "alt": "T"}])
+    assert isinstance(one_hot, torch.Tensor)
+    assert one_hot.shape == (4, DECIMA_CONTEXT_SIZE)
+    assert gene_mask.shape == (1, DECIMA_CONTEXT_SIZE)

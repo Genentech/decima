@@ -5,7 +5,7 @@ from decima.cli.predict_genes import cli_predict_genes
 from decima.cli.download import cli_download
 from decima.cli.attributions import cli_attributions
 from decima.cli.query_cell import cli_query_cell
-from decima.cli.variant import cli_predict_variant_effect
+from decima.cli.vep import cli_predict_variant_effect
 # from decima.cli.finetune import cli_finetune
 
 

@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 import anndata
 import numpy as np
 import torch
@@ -8,6 +8,7 @@ from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
+from decima.utils.inject import prepare_seq_alt_allele
 # from decima.interpret.ism import ism # TODO: implement ism
 
 
@@ -157,7 +158,7 @@ class DecimaResult:
         else:
             return pd.DataFrame(self.anndata[:, genes].layers["preds"], index=self.cells, columns=genes)
 
-    def prepare_one_hot(self, gene: str) -> torch.Tensor:
+    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None) -> torch.Tensor:
         """Prepare one-hot encoding for a gene.
 
         Args:
@@ -167,15 +168,27 @@ class DecimaResult:
             torch.Tensor: One-hot encoding of the gene
         """
         assert gene in self.genes, f"{gene} is not in the anndata object"
-        row = self.gene_metadata.loc[gene]
+        gene_meta = self.gene_metadata.loc[gene]
 
-        seq = strings_to_one_hot(intervals_to_strings(row, genome="hg38"))
+        if variants is None:
+            seq = intervals_to_strings(gene_meta, genome="hg38")
+            gene_start, gene_end = gene_meta.gene_mask_start, gene_meta.gene_mask_end
+        else:
+            seq, (gene_start, gene_end) = prepare_seq_alt_allele(gene_meta, variants)
 
         mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE))
-        mask[0, row.gene_mask_start : row.gene_mask_end] += 1
+        mask[0, gene_start:gene_end] += 1
         mask = torch.from_numpy(mask).float()
 
-        return seq, mask
+        return strings_to_one_hot(seq), mask
+
+    def gene_sequence(self, gene: str, stranded: bool = True) -> str:
+        """Get sequence for a gene."""
+        assert gene in self.genes, f"{gene} is not in the anndata object"
+        gene_meta = self.gene_metadata.loc[gene]
+        if not stranded:
+            gene_meta = {"chrom": gene_meta.chrom, "start": gene_meta.start, "end": gene_meta.end}
+        return intervals_to_strings(gene_meta, genome="hg38")
 
     def attributions(
         self,

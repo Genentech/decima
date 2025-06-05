@@ -5,4 +5,4 @@ chr1	1000018	.	G	A	.	PASS	.
 chr1	1002308	.	T	C	.	PASS	.
 chr1	109727471	.	A	C	.	PASS	.
 chr1	109728286	.	T	G	.	PASS	.
-chr1	109728807	.	T	G	.	PASS	.
+chr1	109728807	.	TTT	G	.	PASS	.

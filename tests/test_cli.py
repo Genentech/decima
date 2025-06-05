@@ -142,7 +142,7 @@ def test_cli_vep_tsv(tmp_path):
         "--tasks", "cell_type == 'CD8-positive, alpha-beta T cell'",
         "--model", "0",
         "--device", device,
-        "--max-dist-tss", "20000",
+        "--max-distance", "20000",
         "--chunksize", "5"
     ])
     assert result.exit_code == 0
@@ -170,7 +170,7 @@ def test_cli_vep_vcf(tmp_path):
         "--tasks", "cell_type == 'CD8-positive, alpha-beta T cell'",
         "--model", "0",
         "--device", device,
-        "--max-dist-tss", "20000",
+        "--max-distance", "20000",
         "--chunksize", "5"
     ])
     assert result.exit_code == 0
@@ -193,11 +193,11 @@ def test_cli_vep_all_tasks(tmp_path):
     runner = CliRunner()
     result = runner.invoke(main, [
         "vep",
-        "-v", "tests/data/test_variants.tsv",
+        "-v", "tests/data/variants.tsv",
         "-o", str(output_file),
         "--model", "0",
         "--device", device,
-        "--max-dist-tss", "20000",
+        "--max-distance", "20000",
         "--chunksize", "5"
     ])
     assert result.exit_code == 0

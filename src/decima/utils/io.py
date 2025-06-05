@@ -26,16 +26,16 @@ def read_vcf_chunks(vcf_file: str, chunksize: int) -> Iterator[pd.DataFrame]:
     df = list()
 
     for record in vcf:
-        alt_allele = record.ALT[0] if record.ALT else ""
-
-        df.append(
-            {
-                "chrom": record.CHROM,
-                "pos": record.POS,
-                "ref": record.REF,
-                "alt": alt_allele,
-            }
-        )
+        alt_allele = record.ALT if record.ALT else [""]
+        for alt in alt_allele:
+            df.append(
+                {
+                    "chrom": record.CHROM,
+                    "pos": record.POS,
+                    "ref": record.REF,
+                    "alt": alt,
+                }
+            )
         if len(df) >= chunksize:
             yield pd.DataFrame(df)
             df = list()

@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import torch
 import pytest
 from decima.hub import login_wandb
@@ -39,3 +40,13 @@ download_hg38()
 device = "cpu"
 if torch.cuda.is_available():
     device = "cuda"
+
+
+@pytest.fixture
+def df_variant():
+    return pd.DataFrame({
+        "chrom": ["chr1", "chr1", "chr1", "chr1", "chr1"],
+        "pos": [1000018, 1002308, 109727471, 109728286, 109728807],
+        "ref": ["G", "T", "A", "TTT", "T"],
+        "alt": ["A", "C", "C", "G", "GG"],
+    })
