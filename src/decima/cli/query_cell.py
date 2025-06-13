@@ -6,7 +6,7 @@ from decima.core.result import DecimaResult
 @click.argument("query", default="")
 def cli_query_cell(query=""):
     """
-    Query a cell using query strig
+    Query a cell using query string
 
     Examples:
 
