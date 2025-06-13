@@ -385,16 +385,17 @@ class Attribution:
         ).rename(columns={"sequence": "peak"})
 
         df = df.merge(
-            self.peaks[["peak", "from_tss", "start"]].reset_index(drop=True),
+            self.peaks[["peak", "from_tss", "start"]].assign(mid=mid).reset_index(drop=True),
             on="peak",
             suffixes=("", "_peak"),
         )
 
-        df["start"] += df["start_peak"] - window
-        df["end"] += df["start_peak"] - window
+        df["start"] += df["mid"] - window
+        df["end"] += df["mid"] - window
         df["from_tss"] = df["start"] - self.gene_mask_start
         del df["start_peak"]
         del df["seq_idx"]
+        del df["mid"]
 
         return df.sort_values("p-value")
 
