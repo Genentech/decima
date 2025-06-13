@@ -385,16 +385,17 @@ class Attribution:
         ).rename(columns={"sequence": "peak"})
 
         df = df.merge(
-            self.peaks[["peak", "from_tss", "start"]].reset_index(drop=True),
+            self.peaks[["peak", "from_tss", "start"]].assign(mid=mid).reset_index(drop=True),
             on="peak",
             suffixes=("", "_peak"),
         )
 
-        df["start"] += df["start_peak"] - window
-        df["end"] += df["start_peak"] - window
+        df["start"] += df["mid"] - window
+        df["end"] += df["mid"] - window
         df["from_tss"] = df["start"] - self.gene_mask_start
         del df["start_peak"]
         del df["seq_idx"]
+        del df["mid"]
 
         return df.sort_values("p-value")
 
@@ -498,8 +499,8 @@ class Attribution:
             df["start"], df["end"] = self.end - df["end"], self.end - df["start"]
 
         df["strand"] = "."
-        df["score"] = -np.log10(df["p-value"] + 1e-100)
-        df["score"] = df["score"].astype(int).clip(lower=0, upper=100)
+        df["score"] = -np.log10(df["p-value"] + 1e-50)
+        df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
         return df[["chrom", "start", "end", "name", "score", "strand"]]
 
     def save_peaks(self, bed_path: str):

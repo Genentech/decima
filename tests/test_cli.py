@@ -129,3 +129,86 @@ def test_cli_attributions_sequences(tmp_path):
     genes = set(df_motifs['peak'].str.split("@").str[0])
     assert "CD68" in genes
     assert "SPI1" in genes
+
+
+@pytest.mark.long_running
+def test_cli_vep_tsv(tmp_path):
+    output_file = tmp_path / "test_predictions.parquet"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep",
+        "-v", "tests/data/variants.tsv",
+        "-o", str(output_file),
+        "--tasks", "cell_type == 'CD8-positive, alpha-beta T cell'",
+        "--model", "0",
+        "--device", device,
+        "--max-distance", "20000",
+        "--chunksize", "5"
+    ])
+    assert result.exit_code == 0
+
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape[0] > 0  # Should have some predictions
+    assert df_saved.shape[1] > 14  # annotationcolumns + prediction columns
+
+    required_cols = ['chrom', 'pos', 'ref', 'alt', 'gene', 'start', 'end', 'strand',
+                     'gene_mask_start', 'gene_mask_end', 'rel_pos', 'ref_tx', 'alt_tx', 'tss_dist']
+    for col in required_cols:
+        assert col in df_saved.columns
+
+
+@pytest.mark.long_running
+def test_cli_vep_vcf(tmp_path):
+    output_file = tmp_path / "test_predictions.parquet"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep",
+        "-v", "tests/data/test.vcf",
+        "-o", str(output_file),
+        "--tasks", "cell_type == 'CD8-positive, alpha-beta T cell'",
+        "--model", "0",
+        "--device", device,
+        "--max-distance", "20000",
+        "--chunksize", "5"
+    ])
+    assert result.exit_code == 0
+
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape[0] > 0
+    assert df_saved.shape[1] > 14
+
+    required_cols = ['chrom', 'pos', 'ref', 'alt', 'gene', 'start', 'end', 'strand',
+                     'gene_mask_start', 'gene_mask_end', 'rel_pos', 'ref_tx', 'alt_tx', 'tss_dist']
+    for col in required_cols:
+        assert col in df_saved.columns
+
+
+@pytest.mark.long_running
+def test_cli_vep_all_tasks(tmp_path):
+    output_file = tmp_path / "test_predictions_all.parquet"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep",
+        "-v", "tests/data/variants.tsv",
+        "-o", str(output_file),
+        "--model", "0",
+        "--device", device,
+        "--max-distance", "20000",
+        "--chunksize", "5"
+    ])
+    assert result.exit_code == 0
+
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape[0] > 0
+    assert df_saved.shape[1] == 8870
+
+    required_cols = ['chrom', 'pos', 'ref', 'alt', 'gene', 'start', 'end', 'strand',
+                     'gene_mask_start', 'gene_mask_end', 'rel_pos', 'ref_tx', 'alt_tx', 'tss_dist']
+    for col in required_cols:
+        assert col in df_saved.columns

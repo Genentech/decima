@@ -26,6 +26,7 @@ def predict_save_attributions(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     model: Optional[Union[str, int]] = 0,
+    metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     device: Optional[str] = None,
     plot_peaks: bool = True,
@@ -78,7 +79,7 @@ def predict_save_attributions(
     if (genes is not None) and (seqs is not None):
         raise ValueError("Only one of genes or seq must be provided")
 
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("decima")
 
     device = get_compute_device(device)
     logger.info(f"Using device: {device}")
@@ -92,7 +93,7 @@ def predict_save_attributions(
         )
 
     logger.info("Loading model and metadata to compute attributions...")
-    result = DecimaResult.load()
+    result = DecimaResult.load(metadata_anndata)
 
     if tasks is None:
         tasks = result.cell_metadata.index.tolist()
