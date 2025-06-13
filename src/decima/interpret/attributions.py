@@ -498,8 +498,8 @@ class Attribution:
             df["start"], df["end"] = self.end - df["end"], self.end - df["start"]
 
         df["strand"] = "."
-        df["score"] = -np.log10(df["p-value"] + 1e-100)
-        df["score"] = df["score"].astype(int).clip(lower=0, upper=100)
+        df["score"] = -np.log10(df["p-value"] + 1e-50)
+        df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
         return df[["chrom", "start", "end", "name", "score", "strand"]]
 
     def save_peaks(self, bed_path: str):

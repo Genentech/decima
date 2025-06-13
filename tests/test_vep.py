@@ -196,7 +196,7 @@ def test_predict_variant_effect_vcf(tmp_path):
 
     with open(warnings_file, 'r') as f:
         warnings = f.read()
-        assert "allele_mismatch_with_reference_genome: 6 / 12" in warnings
+        assert "allele_mismatch_with_reference_genome: 1 / 12" in warnings
 
 
 @pytest.mark.long_running

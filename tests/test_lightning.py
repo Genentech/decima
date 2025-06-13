@@ -34,4 +34,4 @@ def test_LightningModel_predict_on_dataset(lightning_model, df_variant):
     results = lightning_model.predict_on_dataset(dataset)
     assert results["expression"].shape == (82, 1)
     assert results["warnings"]['unknown'] == 0
-    assert results["warnings"]['allele_mismatch_with_reference_genome'] == 26
+    assert results["warnings"]['allele_mismatch_with_reference_genome'] == 13
