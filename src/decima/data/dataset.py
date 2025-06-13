@@ -6,7 +6,7 @@ import h5py
 import bioframe
 from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
-from grelu.sequence.format import indices_to_strings, BASE_TO_INDEX_HASH
+from grelu.sequence.format import indices_to_strings
 from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
@@ -101,13 +101,6 @@ class HDF5Dataset(Dataset):
         else:
             label = self.extract_label(gene_idx)
             return seq, label
-
-
-def mutate(seq, allele, pos):
-    idx = BASE_TO_INDEX_HASH[allele]
-    seq[:4, pos] = 0
-    seq[idx, pos] = 1
-    return seq
 
 
 class VariantDataset(Dataset):

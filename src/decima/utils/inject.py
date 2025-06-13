@@ -73,7 +73,7 @@ class SeqBuilder:
             if variant["pos"] == i["pos"]:
                 raise ValueError(
                     f"At this position `{variant['pos']}` there is already a variant `{i}` "
-                    "thus cannot inject `{variant}` variant at the same position."
+                    f"thus cannot inject `{variant}` variant at the same position."
                     " Please check variant and ensure not redundant positions."
                 )
 
