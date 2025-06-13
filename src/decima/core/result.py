@@ -9,7 +9,6 @@ from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.utils.inject import prepare_seq_alt_allele
-# from decima.interpret.ism import ism # TODO: implement ism
 
 
 class DecimaResult:

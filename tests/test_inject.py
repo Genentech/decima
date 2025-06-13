@@ -1,7 +1,9 @@
-from decima.utils.inject import SeqBuilder
+import pytest
+from decima.utils.inject import SeqBuilder, prepare_seq_alt_allele
 
 
 def test_seq_builder():
+    # 0 based start and 1 based end
     builder = SeqBuilder(chrom="chr1", start=100, end=200, anchor=150)
     builder.inject({"chrom": "chr1", "pos": 120, "ref": "A", "alt": "C"})
     builder.inject({"chrom": "chr1", "pos": 180, "ref": "G", "alt": "T"})
@@ -69,3 +71,11 @@ def test_seq_builder_indel_with_anchor():
     assert len(builder.concat()) == 100
 
     assert builder.shifts == {110: 0, 149: 1, 181: -2, 150: 0}
+
+
+def test_seq_builder_redundant_variants():
+    builder = SeqBuilder(chrom="chr1", start=100, end=200, anchor=150)
+    builder.inject({"chrom": "chr1", "pos": 120, "ref": "A", "alt": "CC"})
+
+    with pytest.raises(ValueError):
+        builder.inject({"chrom": "chr1", "pos": 120, "ref": "C", "alt": "TT"})

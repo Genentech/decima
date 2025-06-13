@@ -76,4 +76,4 @@ class WarningCounter(Metric):
         """
         Compute the final counts of all warning types.
         """
-        return Counter({wt.value: self.counts[i].item() for i, wt in enumerate(self.warning_types)})
+        return Counter({wt.value: self.counts[i] for i, wt in enumerate(self.warning_types)})

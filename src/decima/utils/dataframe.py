@@ -37,6 +37,8 @@ class ChunkDataFrameWriter:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.writer is not None:
             self.writer.close()
+        else:
+            raise RuntimeError("NoDataFrameWrittenError: No dataframe was written to the parquet file.")
         self.first_chunk = True
 
     def write(self, chunk: pd.DataFrame) -> None:

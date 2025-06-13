@@ -30,7 +30,9 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
     Raises:
         ValueError: If model identifier is invalid or not found.
     """
-    if isinstance(model, str):
+    if isinstance(model, LightningModel):
+        return model
+    elif isinstance(model, str):
         if Path(model).exists():
             return LightningModel.load_from_checkpoint(model, map_location=device)
         model_name = model
@@ -38,7 +40,7 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
         model_name = f"decima_rep{model}"
     else:
         raise ValueError(
-            "Invalid model it need to be a string of model_name on wandb "
+            f"Invalid model: {model} it need to be a string of model_name on wandb "
             "or an integer of replicate number {0, 1, 2, 3}, or a path to a local model"
         )
 

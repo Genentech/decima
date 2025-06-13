@@ -20,7 +20,12 @@ def read_fasta_gene_mask(fasta_file: str) -> pd.DataFrame:
 
 
 def read_vcf_chunks(vcf_file: str, chunksize: int) -> Iterator[pd.DataFrame]:
-    from cyvcf2 import VCF  # optional dependency
+    try:
+        from cyvcf2 import VCF  # optional dependency
+    except ImportError:
+        raise ImportError(
+            "Optional dependency `cyvcf2` is not installed and is required for reading vcf files. Please install it with `pip install cyvcf2`."
+        )
 
     vcf = VCF(vcf_file)
     df = list()

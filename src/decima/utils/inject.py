@@ -61,16 +61,28 @@ class SeqBuilder:
         Returns:
             self
         """
+        variant = dict(variant)
+        variant["ref"] = variant["ref"].replace(".", "")
+        variant["alt"] = variant["alt"].replace(".", "")
+
         if variant["chrom"] != self.chrom:
-            warnings.warn(f"Variant chromosome {variant['chrom']} does not match {self.chrom}. Skipping...")
+            warnings.warn(f"Variant chromosome `{variant['chrom']}` does not match `{self.chrom}`. Skipping...")
             return self
+
+        for i in self.variants:
+            if variant["pos"] == i["pos"]:
+                raise ValueError(
+                    f"At this position `{variant['pos']}` there is already a variant `{i}` "
+                    "thus cannot inject `{variant}` variant at the same position."
+                    " Please check variant and ensure not redundant positions."
+                )
 
         variant_start = variant["pos"]
         variant_end = variant_start + len(variant["ref"])
 
         if variant_end <= self.start:
             warnings.warn(
-                f"Variant position {variant['pos']} is upstream of the interval [{self.start}, {self.end}]. Skipping..."
+                f"Variant position `{variant['pos']}` is upstream of the interval `[{self.start}, {self.end}]`. Skipping..."
             )
             return self
         elif variant_start < self.start < variant_end:
@@ -78,7 +90,7 @@ class SeqBuilder:
             return self.inject(right_variant)
         elif self.end < variant_start:
             warnings.warn(
-                f"Variant position {variant['pos']} is downstream of the interval [{self.start}, {self.end}]. Skipping..."
+                f"Variant position `{variant['pos']}` is downstream of the interval `[{self.start}, {self.end}]`. Skipping..."
             )
             return self
         elif variant_start < self.end < variant_end:
@@ -134,6 +146,7 @@ class SeqBuilder:
         end = self.end + self.end_shift
 
         seq = intervals_to_strings({"chrom": self.chrom, "start": start, "end": end}, genome="hg38")
+        start += 1  # 0 based to 1 based start
 
         variants = sorted(self.variants, key=lambda x: x["pos"])
 
@@ -143,9 +156,9 @@ class SeqBuilder:
                 prev_end = 0
             else:
                 prev_variant = variants[i - 1]
-                prev_end = prev_variant["pos"] + len(prev_variant["ref"]) - start - 1
+                prev_end = prev_variant["pos"] + len(prev_variant["ref"]) - start
 
-            variant_start = variant["pos"] - start - 1
+            variant_start = variant["pos"] - start
             variant_end = variant_start + len(variant["ref"])
 
             yield seq[prev_end:variant_start]
@@ -205,7 +218,7 @@ def prepare_seq_alt_allele(gene: GeneMetadata, variants: List[Dict]):
     if gene.strand == "-":
         assert gene_end_shift == 0
         seq = reverse_complement(seq, input_type="strings")
-        gene_mask = (gene.gene_mask_end - gene_end_shift, gene.gene_mask_start - gene_start_shift)
+        gene_mask = (gene.gene_mask_start - gene_start_shift, gene.gene_mask_end - gene_end_shift)
     else:
         assert gene_start_shift == 0
         gene_mask = (gene.gene_mask_start + gene_start_shift, gene.gene_mask_end + gene_end_shift)

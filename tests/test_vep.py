@@ -1,7 +1,9 @@
 import torch
 import numpy as np
 import pandas as pd
+from scipy.stats import pearsonr
 import pytest
+
 from decima.core.result import DecimaResult
 from decima.data.dataset import VariantDataset
 from decima.model.metrics import WarningType
@@ -42,10 +44,10 @@ def test_VariantDataset_overlap_genes(df_variant):
         "strand": ["+", "+", "-", "-", "-"],
         "gene_mask_start": [163840, 163840, 163840, 163840, 163840],
         "gene_mask_end": [164840, 164840, 164840, 164840, 164840],
-        "rel_pos": [162720, 165010, 177407, 176592, 176071],
+        "rel_pos": [162719, 165009, 177407, 176592, 176071],
         "ref_tx": ["G", "T", "T", "AAA", "A"],
         "alt_tx": ["A", "C", "G", "C", "CC"],
-        "tss_dist": [-1120, 1170, 13567, 12752, 12231],
+        "tss_dist": [-1121, 1169, 13567, 12752, 12231],
     }))
 
     df_variant['gene'] = ['ISG15', 'ISG15', 'ISG15', 'ISG15', 'ISG15']
@@ -61,10 +63,10 @@ def test_VariantDataset_overlap_genes(df_variant):
         "strand": ["+", "+"],
         "gene_mask_start": [163840, 163840],
         "gene_mask_end": [164840, 164840],
-        "rel_pos": [162720, 165010],
+        "rel_pos": [162719, 165009],
         "ref_tx": ["G", "T"],
         "alt_tx": ["A", "C"],
-        "tss_dist": [-1120, 1170],
+        "tss_dist": [-1121, 1169],
     }))
 
 
@@ -195,3 +197,19 @@ def test_predict_variant_effect_vcf(tmp_path):
     with open(warnings_file, 'r') as f:
         warnings = f.read()
         assert "allele_mismatch_with_reference_genome: 6 / 12" in warnings
+
+
+@pytest.mark.long_running
+def test_predict_variant_effect_check_results():
+    df_orig = pd.read_csv("tests/data/test_preds.csv.gz")
+    df_variants = df_orig[df_orig.columns[:5]]
+    df_preds = predict_variant_effect(
+        df_variants, device=device, gene_col="gene",
+    )
+
+    for i in range(df_orig.shape[0]):
+        orig = df_orig.iloc[i][df_orig.columns[5:]].values.tolist()
+        pred = df_preds.iloc[i][df_preds.columns[14:]].values.tolist()
+        assert pearsonr(orig, pred).statistic > 0.99
+        assert orig == pytest.approx(pred, abs=1e-2)
+        # np.where(np.abs(np.array(orig) - np.array(pred)) < 1e-2)

@@ -1,3 +1,4 @@
+import warnings
 import torch
 import numpy as np
 import pandas as pd
@@ -5,6 +6,7 @@ import h5py
 import bioframe
 from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
+from grelu.sequence.format import indices_to_strings, BASE_TO_INDEX_HASH
 from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
@@ -101,31 +103,97 @@ class HDF5Dataset(Dataset):
             return seq, label
 
 
+def mutate(seq, allele, pos):
+    idx = BASE_TO_INDEX_HASH[allele]
+    seq[:4, pos] = 0
+    seq[idx, pos] = 1
+    return seq
+
+
 class VariantDataset(Dataset):
+    """
+    Dataset for variant effect prediction
+
+    Args:
+        variants (pd.DataFrame): DataFrame with variants
+        anndata (AnnData): AnnData object with gene metadata
+        seq_len (int): Length of the sequence
+        max_seq_shift (int): Maximum sequence shift
+        include_cols (list): List of columns to include in the output
+        gene_col (str): Column name for gene names
+        min_from_end (int): Minimum distance from the end of the gene
+        distance_type (str): Type of distance
+        min_distance (int): Minimum distance from the TSS
+        max_distance (int): Maximum distance from the TSS
+
+    Returns:
+        Dataset: Dataset for variant effect prediction
+
+    Examples:
+        >>> import pandas as pd
+        >>> import anndata as ad
+        >>> from decima.data.dataset import (
+        ...     VariantDataset,
+        ... )
+        >>> variants = pd.read_csv(
+        ...     "variants.csv"
+        ... )
+        >>> dataset = (
+        ...     VariantDataset(
+        ...         variants
+        ...     )
+        ... )
+        >>> dataset[0]
+        {'seq': tensor([[1.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 1.0000],
+                        [0.0000, 1.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+                        [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],
+                        [0.0000, 0.0000, 0.0000,  ..., 1.0000, 0.0000, 0.0000],
+                        [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]), 'warning': []}
+    """
+
+    DEFAULT_COLUMNS = [
+        "chrom",
+        "pos",
+        "ref",
+        "alt",
+        "gene",
+        "start",
+        "end",
+        "strand",
+        "gene_mask_start",
+        "gene_mask_end",
+        "rel_pos",
+        "ref_tx",
+        "alt_tx",
+        "tss_dist",
+    ]
+
     def __init__(
         self,
         variants,
-        anndata=None,
+        metadata_anndata=None,
         seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
         include_cols=None,
         gene_col=None,
         min_from_end=0,
+        distance_type="tss",
+        min_distance=0,
         max_distance=float("inf"),
-        max_distance_type="tss",
     ):
         super().__init__()
 
         self.seq_len = seq_len
-        self.result = DecimaResult.load(anndata)
+        self.result = DecimaResult.load(metadata_anndata)
 
         self.variants = self._overlap_genes(
             variants,
             include_cols=include_cols,
             gene_col=gene_col,
             min_from_end=min_from_end,
+            distance_type=distance_type,
+            min_distance=min_distance,
             max_distance=max_distance,
-            max_distance_type=max_distance_type,
         )
 
         self.n_seqs = len(self.variants)
@@ -151,12 +219,16 @@ class VariantDataset(Dataset):
         gene_col=None,
         include_cols=None,
         min_from_end=0,
+        distance_type="tss",
+        min_distance=0,
         max_distance=float("inf"),
-        max_distance_type="tss",
     ):
         include_cols = include_cols or list()
 
-        df_variants = df_variants.copy()
+        df_variants = df_variants.copy().astype({"chrom": str})
+        if not df_variants["chrom"].str.startswith("chr").any():
+            warnings.warn("Chromosome names do not have 'chr' prefix. Adding it to the chromosome names.")
+            df_variants["chrom"] = "chr" + df_variants["chrom"].astype(str)
         df_variants["start"] = df_variants.pos
         df_variants["end"] = df_variants["start"] + 1
 
@@ -165,12 +237,19 @@ class VariantDataset(Dataset):
 
             missing = df_variants[~df_variants[gene_col].isin(set(df_genes["gene"]))]
             if len(missing) > 0:
-                raise ValueError(f"Some genes in {gene_col} are not in the result: {missing[gene_col].unique()}")
+                raise ValueError(
+                    f"GeneNotFoundError: Some genes in {gene_col} are not in the result: {missing[gene_col].unique()}"
+                )
 
             df_variants = df_variants.rename(columns={gene_col: "gene"})
             df = df_variants.merge(df_genes, how="left", on="gene", suffixes=("", "_gene"))
         else:
             df = bioframe.overlap(df_genes, df_variants, how="inner", suffixes=("_gene", ""))
+
+        if df.shape[0] == 0:
+            raise ValueError(
+                "NoOverlapError: There is no overlap between provided variants and genes. Check the provided genes and variants."
+            )
 
         df = df.rename(
             columns={
@@ -184,15 +263,7 @@ class VariantDataset(Dataset):
                 "gene_mask_end_gene": "gene_mask_end",
             }
         )
-
-        df["rel_pos"] = df.apply(
-            lambda row: row.pos - row.start if row.strand == "+" else row.end - row.pos,
-            axis=1,
-        )
-        df["rel_pos_end"] = df.apply(
-            lambda row: row.end - row.pos if row.strand == "+" else row.pos - row.start,
-            axis=1,
-        )
+        df["rel_pos"] = df.apply(VariantDataset._relative_pos, axis=1)
         df["ref_tx"] = df.apply(
             lambda row: row.ref if row.strand == "+" else reverse_complement(row.ref),
             axis=1,
@@ -203,34 +274,30 @@ class VariantDataset(Dataset):
         )
         df["tss_dist"] = df.rel_pos - df.gene_mask_start
 
-        df = df[(df.rel_pos > min_from_end) & (df.rel_pos_end > min_from_end)]  # & (df.tss_dist.abs() < max_dist_tss)
+        df = df[(df.rel_pos > min_from_end) & (df.rel_pos < DECIMA_CONTEXT_SIZE - min_from_end)]
 
-        if max_distance_type == "tss":
-            df = df[df.tss_dist.abs() < max_distance]
-        elif max_distance_type == "gene":
+        if distance_type == "tss":
+            df = df[(df.tss_dist.abs() >= min_distance) & (df.tss_dist.abs() < max_distance)]
+        elif distance_type == "gene":
             raise NotImplementedError("max_distance_type == 'gene' is not implemented yet.")
         else:
-            raise ValueError(f"Invalid max_distance_type: {max_distance_type}. Must be 'tss'.")
+            raise ValueError(f"Invalid distance_type: {distance_type}. Must be 'tss'.")
 
-        return df[
-            [
-                "chrom",
-                "pos",
-                "ref",
-                "alt",
-                "gene",
-                "start",
-                "end",
-                "strand",
-                "gene_mask_start",
-                "gene_mask_end",
-                "rel_pos",
-                "ref_tx",
-                "alt_tx",
-                "tss_dist",
-                *include_cols,
-            ]
-        ]
+        if df.shape[0] == 0:
+            raise ValueError(
+                "NoOverlapError: There is no overlap between provided variants and genes."
+                " Check `max_distance` and `min_distance` arguments."
+            )
+
+        return df[[*VariantDataset.DEFAULT_COLUMNS, *include_cols]]
+
+    @staticmethod
+    def _relative_pos(row):
+        # + 1 because gene start is 0 based, variant pos is 1 based and gene end is 1 based
+        # TO CONSIDER: relative position is not valid for indels because of the shifting of the sequence.
+        # so relative position of reference allele and alterantive allele is different
+        rel_pos = row.pos - (row.start + 1) if row.strand == "+" else row.end - row.pos
+        return rel_pos
 
     def _overlap_genes(
         self,
@@ -238,8 +305,9 @@ class VariantDataset(Dataset):
         include_cols=None,
         gene_col=None,
         min_from_end=0,
+        distance_type="tss",
+        min_distance=0,
         max_distance=float("inf"),
-        max_distance_type="tss",
     ):
         return self.overlap_genes(
             variants,
@@ -247,8 +315,9 @@ class VariantDataset(Dataset):
             include_cols=include_cols,
             gene_col=gene_col,
             min_from_end=min_from_end,
+            distance_type=distance_type,
+            min_distance=min_distance,
             max_distance=max_distance,
-            max_distance_type=max_distance_type,
         )
 
     def __len__(self):
@@ -256,7 +325,9 @@ class VariantDataset(Dataset):
 
     def validate_allele_seq(self, gene, variant):
         seq = self.result.gene_sequence(gene)
-        return (seq[variant.rel_pos] == variant.ref_tx) or (seq[variant.rel_pos] == variant.alt_tx)
+        vstart = variant.rel_pos
+        vend = vstart + len(variant.ref)
+        return (seq[vstart:vend] == variant.ref_tx) or (seq[vstart:vend] == variant.alt_tx)
 
     def __getitem__(self, idx):
         seq_idx, augment_idx, allele_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented, self.n_alleles))
@@ -272,11 +343,18 @@ class VariantDataset(Dataset):
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.ref, "alt": variant.alt}],
             )
+            allele = seq[:, variant.rel_pos : variant.rel_pos + len(variant.alt)]
+            allele_tx = variant.alt_tx
         else:
             seq, mask = self.result.prepare_one_hot(
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],
             )
+            allele = seq[:, variant.rel_pos : variant.rel_pos + len(variant.ref)]
+            allele_tx = variant.ref_tx
+
+        if len(variant.ref_tx) == len(variant.alt_tx):  # not SNV there would be shifts
+            assert indices_to_strings(allele.argmax(axis=0)) == allele_tx
 
         inputs = torch.vstack([seq, mask])
 

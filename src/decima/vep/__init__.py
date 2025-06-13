@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections import Counter
 from typing import Iterator, Optional, Union, List
 import genomepy
@@ -17,13 +18,15 @@ def _predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     tasks: Optional[Union[str, List[str]]] = None,
     model: Union[int, str] = 0,
+    metadata_anndata: Optional[str] = None,
     batch_size: int = 8,
     num_workers: int = 16,
     device: Optional[str] = None,
     include_cols: Optional[List[str]] = None,
     gene_col: Optional[str] = None,
+    distance_type: Optional[str] = "tss",
+    min_distance: Optional[float] = 0,
     max_distance: Optional[float] = float("inf"),
-    max_distance_type: Optional[str] = "tss",
     genome: str = "hg38",
 ) -> pd.DataFrame:
     """Predict variant effect on a set of variants
@@ -32,27 +35,40 @@ def _predict_variant_effect(
         df_variant (pd.DataFrame): DataFrame with variant information
         tasks (str, optional): Tasks to predict. Defaults to None.
         model (int, optional): Model to use. Defaults to 0.
+        metadata_anndata (str, optional): Path to anndata file. Defaults to None.
         batch_size (int, optional): Batch size. Defaults to 8.
         num_workers (int, optional): Number of workers. Defaults to 16.
         device (str, optional): Device to use. Defaults to "cpu".
         include_cols (list, optional): Columns to include in the output. Defaults to None.
         gene_col (str, optional): Column name for gene names. Defaults to None.
-        min_from_end (int, optional): Minimum distance from the end of the gene. Defaults to 0.
-        max_dist_tss (float, optional): Maximum distance from the TSS. Defaults to inf.
+        distance_type (str, optional): Type of distance. Defaults to "tss".
+        min_distance (float, optional): Minimum distance from the end of the gene. Defaults to 0 (inclusive).
+        max_distance (float, optional): Maximum distance from the TSS. Defaults to inf (exclusive).
 
     Returns:
         pd.DataFrame: DataFrame with variant effect predictions
     """
 
     assert genome in ["hg38"], "Currently only hg38 genome is supported."
+    include_cols = include_cols or list()
 
-    dataset = VariantDataset(
-        df_variant,
-        include_cols=include_cols,
-        gene_col=gene_col,
-        max_distance=max_distance,
-        max_distance_type=max_distance_type,
-    )
+    try:
+        dataset = VariantDataset(
+            df_variant,
+            include_cols=include_cols,
+            metadata_anndata=metadata_anndata,
+            gene_col=gene_col,
+            distance_type=distance_type,
+            min_distance=min_distance,
+            max_distance=max_distance,
+        )
+    except ValueError as e:
+        if str(e).startswith("NoOverlapError"):
+            warnings.warn("No overlapping gene and variant found. Skipping this chunk...")
+            return pd.DataFrame(columns=[*VariantDataset.DEFAULT_COLUMNS, *include_cols]), [], 0
+        else:
+            raise e
+
     model = load_decima_model(model=model, device=device)
 
     if tasks is not None:
@@ -75,14 +91,16 @@ def predict_variant_effect(
     output_pq: Optional[str] = None,
     tasks: Optional[Union[str, List[str]]] = None,
     model: Union[int, str] = 0,
+    metadata_anndata: Optional[str] = None,
     chunksize: int = 10_000,
     batch_size: int = 8,
     num_workers: int = 16,
     device: Optional[str] = None,
     include_cols: Optional[List[str]] = None,
     gene_col: Optional[str] = None,
+    distance_type: Optional[str] = "tss",
+    min_distance: Optional[float] = 0,
     max_distance: Optional[float] = float("inf"),
-    max_distance_type: Optional[str] = "tss",
     genome: str = "hg38",
 ) -> None:
     """Predict variant effect and save to parquet
@@ -92,17 +110,19 @@ def predict_variant_effect(
         output_path (str): Path to save the parquet file
         tasks (str, optional): Tasks to predict. Defaults to None.
         model (int, optional): Model to use. Defaults to 0.
+        metadata_anndata (str, optional): Path to anndata file. Defaults to None.
         chunksize (int, optional): Number of variants to predict in each chunk. Defaults to 10_000.
         batch_size (int, optional): Batch size. Defaults to 8.
         num_workers (int, optional): Number of workers. Defaults to 16.
         device (str, optional): Device to use. Defaults to "cpu".
         include_cols (list, optional): Columns to include in the output. Defaults to None.
         gene_col (str, optional): Column name for gene names. Defaults to None.
-        max_distance (float, optional): Maximum distance from the TSS. Defaults to inf.
-        max_distance_type (str, optional): Type of maximum distance. Defaults to None.
+        distance_type (str, optional): Type of distance. Defaults to "tss".
+        min_distance (float, optional): Minimum distance from the end of the gene. Defaults to 0 (inclusive).
+        max_distance (float, optional): Maximum distance from the TSS. Defaults to inf (exclusive).
         genome (str, optional): Genome build. Defaults to "hg38".
     """
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("decima")
     device = get_compute_device(device)
     logger.info(f"Using device: {device} and genome: {genome}")
 
@@ -111,6 +131,8 @@ def predict_variant_effect(
     elif isinstance(df_variant, str):
         if df_variant.endswith(".tsv"):
             chunks = pd.read_csv(df_variant, sep="\t", chunksize=chunksize)
+        elif df_variant.endswith(".csv"):
+            chunks = pd.read_csv(df_variant, sep=",", chunksize=chunksize)
         elif df_variant.endswith(".vcf") or df_variant.endswith(".vcf.gz"):
             chunks = read_vcf_chunks(df_variant, chunksize)
         else:
@@ -122,17 +144,19 @@ def predict_variant_effect(
 
     results = (
         _predict_variant_effect(
-            df_chunk,
-            tasks,
-            model,
-            batch_size,
-            num_workers,
-            device,
-            include_cols,
-            gene_col,
-            max_distance,
-            max_distance_type,
-            genome,
+            df_variant=df_chunk,
+            tasks=tasks,
+            model=model,
+            metadata_anndata=metadata_anndata,
+            batch_size=batch_size,
+            num_workers=num_workers,
+            device=device,
+            include_cols=include_cols,
+            gene_col=gene_col,
+            distance_type=distance_type,
+            min_distance=min_distance,
+            max_distance=max_distance,
+            genome=genome,
         )
         for df_chunk in chunks
     )
@@ -147,6 +171,8 @@ def predict_variant_effect(
             for df, warnings, _num_variants in results:
                 writer.write(df)
                 num_variants += _num_variants
+                if df.shape[0] == 0:
+                    warnings.append("no_overlap_found_for_chunk")
                 warning_counter.update(warnings)
         if warning_counter.total():
             with open(output_pq + ".warnings.log", "w") as f:
@@ -160,18 +186,20 @@ def predict_variant_effect(
             _df.append(df)
 
     if warning_counter.total():
-        logger.info("Warnings:")
+        logger.warning("Warnings:")
 
         for warning, count in warning_counter.items():
             if count == 0:
                 continue
             if warning == WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME.value:
-                logger.info(
+                logger.warning(
                     f"{warning}: {count} alleles out of {num_variants} predictions mismatched with the genome file {genome_path}."
                     "If this is not expected, please check if you are using the correct genome version."
                 )
+            elif warning == "no_overlap_found_for_chunk":
+                logger.warning(f"{warning}: {count} chunks with no overlap found with genes.")
             else:
-                logger.info(f"{warning}: {count} out of {num_variants} variants")
+                logger.warning(f"{warning}: {count} out of {num_variants} variants")
 
     if output_pq is None:
         return pd.concat(_df)

@@ -16,7 +16,6 @@ def process_variants(variants, ad=None, min_from_end=0):
     else:
         raise ValueError(f"Invalid ad: {ad} (must be None, str, or anndata.AnnData)")
 
-    # TODO: overlap with gene intervals
     orig_len = len(variants)
     variants = variants[variants.gene.isin(result.genes)]
     print(f"dropped {orig_len - len(variants)} variants because the gene was not found in ad.var")

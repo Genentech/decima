@@ -23,6 +23,12 @@ from decima import predict_save_attributions
     help="Model to use for attribution analysis either replicate number or path to the model.",
 )
 @click.option(
+    "--metadata",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to the metadata anndata file. Default: None.",
+)
+@click.option(
     "--method", type=str, required=False, default="inputxgradient", help="Method to use for attribution analysis."
 )
 @click.option("--device", type=str, required=False, default=None, help="Device to use for attribution analysis.")
@@ -31,7 +37,19 @@ from decima import predict_save_attributions
 @click.option("--seqlogo_window", type=int, default=50, help="Window size for sequence logo plots")
 @click.option("--dpi", type=int, default=100, help="DPI for attribution plots")
 def cli_attributions(
-    output_dir, genes, seqs, tasks, off_tasks, model, method, device, plot_peaks, plot_seqlogo, seqlogo_window, dpi
+    output_dir,
+    genes,
+    seqs,
+    tasks,
+    off_tasks,
+    model,
+    metadata,
+    method,
+    device,
+    plot_peaks,
+    plot_seqlogo,
+    seqlogo_window,
+    dpi,
 ):
     """
     Generate and save attribution analysis results for a gene or a set of sequences.
@@ -80,6 +98,7 @@ def cli_attributions(
         tasks=tasks,
         off_tasks=off_tasks,
         model=model,
+        metadata_anndata=metadata,
         method=method,
         device=device,
         plot_peaks=plot_peaks,
