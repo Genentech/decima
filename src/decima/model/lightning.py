@@ -19,7 +19,7 @@ from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE, WarningCounter
+from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
 
 
 default_train_params = {
@@ -33,6 +33,8 @@ default_train_params = {
     "accumulate_grad_batches": 1,
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
+    "optimizer": "adam",
+    "clip":0,
 }
 
 
@@ -78,6 +80,7 @@ class LightningModel(pl.LightningModule):
         _metrics = {
             "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
             "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "gene_pearson": GenePearsonCorrCoef(average=False),
         }
         if "pairs" in self.train_params:
             _metrics["disease_lfc_mse"] = DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False)
@@ -189,7 +192,12 @@ class LightningModel(pl.LightningModule):
         """
         Configure oprimizer for training
         """
-        return optim.Adam(self.parameters(), lr=self.train_params["lr"])
+        if self.train_params['optimizer'] == 'adam':
+            return optim.Adam(self.parameters(), lr=self.train_params["lr"])
+        elif self.train_params['optimizer'] == 'sgd':
+            return optim.SGD(self.parameters(), lr=self.train_params["lr"], momentum=0.9)
+        else:
+            raise NotImplementedError('Optimizer must be adam or sgd.')
 
     def count_params(self) -> int:
         """
@@ -311,7 +319,8 @@ class LightningModel(pl.LightningModule):
             callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
-            precision="16-mixed",
+            precision="32-true",
+            gradient_clip_val=self.train_params["clip"],
         )
 
         # Make dataloaders

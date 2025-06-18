@@ -8,9 +8,58 @@ from grelu.model.models import BaseModel, BorzoiModel
 from torch import nn
 
 
+class DecimaMLPHead(nn.Module):
+    """
+    Args:
+        n_tasks: Number of tasks (output channels)
+        norm: If True, batch normalization will be included.
+        hidden_size: A list of dimensions for each hidden layer of the MLP.
+        dropout: Dropout probability for the linear layers.
+    """
+
+    def __init__(
+        self,
+        n_tasks: int,
+        len_pools: int = 4,
+        hidden_size: List[int] = [],
+        norm: bool = False,
+        dropout: float = 0.0,
+    ) -> None:
+        super().__init__()
+
+        # Save params
+        self.n_tasks = n_tasks
+
+        # Set up pool
+        assert 6144 % len_pools = 0
+        self.pool = nn.AvgPool1d(kernel_size=6144//len_pools)# B, 1920, 6144 -> B, 1920, len_pools
+
+        # Set up MLP
+        self.mlp = MLPHead(
+            n_tasks=n_tasks,
+            in_channels=1920,
+            in_len=len_pools,
+            act_func='relu',
+            hidden_size = hidden_size,
+            norm = norm,
+            dropout = dropout,
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x : Input data.
+        """
+        # Average over length axis
+        x = self.pool(x) # N, 1920, len_pools
+        x = self.mlp(x) # N, n_tasks, 1
+        return x
+
+
 class DecimaModel(BaseModel):
-    def __init__(self, n_tasks: int, replicate: int = 0, mask=True, init_borzoi=True):
+    def __init__(self, n_tasks: int, replicate: int = 0, mask=True, init_borzoi=True, head='conv', hidden_size=[1920], dropout=0.2, len_pools=1):
         self.mask = mask
+        self.head=head
         model = BorzoiModel(
             crop_len=5120,
             n_tasks=7611,
@@ -41,7 +90,12 @@ class DecimaModel(BaseModel):
             model.load_state_dict(state_dict)
 
         # Change head
-        head = ConvHead(n_tasks=n_tasks, in_channels=1920, pool_func="avg")
+        if self.head=='conv':
+            head = ConvHead(n_tasks=n_tasks, in_channels=1920, pool_func="avg")
+
+        elif self.head=='mlp':
+            head = DecimaMLPHead(n_tasks=n_tasks, hidden_size=hidden_size, dropout=dropout, len_pools=len_pools)
+
 
         super().__init__(embedding=model.embedding, head=head)
 
