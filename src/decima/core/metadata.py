@@ -10,8 +10,8 @@ class GeneMetadata:
     Attributes:
         name: Gene name
         chrom: Chromosome where the gene is located
-        start: Start position in the chromosome
-        end: End position in the chromosome
+        start: Start position of the region around the gene to perform predictions in the chromosome
+        end: End position of the region around the gene to perform predictions in the chromosome
         strand: Strand orientation (+ or -)
         gene_type: Type of gene (e.g., protein_coding)
         frac_nan: Fraction of NaN values
@@ -91,8 +91,8 @@ class CellMetadata:
     disease: str
     study: str
     dataset: str
-    region: str
-    subregion: str
+    region: Optional[str]
+    subregion: Optional[str]
     celltype_coarse: Optional[str]
     n_cells: int
     total_counts: float

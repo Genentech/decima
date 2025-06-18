@@ -19,7 +19,7 @@ from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE, WarningCounter, WarningType
+from .metrics import DiseaseLfcMSE, WarningCounter
 
 default_train_params = {
     "lr": 4e-5,
@@ -448,11 +448,7 @@ class LightningModel(pl.LightningModule):
 
         expression = np.mean(expression, axis=1)  # B T
 
-        num_warnings = self.warning_counter.compute()
-        # allele mismatch is counted twice for each variant due to the two alleles
-        num_warnings[WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME.value] //= 2
-
-        return {"expression": expression, "warnings": num_warnings}
+        return {"expression": expression, "warnings": self.warning_counter.compute()}
 
     def get_task_idxs(
         self,

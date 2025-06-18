@@ -1,5 +1,7 @@
 import sys
+from decima.core.result import DecimaResult
 from decima.interpret.save_attributions import predict_save_attributions
+from decima.vep import predict_variant_effect
 
 
 if sys.version_info[:2] >= (3, 8):
@@ -16,3 +18,6 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 finally:
     del version, PackageNotFoundError
+
+
+__all__ = ["DecimaResult", "predict_variant_effect", "predict_save_attributions"]

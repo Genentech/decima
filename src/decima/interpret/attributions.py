@@ -400,15 +400,14 @@ class Attribution:
         return df.sort_values("p-value")
 
     def plot_peaks(self, overlapping_min_dist=1000, figsize=(10, 2)):
-        """Plot attribution scores in a window around a relative location.
+        """Plot attribution scores and highlight peaks.
 
         Args:
-            relative_loc: Position relative to TSS to center plot on
-            window: Number of bases to show on each side of center
+            overlapping_min_dist: Minimum distance between peaks to consider them overlapping
             figsize: Figure size in inches (width, height)
 
         Returns:
-            matplotlib.pyplot.Figure: Attribution plot showing the window around the specified location
+            plotnine.ggplot: The plotted figure showing attribution scores with highlighted peaks
         """
         return plot_peaks(
             self.attrs,
