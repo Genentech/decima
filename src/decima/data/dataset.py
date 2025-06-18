@@ -328,9 +328,6 @@ class VariantDataset(Dataset):
         variant = self.variants.iloc[seq_idx]
 
         warnings = list()
-        if not self.validate_allele_seq(variant.gene, variant):
-            warnings.append(WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME)
-
         if allele_idx:
             seq, mask = self.result.prepare_one_hot(
                 variant.gene,
@@ -339,6 +336,9 @@ class VariantDataset(Dataset):
             allele = seq[:, variant.rel_pos : variant.rel_pos + len(variant.alt)]
             allele_tx = variant.alt_tx
         else:
+            if not self.validate_allele_seq(variant.gene, variant):
+                warnings.append(WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME)
+
             seq, mask = self.result.prepare_one_hot(
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],

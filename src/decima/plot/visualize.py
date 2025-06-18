@@ -197,7 +197,7 @@ def plot_peaks(attrs, tss_pos, df_peaks=None, overlapping_min_dist=1000, figsize
 
     Args:
         attr: Attribution scores array
-        tss_pos: Position of TSS
+        tss_pos: Position of TSS (relative to the gene)
         df_peaks: DataFrame containing peak information
         overlapping_min_dist: Minimum distance between peaks to consider them overlapping
         figsize: Figure size

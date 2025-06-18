@@ -80,22 +80,16 @@ class SeqBuilder:
         variant_start = variant["pos"]
         variant_end = variant_start + len(variant["ref"])
 
-        if variant_end <= self.start:
+        if variant_start < self.start:
             warnings.warn(
                 f"Variant position `{variant['pos']}` is upstream of the interval `[{self.start}, {self.end}]`. Skipping..."
             )
             return self
-        elif variant_start < self.start < variant_end:
-            _, right_variant = self._split_variant(variant, self.start)
-            return self.inject(right_variant)
-        elif self.end < variant_start:
+        elif self.end < variant_end:
             warnings.warn(
                 f"Variant position `{variant['pos']}` is downstream of the interval `[{self.start}, {self.end}]`. Skipping..."
             )
             return self
-        elif variant_start < self.end < variant_end:
-            left_variant, _ = self._split_variant(variant, self.end)
-            return self.inject(left_variant)
 
         if variant_start < self.anchor < variant_end:
             left_variant, right_variant = self._split_variant(variant, self.anchor)
