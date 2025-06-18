@@ -1,7 +1,57 @@
 import h5py
 import numpy as np
-from grelu.sequence.format import convert_input_type
+from grelu.sequence.format import strings_to_indices
 from grelu.sequence.utils import get_unique_length
+from grelu.io.genome import read_sizes, get_genome
+
+
+def _get_padded_seq(chrom, start, end, strand, sizes, genome):
+    target_len = end - start
+    
+    if start < 0:
+        seq = str(genome.get_seq(chrom, 1, end, rc=strand == "-")).upper()
+        seq = 'N' * (target_len - len(seq)) + seq
+
+    else:
+        chr_end = sizes[sizes.chrom==chrom].size
+        if end > chr_end:
+            seq = str(genome.get_seq(chrom, start+1, chr_end, rc=strand == "-")).upper()
+            seq = 'N' * (target_len - len(seq)) + seq
+
+        else:
+            seq = str(genome.get_seq(chrom, start, end, rc=strand == "-")).upper()
+
+    assert len(seq) == target_len
+    return seq
+        
+
+def intervals_to_strings_N_pad(intervals, genome = 'hg38'):
+    """
+    Extract DNA sequences from the specified intervals in a genome.
+
+    Args:
+        intervals: A pandas DataFrame, Series or dictionary containing
+            the genomic interval(s) to extract.
+        genome: Name of the genome to use.
+
+    Returns:
+        A list of DNA sequences extracted from the intervals.
+    """
+    # Get chromosome sizes
+    sizes = read_sizes(genome)
+    
+    # Get genome
+    genome = get_genome(genome)
+
+    # Extract sequence for a single interval
+    seqs = intervals.apply(
+                lambda row:  _get_seq_N_pad(
+                    row["chrom"], row["start"], row["end"], row["strand"], sizes, genome
+                ), axis=1,
+            ).tolist()
+
+    assert len(seqs) == len(intervals)
+    return seqs
 
 
 def write_hdf5(file, ad, pad=0):
@@ -45,7 +95,8 @@ def write_hdf5(file, ad, pad=0):
         arr = ad.var[["chrom", "start", "end", "strand"]].copy()
         arr.start = arr.start - pad
         arr.end = arr.end + pad
-        arr = convert_input_type(arr, "indices", genome="hg38")
+        arr = intervals_to_strings_N_pad(arr, genome="hg38")
+        arr = strings_to_indices(arr)
         print(f"Writing sequence array of shape: {arr.shape}")
         f.create_dataset("sequences", shape=arr.shape, dtype=np.int8, data=arr)
 
