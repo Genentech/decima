@@ -1,18 +1,9 @@
 import numpy as np
 import pandas as pd
 import plotnine as p9
-from grelu.visualize import plot_attributions
+import bioframe as bf
 
-from .evaluate import match_criteria
-
-
-def plot_logo(motif, rc=False, figsize=(2, 1)):
-    m = np.array(motif.frequencies).T
-    ic = 2 + (m * np.log2(m)).sum(0)
-    m = m * np.expand_dims(ic, 0)
-    if rc:
-        m = np.flip(m, (0, 1))
-    return plot_attributions(m, figsize=figsize)
+from ..tools.evaluate import match_criteria
 
 
 def plot_gene_scatter(
@@ -201,18 +192,44 @@ def plot_marker_box(
     return g
 
 
-def plot_attribution_peaks(attr, tss_pos):
+def plot_peaks(attrs, tss_pos, df_peaks=None, overlapping_min_dist=1000, figsize=(10, 2)):
+    """Plot peaks in attribution scores.
+
+    Args:
+        attr: Attribution scores array
+        tss_pos: Position of TSS (relative to the gene)
+        df_peaks: DataFrame containing peak information
+        overlapping_min_dist: Minimum distance between peaks to consider them overlapping
+        figsize: Figure size
+
+    Returns:
+        plotnine.ggplot: The plotted figure
+    """
     to_plot = pd.DataFrame(
         {
-            "distance from TSS": [x - tss_pos for x in range(attr.shape[1])],
-            "attribution": attr.mean(0),
+            "distance from TSS": [x - tss_pos for x in range(attrs.shape[1])],
+            "attribution": attrs.mean(0),
         }
     )
     g = (
         p9.ggplot(to_plot, p9.aes(x="distance from TSS", y="attribution"))
         + p9.geom_line()
         + p9.theme_classic()
-        + p9.theme(figure_size=(6, 2))
+        + p9.theme(figure_size=figsize)
     )
+
+    if df_peaks is not None:
+        df_peaks = df_peaks.copy()
+        df_peaks["chrom"] = "_chr"
+        for region in bf.merge(df_peaks, min_dist=overlapping_min_dist).itertuples():
+            g += p9.annotate(
+                xmin=region.start - tss_pos,
+                xmax=region.end - tss_pos,
+                ymin=to_plot["attribution"].min(),
+                ymax=to_plot["attribution"].max(),
+                geom="rect",
+                color="#FF000040",
+                fill="#FF000040",
+            )
 
     return g

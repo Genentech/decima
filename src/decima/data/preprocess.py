@@ -4,11 +4,12 @@ import anndata
 import bioframe as bf
 import numpy as np
 import pandas as pd
-import torch
 from grelu.io.genome import read_sizes
-from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
+from grelu.sequence.format import intervals_to_strings
 from grelu.sequence.utils import get_unique_length
 from tqdm import tqdm
+
+from decima.constants import DECIMA_CONTEXT_SIZE
 
 
 def merge_transcripts(gtf):
@@ -29,7 +30,7 @@ def merge_transcripts(gtf):
     return genes
 
 
-def var_to_intervals(ad, chr_end_pad=10000, genome="hg38", seq_len=524288, crop_coords=163840):
+def var_to_intervals(ad, chr_end_pad=10000, genome="hg38", seq_len=DECIMA_CONTEXT_SIZE, crop_coords=163840):
     sizes = read_sizes(genome)
 
     # Calculate interval size
@@ -244,8 +245,8 @@ def load_ncbi_string(string):
                             )
 
                 out.append(curr_dict)
-            except:
-                print(i)
+            except Exception as e:
+                print(i, str(e))
 
         out = pd.DataFrame(out)
         out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts() == 1].index)]
@@ -266,16 +267,7 @@ def match_ncbi(ad, ncbi):
 
 
 def make_inputs(gene, ad):
-    assert gene in ad.var_names, f"{gene} is not in the anndata object"
-    row = ad.var.loc[gene]
-
-    print("One-hot encoding sequence")
-    seq = intervals_to_strings(row, genome="hg38")
-    seq = strings_to_one_hot(seq)
-
-    print("Making gene mask")
-    mask = np.zeros(shape=(1, 524288))
-    mask[0, row.gene_mask_start : row.gene_mask_end] += 1
-    mask = torch.Tensor(mask)
-
-    return seq, mask
+    raise DeprecationWarning(
+        "make_inputs() is deprecated and will be removed in a future version. "
+        "Please use the DecimaResult.prepare_one_hot() directly instead."
+    )

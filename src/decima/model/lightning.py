@@ -19,7 +19,8 @@ from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE
+from .metrics import DiseaseLfcMSE, WarningCounter
+
 
 default_train_params = {
     "lr": 4e-5,
@@ -74,15 +75,16 @@ class LightningModel(pl.LightningModule):
         self.activation = torch.exp
 
         # Inititalize metrics
-        metrics = MetricCollection(
-            {
-                "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
-                "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
-                "disease_lfc_mse": DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False),
-            }
-        )
+        _metrics = {
+            "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
+            "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+        }
+        if "pairs" in self.train_params:
+            _metrics["disease_lfc_mse"] = DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False)
+        metrics = MetricCollection(_metrics)
         self.val_metrics = metrics.clone(prefix="val_")
         self.test_metrics = metrics.clone(prefix="test_")
+        self.warning_counter = WarningCounter()
 
         # Initialize prediction transform
         self.reset_transform()
@@ -263,6 +265,7 @@ class LightningModel(pl.LightningModule):
         dataset: Callable,
         batch_size: Optional[int] = None,
         num_workers: Optional[int] = None,
+        **kwargs,
     ) -> Callable:
         """
         Make dataloader for prediction
@@ -273,6 +276,7 @@ class LightningModel(pl.LightningModule):
             batch_size=batch_size or self.train_params["batch_size"],
             shuffle=False,
             num_workers=num_workers or self.train_params["num_workers"],
+            **kwargs,
         )
 
     def train_on_dataset(
@@ -355,6 +359,28 @@ class LightningModel(pl.LightningModule):
     def on_save_checkpoint(self, checkpoint: dict) -> None:
         checkpoint["hyper_parameters"]["data_params"] = self.data_params
 
+    def predict_step(self, batch, batch_idx, dataloader_idx=0) -> Union[dict, Tensor]:
+        """
+        Predict for a single batch of sequences or variants
+
+        Args:
+            batch: Batch of sequences or variants
+            batch_idx: Index of the batch
+            dataloader_idx: Index of the dataloader
+
+        Returns:
+            Dictionary containing predictions and warnings or a tensor of predictions
+        """
+
+        seq = batch["seq"] if isinstance(batch, dict) else batch
+
+        expression = self(seq)
+
+        if isinstance(batch, dict):
+            return {"expression": expression, "warnings": batch["warning"]}
+        else:
+            return expression
+
     def predict_on_dataset(
         self,
         dataset: Callable,
@@ -369,12 +395,12 @@ class LightningModel(pl.LightningModule):
 
         Args:
             dataset: Dataset object that yields one-hot encoded sequences
-            
-            devices: Number of devices to use, 
+
+            devices: Number of devices to use,
                 e.g. machine has 4 gpu's but only want to use 2 for predictions
 
             num_workers: Number of workers for data loader
-            
+
             batch_size: Batch size for data loader
 
         Returns:
@@ -385,39 +411,45 @@ class LightningModel(pl.LightningModule):
             dataset,
             num_workers=num_workers,
             batch_size=batch_size,
+            collate_fn=dataset.collate_fn,
         )
         accelerator = "auto"
         if devices is None:
-            devices = "auto" # use all devices
+            devices = "auto"  # use all devices
             # device = "cuda" if torch.cuda.is_available() else "cpu"
             accelerator = "gpu" if torch.cuda.is_available() else "auto"
 
         if accelerator == "auto":
-            trainer = pl.Trainer(accelerator=accelerator, logger=None)
+            trainer = pl.Trainer(accelerator=accelerator, logger=False)
         else:
-            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=None)
+            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False)
 
         # Predict
-        preds = torch.concat(trainer.predict(self, dataloader)).squeeze(-1)
+        results = trainer.predict(self, dataloader)
+        expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
+
+        for r in results:
+            self.warning_counter.update(r["warnings"])
 
         # Reshape predictions
-        preds = rearrange(
-            preds,
+        expression = rearrange(
+            expression,
             "(b n a) t -> b n a t",
             n=dataset.n_augmented,
             a=dataset.n_alleles,
         )
 
         # Convert predictions to numpy array
-        preds = preds.detach().cpu().numpy()
+        expression = expression.detach().cpu().numpy()
 
         if dataset.n_alleles == 2:
-            preds = preds[:, :, 1, :] - preds[:, :, 0, :]  # BNT
+            expression = expression[:, :, 1, :] - expression[:, :, 0, :]  # BNT
         else:
-            preds = preds.squeeze(2)  # B N T
+            expression = expression.squeeze(2)  # B N T
 
-        preds = np.mean(preds, axis=1)  # B T
-        return preds
+        expression = np.mean(expression, axis=1)  # B T
+
+        return {"expression": expression, "warnings": self.warning_counter.compute()}
 
     def get_task_idxs(
         self,
