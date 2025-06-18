@@ -77,3 +77,42 @@ class WarningCounter(Metric):
         Compute the final counts of all warning types.
         """
         return Counter({wt.value: self.counts[i] for i, wt in enumerate(self.warning_types)})
+
+
+class GenePearsonCorrCoef(Metric):
+    """
+    Metric class to calculate the Pearson correlation coefficient for each gene.
+
+    Args:
+        average: If true, return the average metric across genes.
+            Otherwise, return a separate value for each gene
+
+    As input to forward and update the metric accepts the following input:
+        preds: Predictions of shape (N, n_tasks, L)
+        target: Ground truth labels of shape (N, n_tasks, L)
+
+    As output of forward and compute the metric returns the following output:
+        output: A tensor with the Pearson coefficient.
+    """
+
+    def __init__(self, average = True) -> None:
+        super().__init__()
+        self.corrs = []
+        self.average = average
+
+    def update(self, preds: torch.Tensor, target: torch.Tensor) -> None:
+        #preds: B, T, L
+        preds = preds.flatten(start_dim=1, end_dim=2) # B, T
+        target = target.flatten(start_dim=1, end_dim=2) # B, T
+        n = preds.shape[0]
+        corrs = [torch.corrcoef(torch.vstack([preds[i],target[i]]))[0,1] for i in range(n)]
+        self.corrs.extend(corrs)
+
+    def compute(self) -> torch.Tensor:
+        corrs = torch.tensor(self.corrs)
+        if self.average:
+            corrs = corrs.mean()
+        return corrs
+
+    def reset(self) -> None:
+        self.corrs = []
