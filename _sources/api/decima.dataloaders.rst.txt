@@ -1,0 +1,10 @@
+decima.dataloaders package
+==========================
+
+Module contents
+---------------
+
+.. automodule:: decima.dataloaders
+   :members:
+   :show-inheritance:
+   :undoc-members:

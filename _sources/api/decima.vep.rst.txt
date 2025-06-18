@@ -1,0 +1,10 @@
+decima.vep package
+==================
+
+Module contents
+---------------
+
+.. automodule:: decima.vep
+   :members:
+   :show-inheritance:
+   :undoc-members:

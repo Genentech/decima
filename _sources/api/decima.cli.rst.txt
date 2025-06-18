@@ -1,0 +1,61 @@
+decima.cli package
+==================
+
+Submodules
+----------
+
+decima.cli.attributions module
+------------------------------
+
+.. automodule:: decima.cli.attributions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.download module
+--------------------------
+
+.. automodule:: decima.cli.download
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.finetune module
+--------------------------
+
+.. automodule:: decima.cli.finetune
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.predict\_genes module
+--------------------------------
+
+.. automodule:: decima.cli.predict_genes
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.query\_cell module
+-----------------------------
+
+.. automodule:: decima.cli.query_cell
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.vep module
+---------------------
+
+.. automodule:: decima.cli.vep
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.cli
+   :members:
+   :show-inheritance:
+   :undoc-members:

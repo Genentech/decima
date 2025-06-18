@@ -1,0 +1,10 @@
+decima.train package
+====================
+
+Module contents
+---------------
+
+.. automodule:: decima.train
+   :members:
+   :show-inheritance:
+   :undoc-members:

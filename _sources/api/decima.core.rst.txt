@@ -1,0 +1,29 @@
+decima.core package
+===================
+
+Submodules
+----------
+
+decima.core.metadata module
+---------------------------
+
+.. automodule:: decima.core.metadata
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.core.result module
+-------------------------
+
+.. automodule:: decima.core.result
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.core
+   :members:
+   :show-inheritance:
+   :undoc-members:

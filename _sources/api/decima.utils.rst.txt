@@ -1,0 +1,45 @@
+decima.utils package
+====================
+
+Submodules
+----------
+
+decima.utils.dataframe module
+-----------------------------
+
+.. automodule:: decima.utils.dataframe
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.utils.inject module
+--------------------------
+
+.. automodule:: decima.utils.inject
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.utils.io module
+----------------------
+
+.. automodule:: decima.utils.io
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.utils.variant module
+---------------------------
+
+.. automodule:: decima.utils.variant
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.utils
+   :members:
+   :show-inheritance:
+   :undoc-members:

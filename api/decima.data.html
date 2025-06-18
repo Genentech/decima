@@ -1,0 +1,651 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.dataloaders package" href="decima.dataloaders.html" /><link rel="prev" title="decima.core package" href="decima.core.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>decima.data package - decima 0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">decima 0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Module Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="decima.html">decima package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of decima package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.core.html">decima.core package</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.dataloaders.html">decima.dataloaders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/api/decima.data.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="decima-data-package">
+<h1>decima.data package<a class="headerlink" href="#decima-data-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-decima.data.dataset">
+<span id="decima-data-dataset-module"></span><h2>decima.data.dataset module<a class="headerlink" href="#module-decima.data.dataset" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">HDF5Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.close" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_label">
+<span class="sig-name descname"><span class="pre">extract_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_label" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_seq">
+<span class="sig-name descname"><span class="pre">extract_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_seq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_tasks">
+<span class="sig-name descname"><span class="pre">extract_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_tasks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">VariantDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>Dataset for variant effect prediction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variants</strong> (<em>pd.DataFrame</em>) – DataFrame with variants</p></li>
+<li><p><strong>anndata</strong> (<em>AnnData</em>) – AnnData object with gene metadata</p></li>
+<li><p><strong>seq_len</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Length of the sequence</p></li>
+<li><p><strong>max_seq_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum sequence shift</p></li>
+<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List of columns to include in the output</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Column name for gene names</p></li>
+<li><p><strong>min_from_end</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the end of the gene</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Type of distance</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the TSS</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum distance from the TSS</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset for variant effect prediction</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">VariantDataset</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variants</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;variants.csv&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">VariantDataset</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">variants</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">{&#39;seq&#39;: tensor([[1.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 1.0000],</span>
+<span class="go">                [0.0000, 1.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 0.0000,  ..., 1.0000, 0.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]), &#39;warning&#39;: []}</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.DEFAULT_COLUMNS">
+<span class="sig-name descname"><span class="pre">DEFAULT_COLUMNS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['chrom',</span> <span class="pre">'pos',</span> <span class="pre">'ref',</span> <span class="pre">'alt',</span> <span class="pre">'gene',</span> <span class="pre">'start',</span> <span class="pre">'end',</span> <span class="pre">'strand',</span> <span class="pre">'gene_mask_start',</span> <span class="pre">'gene_mask_end',</span> <span class="pre">'rel_pos',</span> <span class="pre">'ref_tx',</span> <span class="pre">'alt_tx',</span> <span class="pre">'tss_dist']</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.DEFAULT_COLUMNS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.collate_fn">
+<span class="sig-name descname"><span class="pre">collate_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.collate_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.collate_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.overlap_genes">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">overlap_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.overlap_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.overlap_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.validate_allele_seq">
+<span class="sig-name descname"><span class="pre">validate_allele_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.validate_allele_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.validate_allele_seq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-decima.data.preprocess">
+<span id="decima-data-preprocess-module"></span><h2>decima.data.preprocess module<a class="headerlink" href="#module-decima.data.preprocess" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.aggregate_anndata">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">aggregate_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cell_type',</span> <span class="pre">'tissue',</span> <span class="pre">'organ',</span> <span class="pre">'disease',</span> <span class="pre">'study',</span> <span class="pre">'dataset',</span> <span class="pre">'region',</span> <span class="pre">'subregion',</span> <span class="pre">'celltype_coarse']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['n_cells']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#aggregate_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.aggregate_anndata" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.assign_borzoi_folds">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">assign_borzoi_folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#assign_borzoi_folds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.assign_borzoi_folds" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.change_values">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">change_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#change_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.change_values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.get_frac_N">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">get_frac_N</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#get_frac_N"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.get_frac_N" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.load_ncbi_string">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">load_ncbi_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#load_ncbi_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.load_ncbi_string" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.make_inputs">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">make_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#make_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.make_inputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_cellranger_2024">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_cellranger_2024</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes24</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_cellranger_2024"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_cellranger_2024" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_ncbi">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_ncbi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncbi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_ncbi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_ncbi" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_ref_ad">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_ref_ad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_ref_ad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_ref_ad" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.merge_transcripts">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">merge_transcripts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#merge_transcripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.merge_transcripts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.var_to_intervals">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">var_to_intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chr_end_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">163840</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#var_to_intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.var_to_intervals" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-decima.data.read_hdf5">
+<span id="decima-data-read-hdf5-module"></span><h2>decima.data.read_hdf5 module<a class="headerlink" href="#module-decima.data.read_hdf5" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.count_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">count_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#count_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.count_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.extract_gene_data">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">extract_gene_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#extract_gene_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.extract_gene_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.get_gene_idx">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">get_gene_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#get_gene_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.get_gene_idx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.index_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">index_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#index_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.index_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.list_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">list_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#list_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.list_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.mutate">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">mutate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allele</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#mutate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.mutate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-decima.data.read_vcf">
+<span id="decima-data-read-vcf-module"></span><h2>decima.data.read_vcf module<a class="headerlink" href="#module-decima.data.read_vcf" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-decima.data.write_hdf5">
+<span id="decima-data-write-hdf5-module"></span><h2>decima.data.write_hdf5 module<a class="headerlink" href="#module-decima.data.write_hdf5" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.write_hdf5.write_hdf5">
+<span class="sig-prename descclassname"><span class="pre">decima.data.write_hdf5.</span></span><span class="sig-name descname"><span class="pre">write_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/write_hdf5.html#write_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.write_hdf5.write_hdf5" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-decima.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.data" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="decima.dataloaders.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">decima.dataloaders package</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="decima.core.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">decima.core package</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">decima.data package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-decima.data.dataset">decima.data.dataset module</a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__init__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__len__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.close"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_label"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_label()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_seq"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_seq()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_tasks"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_tasks()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset"><code class="docutils literal notranslate"><span class="pre">VariantDataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.DEFAULT_COLUMNS"><code class="docutils literal notranslate"><span class="pre">VariantDataset.DEFAULT_COLUMNS</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__annotations__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__init__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__len__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.collate_fn"><code class="docutils literal notranslate"><span class="pre">VariantDataset.collate_fn()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.overlap_genes"><code class="docutils literal notranslate"><span class="pre">VariantDataset.overlap_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.validate_allele_seq"><code class="docutils literal notranslate"><span class="pre">VariantDataset.validate_allele_seq()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.preprocess">decima.data.preprocess module</a><ul>
+<li><a class="reference internal" href="#decima.data.preprocess.aggregate_anndata"><code class="docutils literal notranslate"><span class="pre">aggregate_anndata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.assign_borzoi_folds"><code class="docutils literal notranslate"><span class="pre">assign_borzoi_folds()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.change_values"><code class="docutils literal notranslate"><span class="pre">change_values()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.get_frac_N"><code class="docutils literal notranslate"><span class="pre">get_frac_N()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.load_ncbi_string"><code class="docutils literal notranslate"><span class="pre">load_ncbi_string()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.make_inputs"><code class="docutils literal notranslate"><span class="pre">make_inputs()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_cellranger_2024"><code class="docutils literal notranslate"><span class="pre">match_cellranger_2024()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_ncbi"><code class="docutils literal notranslate"><span class="pre">match_ncbi()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_ref_ad"><code class="docutils literal notranslate"><span class="pre">match_ref_ad()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.merge_transcripts"><code class="docutils literal notranslate"><span class="pre">merge_transcripts()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.var_to_intervals"><code class="docutils literal notranslate"><span class="pre">var_to_intervals()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.read_hdf5">decima.data.read_hdf5 module</a><ul>
+<li><a class="reference internal" href="#decima.data.read_hdf5.count_genes"><code class="docutils literal notranslate"><span class="pre">count_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.extract_gene_data"><code class="docutils literal notranslate"><span class="pre">extract_gene_data()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.get_gene_idx"><code class="docutils literal notranslate"><span class="pre">get_gene_idx()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.index_genes"><code class="docutils literal notranslate"><span class="pre">index_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.list_genes"><code class="docutils literal notranslate"><span class="pre">list_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.mutate"><code class="docutils literal notranslate"><span class="pre">mutate()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.read_vcf">decima.data.read_vcf module</a></li>
+<li><a class="reference internal" href="#module-decima.data.write_hdf5">decima.data.write_hdf5 module</a><ul>
+<li><a class="reference internal" href="#decima.data.write_hdf5.write_hdf5"><code class="docutils literal notranslate"><span class="pre">write_hdf5()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>

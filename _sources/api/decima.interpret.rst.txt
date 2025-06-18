@@ -1,0 +1,37 @@
+decima.interpret package
+========================
+
+Submodules
+----------
+
+decima.interpret.attributions module
+------------------------------------
+
+.. automodule:: decima.interpret.attributions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.interpret.ism module
+---------------------------
+
+.. automodule:: decima.interpret.ism
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.interpret.save\_attributions module
+------------------------------------------
+
+.. automodule:: decima.interpret.save_attributions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.interpret
+   :members:
+   :show-inheritance:
+   :undoc-members:

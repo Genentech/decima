@@ -1,0 +1,53 @@
+decima.data package
+===================
+
+Submodules
+----------
+
+decima.data.dataset module
+--------------------------
+
+.. automodule:: decima.data.dataset
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.data.preprocess module
+-----------------------------
+
+.. automodule:: decima.data.preprocess
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.data.read\_hdf5 module
+-----------------------------
+
+.. automodule:: decima.data.read_hdf5
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.data.read\_vcf module
+----------------------------
+
+.. automodule:: decima.data.read_vcf
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.data.write\_hdf5 module
+------------------------------
+
+.. automodule:: decima.data.write_hdf5
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.data
+   :members:
+   :show-inheritance:
+   :undoc-members:

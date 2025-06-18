@@ -1,0 +1,1258 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.data package" href="decima.data.html" /><link rel="prev" title="decima.cli package" href="decima.cli.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>decima.core package - decima 0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">decima 0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Module Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="decima.html">decima package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of decima package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">decima.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.data.html">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.dataloaders.html">decima.dataloaders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/api/decima.core.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="decima-core-package">
+<h1>decima.core package<a class="headerlink" href="#decima-core-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-decima.core.metadata">
+<span id="decima-core-metadata-module"></span><h2>decima.core.metadata module<a class="headerlink" href="#module-decima.core.metadata" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.metadata.</span></span><span class="sig-name descname"><span class="pre">CellMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tissue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">study</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">celltype_coarse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_pearson</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/metadata.html#CellMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.metadata.CellMetadata" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Metadata for a cell in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.name" title="Link to this definition">¶</a></dt>
+<dd><p>Cell identifier</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.cell_type">
+<span class="sig-name descname"><span class="pre">cell_type</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.cell_type" title="Link to this definition">¶</a></dt>
+<dd><p>Detailed cell type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.tissue">
+<span class="sig-name descname"><span class="pre">tissue</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.tissue" title="Link to this definition">¶</a></dt>
+<dd><p>Tissue identifier</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.organ">
+<span class="sig-name descname"><span class="pre">organ</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.organ" title="Link to this definition">¶</a></dt>
+<dd><p>Organ name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.disease">
+<span class="sig-name descname"><span class="pre">disease</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.disease" title="Link to this definition">¶</a></dt>
+<dd><p>Disease state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.study">
+<span class="sig-name descname"><span class="pre">study</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.study" title="Link to this definition">¶</a></dt>
+<dd><p>Study identifier</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Dataset identifier</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.region">
+<span class="sig-name descname"><span class="pre">region</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.region" title="Link to this definition">¶</a></dt>
+<dd><p>Anatomical region</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.subregion">
+<span class="sig-name descname"><span class="pre">subregion</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.subregion" title="Link to this definition">¶</a></dt>
+<dd><p>Anatomical subregion</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.celltype_coarse">
+<span class="sig-name descname"><span class="pre">celltype_coarse</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.celltype_coarse" title="Link to this definition">¶</a></dt>
+<dd><p>Coarse cell type classification</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.n_cells">
+<span class="sig-name descname"><span class="pre">n_cells</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.n_cells" title="Link to this definition">¶</a></dt>
+<dd><p>Number of cells</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.total_counts">
+<span class="sig-name descname"><span class="pre">total_counts</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.total_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Total count of transcripts</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.n_genes">
+<span class="sig-name descname"><span class="pre">n_genes</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.n_genes" title="Link to this definition">¶</a></dt>
+<dd><p>Number of genes detected</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.size_factor">
+<span class="sig-name descname"><span class="pre">size_factor</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.size_factor" title="Link to this definition">¶</a></dt>
+<dd><p>Size normalization factor</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.train_pearson">
+<span class="sig-name descname"><span class="pre">train_pearson</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.train_pearson" title="Link to this definition">¶</a></dt>
+<dd><p>Pearson correlation in training set</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.val_pearson">
+<span class="sig-name descname"><span class="pre">val_pearson</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.val_pearson" title="Link to this definition">¶</a></dt>
+<dd><p>Pearson correlation in validation set</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.test_pearson">
+<span class="sig-name descname"><span class="pre">test_pearson</span></span><a class="headerlink" href="#decima.core.metadata.CellMetadata.test_pearson" title="Link to this definition">¶</a></dt>
+<dd><p>Pearson correlation in test set</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cell_type':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'celltype_coarse':</span> <span class="pre">typing.Optional[str],</span> <span class="pre">'dataset':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'disease':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'n_cells':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'n_genes':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'organ':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'region':</span> <span class="pre">typing.Optional[str],</span> <span class="pre">'size_factor':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'study':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'subregion':</span> <span class="pre">typing.Optional[str],</span> <span class="pre">'test_pearson':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'tissue':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'total_counts':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'train_pearson':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'val_pearson':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;}</span></em><a class="headerlink" href="#decima.core.metadata.CellMetadata.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__dataclass_fields__">
+<span class="sig-name descname"><span class="pre">__dataclass_fields__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cell_type':</span> <span class="pre">Field(name='cell_type',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'celltype_coarse':</span> <span class="pre">Field(name='celltype_coarse',type=typing.Optional[str],default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'dataset':</span> <span class="pre">Field(name='dataset',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'disease':</span> <span class="pre">Field(name='disease',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'n_cells':</span> <span class="pre">Field(name='n_cells',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'n_genes':</span> <span class="pre">Field(name='n_genes',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'name':</span> <span class="pre">Field(name='name',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'organ':</span> <span class="pre">Field(name='organ',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'region':</span> <span class="pre">Field(name='region',type=typing.Optional[str],default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'size_factor':</span> <span class="pre">Field(name='size_factor',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'study':</span> <span class="pre">Field(name='study',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'subregion':</span> <span class="pre">Field(name='subregion',type=typing.Optional[str],default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'test_pearson':</span> <span class="pre">Field(name='test_pearson',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'tissue':</span> <span class="pre">Field(name='tissue',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'total_counts':</span> <span class="pre">Field(name='total_counts',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'train_pearson':</span> <span class="pre">Field(name='train_pearson',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'val_pearson':</span> <span class="pre">Field(name='val_pearson',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD)}</span></em><a class="headerlink" href="#decima.core.metadata.CellMetadata.__dataclass_fields__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__dataclass_params__">
+<span class="sig-name descname"><span class="pre">__dataclass_params__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">_DataclassParams(init=True,repr=True,eq=True,order=False,unsafe_hash=False,frozen=False)</span></em><a class="headerlink" href="#decima.core.metadata.CellMetadata.__dataclass_params__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.CellMetadata.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#decima.core.metadata.CellMetadata.__hash__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tissue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">study</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">celltype_coarse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_pearson</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.CellMetadata.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__match_args__">
+<span class="sig-name descname"><span class="pre">__match_args__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'cell_type',</span> <span class="pre">'tissue',</span> <span class="pre">'organ',</span> <span class="pre">'disease',</span> <span class="pre">'study',</span> <span class="pre">'dataset',</span> <span class="pre">'region',</span> <span class="pre">'subregion',</span> <span class="pre">'celltype_coarse',</span> <span class="pre">'n_cells',</span> <span class="pre">'total_counts',</span> <span class="pre">'n_genes',</span> <span class="pre">'size_factor',</span> <span class="pre">'train_pearson',</span> <span class="pre">'val_pearson',</span> <span class="pre">'test_pearson')</span></em><a class="headerlink" href="#decima.core.metadata.CellMetadata.__match_args__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.CellMetadata.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">cell_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">celltype_coarse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">disease</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.CellMetadata.from_series">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/metadata.html#CellMetadata.from_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.metadata.CellMetadata.from_series" title="Link to this definition">¶</a></dt>
+<dd><p>Create CellMetadata from a pandas Series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.CellMetadata" title="decima.core.metadata.CellMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">n_cells</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">n_genes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id6" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">organ</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id7" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#id8" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">size_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id9" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">study</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id10" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">subregion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#id11" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">test_pearson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id12" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">tissue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id13" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">total_counts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id14" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">train_pearson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id15" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">val_pearson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id16" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.metadata.</span></span><span class="sig-name descname"><span class="pre">GeneMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tracks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_factor_pearson</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/metadata.html#GeneMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.metadata.GeneMetadata" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Metadata for a gene in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.name" title="Link to this definition">¶</a></dt>
+<dd><p>Gene name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.chrom">
+<span class="sig-name descname"><span class="pre">chrom</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.chrom" title="Link to this definition">¶</a></dt>
+<dd><p>Chromosome where the gene is located</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.start" title="Link to this definition">¶</a></dt>
+<dd><p>Start position of the region around the gene to perform predictions in the chromosome</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.end" title="Link to this definition">¶</a></dt>
+<dd><p>End position of the region around the gene to perform predictions in the chromosome</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.strand">
+<span class="sig-name descname"><span class="pre">strand</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.strand" title="Link to this definition">¶</a></dt>
+<dd><p>Strand orientation (+ or -)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_type">
+<span class="sig-name descname"><span class="pre">gene_type</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_type" title="Link to this definition">¶</a></dt>
+<dd><p>Type of gene (e.g., protein_coding)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.frac_nan">
+<span class="sig-name descname"><span class="pre">frac_nan</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.frac_nan" title="Link to this definition">¶</a></dt>
+<dd><p>Fraction of NaN values</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.mean_counts">
+<span class="sig-name descname"><span class="pre">mean_counts</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.mean_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Mean count across samples</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.n_tracks">
+<span class="sig-name descname"><span class="pre">n_tracks</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.n_tracks" title="Link to this definition">¶</a></dt>
+<dd><p>Number of tracks</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_start">
+<span class="sig-name descname"><span class="pre">gene_start</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_start" title="Link to this definition">¶</a></dt>
+<dd><p>Gene start position</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_end">
+<span class="sig-name descname"><span class="pre">gene_end</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_end" title="Link to this definition">¶</a></dt>
+<dd><p>Gene end position</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_length">
+<span class="sig-name descname"><span class="pre">gene_length</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_length" title="Link to this definition">¶</a></dt>
+<dd><p>Length of the gene</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_mask_start">
+<span class="sig-name descname"><span class="pre">gene_mask_start</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_mask_start" title="Link to this definition">¶</a></dt>
+<dd><p>Start position of the gene mask</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_mask_end">
+<span class="sig-name descname"><span class="pre">gene_mask_end</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_mask_end" title="Link to this definition">¶</a></dt>
+<dd><p>End position of the gene mask</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.frac_N">
+<span class="sig-name descname"><span class="pre">frac_N</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.frac_N" title="Link to this definition">¶</a></dt>
+<dd><p>Fraction of N bases</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.fold">
+<span class="sig-name descname"><span class="pre">fold</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.fold" title="Link to this definition">¶</a></dt>
+<dd><p>Cross-validation fold</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Dataset identifier</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.gene_id">
+<span class="sig-name descname"><span class="pre">gene_id</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.gene_id" title="Link to this definition">¶</a></dt>
+<dd><p>Ensembl gene ID</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.pearson">
+<span class="sig-name descname"><span class="pre">pearson</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.pearson" title="Link to this definition">¶</a></dt>
+<dd><p>Pearson correlation</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.size_factor_pearson">
+<span class="sig-name descname"><span class="pre">size_factor_pearson</span></span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.size_factor_pearson" title="Link to this definition">¶</a></dt>
+<dd><p>Size factor Pearson correlation</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'chrom':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'dataset':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'end':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'fold':</span> <span class="pre">typing.List[str],</span> <span class="pre">'frac_N':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'frac_nan':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'gene_end':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'gene_id':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'gene_length':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'gene_mask_end':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'gene_mask_start':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'gene_start':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'gene_type':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'mean_counts':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'n_tracks':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">'pearson':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'size_factor_pearson':</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">'start':</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">'strand':</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;}</span></em><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__dataclass_fields__">
+<span class="sig-name descname"><span class="pre">__dataclass_fields__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'chrom':</span> <span class="pre">Field(name='chrom',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'dataset':</span> <span class="pre">Field(name='dataset',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'end':</span> <span class="pre">Field(name='end',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'fold':</span> <span class="pre">Field(name='fold',type=typing.List[str],default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'frac_N':</span> <span class="pre">Field(name='frac_N',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'frac_nan':</span> <span class="pre">Field(name='frac_nan',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_end':</span> <span class="pre">Field(name='gene_end',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_id':</span> <span class="pre">Field(name='gene_id',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_length':</span> <span class="pre">Field(name='gene_length',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_mask_end':</span> <span class="pre">Field(name='gene_mask_end',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_mask_start':</span> <span class="pre">Field(name='gene_mask_start',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_start':</span> <span class="pre">Field(name='gene_start',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'gene_type':</span> <span class="pre">Field(name='gene_type',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'mean_counts':</span> <span class="pre">Field(name='mean_counts',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'n_tracks':</span> <span class="pre">Field(name='n_tracks',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'name':</span> <span class="pre">Field(name='name',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'pearson':</span> <span class="pre">Field(name='pearson',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'size_factor_pearson':</span> <span class="pre">Field(name='size_factor_pearson',type=&lt;class</span> <span class="pre">'float'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'start':</span> <span class="pre">Field(name='start',type=&lt;class</span> <span class="pre">'int'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD),</span> <span class="pre">'strand':</span> <span class="pre">Field(name='strand',type=&lt;class</span> <span class="pre">'str'&gt;,default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False,_field_type=_FIELD)}</span></em><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__dataclass_fields__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__dataclass_params__">
+<span class="sig-name descname"><span class="pre">__dataclass_params__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">_DataclassParams(init=True,repr=True,eq=True,order=False,unsafe_hash=False,frozen=False)</span></em><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__dataclass_params__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__hash__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tracks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pearson</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_factor_pearson</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__match_args__">
+<span class="sig-name descname"><span class="pre">__match_args__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'chrom',</span> <span class="pre">'start',</span> <span class="pre">'end',</span> <span class="pre">'strand',</span> <span class="pre">'gene_type',</span> <span class="pre">'frac_nan',</span> <span class="pre">'mean_counts',</span> <span class="pre">'n_tracks',</span> <span class="pre">'gene_start',</span> <span class="pre">'gene_end',</span> <span class="pre">'gene_length',</span> <span class="pre">'gene_mask_start',</span> <span class="pre">'gene_mask_end',</span> <span class="pre">'frac_N',</span> <span class="pre">'fold',</span> <span class="pre">'dataset',</span> <span class="pre">'gene_id',</span> <span class="pre">'pearson',</span> <span class="pre">'size_factor_pearson')</span></em><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__match_args__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decima.core.metadata.GeneMetadata.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">chrom</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id17" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id18" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id19" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">fold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#id20" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">frac_N</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id21" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">frac_nan</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id22" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.metadata.GeneMetadata.from_series">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/metadata.html#GeneMetadata.from_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.metadata.GeneMetadata.from_series" title="Link to this definition">¶</a></dt>
+<dd><p>Create GeneMetadata from a pandas Series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.GeneMetadata" title="decima.core.metadata.GeneMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">gene_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id23" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">gene_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id24" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">gene_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id25" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">gene_mask_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id26" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">gene_mask_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id27" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">gene_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id28" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">gene_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id29" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">mean_counts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id30" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">n_tracks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id31" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id32" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">pearson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id33" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">size_factor_pearson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#id34" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#id35" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">strand</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#id36" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-decima.core.result">
+<span id="decima-core-result-module"></span><h2>decima.core.result module<a class="headerlink" href="#module-decima.core.result" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.result.</span></span><span class="sig-name descname"><span class="pre">DecimaResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Container for Decima results and model predictions.</p>
+<p>This class provides a unified interface for loading pre-trained Decima models and
+associated metadata, making predictions, and performing attribution analyses.</p>
+<dl class="simple">
+<dt>The DecimaResult object contains:</dt><dd><ul class="simple">
+<li><p>An AnnData object with gene expression and metadata</p></li>
+<li><p>A trained model for making predictions</p></li>
+<li><p>Methods for attribution analysis and interpretation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>anndata</strong> – AnnData object containing gene expression data and metadata</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load default pre-trained model and metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">rep</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform attribution analysis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attributions</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">attributions</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;attrs_SP1I_classical_monoctypes&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gene</span><span class="o">=</span><span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="s1">&#39;cell_type == &quot;classical monocyte&quot;&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Properties:</dt><dd><p>model: Decima model
+genes: List of gene names
+cells: List of cell names
+cell_metadata: Cell metadata
+gene_metadata: Gene metadata
+shape: Shape of the expression matrix
+attributions: Attributions for a gene</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.core.result.DecimaResult.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.attributions">
+<span class="sig-name descname"><span class="pre">attributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'specificity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputxgradient'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.attributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.attributions" title="Link to this definition">¶</a></dt>
+<dd><p>Get attributions for a specific gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name</p></li>
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – List of cells to use as on task</p></li>
+<li><p><strong>off_tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – List of cells to use as off task</p></li>
+<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Attribution transform method</p></li>
+<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Attribution method</p></li>
+<li><p><strong>n_peaks</strong> – Number of peaks to find</p></li>
+<li><p><strong>min_dist</strong> – Minimum distance between peaks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Container with inputs, predictions, attribution scores and TSS position</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="decima.interpret.html#decima.interpret.attributions.Attribution" title="decima.interpret.attributions.Attribution">Attribution</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.cell_metadata">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cell_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.0)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.cell_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Cell metadata including annotations, metrics, etc.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.cells">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cells</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#decima.core.result.DecimaResult.cells" title="Link to this definition">¶</a></dt>
+<dd><p>List of cell identifiers in the dataset.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.gene_metadata">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gene_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.0)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.gene_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Gene metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.gene_sequence">
+<span class="sig-name descname"><span class="pre">gene_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stranded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.gene_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.gene_sequence" title="Link to this definition">¶</a></dt>
+<dd><p>Get sequence for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.genes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#decima.core.result.DecimaResult.genes" title="Link to this definition">¶</a></dt>
+<dd><p>List of gene names in the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.get_cell_metadata">
+<span class="sig-name descname"><span class="pre">get_cell_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.get_cell_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.get_cell_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Get metadata for a specific cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.CellMetadata" title="decima.core.metadata.CellMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.get_gene_metadata">
+<span class="sig-name descname"><span class="pre">get_gene_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.get_gene_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.get_gene_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Get metadata for a specific gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.GeneMetadata" title="decima.core.metadata.GeneMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.load">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load a DecimaResult object from an anndata file or a path to an anndata file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>anndata_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – Path to anndata file or anndata object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DecimaResult object</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>  <span class="c1"># Load default decima metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;path/to/anndata.h5ad&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  <span class="c1"># Load custom anndata object from file</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.load_model" title="Link to this definition">¶</a></dt>
+<dd><p>Load the trained model from a checkpoint path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – Path to model checkpoint or replicate number (0-3) for pre-trained models</p></li>
+<li><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Device to load model on</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>  <span class="c1"># Load default model (rep0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;path/to/checkpoint.ckpt&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.model">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#decima.core.result.DecimaResult.model" title="Link to this definition">¶</a></dt>
+<dd><p>Decima model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.predicted_expression_matrix">
+<span class="sig-name descname"><span class="pre">predicted_expression_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.predicted_expression_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.predicted_expression_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Get predicted expression matrix for all or specific genes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Optional list of genes to get predictions for. If None, returns all genes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Predicted expression matrix (cells x genes)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.prepare_one_hot">
+<span class="sig-name descname"><span class="pre">prepare_one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.prepare_one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.prepare_one_hot" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare one-hot encoding for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One-hot encoding of the gene</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.query_cells">
+<span class="sig-name descname"><span class="pre">query_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.query_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.query_cells" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.query_tasks">
+<span class="sig-name descname"><span class="pre">query_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.query_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.query_tasks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.shape">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.shape" title="Link to this definition">¶</a></dt>
+<dd><p>Shape of the expression matrix (n_cells, n_genes).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-decima.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.core" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="decima.data.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">decima.data package</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="decima.cli.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">decima.cli package</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">decima.core package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-decima.core.metadata">decima.core.metadata module</a><ul>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata"><code class="docutils literal notranslate"><span class="pre">CellMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.name"><code class="docutils literal notranslate"><span class="pre">CellMetadata.name</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.cell_type"><code class="docutils literal notranslate"><span class="pre">CellMetadata.cell_type</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.tissue"><code class="docutils literal notranslate"><span class="pre">CellMetadata.tissue</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.organ"><code class="docutils literal notranslate"><span class="pre">CellMetadata.organ</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.disease"><code class="docutils literal notranslate"><span class="pre">CellMetadata.disease</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.study"><code class="docutils literal notranslate"><span class="pre">CellMetadata.study</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.dataset"><code class="docutils literal notranslate"><span class="pre">CellMetadata.dataset</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.region"><code class="docutils literal notranslate"><span class="pre">CellMetadata.region</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.subregion"><code class="docutils literal notranslate"><span class="pre">CellMetadata.subregion</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.celltype_coarse"><code class="docutils literal notranslate"><span class="pre">CellMetadata.celltype_coarse</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.n_cells"><code class="docutils literal notranslate"><span class="pre">CellMetadata.n_cells</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.total_counts"><code class="docutils literal notranslate"><span class="pre">CellMetadata.total_counts</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.n_genes"><code class="docutils literal notranslate"><span class="pre">CellMetadata.n_genes</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.size_factor"><code class="docutils literal notranslate"><span class="pre">CellMetadata.size_factor</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.train_pearson"><code class="docutils literal notranslate"><span class="pre">CellMetadata.train_pearson</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.val_pearson"><code class="docutils literal notranslate"><span class="pre">CellMetadata.val_pearson</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.test_pearson"><code class="docutils literal notranslate"><span class="pre">CellMetadata.test_pearson</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__annotations__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__dataclass_fields__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__dataclass_fields__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__dataclass_params__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__dataclass_params__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__eq__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__hash__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__hash__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__init__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__match_args__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__match_args__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.__repr__"><code class="docutils literal notranslate"><span class="pre">CellMetadata.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">CellMetadata.cell_type</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">CellMetadata.celltype_coarse</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">CellMetadata.dataset</span></code></a></li>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">CellMetadata.disease</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.CellMetadata.from_series"><code class="docutils literal notranslate"><span class="pre">CellMetadata.from_series()</span></code></a></li>
+<li><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">CellMetadata.n_cells</span></code></a></li>
+<li><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">CellMetadata.n_genes</span></code></a></li>
+<li><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">CellMetadata.name</span></code></a></li>
+<li><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">CellMetadata.organ</span></code></a></li>
+<li><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">CellMetadata.region</span></code></a></li>
+<li><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">CellMetadata.size_factor</span></code></a></li>
+<li><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">CellMetadata.study</span></code></a></li>
+<li><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">CellMetadata.subregion</span></code></a></li>
+<li><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">CellMetadata.test_pearson</span></code></a></li>
+<li><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">CellMetadata.tissue</span></code></a></li>
+<li><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">CellMetadata.total_counts</span></code></a></li>
+<li><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">CellMetadata.train_pearson</span></code></a></li>
+<li><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">CellMetadata.val_pearson</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata"><code class="docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.name"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.name</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.chrom"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.chrom</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.start"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.start</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.end"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.end</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.strand"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.strand</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_type"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_type</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.frac_nan"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.frac_nan</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.mean_counts"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.mean_counts</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.n_tracks"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.n_tracks</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_start"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_start</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_end"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_end</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_length"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_length</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_mask_start"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_mask_start</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_mask_end"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_mask_end</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.frac_N"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.frac_N</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.fold"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.fold</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.dataset"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.dataset</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.gene_id"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_id</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.pearson"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.pearson</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.size_factor_pearson"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.size_factor_pearson</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__annotations__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__dataclass_fields__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__dataclass_fields__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__dataclass_params__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__dataclass_params__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__eq__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__hash__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__hash__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__init__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__match_args__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__match_args__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.__repr__"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#id17"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.chrom</span></code></a></li>
+<li><a class="reference internal" href="#id18"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.dataset</span></code></a></li>
+<li><a class="reference internal" href="#id19"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.end</span></code></a></li>
+<li><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.fold</span></code></a></li>
+<li><a class="reference internal" href="#id21"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.frac_N</span></code></a></li>
+<li><a class="reference internal" href="#id22"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.frac_nan</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.metadata.GeneMetadata.from_series"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.from_series()</span></code></a></li>
+<li><a class="reference internal" href="#id23"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_end</span></code></a></li>
+<li><a class="reference internal" href="#id24"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_id</span></code></a></li>
+<li><a class="reference internal" href="#id25"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_length</span></code></a></li>
+<li><a class="reference internal" href="#id26"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_mask_end</span></code></a></li>
+<li><a class="reference internal" href="#id27"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_mask_start</span></code></a></li>
+<li><a class="reference internal" href="#id28"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_start</span></code></a></li>
+<li><a class="reference internal" href="#id29"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.gene_type</span></code></a></li>
+<li><a class="reference internal" href="#id30"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.mean_counts</span></code></a></li>
+<li><a class="reference internal" href="#id31"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.n_tracks</span></code></a></li>
+<li><a class="reference internal" href="#id32"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.name</span></code></a></li>
+<li><a class="reference internal" href="#id33"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.pearson</span></code></a></li>
+<li><a class="reference internal" href="#id34"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.size_factor_pearson</span></code></a></li>
+<li><a class="reference internal" href="#id35"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.start</span></code></a></li>
+<li><a class="reference internal" href="#id36"><code class="docutils literal notranslate"><span class="pre">GeneMetadata.strand</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.core.result">decima.core.result module</a><ul>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult"><code class="docutils literal notranslate"><span class="pre">DecimaResult</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__annotations__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__init__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__repr__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.attributions"><code class="docutils literal notranslate"><span class="pre">DecimaResult.attributions()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.cell_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.cell_metadata</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.cells"><code class="docutils literal notranslate"><span class="pre">DecimaResult.cells</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.gene_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.gene_metadata</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.gene_sequence"><code class="docutils literal notranslate"><span class="pre">DecimaResult.gene_sequence()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.genes"><code class="docutils literal notranslate"><span class="pre">DecimaResult.genes</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.get_cell_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.get_cell_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.get_gene_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.get_gene_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.load"><code class="docutils literal notranslate"><span class="pre">DecimaResult.load()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.load_model"><code class="docutils literal notranslate"><span class="pre">DecimaResult.load_model()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.model"><code class="docutils literal notranslate"><span class="pre">DecimaResult.model</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.predicted_expression_matrix"><code class="docutils literal notranslate"><span class="pre">DecimaResult.predicted_expression_matrix()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.prepare_one_hot"><code class="docutils literal notranslate"><span class="pre">DecimaResult.prepare_one_hot()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.query_cells"><code class="docutils literal notranslate"><span class="pre">DecimaResult.query_cells()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.query_tasks"><code class="docutils literal notranslate"><span class="pre">DecimaResult.query_tasks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.shape"><code class="docutils literal notranslate"><span class="pre">DecimaResult.shape</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.core">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>

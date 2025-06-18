@@ -1,0 +1,29 @@
+decima.tools package
+====================
+
+Submodules
+----------
+
+decima.tools.evaluate module
+----------------------------
+
+.. automodule:: decima.tools.evaluate
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.tools.interpret module
+-----------------------------
+
+.. automodule:: decima.tools.interpret
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.tools
+   :members:
+   :show-inheritance:
+   :undoc-members:

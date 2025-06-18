@@ -1,0 +1,21 @@
+decima.hub package
+==================
+
+Submodules
+----------
+
+decima.hub.download module
+--------------------------
+
+.. automodule:: decima.hub.download
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.hub
+   :members:
+   :show-inheritance:
+   :undoc-members:

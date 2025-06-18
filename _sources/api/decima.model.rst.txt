@@ -1,0 +1,45 @@
+decima.model package
+====================
+
+Submodules
+----------
+
+decima.model.decima\_model module
+---------------------------------
+
+.. automodule:: decima.model.decima_model
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.model.lightning module
+-----------------------------
+
+.. automodule:: decima.model.lightning
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.model.loss module
+------------------------
+
+.. automodule:: decima.model.loss
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.model.metrics module
+---------------------------
+
+.. automodule:: decima.model.metrics
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.model
+   :members:
+   :show-inheritance:
+   :undoc-members:

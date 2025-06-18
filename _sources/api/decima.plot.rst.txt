@@ -1,0 +1,21 @@
+decima.plot package
+===================
+
+Submodules
+----------
+
+decima.plot.visualize module
+----------------------------
+
+.. automodule:: decima.plot.visualize
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: decima.plot
+   :members:
+   :show-inheritance:
+   :undoc-members:

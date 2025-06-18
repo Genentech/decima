@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.write_hdf5 - decima 0.1 documentation</title>
+        <title>decima.utils - decima 0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">decima 0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">decima 0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.1 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -205,7 +205,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">Module Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api/decima.html">decima package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/decima.html">decima package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of decima package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.core.html">decima.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.data.html">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.dataloaders.html">decima.dataloaders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -242,61 +256,25 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for decima.write_hdf5</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.format</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_input_type</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_unique_length</span>
+          <h1>Source code for decima.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 
-<div class="viewcode-block" id="write_hdf5">
-<a class="viewcode-back" href="../../api/decima.html#decima.write_hdf5.write_hdf5">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_hdf5</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="c1"># Calculate seq_len</span>
-    <span class="n">seq_len</span> <span class="o">=</span> <span class="n">get_unique_length</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">var</span><span class="p">)</span>
+<div class="viewcode-block" id="get_compute_device">
+<a class="viewcode-back" href="../../api/decima.utils.html#decima.utils.get_compute_device">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_compute_device</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the best available device for computation.</span>
 
-    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="c1"># Metadata</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing metadata&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;pad&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">pad</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;seq_len&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">seq_len</span><span class="p">)</span>
-        <span class="n">padded_seq_len</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pad</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;padded_seq_len&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">padded_seq_len</span><span class="p">)</span>
+<span class="sd">    Args:</span>
+<span class="sd">        device: Optional device specification. If None, automatically selects best available device.</span>
 
-        <span class="c1"># Tasks</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing tasks&quot;</span><span class="p">)</span>
-        <span class="n">tasks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">tasks</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">tasks</span><span class="p">)</span>
-
-        <span class="c1"># Genes</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">var</span><span class="p">[[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing genes array of shape: </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;genes&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">arr</span><span class="p">)</span>
-
-        <span class="c1"># Labels</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing labels array of shape: </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">arr</span><span class="p">)</span>
-
-        <span class="c1"># Gene masks</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making gene masks&quot;</span><span class="p">)</span>
-        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">padded_seq_len</span><span class="p">)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()):</span>
-            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">gene_mask_start</span> <span class="o">+</span> <span class="n">pad</span> <span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">gene_mask_end</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing mask array of shape: </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;masks&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">arr</span><span class="p">)</span>
-
-        <span class="c1"># Sequences</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Encoding sequences&quot;</span><span class="p">)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">var</span><span class="p">[[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;strand&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">arr</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">pad</span>
-        <span class="n">arr</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="n">pad</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="s2">&quot;hg38&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing sequence array of shape: </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;sequences&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">arr</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done!&quot;</span><span class="p">)</span></div>
+<span class="sd">    Returns:</span>
+<span class="sd">        torch.device: The selected device for computation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -330,7 +308,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+</div><script src="../../_static/documentation_options.js?v=10f1778b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
