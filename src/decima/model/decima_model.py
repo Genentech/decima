@@ -19,11 +19,11 @@ class DecimaMLPHead(nn.Module):
 
     def __init__(
         self,
-        n_tasks: int,
-        len_pools: int = 4,
-        hidden_size: List[int] = [],
-        norm: bool = False,
-        dropout: float = 0.0,
+        n_tasks,
+        len_pools = 4,
+        hidden_size = [],
+        norm = False,
+        dropout = 0.0,
     ) -> None:
         super().__init__()
 
@@ -31,7 +31,7 @@ class DecimaMLPHead(nn.Module):
         self.n_tasks = n_tasks
 
         # Set up pool
-        assert 6144 % len_pools = 0
+        assert 6144 % len_pools == 0
         self.pool = nn.AvgPool1d(kernel_size=6144//len_pools)# B, 1920, 6144 -> B, 1920, len_pools
 
         # Set up MLP
