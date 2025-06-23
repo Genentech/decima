@@ -156,7 +156,7 @@ class TaskPearsonCorrCoef(Metric):
         var_y = var_y / (n_total - 1)
         corr_xy = corr_xy / (n_total - 1)
 
-        corrcoef = ((corr_xy / (var_x * var_y).sqrt()).squeeze().to(corrcoef.dtype))
+        corrcoef = ((corr_xy / (var_x * var_y).sqrt()).squeeze().to(torch.float32))
         corrcoef = torch.clamp(corrcoef, -1.0, 1.0)
         return corrcoef.squeeze()
 
