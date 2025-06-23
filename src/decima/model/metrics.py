@@ -2,6 +2,7 @@ from enum import Enum
 from collections import Counter
 from typing import List
 import torch
+import torchmetrics
 from torchmetrics import Metric
 from grelu.lightning.metrics import MSE
 
