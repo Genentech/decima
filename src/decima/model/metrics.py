@@ -116,3 +116,55 @@ class GenePearsonCorrCoef(Metric):
 
     def reset(self) -> None:
         self.corrs = []
+
+
+class TaskPearsonCorrCoef(Metric):
+    """
+    Metric class to calculate the Pearson correlation coefficient for each task.
+
+    Args:
+        num_outputs: Number of tasks
+        average: If true, return the average metric across tasks.
+            Otherwise, return a separate value for each task
+
+    As input to forward and update the metric accepts the following input:
+        preds: Predictions of shape (N, n_tasks, L)
+        target: Ground truth labels of shape (N, n_tasks, L)
+
+    As output of forward and compute the metric returns the following output:
+        output: A tensor with the Pearson coefficient.
+    """
+
+    def __init__(self, num_outputs: int = 1, average: bool = True) -> None:
+        super().__init__()
+        self.pearson = torchmetrics.PearsonCorrCoef(num_outputs=num_outputs)
+        self.average = average
+
+    def update(self, preds: torch.Tensor, target: torch.Tensor) -> None:
+        preds = (
+            preds.swapaxes(1, 2).flatten(start_dim=0, end_dim=1).to(torch.float32)
+        )  # Nx L, n_tasks
+        target = (
+            target.swapaxes(1, 2).flatten(start_dim=0, end_dim=1).to(torch.float32)
+        )  # Nx L, n_tasks
+        var_x = self.pearson.var_x
+        var_y = self.pearson.var_y
+        corr_xy = self.pearson.corr_xy
+        n_total = self.pearson.n_total
+        var_x = var_x / (n_total - 1)
+        var_y = var_y / (n_total - 1)
+        corr_xy = corr_xy / (n_total - 1)
+
+        corrcoef = ((corr_xy / (var_x * var_y).sqrt()).squeeze().to(corrcoef.dtype))
+        corrcoef = torch.clamp(corrcoef, -1.0, 1.0)
+        return corrcoef.squeeze()
+
+    def compute(self) -> torch.Tensor:
+        output = self.pearson.compute()
+        if self.average:
+            return output.mean()
+        else:
+            return output
+
+    def reset(self) -> None:
+        self.pearson.reset()
