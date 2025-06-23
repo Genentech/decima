@@ -9,7 +9,7 @@ import numpy as np
 import pytorch_lightning as pl
 import torch
 from einops import rearrange
-from grelu.lightning.metrics import MSE, PearsonCorrCoef
+from grelu.lightning.metrics import MSE
 from grelu.utils import make_list
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
@@ -19,7 +19,7 @@ from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
+from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef, TaskPearsonCorrCoef
 
 
 default_train_params = {
@@ -79,7 +79,7 @@ class LightningModel(pl.LightningModule):
         # Inititalize metrics
         _metrics = {
             "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
-            "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "pearson": TaskPearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
             "gene_pearson": GenePearsonCorrCoef(average=False),
         }
         if "pairs" in self.train_params:
