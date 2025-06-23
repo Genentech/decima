@@ -160,7 +160,10 @@ class LightningModel(pl.LightningModule):
         # Log
         self.log_dict(mean_val_metrics)
         self.log("val_loss", mean_losses)
-
+        #Print
+        print(mean_val_metrics)
+        print(f"Val loss: {mean_losses}")
+        # Reset
         self.val_metrics.reset()
         self.val_losses = []
 
