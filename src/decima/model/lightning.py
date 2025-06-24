@@ -322,7 +322,8 @@ class LightningModel(pl.LightningModule):
             callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
-            precision="32-true",
+            precision="16-mixed",
+            #precision="32-true",
             gradient_clip_val=self.train_params["clip"],
         )
 
