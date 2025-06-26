@@ -8,6 +8,10 @@ from grelu.io.genome import read_sizes
 from grelu.sequence.format import intervals_to_strings
 from grelu.sequence.utils import get_unique_length
 from tqdm import tqdm
+import mygene
+import json
+import subprocess
+
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 
@@ -206,50 +210,51 @@ def match_ref_ad(ad, ref_ad):
     print(f"{matched} genes matched.")
 
 
-def load_ncbi_string(string):
+def load_ncbi_string(string, multiples=False):
     out = []
     reports = json.loads(string[0])
-
+    
     # Check the total count
     if reports == {"total_count": 0}:
         pass
-    else:
-        for i, r in enumerate(reports["reports"]):
+    else:        
+        for i, r in enumerate(reports['reports']):
             try:
                 curr_dict = {}
-                if "query" in r:
-                    curr_dict["gene_name"] = r["query"][0]
+                if 'query' in r:
+                    curr_dict['gene_name'] = r['query'][0]
                 else:
-                    curr_dict["gene_name"] = r["gene"]["symbol"]
-                r = r["gene"]
-                curr_dict["symbol"] = r["symbol"]
-                curr_dict["chrom"] = "chr" + r["chromosomes"][0]
-                curr_dict["gene_type"] = r["type"]
-
-                if "ensembl_gene_ids" in r:
-                    eids = r["ensembl_gene_ids"]
+                    curr_dict['gene_name'] = r['gene']['symbol']
+                r = r['gene']
+                curr_dict['symbol'] = r['symbol']
+                curr_dict['chrom']= 'chr'+r['chromosomes'][0]
+                curr_dict['gene_type'] = r['type']
+                curr_dict['synonyms'] = r['synonyms']
+                
+                if 'ensembl_gene_ids' in r:
+                    eids = r['ensembl_gene_ids']
                     if len(eids) > 1:
                         pass
                     else:
-                        curr_dict["gene_id"] = eids[0]
+                        curr_dict['gene_id'] = eids[0]
                 else:
-                    curr_dict["gene_id"] = r["symbol"]
-
-                for annot in r["annotations"]:
-                    if "assembly_name" in annot:
-                        if annot["assembly_name"] == "GRCh38.p14":
-                            curr_dict["start"] = annot["genomic_locations"][0]["genomic_range"]["begin"]
-                            curr_dict["end"] = annot["genomic_locations"][0]["genomic_range"]["end"]
-                            curr_dict["strand"] = (
-                                "-" if annot["genomic_locations"][0]["genomic_range"]["orientation"] == "minus" else "+"
-                            )
-
+                    curr_dict['gene_id'] = r['symbol']
+    
+                for annot in r['annotations']:
+                    if 'assembly_name' in annot:
+                        if annot['assembly_name'] == 'GRCh38.p14':
+                            curr_dict['start'] = annot['genomic_locations'][0]['genomic_range']['begin']
+                            curr_dict['end'] = annot['genomic_locations'][0]['genomic_range']['end']
+                            curr_dict['strand'] = '-' if annot['genomic_locations'][0]['genomic_range']['orientation'] == "minus" else "+"
+            
                 out.append(curr_dict)
             except Exception as e:
                 print(i, str(e))
-
+        
         out = pd.DataFrame(out)
-        out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts() == 1].index)]
+        if not multiples:
+            out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts()==1].index)]
+        out['source'] = 'ncbi'
         return out
 
 
@@ -271,3 +276,47 @@ def make_inputs(gene, ad):
         "make_inputs() is deprecated and will be removed in a future version. "
         "Please use the DecimaResult.prepare_one_hot() directly instead."
     )
+
+
+def return_ensembl(queries, on='gene_id'):
+    mg = mygene.MyGeneInfo()
+    df = []
+    fields = ['ensembl.gene', 'symbol', 'type_of_gene', 'genomic_pos.chr', 
+            'genomic_pos.start', 'genomic_pos.end', 'genomic_pos.strand']
+    for query in tqdm(queries):
+
+        # Make the query
+        if on == 'gene_id':
+            hits = mg.query(f'ensembl.gene:{query}', fields=fields)['hits']
+            hits = [hit for hit in hits if ('symbol' in hit) and ('ensembl' in hit)]
+            
+        elif on == 'gene_name':
+            hits = mg.query(query, fields=fields)['hits']
+            hits = [hit for hit in hits if ('symbol' in hit) and ('ensembl' in hit)]
+            hits = [hit for hit in hits if len(hit['ensembl'])==1]
+            hits = [hit for hit in hits if hit['ensembl']['gene'].startswith('ENSG')]
+            if len(hits) > 1:
+                hits = [hit for hit in hits if hit['symbol'] == query]
+
+        # Format the query
+        if len(hits) == 1:
+            hit = hits[0]
+            if type(hit['genomic_pos']) is dict:
+                hit['chrom'] = hit['genomic_pos']['chr']
+                for col in ['start', 'end', 'strand']:
+                    hit[col] = hit['genomic_pos'][col]
+                del hit['genomic_pos']
+            
+                if on=='gene_id':
+                    hit['gene_id'] = query
+                elif on == 'gene_name':
+                    hit['gene_id'] = hit['ensembl']['gene']
+                    hit['gene_name'] = query
+    
+                del hit['ensembl']
+                df.append(pd.DataFrame.from_dict(hit, orient='index').T)
+       
+    df = pd.concat(df).reset_index(drop=True)
+    df.strand = df.strand.map({1:'+', -1:'-'})
+    df['source'] = 'mygene'
+    return df
