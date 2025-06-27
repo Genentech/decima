@@ -1,6 +1,7 @@
 """Finetune the Decima model."""
 
 import os
+os.environ['WANDB_DISABLE_CODE_AND_METADATA_COLLECTION'] = 'true'
 import click
 import anndata
 import wandb
@@ -20,12 +21,11 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--shift", default=5000, type=int, help="Shift augmentation")
 @click.option("--optim", default='adam', type=str, help="Optimizer")
 @click.option("--clip", default=0.0, type=float, help="Gradient clipping")
+@click.option("--logger", default='wandb', type=str, help="Logger")
 
-def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, optim, clip):
+def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
+optim, clip, logger):
     """Finetune the Decima model."""
-    wandb.login(host="https://genentech.wandb.io")
-    run = wandb.init(project="decima", dir=name, name=name)
-
     matrix_file = os.path.join(datadir, "aggregated.h5ad")
     h5_file = os.path.join(datadir, "data.h5")
     print(f"Data paths: {matrix_file}, {h5_file}")
@@ -49,7 +49,7 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
         "batch_size": bs,
         "num_workers": 16,
         "devices": 0,
-        "logger": "wandb",
+        "logger": logger,
         "save_dir": outdir,
         "max_epochs": 50,
         "lr": lr,
@@ -70,6 +70,10 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
     model = LightningModel(model_params=model_params, train_params=train_params)
 
     print("Training")
+    if logger == "wandb":
+        import wandb
+        wandb.login(host="https://genentech.wandb.io")
+        run = wandb.init(project="decima", dir=name, name=name)
     model.train_on_dataset(train_dataset, val_dataset)
     train_dataset.close()
     val_dataset.close()
