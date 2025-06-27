@@ -19,7 +19,7 @@ from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE, WarningCounter
+from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
 
 
 default_train_params = {
@@ -79,7 +79,8 @@ class LightningModel(pl.LightningModule):
         # Inititalize metrics
         _metrics = {
             "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
-            "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "task_pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "gene_pearson": GenePearsonCorrCoef(average=False)
         }
         if "pairs" in self.train_params:
             _metrics["disease_lfc_mse"] = DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False)
@@ -318,7 +319,7 @@ class LightningModel(pl.LightningModule):
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
             gradient_clip_val=self.train_params["clip"],
-            precision="32-true",
+            precision="16-mixed",
         )
 
         # Make dataloaders
