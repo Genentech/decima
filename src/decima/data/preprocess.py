@@ -210,7 +210,7 @@ def match_ref_ad(ad, ref_ad):
     print(f"{matched} genes matched.")
 
 
-def load_ncbi_string(string, multiples=False):
+def load_ncbi_string(string, allow_dups=False, verbose=False):
     out = []
     reports = json.loads(string[0])
     
@@ -221,38 +221,42 @@ def load_ncbi_string(string, multiples=False):
         for i, r in enumerate(reports['reports']):
             try:
                 curr_dict = {}
-                if 'query' in r:
-                    curr_dict['gene_name'] = r['query'][0]
-                else:
-                    curr_dict['gene_name'] = r['gene']['symbol']
+
+                # Get gene metadata
+                curr_dict['gene_name'] = r['query'][0] if 'query' in r else r['gene']['symbol']
                 r = r['gene']
                 curr_dict['symbol'] = r['symbol']
                 curr_dict['chrom']= 'chr'+r['chromosomes'][0]
                 curr_dict['gene_type'] = r['type']
-                curr_dict['synonyms'] = r['synonyms']
-                
+
+                # Get ensembl ID
                 if 'ensembl_gene_ids' in r:
                     eids = r['ensembl_gene_ids']
-                    if len(eids) > 1:
-                        pass
-                    else:
-                        curr_dict['gene_id'] = eids[0]
+                    assert len(eids) == 1
+                    curr_dict['gene_id'] = eids[0]
                 else:
                     curr_dict['gene_id'] = r['symbol']
-    
-                for annot in r['annotations']:
-                    if 'assembly_name' in annot:
-                        if annot['assembly_name'] == 'GRCh38.p14':
-                            curr_dict['start'] = annot['genomic_locations'][0]['genomic_range']['begin']
-                            curr_dict['end'] = annot['genomic_locations'][0]['genomic_range']['end']
-                            curr_dict['strand'] = '-' if annot['genomic_locations'][0]['genomic_range']['orientation'] == "minus" else "+"
-            
+
+                # Get genomic position
+                annot = [x for x in r['annotations'] if x['assembly_name'] == 'GRCh38.p14'][0]
+                loc = annot['genomic_locations']
+                assert len(loc) == 1
+                loc = loc[0]['genomic_range']
+                
+                curr_dict['start'] = loc['begin']
+                curr_dict['end'] = loc['end']
+                curr_dict['strand'] = '-' if loc['orientation'] == "minus" else "+"
+
                 out.append(curr_dict)
+
             except Exception as e:
-                print(i, str(e))
+                if verbose:
+                    print(i, str(e))
+                else:
+                    pass
         
         out = pd.DataFrame(out)
-        if not multiples:
+        if not allow_dups:
             out = out[out.gene_name.isin(out.gene_name.value_counts()[out.gene_name.value_counts()==1].index)]
         out['source'] = 'ncbi'
         return out
