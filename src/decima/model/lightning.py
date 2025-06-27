@@ -33,6 +33,8 @@ default_train_params = {
     "accumulate_grad_batches": 1,
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
+    "clip": 0.,
+    "optim":'adam',
 }
 
 
@@ -189,7 +191,11 @@ class LightningModel(pl.LightningModule):
         """
         Configure oprimizer for training
         """
-        return optim.Adam(self.parameters(), lr=self.train_params["lr"])
+        if self.train_params['optim'] == 'adam':
+            return optim.Adam(self.parameters(), lr=self.train_params["lr"])
+        elif self.train_params['optim'] == 'sgd':
+            return optim.SGD(self.parameters(), lr=self.train_params["lr"], 
+            momentum=0.9, weight_decay=1e-6)
 
     def count_params(self) -> int:
         """
@@ -311,7 +317,8 @@ class LightningModel(pl.LightningModule):
             callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
-            precision="16-mixed",
+            gradient_clip_val=self.train_params["clip"],
+            precision="32-true",
         )
 
         # Make dataloaders

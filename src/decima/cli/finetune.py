@@ -17,6 +17,9 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--grad", required=True, type=int, help="Gradient accumulation steps")
 @click.option("--replicate", default=0, type=int, help="Replication number")
 @click.option("--bs", default=4, type=int, help="Batch size")
+@click.option("--shift", default=5000, type=int, help="Shift augmentation")
+@click.option("--optim", default='adam', type=str, help="Optimizer")
+@click.option("--clip", default=0.0, type=float, help="Gradient clipping")
 def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs):
     """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")
@@ -34,25 +37,26 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs):
         h5_file=h5_file,
         ad=ad,
         key="train",
-        max_seq_shift=5000,
+        max_seq_shift=shift,
         augment_mode="random",
         seed=0,
     )
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
     train_params = {
-        "optimizer": "adam",
+        "optimizer": optim,
         "batch_size": bs,
         "num_workers": 16,
         "devices": 0,
         "logger": "wandb",
         "save_dir": outdir,
-        "max_epochs": 15,
+        "max_epochs": 50,
         "lr": lr,
         "total_weight": weight,
         "accumulate_grad_batches": grad,
         "loss": "poisson_multinomial",
         #"pairs": ad.uns["disease_pairs"].values,
+        "clip": clip,
     }
     model_params = {
         "n_tasks": ad.shape[0],
