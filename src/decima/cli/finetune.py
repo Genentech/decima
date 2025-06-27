@@ -20,7 +20,8 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--shift", default=5000, type=int, help="Shift augmentation")
 @click.option("--optim", default='adam', type=str, help="Optimizer")
 @click.option("--clip", default=0.0, type=float, help="Gradient clipping")
-def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs):
+
+def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, optim, clip):
     """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")
     run = wandb.init(project="decima", dir=name, name=name)
