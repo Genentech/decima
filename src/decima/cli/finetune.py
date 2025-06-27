@@ -7,7 +7,8 @@ import anndata
 import wandb
 from decima.model.lightning import LightningModel
 from decima.data.dataset import HDF5Dataset
-
+import wandb
+wandb.login(host="https://genentech.wandb.io")
 
 @click.command()
 @click.option("--name", required=True, help="Project name")
@@ -71,8 +72,6 @@ optim, clip, logger):
 
     print("Training")
     if logger == "wandb":
-        import wandb
-        wandb.login(host="https://genentech.wandb.io")
         run = wandb.init(project="decima", dir=name, name=name)
     model.train_on_dataset(train_dataset, val_dataset)
     train_dataset.close()
