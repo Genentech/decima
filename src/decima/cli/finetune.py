@@ -46,6 +46,7 @@ optim, clip, logger):
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
     train_params = {
+        "name": name,
         "optimizer": optim,
         "batch_size": bs,
         "num_workers": 16,
