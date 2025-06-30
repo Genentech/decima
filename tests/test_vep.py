@@ -1,8 +1,9 @@
+import pytest
 import torch
 import numpy as np
 import pandas as pd
+import pyarrow.parquet as pq
 from scipy.stats import pearsonr
-import pytest
 
 from decima.core.result import DecimaResult
 from decima.data.dataset import VariantDataset
@@ -191,6 +192,14 @@ def test_predict_variant_effect_vcf(tmp_path):
     )
     assert output_file.exists()
 
+    parquet_file = pq.ParquetFile(output_file)
+    metadata = parquet_file.metadata.metadata
+
+    assert metadata[b"genome"] == b"hg38"
+    assert metadata[b"model"] == b"decima_rep0"
+    assert metadata[b"min_distance"] == b"0"
+    assert metadata[b"max_distance"] == b"20000"
+
     df_saved = pd.read_parquet(output_file)
     assert df_saved.shape == (12, 8870)
 
@@ -213,3 +222,43 @@ def test_predict_variant_effect_check_results():
         assert pearsonr(orig, pred).statistic > 0.99
         assert orig == pytest.approx(pred, abs=1e-2)
         # np.where(np.abs(np.array(orig) - np.array(pred)) < 1e-2)
+
+@pytest.mark.long_running
+def test_predict_variant_effect_vcf_ensemble(tmp_path):
+
+    output_file = tmp_path / "test_predictions.parquet"
+    predict_variant_effect(
+        "tests/data/test.vcf",
+        output_pq=str(output_file),
+        model="ensemble",
+        device=device,
+        max_distance=20000,
+    )
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape == (12, 8870)
+
+
+@pytest.mark.long_running
+def test_predict_variant_effect_vcf_ensemble_replicates(tmp_path):
+    output_file = tmp_path / "test_predictions.parquet"
+    predict_variant_effect(
+        "tests/data/test.vcf",
+        output_pq=str(output_file),
+        model="ensemble",
+        device=device,
+        max_distance=20000,
+        save_replicates=True,
+    )
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape == (12, 44294)
+
+    cells = list(df_saved.columns[14:8870])
+    average_preds = np.mean([
+        df_saved[[f"{cell}_decima_rep{i}" for cell in cells]].values
+        for i in range(4)
+    ], axis=0)
+    np.testing.assert_allclose(df_saved[cells].values, average_preds, rtol=1e-5)

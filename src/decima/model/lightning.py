@@ -416,7 +416,6 @@ class LightningModel(pl.LightningModule):
         accelerator = "auto"
         if devices is None:
             devices = "auto"  # use all devices
-            # device = "cuda" if torch.cuda.is_available() else "cpu"
             accelerator = "gpu" if torch.cuda.is_available() else "auto"
 
         if accelerator == "auto":
@@ -447,7 +446,7 @@ class LightningModel(pl.LightningModule):
         else:
             expression = expression.squeeze(2)  # B N T
 
-        expression = np.mean(expression, axis=1)  # B T
+        expression = np.mean(expression, axis=-2)  # B T
 
         return {"expression": expression, "warnings": self.warning_counter.compute()}
 
@@ -485,3 +484,60 @@ class LightningModel(pl.LightningModule):
             raise TypeError("Input must be a list, string or integer")
         if invert:
             return [i for i in range(self.model_params["n_tasks"]) if i not in make_list(tasks)]
+
+
+class EnsembleLightningModel(LightningModel):
+    def __init__(self, models: List[LightningModel]):
+        super().__init__(
+            model_params=models[0].model_params,
+            train_params=models[0].train_params,
+            data_params=models[0].data_params,
+        )
+        self.models = nn.ModuleList(models)
+
+    def forward(self, x: Tensor) -> Tensor:
+        return torch.concat([model(x) for model in self.models], dim=0)
+
+    def training_step(self, batch: Tensor, batch_idx: int) -> Tensor:
+        raise NotImplementedError("Ensemble training is not implemented.")
+
+    def validation_step(self, batch: Tensor, batch_idx: int) -> Tensor:
+        raise NotImplementedError("Ensemble validation is not implemented.")
+
+    def test_step(self, batch: Tensor, batch_idx: int) -> Tensor:
+        raise NotImplementedError("Ensemble test is not implemented.")
+
+    def predict_on_dataset(
+        self,
+        dataset: Callable,
+        devices: Optional[int] = None,
+        num_workers: int = 1,
+        batch_size: int = 6,
+        augment_aggfunc: Union[str, Callable] = "mean",
+        compare_func: Optional[Union[str, Callable]] = None,
+    ):
+        preds = super().predict_on_dataset(
+            dataset=dataset,
+            devices=devices,
+            num_workers=num_workers,
+            batch_size=batch_size,
+            augment_aggfunc=augment_aggfunc,
+            compare_func=compare_func,
+        )
+        expression = rearrange(
+            preds["expression"],
+            "(e b) t -> e b t",
+            e=len(self.models),
+        )
+        return {
+            "expression": expression.mean(axis=0),
+            "warnings": preds["warnings"],
+            "ensemble_preds": expression,
+        }
+
+    @classmethod
+    def load_from_checkpoints(cls, checkpoints: List[str]):
+        models = []
+        for checkpoint in checkpoints:
+            models.append(LightningModel.load_from_checkpoint(checkpoint))
+        return cls(models)

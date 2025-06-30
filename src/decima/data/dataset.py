@@ -216,13 +216,14 @@ class VariantDataset(Dataset):
         min_distance=0,
         max_distance=float("inf"),
     ):
+        assert min_distance < max_distance, "`min_distance` must be less than `max_distance`"
         include_cols = include_cols or list()
 
         df_variants = df_variants.copy().astype({"chrom": str})
         if not df_variants["chrom"].str.startswith("chr").any():
             warnings.warn("Chromosome names do not have 'chr' prefix. Adding it to the chromosome names.")
             df_variants["chrom"] = "chr" + df_variants["chrom"].astype(str)
-        df_variants["start"] = df_variants.pos
+        df_variants["start"] = df_variants.pos.astype(int)
         df_variants["end"] = df_variants["start"] + 1
 
         if gene_col is not None:

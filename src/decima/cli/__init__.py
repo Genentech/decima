@@ -6,6 +6,7 @@ from decima.cli.download import cli_download
 from decima.cli.attributions import cli_attributions
 from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
+from decima.cli.vep import cli_vep_ensemble
 # from decima.cli.finetune import cli_finetune
 
 
@@ -32,6 +33,8 @@ main.add_command(cli_download, name="download")
 main.add_command(cli_attributions, name="attributions")
 main.add_command(cli_query_cell, name="query-cell")
 main.add_command(cli_predict_variant_effect, name="vep")
+main.add_command(cli_vep_ensemble, name="vep-ensemble")
+
 
 if __name__ == "__main__":
     main()
