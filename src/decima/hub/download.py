@@ -9,7 +9,7 @@ logger = logging.getLogger("decima")
 def download_hg38():
     """Download hg38 genome from UCSC."""
     logger.info("Downloading hg38 genome...")
-    genomepy.install_genome("hg38", provider="UCSC")
+    genomepy.install_genome(provider="url", name="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz")
 
 
 def download_decima_weights():

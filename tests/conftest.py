@@ -8,6 +8,7 @@ import pytest
 
 from decima.hub.download import download_hg38
 
+
 def pytest_addoption(parser):
     """Adds a --run-long-running option to pytest."""
     parser.addoption(
