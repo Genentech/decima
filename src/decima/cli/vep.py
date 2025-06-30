@@ -1,5 +1,6 @@
 import click
 from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.utils.dataframe import ensemble_predictions
 from decima.vep import predict_variant_effect
 
 
@@ -22,7 +23,7 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--model",
     type=str,
-    default="0",
+    default="ensemble",
     help="Model to use for variant effect prediction either replicate number or path to the model.",
 )
 @click.option(
@@ -121,3 +122,27 @@ def cli_predict_variant_effect(
         gene_col=gene_col,
         genome=genome,
     )
+
+
+@click.command()
+@click.option("-f", "--files", type=str, help="Path to the parquet files to ensemble. Can be passed multiple times.")
+@click.option("-o", "--output_pq", type=click.Path(), help="Path to the output parquet file.")
+@click.option(
+    "--save-replicates",
+    default=False,
+    type=bool,
+    is_flag=True,
+    help="Save the replicates in the output parquet file. Default: False.",
+)
+def cli_vep_ensemble(files, output_pq, save_replicates=False):
+    """Ensemble variant effect predictions from multiple parquet files
+
+    Examples:
+
+        >>> decima vep-ensemble -f "data/sample_rep0.parquet,data/sample_rep1.parquet,data/sample_rep2.parquet" -o "vep_results.parquet"
+
+        >>> decima vep-ensemble -f "data/sample_rep*.parquet" -o "vep_results.parquet" --save-replicates
+    """
+    if "," in files:
+        files = files.split(",")
+    ensemble_predictions(files=files, output_pq=output_pq, save_replicates=save_replicates)

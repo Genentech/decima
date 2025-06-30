@@ -3,6 +3,17 @@ import pandas as pd
 from pyfaidx import Fasta
 
 
+def import_cyvcf2():
+    try:
+        from cyvcf2 import VCF  # optional dependency
+    except ImportError:
+        raise ImportError(
+            "Optional dependency `cyvcf2` is not installed and is required for reading vcf files. "
+            "Please install vep dependencies with `pip install decima[vep]`."
+        )
+    return VCF
+
+
 def read_fasta_gene_mask(fasta_file: str) -> pd.DataFrame:
     df = list()
     with Fasta(fasta_file) as fasta:
@@ -20,13 +31,7 @@ def read_fasta_gene_mask(fasta_file: str) -> pd.DataFrame:
 
 
 def read_vcf_chunks(vcf_file: str, chunksize: int) -> Iterator[pd.DataFrame]:
-    try:
-        from cyvcf2 import VCF  # optional dependency
-    except ImportError:
-        raise ImportError(
-            "Optional dependency `cyvcf2` is not installed and is required for reading vcf files. Please install it with `pip install cyvcf2`."
-        )
-
+    VCF = import_cyvcf2()
     vcf = VCF(vcf_file)
     df = list()
 
