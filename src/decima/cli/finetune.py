@@ -1,14 +1,16 @@
 """Finetune the Decima model."""
 
 import os
-os.environ['WANDB_DISABLE_CODE_AND_METADATA_COLLECTION'] = 'true'
+
+os.environ["WANDB_DISABLE_CODE_AND_METADATA_COLLECTION"] = "true"
 import click
 import anndata
 import wandb
 from decima.model.lightning import LightningModel
 from decima.data.dataset import HDF5Dataset
-import wandb
+
 wandb.login(host="https://genentech.wandb.io")
+
 
 @click.command()
 @click.option("--name", required=True, help="Project name")
@@ -20,12 +22,10 @@ wandb.login(host="https://genentech.wandb.io")
 @click.option("--replicate", default=0, type=int, help="Replication number")
 @click.option("--bs", default=4, type=int, help="Batch size")
 @click.option("--shift", default=5000, type=int, help="Shift augmentation")
-@click.option("--optim", default='adam', type=str, help="Optimizer")
+@click.option("--optim", default="adam", type=str, help="Optimizer")
 @click.option("--clip", default=0.0, type=float, help="Gradient clipping")
-@click.option("--logger", default='wandb', type=str, help="Logger")
-
-def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
-optim, clip, logger):
+@click.option("--logger", default="wandb", type=str, help="Logger")
+def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, optim, clip, logger):
     """Finetune the Decima model."""
     matrix_file = os.path.join(datadir, "aggregated.h5ad")
     h5_file = os.path.join(datadir, "data.h5")
@@ -58,7 +58,7 @@ optim, clip, logger):
         "total_weight": weight,
         "accumulate_grad_batches": grad,
         "loss": "poisson_multinomial",
-        #"pairs": ad.uns["disease_pairs"].values,
+        # "pairs": ad.uns["disease_pairs"].values,
         "clip": clip,
     }
     model_params = {

@@ -1,6 +1,6 @@
-Copyright Genentech, Inc., 2024. 
+Copyright Genentech, Inc., 2024.
 
-Licensed under the Genentech Non-Commercial Software License Version 1.0, September 2022 (the "License"); you may not use the associated software except in compliance with the License. 
+Licensed under the Genentech Non-Commercial Software License Version 1.0, September 2022 (the "License"); you may not use the associated software except in compliance with the License.
 
 Note the Genentech Non-Commercial Software License reuses most of the text of the Apache License, Version 2.0, except that it includes a restriction against commercial use. The full text of the Apache License, Version 2.0 can be found at https://www.apache.org/licenses/LICENSE-2.0.
 
@@ -34,7 +34,7 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
 "Commercial Use" shall mean (i) the sale of a product embodying or incorporating or generated through the use of the Work (ii) the provision to a third party of a service for commercial purposes using the Work or (iii) granting commercial licenses and/or assigning such commercial rights to the Work to a third party, (iv) use of the Work in the discovery, research, pre-clinical or clinical development, or related manufacturing of diagnostic, prognostic, prophylactic, or therapeutic treatments, (v) use of the Work to identify patient characteristics (e.g., genomic sequences or phenotypic traits) to monitor, target, or use in or with such therapies in the course of such discovery, research as well as preclinical or clinical development activities.
 
-2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form for any legal purpose that is not a Commercial Use. 
+2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form for any legal purpose that is not a Commercial Use.
 
 3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, import, and otherwise transfer the Work for any legal purpose that is not a Commercial Use, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed.
 

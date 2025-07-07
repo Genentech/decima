@@ -2,7 +2,6 @@ from enum import Enum
 from collections import Counter
 from typing import List
 import torch
-import torchmetrics
 from torchmetrics import Metric
 from grelu.lightning.metrics import MSE
 
@@ -96,17 +95,17 @@ class GenePearsonCorrCoef(Metric):
         output: A tensor with the Pearson coefficient.
     """
 
-    def __init__(self, average = True) -> None:
+    def __init__(self, average=True) -> None:
         super().__init__()
         self.corrs = []
         self.average = average
 
     def update(self, preds: torch.Tensor, target: torch.Tensor) -> None:
-        #preds: B, T, L
-        preds = preds.flatten(start_dim=1, end_dim=2) # B, T
-        target = target.flatten(start_dim=1, end_dim=2) # B, T
+        # preds: B, T, L
+        preds = preds.flatten(start_dim=1, end_dim=2)  # B, T
+        target = target.flatten(start_dim=1, end_dim=2)  # B, T
         n = preds.shape[0]
-        corrs = [torch.corrcoef(torch.vstack([preds[i],target[i]]))[0,1] for i in range(n)]
+        corrs = [torch.corrcoef(torch.vstack([preds[i], target[i]]))[0, 1] for i in range(n)]
         self.corrs.extend(corrs)
 
     def compute(self) -> torch.Tensor:

@@ -19,8 +19,9 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--h5_file", required=True, help="Path to h5 file indexed by genes.")
 @click.option("--matrix_file", required=True, help="Path to h5ad file containing genes to predict.")
 @click.option("--out_file", required=True, help="Output file path.")
+@click.option("--key", type=str, default=None, help="train, val or test. If None, all genes will be predicted.")
 @click.option("--max_seq_shift", default=0, help="Maximum jitter for augmentation.")
-def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shift):
+def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, key, max_seq_shift):
     """Make predictions for all genes."""
     torch.set_float32_matmul_precision("medium")
 
@@ -30,11 +31,14 @@ def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shi
 
     print("Loading anndata")
     ad = anndata.read_h5ad(matrix_file)
-    assert np.all(list_genes(h5_file, key=None) == ad.var_names.tolist())
+    if key is not None:
+        print(f"Subsetting anndata to {key} genes")
+        ad = ad[:, ad.var.dataset == key]
+    assert np.all(list_genes(h5_file, key=key) == ad.var_names.tolist())
 
     print("Making dataset")
     ds = HDF5Dataset(
-        key=None,
+        key=key,
         h5_file=h5_file,
         ad=ad,
         seq_len=DECIMA_CONTEXT_SIZE,
@@ -46,7 +50,7 @@ def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shi
 
     print("Computing predictions")
     preds = (
-        np.stack([model.predict_on_dataset(ds, devices=0, batch_size=6, num_workers=16) for model in models]).mean(0).T
+        np.stack([model.predict_on_dataset(ds, devices=0, batch_size=8, num_workers=16) for model in models]).mean(0).T
     )
     ad.layers["preds"] = preds
 
@@ -58,16 +62,21 @@ def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, max_seq_shi
     )
 
     print("Computing correlation per track")
-    for dataset in ad.var.dataset.unique():
-        key = f"{dataset}_pearson"
-        ad.obs[key] = [
-            np.corrcoef(
-                ad[i, ad.var.dataset == dataset].X,
-                ad[i, ad.var.dataset == dataset].layers["preds"],
-            )[0, 1]
-            for i in range(ad.shape[0])
-        ]
-        print(f"Mean Pearson Correlation per pseudobulk over {dataset} genes: {ad.obs[key].mean().round(2)}")
+    if key is None:
+        for dataset in ad.var.dataset.unique():
+            ad.obs[f"{dataset}_pearson"] = [
+                np.corrcoef(
+                    ad[i, ad.var.dataset == dataset].X,
+                    ad[i, ad.var.dataset == dataset].layers["preds"],
+                )[0, 1]
+                for i in range(ad.shape[0])
+            ]
+            print(
+                f"Mean Pearson Correlation per pseudobulk over {dataset} genes: {ad.obs[f'{dataset}_pearson'].mean().round(2)}"
+            )
+    else:
+        ad.obs[f"{key}_pearson"] = [np.corrcoef(ad[i, :].X, ad[i, :].layers["preds"])[0, 1] for i in range(ad.shape[0])]
+        print(f"Mean Pearson Correlation per pseudobulk over {key} genes: {ad.obs[f'{key}_pearson'].mean().round(2)}")
 
     print("Saved")
     ad.write_h5ad(out_file)

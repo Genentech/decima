@@ -7,25 +7,25 @@ from grelu.io.genome import read_sizes, get_genome
 
 def _get_padded_seq(chrom, start, end, strand, sizes, genome):
     target_len = end - start
-    
+
     if start < 0:
         seq = str(genome.get_seq(chrom, 1, end, rc=strand == "-")).upper()
-        seq = 'N' * (target_len - len(seq)) + seq
+        seq = "N" * (target_len - len(seq)) + seq
 
     else:
-        chr_end = int(sizes.loc[sizes.chrom==chrom, 'size'])
+        chr_end = int(sizes.loc[sizes.chrom == chrom, "size"])
         if end > chr_end:
-            seq = str(genome.get_seq(chrom, start+1, chr_end, rc=strand == "-")).upper()
-            seq = 'N' * (target_len - len(seq)) + seq
+            seq = str(genome.get_seq(chrom, start + 1, chr_end, rc=strand == "-")).upper()
+            seq = "N" * (target_len - len(seq)) + seq
 
         else:
-            seq = str(genome.get_seq(chrom, start+1, end, rc=strand == "-")).upper()
+            seq = str(genome.get_seq(chrom, start + 1, end, rc=strand == "-")).upper()
 
     assert len(seq) == target_len, (len(seq), target_len)
     return seq
 
 
-def intervals_to_padded_strings(intervals, genome = 'hg38'):
+def intervals_to_padded_strings(intervals, genome="hg38"):
     """
     Extract DNA sequences from the specified intervals in a genome.
 
@@ -39,16 +39,15 @@ def intervals_to_padded_strings(intervals, genome = 'hg38'):
     """
     # Get chromosome sizes
     sizes = read_sizes(genome)
-    
+
     # Get genome
     genome = get_genome(genome)
 
     # Extract sequence for a single interval
     seqs = intervals.apply(
-                lambda row:  _get_padded_seq(
-                    row["chrom"], row["start"], row["end"], row["strand"], sizes, genome
-                ), axis=1,
-            ).tolist()
+        lambda row: _get_padded_seq(row["chrom"], row["start"], row["end"], row["strand"], sizes, genome),
+        axis=1,
+    ).tolist()
 
     assert len(seqs) == len(intervals)
     return seqs
@@ -67,7 +66,7 @@ def write_hdf5(file, ad, pad=0):
         f.create_dataset("padded_seq_len", shape=(), data=padded_seq_len)
 
         # Tasks
-        print("Writing tasks")
+        print("Writing task indices")
         tasks = np.array(ad.obs.index)
         f.create_dataset("tasks", shape=tasks.shape, data=tasks)
 
