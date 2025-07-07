@@ -10,7 +10,8 @@ import torch
 from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
 from grelu.utils import make_list
-from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.callbacks import ModelCheckpoint, StochasticWeightAveraging
+
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
@@ -34,7 +35,8 @@ default_train_params = {
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
     "clip": 0.0,
-    "optim": "adam",
+    "swa": False,
+    "precision": "16-mixed",
 }
 
 
@@ -192,10 +194,7 @@ class LightningModel(pl.LightningModule):
         """
         Configure oprimizer for training
         """
-        if self.train_params["optim"] == "adam":
-            return optim.Adam(self.parameters(), lr=self.train_params["lr"])
-        elif self.train_params["optim"] == "sgd":
-            return optim.SGD(self.parameters(), lr=self.train_params["lr"], momentum=0.9, weight_decay=1e-6)
+        return optim.Adam(self.parameters(), lr=self.train_params["lr"])
 
     def count_params(self) -> int:
         """
@@ -308,17 +307,22 @@ class LightningModel(pl.LightningModule):
         # Set up logging
         logger = self.parse_logger()
 
+        # Set up callbacks
+        callbacks = [ModelCheckpoint(monitor="val_loss", mode="min", save_last=False)]
+        if self.train_params["swa"]:
+            callbacks += [StochasticWeightAveraging(swa_lrs=1e-2)]
+
         # Set up trainer
         trainer = pl.Trainer(
             max_epochs=self.train_params["max_epochs"],
             accelerator="gpu",
             devices=make_list(self.train_params["devices"]),
             logger=logger,
-            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
+            callbacks=callbacks,
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
             gradient_clip_val=self.train_params["clip"],
-            precision="16-mixed",
+            precision=self.train_params["precision"],
         )
 
         # Make dataloaders
