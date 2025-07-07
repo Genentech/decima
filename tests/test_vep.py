@@ -70,6 +70,15 @@ def test_VariantDataset_overlap_genes(df_variant):
         "tss_dist": [-1121, 1169],
     }))
 
+    with pytest.raises(ValueError):
+        df_variant = pd.DataFrame({
+            "chrom": ["chr13"],
+            "pos": [30154905],
+            "ref": ["G"],
+            "alt": ["A"],
+            "gene": ["TEX26-AS1"],
+        })
+        df = VariantDataset.overlap_genes(df_variant, df_genes)
 
 def test_VariantDataset(df_variant):
 
@@ -213,7 +222,7 @@ def test_predict_variant_effect_check_results():
     df_orig = pd.read_csv("tests/data/test_preds.csv.gz")
     df_variants = df_orig[df_orig.columns[:5]]
     df_preds = predict_variant_effect(
-        df_variants, device=device, gene_col="gene",
+        df_variants, model=0, device=device, gene_col="gene",
     )
 
     for i in range(df_orig.shape[0]):

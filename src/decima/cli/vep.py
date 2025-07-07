@@ -63,6 +63,11 @@ from decima.vep import predict_variant_effect
     help="Column name for gene names. Default: None.",
 )
 @click.option("--genome", type=str, default="hg38", help="Genome build. Default: hg38.")
+@click.option(
+    "--save-replicates",
+    is_flag=True,
+    help="Save the replicates in the output parquet file. Default: False.",
+)
 def cli_predict_variant_effect(
     variants,
     output_pq,
@@ -79,6 +84,7 @@ def cli_predict_variant_effect(
     include_cols,
     gene_col,
     genome,
+    save_replicates,
 ):
     """Predict variant effect and save to parquet
 
@@ -95,6 +101,12 @@ def cli_predict_variant_effect(
         >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --gene-col "gene_name" # use gene_name column as gene names if these option passed genes and variants mapped based on these column not based on the genomic locus based on the annotaiton.
 
         >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --distance-type tss --min-distance 50000 --max-distance 100000 # predict for variants within 50kb of the TSS and 100kb of the TSS
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --save-replicates # save the replicates in the output parquet file
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --genome "hg38" # use hg38 genome build
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --genome "path/to/fasta/hg38.fa"  # use custom genome build
     """
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
@@ -104,6 +116,9 @@ def cli_predict_variant_effect(
 
     if include_cols:
         include_cols = include_cols.split(",")
+
+    if save_replicates and (model != "ensemble"):
+        raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
 
     predict_variant_effect(
         variants,
@@ -121,6 +136,7 @@ def cli_predict_variant_effect(
         include_cols=include_cols,
         gene_col=gene_col,
         genome=genome,
+        save_replicates=save_replicates,
     )
 
 

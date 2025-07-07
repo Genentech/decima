@@ -212,3 +212,50 @@ def test_cli_vep_all_tasks(tmp_path):
                      'gene_mask_start', 'gene_mask_end', 'rel_pos', 'ref_tx', 'alt_tx', 'tss_dist']
     for col in required_cols:
         assert col in df_saved.columns
+
+
+@pytest.mark.long_running
+def test_cli_vep_all_tasks_ensemble_custom_genome(tmp_path):
+    import genomepy
+    output_file = tmp_path / "test_predictions_all_ensemble_custom_genome.parquet"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep",
+        "-v", "tests/data/variants.tsv",
+        "-o", str(output_file),
+        "--model", "ensemble",
+        "--device", device,
+        "--max-distance", "20000",
+        "--chunksize", "5",
+        "--genome", genomepy.Genome("hg38").filename
+    ])
+    assert result.exit_code == 0
+
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape[0] > 0
+    assert df_saved.shape[1] == 8870
+
+
+@pytest.mark.long_running
+def test_cli_vep_all_tasks_ensemble(tmp_path):
+    output_file = tmp_path / "test_predictions_all_ensemble.parquet"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep",
+        "-v", "tests/data/variants.tsv",
+        "-o", str(output_file),
+        "--model", "ensemble",
+        "--device", device,
+        "--max-distance", "20000",
+        "--chunksize", "5",
+        "--save-replicates"
+    ])
+    assert result.exit_code == 0
+
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape[0] > 0
+    assert df_saved.shape[1] == 14 + 8856 * 5

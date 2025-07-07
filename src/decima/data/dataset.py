@@ -238,6 +238,12 @@ class VariantDataset(Dataset):
             df_variants = df_variants.rename(columns={gene_col: "gene"})
             df = df_variants.merge(df_genes, how="left", on="gene", suffixes=("", "_gene"))
         else:
+            if "gene" in df_variants.columns:
+                warnings.warn(
+                    "Gene column `gene` found in variant file."
+                    " Overwriting with `gene` column with genes based on the overlap based on genomic coordinates."
+                )
+                del df_variants["gene"]  # remove gene column from df_genes to avoid duplicate column names
             df = bioframe.overlap(df_genes, df_variants, how="inner", suffixes=("_gene", ""))
 
         if df.shape[0] == 0:
@@ -364,3 +370,16 @@ class VariantDataset(Dataset):
             "seq": default_collate([i["seq"] for i in batch]),
             "warning": list(flatten([b["warning"] for b in batch])),
         }
+
+    def __str__(self):
+        return (
+            "VariantDataset("
+            f"{self.variants.shape[0]} variants "
+            f"from {list(self.variants.chrom.unique())} "
+            f"between {self.variants.start.min()} "
+            f"and {self.variants.end.max()} bp from TSS"
+            ")"
+        )
+
+    def __repr__(self):
+        return self.__str__()

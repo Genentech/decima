@@ -1,3 +1,4 @@
+import os
 from typing import Union, Optional
 import wandb
 from pathlib import Path
@@ -9,9 +10,9 @@ from decima.model.lightning import LightningModel, EnsembleLightningModel
 
 def login_wandb():
     try:
-        wandb.login(host=DEFAULT_WANDB_HOST, anonymous="never", timeout=0)
+        wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), anonymous="never", timeout=0)
     except wandb.errors.UsageError:  # login anonymously if not logged in already
-        wandb.login(host=DEFAULT_WANDB_HOST, relogin=True, anonymous="must", timeout=0)
+        wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), relogin=True, anonymous="must", timeout=0)
 
 
 def get_model_name(model: Union[str, int] = 0) -> str:
@@ -68,6 +69,9 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
             "or an integer of replicate number {0, 1, 2, 3}, or a path to a local model"
         )
 
+    if model_name.upper() in os.environ:
+        return LightningModel.load_from_checkpoint(os.environ[model_name.upper()], map_location=device)
+
     art = get_artifact(model_name, project="decima")
     with TemporaryDirectory() as d:
         art.download(d)
@@ -87,6 +91,9 @@ def load_decima_metadata(path: Optional[str] = None):
     """
     if path is not None:
         return anndata.read_h5ad(path)
+
+    if "DECIMA_METADATA" in os.environ:
+        return anndata.read_h5ad(os.environ["DECIMA_METADATA"])
 
     art = get_artifact("decima_metadata", project="decima")
     with TemporaryDirectory() as d:
