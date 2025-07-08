@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.hub - decima 0.2 documentation</title>
+        <title>decima.hub - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -257,22 +257,37 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for decima.hub</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">wandb</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_artifact</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.lightning</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightningModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.lightning</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightningModel</span><span class="p">,</span> <span class="n">EnsembleLightningModel</span>
 
 
 <div class="viewcode-block" id="login_wandb">
 <a class="viewcode-back" href="../../api/decima.hub.html#decima.hub.login_wandb">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">login_wandb</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">DEFAULT_WANDB_HOST</span><span class="p">,</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;never&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WANDB_HOST&quot;</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span><span class="p">),</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;never&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">wandb</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">:</span>  <span class="c1"># login anonymously if not logged in already</span>
-        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">DEFAULT_WANDB_HOST</span><span class="p">,</span> <span class="n">relogin</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;must&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WANDB_HOST&quot;</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span><span class="p">),</span> <span class="n">relogin</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;must&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_model_name">
+<a class="viewcode-back" href="../../api/decima.hub.html#decima.hub.get_model_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;decima_rep</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2"> it need to be a string of model_name on wandb or an integer of replicate number </span><span class="si">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 
@@ -296,22 +311,40 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">LightningModel</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">model</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s2">&quot;ensemble&quot;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">EnsembleLightningModel</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">load_decima_model</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span>
+                <span class="n">load_decima_model</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span>
+                <span class="n">load_decima_model</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span>
+                <span class="n">load_decima_model</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ensemble&quot;</span>
+        <span class="k">return</span> <span class="n">model</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">get_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span>
+            <span class="k">return</span> <span class="n">model</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;decima_rep</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">get_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Invalid model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2"> it need to be a string of model_name on wandb &quot;</span>
             <span class="s2">&quot;or an integer of replicate number {0, 1, 2, 3}, or a path to a local model&quot;</span>
         <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">model_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">model_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()],</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
     <span class="n">art</span> <span class="o">=</span> <span class="n">get_artifact</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;decima&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
         <span class="n">art</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;model.ckpt&quot;</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;model.ckpt&quot;</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span></div>
 
 
 
@@ -328,6 +361,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;DECIMA_METADATA&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DECIMA_METADATA&quot;</span><span class="p">])</span>
 
     <span class="n">art</span> <span class="o">=</span> <span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;decima_metadata&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;decima&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
@@ -366,7 +402,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>

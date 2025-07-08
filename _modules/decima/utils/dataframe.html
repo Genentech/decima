@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.utils.dataframe - decima 0.2 documentation</title>
+        <title>decima.utils.dataframe - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -257,10 +257,17 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for decima.utils.dataframe</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyarrow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pa</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyarrow.parquet</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">more_itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">flatten</span>
 
 
 <div class="viewcode-block" id="chunk_df">
@@ -285,16 +292,18 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ChunkDataFrameWriter</span><span class="p">:</span>
 <div class="viewcode-block" id="ChunkDataFrameWriter.__init__">
 <a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.dataframe.ChunkDataFrameWriter.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ParquetWriter</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            output_path (str): Path to the output parquet file</span>
+<span class="sd">            metadata (dict): Metadata to write to the parquet file. Keys and values must be string-like / coercible to bytes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first_chunk</span> <span class="o">=</span> <span class="kc">True</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_chunk</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span></div>
 
 
 <div class="viewcode-block" id="ChunkDataFrameWriter.__enter__">
@@ -308,9 +317,11 @@
 <a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.dataframe.ChunkDataFrameWriter.__exit__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_key_value_metadata</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;NoDataFrameWrittenError: No dataframe was written to the parquet file.&quot;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;NoDataFrameWrittenError: No dataframe was written to the parquet file.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">first_chunk</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
@@ -334,16 +345,135 @@
 
 <div class="viewcode-block" id="write_df_chunks_to_parquet">
 <a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.dataframe.write_df_chunks_to_parquet">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_df_chunks_to_parquet</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_df_chunks_to_parquet</span><span class="p">(</span>
+    <span class="n">chunks</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write dataframe chunks to parquet file</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        chunks (Iterator[pd.DataFrame]): Iterator of dataframe chunks</span>
 <span class="sd">        output_path (str): Path to the output parquet file</span>
+<span class="sd">        metadata (dict): Metadata to write to the parquet file. If None, no metadata is written.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">ChunkDataFrameWriter</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">ChunkDataFrameWriter</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="read_metadata_from_replicate_parquets">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.dataframe.read_metadata_from_replicate_parquets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_metadata_from_replicate_parquets</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read metadata from multiple parquet files and return as a DataFrame.</span>
+
+<span class="sd">    This function reads key-value metadata from each parquet file and extracts</span>
+<span class="sd">    model, distance parameters and other metadata into a structured DataFrame.</span>
+<span class="sd">    All files must contain the required metadata fields.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files (List[str]): List of parquet file paths to read metadata from</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: DataFrame containing metadata with columns:</span>
+<span class="sd">            - model: Model identifier</span>
+<span class="sd">            - max_distance: Maximum distance used for predictions</span>
+<span class="sd">            - min_distance: Minimum distance used for predictions</span>
+<span class="sd">            - file: Source file path</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: If any required metadata field is missing from a file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Reading metadata from parquet files&quot;</span><span class="p">):</span>
+        <span class="n">parquet_file</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetFile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">parquet_file</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">metadata</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No metadata found in file: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">[</span><span class="sa">b</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;max_distance&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="sa">b</span><span class="s2">&quot;max_distance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))),</span>
+                <span class="s2">&quot;min_distance&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="sa">b</span><span class="s2">&quot;min_distance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))),</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">file</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensemble_predictions</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">save_replicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate replicates from parquet files</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files (List[str]): List of parquet files to aggregate</span>
+<span class="sd">        output_pq (Optional[str]): Path to the output parquet file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df_metadata</span> <span class="o">=</span> <span class="n">read_metadata_from_replicate_parquets</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="n">model_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df_metadata</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">])</span>
+    <span class="n">df_metadata</span> <span class="o">=</span> <span class="n">df_metadata</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;max_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;min_distance&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">df_metadata</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_names</span><span class="p">)),</span> <span class="p">(</span>
+        <span class="s2">&quot;All groups must have the same number of models &quot;</span>
+        <span class="s2">&quot;however found different numbers of models in the following groups: &quot;</span>
+        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df_metadata</span><span class="p">[</span><span class="n">df_metadata</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">model_names</span><span class="p">)]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">rows</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df_metadata</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">df_metadata</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Ensembling predictions&quot;</span><span class="p">):</span>
+        <span class="n">df_variants</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ann_cols</span> <span class="o">=</span> <span class="n">df_variants</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="mi">14</span><span class="p">]</span>
+        <span class="n">cell_cols</span> <span class="o">=</span> <span class="n">df_variants</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">14</span><span class="p">:]</span>
+        <span class="n">df_variants</span> <span class="o">=</span> <span class="n">df_variants</span><span class="p">[</span><span class="n">ann_cols</span><span class="p">]</span>
+
+        <span class="n">preds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="c1"># TO CONSIDER: batch read if needed or switch to polars if too slow</span>
+        <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="n">rows</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]):</span>
+            <span class="n">_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_variants</span><span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="p">),</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Variant data mismatch between files </span><span class="si">{</span><span class="n">rows</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="s2">&quot; Are you sure you are aggregating the correct files containing the same variants?&quot;</span>
+            <span class="p">)</span>
+            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="n">cell_cols</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">df_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">cell_cols</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save_replicates</span><span class="p">:</span>
+            <span class="n">df_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_pred</span><span class="p">,</span> <span class="o">*</span><span class="n">preds</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_variants</span><span class="p">,</span> <span class="n">df_pred</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ensemble_predictions">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.dataframe.ensemble_predictions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensemble_predictions</span><span class="p">(</span>
+    <span class="n">files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">output_pq</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">save_replicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate replicates from parquet files</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files (List[str]): List of parquet files to aggregate</span>
+<span class="sd">        output_pq (Optional[str]): Path to the output parquet file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">output_pq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">write_df_chunks_to_parquet</span><span class="p">(</span><span class="n">_ensemble_predictions</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">save_replicates</span><span class="p">),</span> <span class="n">output_pq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">_ensemble_predictions</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">save_replicates</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -377,7 +507,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../../../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

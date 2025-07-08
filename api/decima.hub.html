@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.interpret package" href="decima.interpret.html" /><link rel="prev" title="decima.dataloaders package" href="decima.dataloaders.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.hub package - decima 0.2 documentation</title>
+        <title>decima.hub package - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -298,12 +298,22 @@
 <section id="module-decima.hub">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.hub" title="Link to this heading">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="decima.hub.get_model_name">
+<span class="sig-prename descclassname"><span class="pre">decima.hub.</span></span><span class="sig-name descname"><span class="pre">get_model_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/hub.html#get_model_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.hub.get_model_name" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="decima.hub.load_decima_metadata">
 <span class="sig-prename descclassname"><span class="pre">decima.hub.</span></span><span class="sig-name descname"><span class="pre">load_decima_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/hub.html#load_decima_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.hub.load_decima_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Load the Decima metadata from wandb.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Path to local metadata file. If None, downloads from wandb.</p>
+<dd class="field-odd"><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Path to local metadata file. If None, downloads from wandb.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An AnnData object containing the Decima metadata.</p>
@@ -318,11 +328,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Model identifier or path. Can be:
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Union" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Model identifier or path. Can be:
 - int: Replicate number (0-3)
 - str: Model name on wandb
 - str: Path to local model checkpoint</p></li>
-<li><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Device to load the model on. If None, automatically selects the best available device.</p></li>
+<li><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Device to load the model on. If None, automatically selects the best available device.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -332,7 +342,7 @@
 <dd class="field-odd"><p><a class="reference internal" href="decima.model.html#decima.model.lightning.LightningModel" title="decima.model.lightning.LightningModel">LightningModel</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If model identifier is invalid or not found.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.12/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If model identifier is invalid or not found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -410,6 +420,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#module-decima.hub">Module contents</a><ul>
+<li><a class="reference internal" href="#decima.hub.get_model_name"><code class="docutils literal notranslate"><span class="pre">get_model_name()</span></code></a></li>
 <li><a class="reference internal" href="#decima.hub.load_decima_metadata"><code class="docutils literal notranslate"><span class="pre">load_decima_metadata()</span></code></a></li>
 <li><a class="reference internal" href="#decima.hub.load_decima_model"><code class="docutils literal notranslate"><span class="pre">load_decima_model()</span></code></a></li>
 <li><a class="reference internal" href="#decima.hub.login_wandb"><code class="docutils literal notranslate"><span class="pre">login_wandb()</span></code></a></li>
@@ -426,7 +437,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

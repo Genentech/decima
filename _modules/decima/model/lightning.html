@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.model.lightning - decima 0.2 documentation</title>
+        <title>decima.model.lightning - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -736,7 +736,6 @@
         <span class="n">accelerator</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
         <span class="k">if</span> <span class="n">devices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">devices</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>  <span class="c1"># use all devices</span>
-            <span class="c1"># device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;</span>
             <span class="n">accelerator</span> <span class="o">=</span> <span class="s2">&quot;gpu&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;auto&quot;</span>
 
         <span class="k">if</span> <span class="n">accelerator</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
@@ -767,7 +766,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">expression</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># B N T</span>
 
-        <span class="n">expression</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># B T</span>
+        <span class="n">expression</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># B T</span>
 
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;expression&quot;</span><span class="p">:</span> <span class="n">expression</span><span class="p">,</span> <span class="s2">&quot;warnings&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">warning_counter</span><span class="o">.</span><span class="n">compute</span><span class="p">()}</span></div>
 
@@ -810,6 +809,94 @@
             <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;n_tasks&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">tasks</span><span class="p">)]</span></div>
 </div>
 
+
+
+<div class="viewcode-block" id="EnsembleLightningModel">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EnsembleLightningModel</span><span class="p">(</span><span class="n">LightningModel</span><span class="p">):</span>
+<div class="viewcode-block" id="EnsembleLightningModel.__init__">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LightningModel</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model_params</span><span class="o">=</span><span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_params</span><span class="p">,</span>
+            <span class="n">train_params</span><span class="o">=</span><span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">train_params</span><span class="p">,</span>
+            <span class="n">data_params</span><span class="o">=</span><span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_params</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">models</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.forward">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.training_step">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.training_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Ensemble training is not implemented.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.validation_step">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.validation_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Ensemble validation is not implemented.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.test_step">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.test_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Ensemble test is not implemented.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.predict_on_dataset">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.predict_on_dataset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_on_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">devices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="n">augment_aggfunc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+        <span class="n">compare_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">predict_on_dataset</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+            <span class="n">devices</span><span class="o">=</span><span class="n">devices</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">augment_aggfunc</span><span class="o">=</span><span class="n">augment_aggfunc</span><span class="p">,</span>
+            <span class="n">compare_func</span><span class="o">=</span><span class="n">compare_func</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">expression</span> <span class="o">=</span> <span class="n">rearrange</span><span class="p">(</span>
+            <span class="n">preds</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;(e b) t -&gt; e b t&quot;</span><span class="p">,</span>
+            <span class="n">e</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;expression&quot;</span><span class="p">:</span> <span class="n">expression</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;warnings&quot;</span><span class="p">:</span> <span class="n">preds</span><span class="p">[</span><span class="s2">&quot;warnings&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;ensemble_preds&quot;</span><span class="p">:</span> <span class="n">expression</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.load_from_checkpoints">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.load_from_checkpoints">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_from_checkpoints</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">checkpoints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">checkpoint</span> <span class="ow">in</span> <span class="n">checkpoints</span><span class="p">:</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">models</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnsembleLightningModel.add_transform">
+<a class="viewcode-back" href="../../../api/decima.model.html#decima.model.lightning.EnsembleLightningModel.add_transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction_transform</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">add_transform</span><span class="p">(</span><span class="n">prediction_transform</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
         </article>
       </div>
@@ -842,7 +929,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../../../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.vep package" href="decima.vep.html" /><link rel="prev" title="decima.train package" href="decima.train.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.utils package - decima 0.2 documentation</title>
+        <title>decima.utils package - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -272,8 +272,8 @@
 <span id="decima-utils-dataframe-module"></span><h2>decima.utils.dataframe module<a class="headerlink" href="#module-decima.utils.dataframe" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">ChunkDataFrameWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">ChunkDataFrameWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.12/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.__enter__">
 <span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__enter__" title="Link to this definition">¶</a></dt>
@@ -286,11 +286,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize ParquetWriter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output parquet file</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path to the output parquet file</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Metadata to write to the parquet file. Keys and values must be string-like / coercible to bytes.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -304,7 +307,7 @@
 <dd class="field-odd"><p><strong>chunk</strong> (<em>pd.DataFrame</em>) – DataFrame chunk to write</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -319,7 +322,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input dataframe</p></li>
-<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Size of each chunk</p></li>
+<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Size of each chunk</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -332,18 +335,68 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ensemble_predictions">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">ensemble_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ensemble_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ensemble_predictions" title="Link to this definition">¶</a></dt>
+<dd><p>Aggregate replicates from parquet files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – List of parquet files to aggregate</p></li>
+<li><p><strong>output_pq</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – Path to the output parquet file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.read_metadata_from_replicate_parquets">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">read_metadata_from_replicate_parquets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#read_metadata_from_replicate_parquets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.read_metadata_from_replicate_parquets" title="Link to this definition">¶</a></dt>
+<dd><p>Read metadata from multiple parquet files and return as a DataFrame.</p>
+<p>This function reads key-value metadata from each parquet file and extracts
+model, distance parameters and other metadata into a structured DataFrame.
+All files must contain the required metadata fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>files</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – List of parquet file paths to read metadata from</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame containing metadata with columns:</dt><dd><ul class="simple">
+<li><p>model: Model identifier</p></li>
+<li><p>max_distance: Maximum distance used for predictions</p></li>
+<li><p>min_distance: Minimum distance used for predictions</p></li>
+<li><p>file: Source file path</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.12/library/exceptions.html#KeyError" title="(in Python v3.12)"><strong>KeyError</strong></a> – If any required metadata field is missing from a file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="decima.utils.dataframe.write_df_chunks_to_parquet">
-<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">write_df_chunks_to_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#write_df_chunks_to_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.write_df_chunks_to_parquet" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">write_df_chunks_to_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#write_df_chunks_to_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.write_df_chunks_to_parquet" title="Link to this definition">¶</a></dt>
 <dd><p>Write dataframe chunks to parquet file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>chunks</strong> (<em>Iterator</em><em>[</em><em>pd.DataFrame</em><em>]</em>) – Iterator of dataframe chunks</p></li>
-<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output parquet file</p></li>
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path to the output parquet file</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Metadata to write to the parquet file. If None, no metadata is written.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -354,16 +407,16 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="decima.utils.inject.SeqBuilder">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.inject.</span></span><span class="sig-name descname"><span class="pre">SeqBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#SeqBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.SeqBuilder" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.12/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Build the sequence from the variants.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – chromosome</p></li>
-<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – start position</p></li>
-<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – end position</p></li>
-<li><p><strong>anchor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – anchor position</p></li>
-<li><p><strong>track</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – track positions shifts due to indels.</p></li>
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – chromosome</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – start position</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – end position</p></li>
+<li><p><strong>anchor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – anchor position</p></li>
+<li><p><strong>track</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.List" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – track positions shifts due to indels.</p></li>
 </ul>
 </dd>
 </dl>
@@ -381,7 +434,7 @@
 <dd class="field-odd"><p>the final sequence.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -392,7 +445,7 @@
 <dd><p>Inject the variant into the sequence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>variant</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – variant to inject in the format of {“chrom”: str, “pos”: int, “ref”: str, “alt”: str}</p>
+<dd class="field-odd"><p><strong>variant</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – variant to inject in the format of {“chrom”: str, “pos”: int, “ref”: str, “alt”: str}</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self</p>
@@ -418,14 +471,14 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="decima.core.html#decima.core.metadata.GeneMetadata" title="decima.core.metadata.GeneMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a></span>) – gene metadata in the format of GeneMetadata.</p></li>
-<li><p><strong>variants</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span>) – variants to inject in the format of [{“chrom”: str, “pos”: int, “ref”: str, “alt”: str}, …].</p></li>
+<li><p><strong>variants</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.List" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span>) – variants to inject in the format of [{“chrom”: str, “pos”: int, “ref”: str, “alt”: str}, …].</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the sequence (str) and gene mask start and end positions (int, int)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -434,11 +487,16 @@
 <section id="module-decima.utils.io">
 <span id="decima-utils-io-module"></span><h2>decima.utils.io module<a class="headerlink" href="#module-decima.utils.io" title="Link to this heading">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.io.import_cyvcf2">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">import_cyvcf2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#import_cyvcf2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.import_cyvcf2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="decima.utils.io.read_fasta_gene_mask">
 <span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">read_fasta_gene_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fasta_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#read_fasta_gene_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.read_fasta_gene_mask" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -448,7 +506,7 @@
 <span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">read_vcf_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vcf_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#read_vcf_chunks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.read_vcf_chunks" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Iterator" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Iterator" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -470,7 +528,7 @@
 <dd><p>Get the best available device for computation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional device specification. If None, automatically selects best available device.</p>
+<dd class="field-odd"><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional device specification. If None, automatically selects best available device.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The selected device for computation</p>
@@ -550,6 +608,8 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#decima.utils.dataframe.chunk_df"><code class="docutils literal notranslate"><span class="pre">chunk_df()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.ensemble_predictions"><code class="docutils literal notranslate"><span class="pre">ensemble_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.read_metadata_from_replicate_parquets"><code class="docutils literal notranslate"><span class="pre">read_metadata_from_replicate_parquets()</span></code></a></li>
 <li><a class="reference internal" href="#decima.utils.dataframe.write_df_chunks_to_parquet"><code class="docutils literal notranslate"><span class="pre">write_df_chunks_to_parquet()</span></code></a></li>
 </ul>
 </li>
@@ -564,6 +624,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#module-decima.utils.io">decima.utils.io module</a><ul>
+<li><a class="reference internal" href="#decima.utils.io.import_cyvcf2"><code class="docutils literal notranslate"><span class="pre">import_cyvcf2()</span></code></a></li>
 <li><a class="reference internal" href="#decima.utils.io.read_fasta_gene_mask"><code class="docutils literal notranslate"><span class="pre">read_fasta_gene_mask()</span></code></a></li>
 <li><a class="reference internal" href="#decima.utils.io.read_vcf_chunks"><code class="docutils literal notranslate"><span class="pre">read_vcf_chunks()</span></code></a></li>
 </ul>
@@ -587,7 +648,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

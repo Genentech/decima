@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.utils.io - decima 0.2 documentation</title>
+        <title>decima.utils.io - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -262,6 +262,20 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyfaidx</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fasta</span>
 
 
+<div class="viewcode-block" id="import_cyvcf2">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.import_cyvcf2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">import_cyvcf2</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">cyvcf2</span><span class="w"> </span><span class="kn">import</span> <span class="n">VCF</span>  <span class="c1"># optional dependency</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;Optional dependency `cyvcf2` is not installed and is required for reading vcf files. &quot;</span>
+            <span class="s2">&quot;Please install vep dependencies with `pip install decima[vep]`.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">VCF</span></div>
+
+
+
 <div class="viewcode-block" id="read_fasta_gene_mask">
 <a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.read_fasta_gene_mask">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_fasta_gene_mask</span><span class="p">(</span><span class="n">fasta_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -284,13 +298,7 @@
 <div class="viewcode-block" id="read_vcf_chunks">
 <a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.read_vcf_chunks">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_vcf_chunks</span><span class="p">(</span><span class="n">vcf_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">cyvcf2</span><span class="w"> </span><span class="kn">import</span> <span class="n">VCF</span>  <span class="c1"># optional dependency</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;Optional dependency `cyvcf2` is not installed and is required for reading vcf files. Please install it with `pip install cyvcf2`.&quot;</span>
-        <span class="p">)</span>
-
+    <span class="n">VCF</span> <span class="o">=</span> <span class="n">import_cyvcf2</span><span class="p">()</span>
     <span class="n">vcf</span> <span class="o">=</span> <span class="n">VCF</span><span class="p">(</span><span class="n">vcf_file</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
@@ -346,7 +354,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../../../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

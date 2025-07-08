@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.vep - decima 0.2 documentation</title>
+        <title>decima.vep - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -259,24 +259,26 @@
           <h1>Source code for decima.vep</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">genomepy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.transforms.prediction_transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Aggregate</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">SUPPORTED_GENOMES</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningType</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_compute_device</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils.dataframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">chunk_df</span><span class="p">,</span> <span class="n">ChunkDataFrameWriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_vcf_chunks</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">VariantDataset</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span><span class="p">,</span> <span class="n">get_model_name</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_predict_variant_effect</span><span class="p">(</span>
     <span class="n">df_variant</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ensemble&quot;</span><span class="p">,</span>
     <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
     <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
@@ -287,6 +289,7 @@
     <span class="n">min_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
     <span class="n">genome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+    <span class="n">save_replicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict variant effect on a set of variants</span>
 
@@ -307,8 +310,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        pd.DataFrame: DataFrame with variant effect predictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">assert</span> <span class="n">genome</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hg38&quot;</span><span class="p">],</span> <span class="s2">&quot;Currently only hg38 genome is supported.&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">genome</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUPPORTED_GENOMES</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">genome</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Genome </span><span class="si">{</span><span class="n">genome</span><span class="si">}</span><span class="s2"> not supported. Currently only hg38 is supported.&quot;</span><span class="p">)</span>
     <span class="n">include_cols</span> <span class="o">=</span> <span class="n">include_cols</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">()</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -328,8 +331,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-
+    <span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">query_cells</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
         <span class="n">agg_transform</span> <span class="o">=</span> <span class="n">Aggregate</span><span class="p">(</span><span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
@@ -337,11 +339,23 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">cells</span>
 
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;decima&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Performing predictions on </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_on_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">variants</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">df_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">tasks</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">save_replicates</span><span class="p">:</span>
+        <span class="n">df_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">df_pred</span><span class="p">,</span>
+                <span class="o">*</span><span class="p">[</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">tasks</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;ensemble_preds&quot;</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">models</span><span class="p">))</span>
+                <span class="p">],</span>
+            <span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_pred</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;warnings&quot;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 
@@ -351,7 +365,7 @@
     <span class="n">df_variant</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="n">output_pq</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ensemble&quot;</span><span class="p">,</span>
     <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
@@ -363,6 +377,7 @@
     <span class="n">min_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
     <span class="n">genome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+    <span class="n">save_replicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict variant effect and save to parquet</span>
 
@@ -418,6 +433,7 @@
             <span class="n">min_distance</span><span class="o">=</span><span class="n">min_distance</span><span class="p">,</span>
             <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span>
             <span class="n">genome</span><span class="o">=</span><span class="n">genome</span><span class="p">,</span>
+            <span class="n">save_replicates</span><span class="o">=</span><span class="n">save_replicates</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">df_chunk</span> <span class="ow">in</span> <span class="n">chunks</span>
     <span class="p">)</span>
@@ -425,15 +441,27 @@
     <span class="n">warning_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="n">num_variants</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="n">genome_path</span> <span class="o">=</span> <span class="n">genomepy</span><span class="o">.</span><span class="n">Genome</span><span class="p">(</span><span class="n">genome</span><span class="p">)</span><span class="o">.</span><span class="n">filename</span>
+    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">genome</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">genome_path</span> <span class="o">=</span> <span class="n">genome</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">genomepy</span>
+
+        <span class="n">genome_path</span> <span class="o">=</span> <span class="n">genomepy</span><span class="o">.</span><span class="n">Genome</span><span class="p">(</span><span class="n">genome</span><span class="p">)</span><span class="o">.</span><span class="n">filename</span>
 
     <span class="k">if</span> <span class="n">output_pq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">ChunkDataFrameWriter</span><span class="p">(</span><span class="n">output_pq</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;genome&quot;</span><span class="p">:</span> <span class="n">genome</span><span class="p">,</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">get_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+            <span class="s2">&quot;min_distance&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_distance</span><span class="p">)</span> <span class="k">if</span> <span class="n">min_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;max_distance&quot;</span><span class="p">:</span> <span class="n">max_distance</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="n">ChunkDataFrameWriter</span><span class="p">(</span><span class="n">output_pq</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">df</span><span class="p">,</span> <span class="n">warnings</span><span class="p">,</span> <span class="n">_num_variants</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-                <span class="n">num_variants</span> <span class="o">+=</span> <span class="n">_num_variants</span>
                 <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;no_overlap_found_for_chunk&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">num_variants</span> <span class="o">+=</span> <span class="n">_num_variants</span>
                 <span class="n">warning_counter</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">warnings</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">warning_counter</span><span class="o">.</span><span class="n">total</span><span class="p">():</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_pq</span> <span class="o">+</span> <span class="s2">&quot;.warnings.log&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -497,7 +525,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.dataloaders package" href="decima.dataloaders.html" /><link rel="prev" title="decima.core package" href="decima.core.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.data package - decima 0.2 documentation</title>
+        <title>decima.data package - decima 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">decima 0.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -326,14 +326,14 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>variants</strong> (<em>pd.DataFrame</em>) – DataFrame with variants</p></li>
 <li><p><strong>anndata</strong> (<em>AnnData</em>) – AnnData object with gene metadata</p></li>
-<li><p><strong>seq_len</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Length of the sequence</p></li>
-<li><p><strong>max_seq_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum sequence shift</p></li>
-<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List of columns to include in the output</p></li>
-<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Column name for gene names</p></li>
-<li><p><strong>min_from_end</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the end of the gene</p></li>
-<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Type of distance</p></li>
-<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the TSS</p></li>
-<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum distance from the TSS</p></li>
+<li><p><strong>seq_len</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Length of the sequence</p></li>
+<li><p><strong>max_seq_shift</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum sequence shift</p></li>
+<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of columns to include in the output</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Column name for gene names</p></li>
+<li><p><strong>min_from_end</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum distance from the end of the gene</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Type of distance</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum distance from the TSS</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum distance from the TSS</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -394,6 +394,12 @@
 <dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__parameters__">
 <span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.__parameters__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.collate_fn">
@@ -596,6 +602,7 @@
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__init__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__len__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__len__()</span></code></a></li>
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__repr__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__repr__()</span></code></a></li>
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.collate_fn"><code class="docutils literal notranslate"><span class="pre">VariantDataset.collate_fn()</span></code></a></li>
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.overlap_genes"><code class="docutils literal notranslate"><span class="pre">VariantDataset.overlap_genes()</span></code></a></li>
 <li><a class="reference internal" href="#decima.data.dataset.VariantDataset.validate_allele_seq"><code class="docutils literal notranslate"><span class="pre">VariantDataset.validate_allele_seq()</span></code></a></li>
@@ -643,7 +650,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=10f1778b"></script>
+</div><script src="../_static/documentation_options.js?v=37f418d5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
