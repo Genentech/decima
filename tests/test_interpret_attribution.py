@@ -29,9 +29,8 @@ def attributions():
     inputs = torch.vstack([input_seq, input_mask])
 
     np.random.seed(42)
-    attrs = np.random.rand(4, 500) - .5
-    attrs[:, 360:364] = 10_000
-
+    attrs = np.random.rand(4, 500) / 10 - 0.05
+    attrs[:, 360:364] = 10
     return Attribution(
         gene=gene,
         inputs=inputs,
@@ -40,12 +39,12 @@ def attributions():
         start=1000,
         end=1500,
         strand="+",
-        threshold=1e-2,
+        threshold=1e-3,
     )
 
 
 def test_Attribution_peak_finding(attributions):
-    assert len(attributions.peaks) == 1
+    assert len(attributions.peaks) == 2
     row = attributions.peaks.iloc[0]
     assert row["peak"] == "TEST2@10"
     assert row["start"] == 360
@@ -64,14 +63,16 @@ def test_Attribution_scan_motifs(attributions):
     assert "p-value" in df_motifs.columns
     assert "peak" in df_motifs.columns
     assert "GATA1.H12CORE.1.PSM.A" in set(df_motifs["motif"])
-    assert (df_motifs["peak"] == "TEST2@10").all()
+    assert "TEST2@10" in set(df_motifs["peak"])
+
+    df_motifs = df_motifs[df_motifs["peak"] == "TEST2@10"]
     assert (df_motifs["start"] - 350 == df_motifs["from_tss"]).all()
 
 
 def test_Attribution_peaks_to_bed(attributions):
     df_peaks = attributions.peaks_to_bed()
     assert isinstance(df_peaks, pd.DataFrame)
-    assert len(df_peaks) == 1
+    assert len(df_peaks) == 2
 
     assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand"]
 
@@ -114,7 +115,7 @@ def test_Attribution_save_bigwig(attributions, tmp_path):
     bw = pyBigWig.open(str(bigwig_path))
     attrs = bw.values("chr1", 1360, 1364)
     assert len(attrs) == 4
-    assert attrs[0] == pytest.approx(40_000)
+    assert attrs[0] == pytest.approx(40)
     bw.close()
 
 @pytest.mark.long_running

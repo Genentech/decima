@@ -26,6 +26,9 @@ class DecimaModel(BaseModel):
             attn_dropout=0.0,
             n_heads=8,
             n_pos_features=32,
+            # backward compatibility with grelu<1.0.7
+            norm_kwargs={"eps": 1e-5},
+            act_func="gelu",
             final_act_func=None,
             final_pool_func=None,
         )

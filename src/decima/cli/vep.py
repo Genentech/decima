@@ -1,5 +1,6 @@
 import click
 from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.utils.dataframe import ensemble_predictions
 from decima.vep import predict_variant_effect
 
 
@@ -22,7 +23,7 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--model",
     type=str,
-    default="0",
+    default="ensemble",
     help="Model to use for variant effect prediction either replicate number or path to the model.",
 )
 @click.option(
@@ -62,6 +63,11 @@ from decima.vep import predict_variant_effect
     help="Column name for gene names. Default: None.",
 )
 @click.option("--genome", type=str, default="hg38", help="Genome build. Default: hg38.")
+@click.option(
+    "--save-replicates",
+    is_flag=True,
+    help="Save the replicates in the output parquet file. Default: False.",
+)
 def cli_predict_variant_effect(
     variants,
     output_pq,
@@ -78,6 +84,7 @@ def cli_predict_variant_effect(
     include_cols,
     gene_col,
     genome,
+    save_replicates,
 ):
     """Predict variant effect and save to parquet
 
@@ -94,6 +101,12 @@ def cli_predict_variant_effect(
         >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --gene-col "gene_name" # use gene_name column as gene names if these option passed genes and variants mapped based on these column not based on the genomic locus based on the annotaiton.
 
         >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --distance-type tss --min-distance 50000 --max-distance 100000 # predict for variants within 50kb of the TSS and 100kb of the TSS
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --save-replicates # save the replicates in the output parquet file
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --genome "hg38" # use hg38 genome build
+
+        >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --genome "path/to/fasta/hg38.fa"  # use custom genome build
     """
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
@@ -103,6 +116,9 @@ def cli_predict_variant_effect(
 
     if include_cols:
         include_cols = include_cols.split(",")
+
+    if save_replicates and (model != "ensemble"):
+        raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
 
     predict_variant_effect(
         variants,
@@ -120,4 +136,29 @@ def cli_predict_variant_effect(
         include_cols=include_cols,
         gene_col=gene_col,
         genome=genome,
+        save_replicates=save_replicates,
     )
+
+
+@click.command()
+@click.option("-f", "--files", type=str, help="Path to the parquet files to ensemble. Can be passed multiple times.")
+@click.option("-o", "--output_pq", type=click.Path(), help="Path to the output parquet file.")
+@click.option(
+    "--save-replicates",
+    default=False,
+    type=bool,
+    is_flag=True,
+    help="Save the replicates in the output parquet file. Default: False.",
+)
+def cli_vep_ensemble(files, output_pq, save_replicates=False):
+    """Ensemble variant effect predictions from multiple parquet files
+
+    Examples:
+
+        >>> decima vep-ensemble -f "data/sample_rep0.parquet,data/sample_rep1.parquet,data/sample_rep2.parquet" -o "vep_results.parquet"
+
+        >>> decima vep-ensemble -f "data/sample_rep*.parquet" -o "vep_results.parquet" --save-replicates
+    """
+    if "," in files:
+        files = files.split(",")
+    ensemble_predictions(files=files, output_pq=output_pq, save_replicates=save_replicates)
