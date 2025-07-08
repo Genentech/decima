@@ -196,6 +196,7 @@ def test_predict_variant_effect_vcf(tmp_path):
     predict_variant_effect(
         "tests/data/test.vcf",
         output_pq=str(output_file),
+        model=0,
         device=device,
         max_distance=20000,
     )
