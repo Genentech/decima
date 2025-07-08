@@ -498,7 +498,8 @@ class Attribution:
             df["start"], df["end"] = self.end - df["end"], self.end - df["start"]
 
         df["strand"] = "."
-        df["score"] = -np.log10(df["p-value"] + 1e-50)
+        # np.maximum because of https://github.com/jmschrei/tangermeme/issues/40
+        df["score"] = -np.log10(np.maximum(df["p-value"], 0) + 1e-50)
         df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
         return df[["chrom", "start", "end", "name", "score", "strand"]]
 
