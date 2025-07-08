@@ -425,10 +425,13 @@ class LightningModel(pl.LightningModule):
 
         # Predict
         results = trainer.predict(self, dataloader)
-        expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
+        if isinstance(results, dict):
+            expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
 
-        for r in results:
-            self.warning_counter.update(r["warnings"])
+            for r in results:
+                self.warning_counter.update(r["warnings"])
+        else:
+            expression = torch.concat(results).squeeze(-1)
 
         # Reshape predictions
         expression = rearrange(
