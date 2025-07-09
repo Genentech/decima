@@ -21,7 +21,9 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--out_file", required=True, help="Output file path.")
 @click.option("--key", type=str, default=None, help="train, val or test. If None, all genes will be predicted.")
 @click.option("--max_seq_shift", default=0, help="Maximum jitter for augmentation.")
-def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, key, max_seq_shift):
+@click.option("--bs", default=8, help="Batch size.")
+@click.option("--num_workers", default=16, help="Number of workers.")
+def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, key, max_seq_shift, bs, num_workers):
     """Make predictions for all genes."""
     torch.set_float32_matmul_precision("medium")
 
@@ -50,7 +52,7 @@ def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, key, max_se
 
     print("Computing predictions")
     preds = (
-        np.stack([model.predict_on_dataset(ds, devices=0, batch_size=8, num_workers=16) for model in models]).mean(0).T
+        np.stack([model.predict_on_dataset(ds, devices=0, batch_size=bs, num_workers=num_workers) for model in models]).mean(0).T
     )
     ad.layers["preds"] = preds
 

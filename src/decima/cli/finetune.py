@@ -1,15 +1,11 @@
 """Finetune the Decima model."""
 
 import os
-
-os.environ["WANDB_DISABLE_CODE_AND_METADATA_COLLECTION"] = "true"
 import click
 import anndata
 import wandb
 from decima.model.lightning import LightningModel
 from decima.data.dataset import HDF5Dataset
-
-wandb.login(host="https://genentech.wandb.io")
 
 
 @click.command()
@@ -28,6 +24,7 @@ wandb.login(host="https://genentech.wandb.io")
 @click.option("--logger", default="wandb", type=str, help="Logger")
 def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, clip, savek, epochs, logger):
     """Finetune the Decima model."""
+    wandb.login(host="https://genentech.wandb.io")
     matrix_file = os.path.join(datadir, "aggregated.h5ad")
     h5_file = os.path.join(datadir, "data.h5")
     print(f"Data paths: {matrix_file}, {h5_file}")
