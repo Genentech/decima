@@ -30,12 +30,11 @@ default_train_params = {
     "devices": 0,
     "logger": "csv",
     "save_dir": ".",
-    "max_epochs": 1,
+    "max_epochs": 15,
     "accumulate_grad_batches": 1,
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
     "clip": 0.0,
-    "precision": "16-mixed",
     "save_top_k": 1,
 }
 
@@ -307,20 +306,17 @@ class LightningModel(pl.LightningModule):
         # Set up logging
         logger = self.parse_logger()
 
-        # Set up callbacks
-        callbacks = [ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"])]
-
         # Set up trainer
         trainer = pl.Trainer(
             max_epochs=self.train_params["max_epochs"],
             accelerator="gpu",
             devices=make_list(self.train_params["devices"]),
             logger=logger,
-            callbacks=callbacks,
+            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"])],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
             gradient_clip_val=self.train_params["clip"],
-            precision=self.train_params["precision"],
+            precision="16-mixed",
         )
 
         # Make dataloaders
