@@ -23,10 +23,10 @@ wandb.login(host="https://genentech.wandb.io")
 @click.option("--bs", default=4, type=int, help="Batch size")
 @click.option("--shift", default=5000, type=int, help="Shift augmentation")
 @click.option("--clip", default=0.0, type=float, help="Gradient clipping")
-@click.option("--swa", default=False, type=bool, help="SWA")
-@click.option("--precision", default="16-mixed", type=str, help="Precision")
+@click.option("--savek", default=1, type=int, help="Number of checkpoints to save")
+@click.option("--epochs", default=1, type=int, help="Number of epochs")
 @click.option("--logger", default="wandb", type=str, help="Logger")
-def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, clip, swa, precision, logger):
+def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, clip, savek, epochs, logger):
     """Finetune the Decima model."""
     matrix_file = os.path.join(datadir, "aggregated.h5ad")
     h5_file = os.path.join(datadir, "data.h5")
@@ -53,15 +53,14 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
         "devices": 0,
         "logger": logger,
         "save_dir": outdir,
-        "max_epochs": 50,
+        "max_epochs": epochs,
         "lr": lr,
         "total_weight": weight,
         "accumulate_grad_batches": grad,
         "loss": "poisson_multinomial",
         # "pairs": ad.uns["disease_pairs"].values,
         "clip": clip,
-        "swa": swa,
-        "precision": precision,
+        "savek": savek,
     }
     model_params = {
         "n_tasks": ad.shape[0],

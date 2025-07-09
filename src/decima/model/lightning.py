@@ -10,7 +10,7 @@ import torch
 from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
 from grelu.utils import make_list
-from pytorch_lightning.callbacks import ModelCheckpoint, StochasticWeightAveraging
+from pytorch_lightning.callbacks import ModelCheckpoint
 
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
@@ -35,8 +35,8 @@ default_train_params = {
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
     "clip": 0.0,
-    "swa": False,
     "precision": "16-mixed",
+    "save_top_k": 1,
 }
 
 
@@ -308,9 +308,7 @@ class LightningModel(pl.LightningModule):
         logger = self.parse_logger()
 
         # Set up callbacks
-        callbacks = [ModelCheckpoint(monitor="val_loss", mode="min", save_last=False)]
-        if self.train_params["swa"]:
-            callbacks += [StochasticWeightAveraging(swa_lrs=1e-2)]
+        callbacks = [ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"])]
 
         # Set up trainer
         trainer = pl.Trainer(
@@ -441,8 +439,8 @@ class LightningModel(pl.LightningModule):
         # Predict
         results = trainer.predict(self, dataloader)
 
-        if isinstance(results, dict):
-            expression = torch.concat([r["expression"] for r in results])
+        if isinstance(results[0], dict):
+            expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
             for r in results:
                 self.warning_counter.update(r["warnings"])
 
