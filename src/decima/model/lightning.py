@@ -11,7 +11,6 @@ from einops import rearrange
 from grelu.lightning.metrics import MSE, PearsonCorrCoef
 from grelu.utils import make_list
 from pytorch_lightning.callbacks import ModelCheckpoint
-
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
