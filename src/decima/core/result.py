@@ -183,7 +183,11 @@ class DecimaResult:
 
     def gene_sequence(self, gene: str, stranded: bool = True) -> str:
         """Get sequence for a gene."""
-        assert gene in self.genes, f"{gene} is not in the anndata object"
+        try:
+            assert gene in self.genes, f"{gene} is not in the anndata object"
+        except AssertionError:
+            print(gene)
+            print(self.genes)
         gene_meta = self.gene_metadata.loc[gene]
         if not stranded:
             gene_meta = {"chrom": gene_meta.chrom, "start": gene_meta.start, "end": gene_meta.end}
