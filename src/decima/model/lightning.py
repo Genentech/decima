@@ -5,7 +5,6 @@ The LightningModel class.
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
-import numpy as np
 import pytorch_lightning as pl
 import torch
 from einops import rearrange
@@ -15,11 +14,12 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
+from torch.utils.data.dataloader import default_collate
 from torchmetrics import MetricCollection
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
-from .metrics import DiseaseLfcMSE, WarningCounter
+from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
 
 
 default_train_params = {
@@ -29,10 +29,12 @@ default_train_params = {
     "devices": 0,
     "logger": "csv",
     "save_dir": ".",
-    "max_epochs": 1,
+    "max_epochs": 15,
     "accumulate_grad_batches": 1,
     "total_weight": 1e-4,
     "disease_weight": 1e-2,
+    "clip": 0.0,
+    "save_top_k": 1,
 }
 
 
@@ -77,7 +79,8 @@ class LightningModel(pl.LightningModule):
         # Inititalize metrics
         _metrics = {
             "mse": MSE(num_outputs=self.model.head.n_tasks, average=False),
-            "pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "task_pearson": PearsonCorrCoef(num_outputs=self.model.head.n_tasks, average=False),
+            "gene_pearson": GenePearsonCorrCoef(average=False),
         }
         if "pairs" in self.train_params:
             _metrics["disease_lfc_mse"] = DiseaseLfcMSE(pairs=self.train_params["pairs"], average=False)
@@ -308,9 +311,10 @@ class LightningModel(pl.LightningModule):
             accelerator="gpu",
             devices=make_list(self.train_params["devices"]),
             logger=logger,
-            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_last=True)],
+            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"])],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
+            gradient_clip_val=self.train_params["clip"],
             precision="16-mixed",
         )
 
@@ -407,12 +411,7 @@ class LightningModel(pl.LightningModule):
             Model predictions as a numpy array or dataframe
         """
         torch.set_float32_matmul_precision("medium")
-        dataloader = self.make_predict_loader(
-            dataset,
-            num_workers=num_workers,
-            batch_size=batch_size,
-            collate_fn=dataset.collate_fn,
-        )
+
         accelerator = "auto"
         if devices is None:
             devices = "auto"  # use all devices
@@ -423,32 +422,52 @@ class LightningModel(pl.LightningModule):
         else:
             trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False)
 
-        # Predict
-        results = trainer.predict(self, dataloader)
-        expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
-
-        for r in results:
-            self.warning_counter.update(r["warnings"])
-
-        # Reshape predictions
-        expression = rearrange(
-            expression,
-            "(b n a) t -> b n a t",
-            n=dataset.n_augmented,
-            a=dataset.n_alleles,
+        # Make dataloader
+        dataloader = self.make_predict_loader(
+            dataset,
+            num_workers=num_workers,
+            batch_size=batch_size,
+            collate_fn=dataset.collate_fn if hasattr(dataset, "collate_fn") else default_collate,
         )
 
-        # Convert predictions to numpy array
-        expression = expression.detach().cpu().numpy()
+        # Predict
+        results = trainer.predict(self, dataloader)
 
-        if dataset.n_alleles == 2:
+        if isinstance(results[0], dict):
+            expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
+            for r in results:
+                self.warning_counter.update(r["warnings"])
+
+            # Reshape predictions
+            expression = rearrange(
+                expression,
+                "(b n a) t -> b n a t",
+                n=dataset.n_augmented,
+                a=dataset.n_alleles,
+            )
+
+            # Convert predictions to numpy array
+            expression = expression.detach().cpu().numpy()
+
+            # Subtract alleles
             expression = expression[:, :, 1, :] - expression[:, :, 0, :]  # BNT
+
+            # Average over augmentations
+            expression = expression.mean(1)
+
+            return {"expression": expression, "warnings": self.warning_counter.compute()}
+
         else:
-            expression = expression.squeeze(2)  # B N T
+            # Reshape predictions
+            results = rearrange(
+                torch.concat(results),
+                "(b n) t 1 -> b n t",
+                n=dataset.n_augmented,
+            )
 
-        expression = np.mean(expression, axis=-2)  # B T
-
-        return {"expression": expression, "warnings": self.warning_counter.compute()}
+            # Convert predictions to numpy array
+            results = results.detach().cpu().numpy()
+            return results.mean(1)  # B T
 
     def get_task_idxs(
         self,

@@ -17,7 +17,7 @@ def write_hdf5(file, ad, pad=0):
         f.create_dataset("padded_seq_len", shape=(), data=padded_seq_len)
 
         # Tasks
-        print("Writing tasks")
+        print("Writing task indices")
         tasks = np.array(ad.obs.index)
         f.create_dataset("tasks", shape=tasks.shape, data=tasks)
 

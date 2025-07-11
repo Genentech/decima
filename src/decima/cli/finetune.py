@@ -10,19 +10,23 @@ from decima.data.dataset import HDF5Dataset
 
 @click.command()
 @click.option("--name", required=True, help="Project name")
-@click.option("--dir", required=True, help="Data directory path")
+@click.option("--datadir", required=True, help="Data directory path")
+@click.option("--outdir", required=True, help="Output directory path")
 @click.option("--lr", default=0.001, type=float, help="Learning rate")
 @click.option("--weight", required=True, type=float, help="Weight parameter")
 @click.option("--grad", required=True, type=int, help="Gradient accumulation steps")
 @click.option("--replicate", default=0, type=int, help="Replication number")
 @click.option("--bs", default=4, type=int, help="Batch size")
-def cli_finetune(name, dir, lr, weight, grad, replicate, bs):
+@click.option("--shift", default=5000, type=int, help="Shift augmentation")
+@click.option("--clip", default=0.0, type=float, help="Gradient clipping")
+@click.option("--savek", default=1, type=int, help="Number of checkpoints to save")
+@click.option("--epochs", default=1, type=int, help="Number of epochs")
+@click.option("--logger", default="wandb", type=str, help="Logger")
+def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, clip, savek, epochs, logger):
     """Finetune the Decima model."""
     wandb.login(host="https://genentech.wandb.io")
-    run = wandb.init(project="decima", dir=name, name=name)
-
-    matrix_file = os.path.join(dir, "aggregated.h5ad")
-    h5_file = os.path.join(dir, "data.h5")
+    matrix_file = os.path.join(datadir, "aggregated.h5ad")
+    h5_file = os.path.join(datadir, "data.h5")
     print(f"Data paths: {matrix_file}, {h5_file}")
 
     print("Reading anndata")
@@ -33,25 +37,27 @@ def cli_finetune(name, dir, lr, weight, grad, replicate, bs):
         h5_file=h5_file,
         ad=ad,
         key="train",
-        max_seq_shift=5000,
+        max_seq_shift=shift,
         augment_mode="random",
         seed=0,
     )
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
     train_params = {
-        "optimizer": "adam",
+        "name": name,
         "batch_size": bs,
         "num_workers": 16,
         "devices": 0,
-        "logger": "wandb",
-        "save_dir": dir,
-        "max_epochs": 15,
+        "logger": logger,
+        "save_dir": outdir,
+        "max_epochs": epochs,
         "lr": lr,
         "total_weight": weight,
         "accumulate_grad_batches": grad,
         "loss": "poisson_multinomial",
-        "pairs": ad.uns["disease_pairs"].values,
+        # "pairs": ad.uns["disease_pairs"].values,
+        "clip": clip,
+        "save_top_k": savek,
     }
     model_params = {
         "n_tasks": ad.shape[0],
@@ -64,7 +70,10 @@ def cli_finetune(name, dir, lr, weight, grad, replicate, bs):
     model = LightningModel(model_params=model_params, train_params=train_params)
 
     print("Training")
+    if logger == "wandb":
+        run = wandb.init(project="decima", dir=name, name=name)
     model.train_on_dataset(train_dataset, val_dataset)
     train_dataset.close()
     val_dataset.close()
-    run.finish()
+    if logger == "wandb":
+        run.finish()
