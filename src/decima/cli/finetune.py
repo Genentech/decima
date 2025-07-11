@@ -57,7 +57,7 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
         "loss": "poisson_multinomial",
         # "pairs": ad.uns["disease_pairs"].values,
         "clip": clip,
-        "savek": savek,
+        "save_top_k": savek,
     }
     model_params = {
         "n_tasks": ad.shape[0],
@@ -75,4 +75,5 @@ def cli_finetune(name, datadir, outdir, lr, weight, grad, replicate, bs, shift, 
     model.train_on_dataset(train_dataset, val_dataset)
     train_dataset.close()
     val_dataset.close()
-    run.finish()
+    if logger == "wandb":
+        run.finish()
