@@ -80,5 +80,6 @@ def cli_predict_genes(device, ckpts, h5_file, matrix_file, out_file, key, max_se
         ad.obs[f"{key}_pearson"] = [np.corrcoef(ad[i, :].X, ad[i, :].layers["preds"])[0, 1] for i in range(ad.shape[0])]
         print(f"Mean Pearson Correlation per pseudobulk over {key} genes: {ad.obs[f'{key}_pearson'].mean().round(2)}")
 
-    print("Saved")
+    print(f"Saving to {out_file}")
     ad.write_h5ad(out_file)
+    print("Saved.")
