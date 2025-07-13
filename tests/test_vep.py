@@ -90,16 +90,15 @@ def test_VariantDataset(df_variant):
         "gene_mask_start", "gene_mask_end", "rel_pos", "ref_tx", "alt_tx", "tss_dist"
     ]
 
+    assert len(dataset) == 82 * 2
+    assert dataset[0]['seq'].shape == (5, 524288)
+
     assert dataset[2]["warning"] == []
     assert dataset[3]["warning"] == []
     assert dataset[2]["warning"] == []
     assert dataset[10]["warning"] == []
     assert dataset[30]["warning"] == []
     assert dataset[88]["warning"] == [WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME]
-
-    assert len(dataset) == 82 * 2
-    assert dataset[0]['seq'].shape == (5, 524288)
-
     rows, cols = np.where(dataset[2]['seq'] != dataset[3]['seq'])
     assert rows.tolist() == [0, 2] # A > G
     assert cols.tolist() == [38435, 38435] # should be the same for both
@@ -110,6 +109,21 @@ def test_VariantDataset(df_variant):
     rows, cols = np.where(dataset[162]['seq'] != dataset[163]['seq'])
     assert cols.min() == 505705 # the positions before should not be effected.
     assert cols.shape[0] > 10_000 # remaining most bp should be different due to shifting.
+
+    dataset = VariantDataset(df_variant, max_seq_shift=100)
+
+    assert len(dataset) == 82 * 2 * 201
+    assert dataset[0]['seq'].shape == (5, 524288)
+
+    for i in range(20):
+        assert dataset[i]["warning"] == []
+        assert dataset[i]['seq'].shape == (5, 524288)
+
+    assert dataset[44 * 2 * 201]["warning"] == [WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME]
+
+    rows, cols = np.where(dataset[201 * 2]['seq'] != dataset[201 * 2 + 1]['seq'])
+    assert rows.tolist() == [0, 2] # A > G
+    assert cols.tolist() == [38435 + 100, 38435 + 100] # should be the same for both
 
 
 @pytest.mark.long_running
