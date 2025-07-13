@@ -9,7 +9,9 @@ def test_predict_gene_expression():
     ad = predict_gene_expression(
         genes=["SPI1", "GATA1"],
         metadata_anndata=None,
-        model="0", device=device)
+        model=0,
+        device=device,
+    )
 
     assert ad.layers["preds"].shape == (8856, 2)
     assert ad.var.shape[0] == 2
