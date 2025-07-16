@@ -371,15 +371,20 @@ class LightningModel(pl.LightningModule):
         Returns:
             Dictionary containing predictions and warnings or a tensor of predictions
         """
-
-        seq = batch["seq"] if isinstance(batch, dict) else batch
-
-        expression = self(seq)
-
         if isinstance(batch, dict):
+            seq = batch["seq"]
+            if "pred_expr" in batch:
+                pred_expr = batch["pred_expr"][self.name]
+                pred_expr = self.transform(pred_expr.unsqueeze(-1))
+                expression = torch.zeros_like(pred_expr)
+                precomputed = ~pred_expr.isnan()
+                expression[precomputed] = pred_expr[precomputed]
+                expression[~precomputed] = self(seq[~precomputed.all(axis=(1, 2))]).view(-1)
+            else:
+                expression = self(seq)
             return {"expression": expression, "warnings": batch["warning"]}
         else:
-            return expression
+            return self(batch)
 
     def predict_on_dataset(
         self,
@@ -425,7 +430,7 @@ class LightningModel(pl.LightningModule):
 
         # Predict
         results = trainer.predict(self, dataloader)
-        if isinstance(results, dict):
+        if isinstance(results[0], dict):
             expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
 
             for r in results:
@@ -497,6 +502,7 @@ class EnsembleLightningModel(LightningModel):
             data_params=models[0].data_params,
         )
         self.models = nn.ModuleList(models)
+        self.reset_transform()
 
     def forward(self, x: Tensor) -> Tensor:
         return torch.concat([model(x) for model in self.models], dim=0)
@@ -550,5 +556,29 @@ class EnsembleLightningModel(LightningModel):
             model.add_transform(prediction_transform)
 
     def reset_transform(self) -> None:
-        for model in self.models:
-            model.reset_transform()
+        if hasattr(self, "models"):
+            for model in self.models:
+                model.reset_transform()
+
+    def transform(self, x: Tensor) -> Tensor:
+        return self.models[0].transform(x)
+
+    def predict_step(self, batch, batch_idx, dataloader_idx=0) -> Union[dict, Tensor]:
+        """
+        Predict for a single batch of sequences or variants
+
+        Args:
+            batch: Batch of sequences or variants
+            batch_idx: Index of the batch
+            dataloader_idx: Index of the dataloader
+
+        Returns:
+            Dictionary containing predictions and warnings or a tensor of predictions
+        """
+        if isinstance(batch, dict):
+            expression = torch.concat(
+                [model.predict_step(batch, batch_idx, dataloader_idx)["expression"] for model in self.models]
+            )
+            return {"expression": expression, "warnings": batch["warning"]}
+        else:
+            return self(batch)

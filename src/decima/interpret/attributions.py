@@ -5,7 +5,6 @@ import pandas as pd
 import torch
 import pyBigWig
 from pyfaidx import Faidx
-import genomepy
 from captum.attr import InputXGradient, Saliency, IntegratedGradients
 from grelu.interpret.motifs import scan_sequences
 from grelu.sequence.format import convert_input_type, strings_to_one_hot
@@ -451,6 +450,8 @@ class Attribution:
 
         if self._chrom is not None:
             name = self.chrom
+            import genomepy
+
             sizes = genomepy.Genome("hg38").sizes
             bw.addHeader([(chrom, size) for chrom, size in sizes.items()])
         else:

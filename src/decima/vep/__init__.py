@@ -55,6 +55,8 @@ def _predict_variant_effect(
         raise ValueError(f"Genome {genome} not supported. Currently only hg38 is supported.")
     include_cols = include_cols or list()
 
+    model = load_decima_model(model=model)
+
     try:
         dataset = VariantDataset(
             df_variant,
@@ -64,6 +66,7 @@ def _predict_variant_effect(
             distance_type=distance_type,
             min_distance=min_distance,
             max_distance=max_distance,
+            model_name=model.name,
         )
     except ValueError as e:
         if str(e).startswith("NoOverlapError"):
@@ -71,8 +74,6 @@ def _predict_variant_effect(
             return pd.DataFrame(columns=[*VariantDataset.DEFAULT_COLUMNS, *include_cols]), [], 0
         else:
             raise e
-
-    model = load_decima_model(model=model)
 
     if tasks is not None:
         tasks = dataset.result.query_cells(tasks)

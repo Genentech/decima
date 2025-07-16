@@ -73,6 +73,21 @@ def test_predictions():
     assert preds.shape == (result.shape[0], 5)
     assert all(g in preds.columns for g in genes)
 
+    genes = result.genes[:5]
+    preds = result.predicted_expression_matrix(genes, model_name="decima_rep0")
+    assert isinstance(preds, pd.DataFrame)
+    assert preds.shape == (result.shape[0], 5)
+    assert all(g in preds.columns for g in genes)
+
+    genes = result.genes[:5]
+    preds = result.predicted_expression_matrix(genes, model_name="decima_rep3")
+    assert isinstance(preds, pd.DataFrame)
+    assert preds.shape == (result.shape[0], 5)
+    assert all(g in preds.columns for g in genes)
+
+    assert isinstance(result.predicted_gene_expression("STRADA", "decima_rep3"), torch.Tensor)
+    assert result.predicted_gene_expression("STRADA", "decima_rep3").shape == (result.shape[0],)
+
 
 @pytest.mark.long_running
 def test_attributions():

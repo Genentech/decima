@@ -133,10 +133,12 @@ class VariantDataset(Dataset):
         distance_type="tss",
         min_distance=0,
         max_distance=float("inf"),
+        model_name=None,
     ):
         super().__init__()
 
         self.result = DecimaResult.load(metadata_anndata)
+        self.model_name = model_name
 
         self.variants = self._overlap_genes(
             variants,
@@ -164,6 +166,13 @@ class VariantDataset(Dataset):
         )
         self.n_augmented = len(self.augmenter)
         self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
+
+        if self.model_name is None:
+            self.model_names = list()  # no reference caching
+        elif self.model_name == "ensemble":
+            self.model_names = ["decima_rep0", "decima_rep1", "decima_rep2", "decima_rep3"]
+        else:
+            self.model_names = [self.model_name]
 
     @staticmethod
     def overlap_genes(
@@ -284,15 +293,24 @@ class VariantDataset(Dataset):
 
     def validate_allele_seq(self, gene, variant):
         seq = self.result.gene_sequence(gene)
-        vstart = variant.rel_pos
-        vend = vstart + len(variant.ref)
-        return (seq[vstart:vend] == variant.ref_tx) or (seq[vstart:vend] == variant.alt_tx)
+        pos = variant.rel_pos
+        ref_match = seq[pos : pos + len(variant.ref)] == variant.ref_tx
+        alt_match = seq[pos : pos + len(variant.alt)] == variant.alt_tx
+        return ref_match, alt_match
+
+    def predicted_expression_cache(self, gene):
+        return {model_name: self.result.predicted_gene_expression(gene, model_name) for model_name in self.model_names}
 
     def __getitem__(self, idx):
         seq_idx, augment_idx, allele_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented, self.n_alleles))
 
         variant = self.variants.iloc[seq_idx]
         rel_pos = variant.rel_pos + self.max_seq_shift
+
+        # by default cache values are nan if matched with reference genome
+        # then it will be replaced with the predicted expression from cache.
+        pred_expr = {model_name: torch.full((self.result.shape[0],), torch.nan) for model_name in self.model_names}
+        ref_match, alt_match = self.validate_allele_seq(variant.gene, variant)
 
         warnings = list()
         if allele_idx:
@@ -303,8 +321,11 @@ class VariantDataset(Dataset):
             )
             allele = seq[:, rel_pos : rel_pos + len(variant.alt)]
             allele_tx = variant.alt_tx
+
+            if alt_match:
+                pred_expr = self.predicted_expression_cache(variant.gene)
         else:
-            if not self.validate_allele_seq(variant.gene, variant):
+            if (not ref_match) and (not alt_match):
                 warnings.append(WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME)
 
             seq, mask = self.result.prepare_one_hot(
@@ -315,23 +336,33 @@ class VariantDataset(Dataset):
             allele = seq[:, rel_pos : rel_pos + len(variant.ref)]
             allele_tx = variant.ref_tx
 
-        if len(variant.ref_tx) == len(variant.alt_tx):  # not SNV there would be shifts
+            if ref_match:
+                pred_expr = self.predicted_expression_cache(variant.gene)
+
+        if len(variant.ref) == len(variant.alt):  # not SNV there would be shifts
             assert indices_to_strings(allele.argmax(axis=0)) == allele_tx
 
         inputs = torch.vstack([seq, mask])
-
         inputs = _extract_center(inputs, seq_len=self.padded_seq_len)
         inputs = self.augmenter(seq=inputs, idx=augment_idx)
-        return {
+
+        data = {
             "seq": inputs,
             "warning": warnings,
         }
+        if len(self.model_names) > 0:
+            data["pred_expr"] = pred_expr
+
+        return data
 
     def collate_fn(self, batch):
-        return {
+        _batch = {
             "seq": default_collate([i["seq"] for i in batch]),
             "warning": list(flatten([b["warning"] for b in batch])),
         }
+        if "pred_expr" in batch[0]:
+            _batch["pred_expr"] = default_collate([b["pred_expr"] for b in batch])
+        return _batch
 
     def __str__(self):
         return (

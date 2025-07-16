@@ -95,7 +95,7 @@ def load_decima_metadata(path: Optional[str] = None):
     if "DECIMA_METADATA" in os.environ:
         return anndata.read_h5ad(os.environ["DECIMA_METADATA"])
 
-    art = get_artifact("decima_metadata", project="decima")
+    art = get_artifact("metadata", project="decima")
     with TemporaryDirectory() as d:
         art.download(d)
         return anndata.read_h5ad(Path(d) / "metadata.h5ad")
