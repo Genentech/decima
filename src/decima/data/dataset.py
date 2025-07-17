@@ -7,7 +7,7 @@ from grelu.sequence.format import indices_to_strings
 from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES
 from decima.data.read_hdf5 import _extract_center
 from decima.core.result import DecimaResult
 
@@ -134,11 +134,12 @@ class VariantDataset(Dataset):
         min_distance=0,
         max_distance=float("inf"),
         model_name=None,
+        reference_cache=True,
     ):
         super().__init__()
 
+        self.reference_cache = reference_cache
         self.result = DecimaResult.load(metadata_anndata)
-        self.model_name = model_name
 
         self.variants = self._overlap_genes(
             variants,
@@ -167,12 +168,18 @@ class VariantDataset(Dataset):
         self.n_augmented = len(self.augmenter)
         self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
 
-        if self.model_name is None:
+        if (model_name is None) or (not reference_cache):
             self.model_names = list()  # no reference caching
-        elif self.model_name == "ensemble":
-            self.model_names = ["decima_rep0", "decima_rep1", "decima_rep2", "decima_rep3"]
+        elif model_name == "ensemble":
+            self.model_names = ENSEMBLE_MODELS_NAMES
         else:
-            self.model_names = [self.model_name]
+            self.model_names = [model_name]
+
+        for model_name in self.model_names:
+            assert model_name in self.result.anndata.layers.keys(), (
+                f"Model {model_name} not found in the metadata annotation. "
+                "You may not using the correct metadata file for this model."
+            )
 
     @staticmethod
     def overlap_genes(

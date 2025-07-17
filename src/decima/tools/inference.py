@@ -16,6 +16,7 @@ def predict_gene_expression(
     max_seq_shift=0,
     genome="hg38",
     save_replicates=False,
+    float_precision="32",
 ):
     """Predict gene expression for a list of genes
 
@@ -43,7 +44,9 @@ def predict_gene_expression(
     model = load_decima_model(model, device=device)
 
     ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift)
-    preds = model.predict_on_dataset(ds, devices=device, batch_size=batch_size, num_workers=num_workers)
+    preds = model.predict_on_dataset(
+        ds, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
+    )
 
     X = None
     if ds.result.anndata.X is not None:

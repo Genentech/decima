@@ -15,17 +15,6 @@ def login_wandb():
         wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), relogin=True, anonymous="must", timeout=0)
 
 
-def get_model_name(model: Union[str, int] = 0) -> str:
-    if isinstance(model, int):
-        return f"decima_rep{model}"
-    elif isinstance(model, str):
-        return model
-    else:
-        raise ValueError(
-            f"Invalid model: {model} it need to be a string of model_name on wandb or an integer of replicate number {0, 1, 2, 3}"
-        )
-
-
 def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
     """Load a pre-trained Decima model from wandb or local path.
 
@@ -45,7 +34,7 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
     if isinstance(model, LightningModel):
         return model
     elif model == "ensemble":
-        model = EnsembleLightningModel(
+        return EnsembleLightningModel(
             [
                 load_decima_model(0, device),
                 load_decima_model(1, device),
@@ -53,16 +42,11 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
                 load_decima_model(3, device),
             ]
         )
-        model.name = "ensemble"
-        return model
     elif isinstance(model, str):
-        model_name = get_model_name(model)
         if Path(model).exists():
-            model = LightningModel.load_from_checkpoint(model, map_location=device)
-            model.name = model_name
-            return model
-    elif isinstance(model, int):
-        model_name = get_model_name(model)
+            return LightningModel.load_safetensor(model, device=device)
+    elif model in {0, 1, 2, 3}:
+        model_name = f"rep{model}"
     else:
         raise ValueError(
             f"Invalid model: {model} it need to be a string of model_name on wandb "
@@ -70,14 +54,12 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
         )
 
     if model_name.upper() in os.environ:
-        return LightningModel.load_from_checkpoint(os.environ[model_name.upper()], map_location=device)
+        return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)
 
     art = get_artifact(model_name, project="decima")
     with TemporaryDirectory() as d:
         art.download(d)
-        model = LightningModel.load_from_checkpoint(Path(d) / "model.ckpt", map_location=device)
-        model.name = str(model_name)
-        return model
+        return LightningModel.load_safetensor(Path(d) / f"{model_name}.safetensors", device=device)
 
 
 def load_decima_metadata(path: Optional[str] = None):

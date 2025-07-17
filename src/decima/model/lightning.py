@@ -2,6 +2,7 @@
 The LightningModel class.
 """
 
+import json
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
@@ -16,6 +17,7 @@ from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torchmetrics import MetricCollection
+import safetensors
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
@@ -48,9 +50,10 @@ class LightningModel(pl.LightningModule):
             training.
     """
 
-    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}) -> None:
+    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}, name: str = "") -> None:
         super().__init__()
 
+        self.name = name
         self.save_hyperparameters(ignore=["model"])
 
         # Add default training parameters
@@ -324,7 +327,8 @@ class LightningModel(pl.LightningModule):
             self.val_metrics.reset()
 
         # Add data parameters
-        self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
+        if "tasks" not in self.data_params:
+            self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
 
         for attr, value in self._get_dataset_attrs(train_dataset):
             self.data_params["train_" + attr] = value
@@ -394,6 +398,7 @@ class LightningModel(pl.LightningModule):
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
         compare_func: Optional[Union[str, Callable]] = None,
+        float_precision: str = "32",
     ):
         """
         Predict for a dataset of sequences or variants
@@ -424,9 +429,9 @@ class LightningModel(pl.LightningModule):
             accelerator = "gpu" if torch.cuda.is_available() else "auto"
 
         if accelerator == "auto":
-            trainer = pl.Trainer(accelerator=accelerator, logger=False)
+            trainer = pl.Trainer(accelerator=accelerator, logger=False, precision=float_precision)
         else:
-            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False)
+            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False, precision=float_precision)
 
         # Predict
         results = trainer.predict(self, dataloader)
@@ -447,7 +452,7 @@ class LightningModel(pl.LightningModule):
         )
 
         # Convert predictions to numpy array
-        expression = expression.detach().cpu().numpy()
+        expression = expression.detach().cpu().float().numpy()
 
         if dataset.n_alleles == 2:
             expression = expression[:, :, 1, :] - expression[:, :, 0, :]  # BNT
@@ -493,6 +498,19 @@ class LightningModel(pl.LightningModule):
         if invert:
             return [i for i in range(self.model_params["n_tasks"]) if i not in make_list(tasks)]
 
+    @classmethod
+    def load_safetensor(cls, path: str, device: str = "cpu"):
+        with safetensors.safe_open(path, framework="pt") as f:
+            metadata = f.metadata()
+            model = cls(
+                name=metadata["name"],
+                model_params=json.loads(metadata["model_params"]),
+                data_params=json.loads(metadata["data_params"]),
+            )
+        state_dict = safetensors.torch.load_file(path)
+        model.model.load_state_dict(state_dict)
+        return model.to(device)
+
 
 class EnsembleLightningModel(LightningModel):
     def __init__(self, models: List[LightningModel]):
@@ -503,6 +521,7 @@ class EnsembleLightningModel(LightningModel):
         )
         self.models = nn.ModuleList(models)
         self.reset_transform()
+        self.name = "ensemble"
 
     def forward(self, x: Tensor) -> Tensor:
         return torch.concat([model(x) for model in self.models], dim=0)
@@ -524,6 +543,7 @@ class EnsembleLightningModel(LightningModel):
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
         compare_func: Optional[Union[str, Callable]] = None,
+        float_precision: str = "32",
     ):
         preds = super().predict_on_dataset(
             dataset=dataset,
@@ -532,6 +552,7 @@ class EnsembleLightningModel(LightningModel):
             batch_size=batch_size,
             augment_aggfunc=augment_aggfunc,
             compare_func=compare_func,
+            float_precision=float_precision,
         )
         expression = rearrange(
             preds["expression"],

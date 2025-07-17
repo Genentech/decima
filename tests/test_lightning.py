@@ -10,8 +10,7 @@ from conftest import device
 
 @pytest.fixture
 def lightning_model():
-    model = LightningModel(model_params={'n_tasks': NUM_CELLS, 'init_borzoi': False}).to(device)
-    model.name = "decima_rep0"
+    model = LightningModel(model_params={'n_tasks': NUM_CELLS, 'init_borzoi': False}, name='v1_rep0').to(device)
     return model
 
 
@@ -31,7 +30,7 @@ def test_LightningModel_predict_step(lightning_model):
     batch = {
         "seq": seq.to(device),
         "warning": [WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME],
-        "pred_expr": {"decima_rep0": torch.ones((1, NUM_CELLS), device=device)}
+        "pred_expr": {"v1_rep0": torch.ones((1, NUM_CELLS), device=device)}
     }
     results = lightning_model.predict_step(batch, 1)
     assert results["expression"].shape == (1, NUM_CELLS, 1)
@@ -41,7 +40,7 @@ def test_LightningModel_predict_step(lightning_model):
 
 @pytest.mark.long_running
 def test_LightningModel_predict_on_dataset(lightning_model, df_variant):
-    dataset = VariantDataset(df_variant, model_name="decima_rep0")
+    dataset = VariantDataset(df_variant, model_name="v1_rep0")
     results = lightning_model.predict_on_dataset(dataset)
     assert results["expression"].shape == (82, NUM_CELLS)
     assert results["warnings"]['unknown'] == 0

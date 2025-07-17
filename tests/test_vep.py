@@ -82,7 +82,7 @@ def test_VariantDataset_overlap_genes(df_variant):
 
 def test_VariantDataset(df_variant):
 
-    dataset = VariantDataset(df_variant, model_name="decima_rep0")
+    dataset = VariantDataset(df_variant, model_name="v1_rep0")
 
     assert isinstance(dataset.result, DecimaResult)
     assert dataset.variants.columns.tolist() == [
@@ -93,12 +93,12 @@ def test_VariantDataset(df_variant):
     assert len(dataset) == 82 * 2
     assert dataset[0]['seq'].shape == (5, 524288)
 
-    assert dataset[0]['pred_expr']['decima_rep0'].shape == (8856,)
-    assert not dataset[0]['pred_expr']['decima_rep0'].isnan().any()
-    assert dataset[1]['pred_expr']['decima_rep0'].isnan().all()
-    assert not dataset[2]['pred_expr']['decima_rep0'].isnan().any()
-    assert dataset[3]['pred_expr']['decima_rep0'].isnan().all()
-    assert dataset[88]['pred_expr']['decima_rep0'].isnan().all()
+    assert dataset[0]['pred_expr']['v1_rep0'].shape == (8856,)
+    assert not dataset[0]['pred_expr']['v1_rep0'].isnan().any()
+    assert dataset[1]['pred_expr']['v1_rep0'].isnan().all()
+    assert not dataset[2]['pred_expr']['v1_rep0'].isnan().any()
+    assert dataset[3]['pred_expr']['v1_rep0'].isnan().all()
+    assert dataset[88]['pred_expr']['v1_rep0'].isnan().all()
 
     assert dataset[2]["warning"] == []
     assert dataset[3]["warning"] == []
@@ -144,19 +144,19 @@ def test_VariantDataset_dataloader(df_variant):
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, 524288)
     assert batch["warning"] == []
-    assert batch["pred_expr"]["decima_rep0"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep1"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep2"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep3"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, 8856)
 
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, 524288)
     assert len(batch["warning"]) > 0
     assert WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME in batch["warning"]
-    assert batch["pred_expr"]["decima_rep0"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep1"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep2"].shape == (64, 8856)
-    assert batch["pred_expr"]["decima_rep3"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, 8856)
 
 @pytest.mark.long_running
 def test_VariantDataset_dataloader_vcf():
@@ -169,26 +169,26 @@ def test_VariantDataset_dataloader_vcf():
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, 524288)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['decima_rep0'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep1'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep2'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep3'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, 524288)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['decima_rep0'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep1'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep2'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep3'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, 524288)
     assert len(batch["warning"]) > 0
-    assert batch["pred_expr"]['decima_rep0'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep1'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep2'].shape == (8, 8856)
-    assert batch["pred_expr"]['decima_rep3'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
 
 
 @pytest.mark.long_running
@@ -228,7 +228,8 @@ def test_predict_variant_effect_save(df_variant, tmp_path):
         tasks=query,
         device=device,
         max_distance=5000,
-        chunksize=5
+        chunksize=5,
+        float_precision="16-true"
     )
 
     assert output_file.exists()
@@ -269,7 +270,7 @@ def test_predict_variant_effect_vcf(tmp_path):
     metadata = parquet_file.metadata.metadata
 
     assert metadata[b"genome"] == b"hg38"
-    assert metadata[b"model"] == b"decima_rep0"
+    assert metadata[b"model"] == b"v1_rep0"
     assert metadata[b"min_distance"] == b"0"
     assert metadata[b"max_distance"] == b"20000"
 
@@ -294,7 +295,7 @@ def test_predict_variant_effect_check_results():
         pred = df_preds.iloc[i][df_preds.columns[14:]].values.tolist()
         assert pearsonr(orig, pred).statistic > 0.99
         assert orig == pytest.approx(pred, abs=2e-2)
-        # np.where(np.abs(np.array(orig) - np.array(pred)) < 1e-2)
+        # np.where(np.abs(np.array(orig) - np.array(pred)) < 2e-2)
 
 @pytest.mark.long_running
 def test_predict_variant_effect_vcf_ensemble(tmp_path):
@@ -331,7 +332,7 @@ def test_predict_variant_effect_vcf_ensemble_replicates(tmp_path):
 
     cells = list(df_saved.columns[14:8870])
     average_preds = np.mean([
-        df_saved[[f"{cell}_decima_rep{i}" for cell in cells]].values
+        df_saved[[f"{cell}_v1_rep{i}" for cell in cells]].values
         for i in range(4)
     ], axis=0)
     np.testing.assert_allclose(df_saved[cells].values, average_preds, rtol=1e-5)

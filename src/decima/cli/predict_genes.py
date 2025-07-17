@@ -38,8 +38,24 @@ from decima.tools.inference import predict_gene_expression
     is_flag=True,
     help="Save the replicates in the output parquet file. Default: False.",
 )
+@click.option(
+    "--float-precision",
+    type=str,
+    default="32",
+    help="Floating-point precision to be used in calculations. Avaliable options include: '16-true', '16-mixed', 'bf16-true', 'bf16-mixed', '32-true', '64-true', '32', '16', and 'bf16'.",
+)
 def cli_predict_genes(
-    output, genes, model, metadata, device, batch_size, num_workers, max_seq_shift, genome, save_replicates
+    output,
+    genes,
+    model,
+    metadata,
+    device,
+    batch_size,
+    num_workers,
+    max_seq_shift,
+    genome,
+    save_replicates,
+    float_precision,
 ):
     if model in ["0", "1", "2", "3"]:
         model = int(model)
@@ -63,5 +79,6 @@ def cli_predict_genes(
         max_seq_shift=max_seq_shift,
         genome=genome,
         save_replicates=save_replicates,
+        float_precision=float_precision,
     )
     ad.write_h5ad(output)
