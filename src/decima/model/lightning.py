@@ -35,6 +35,7 @@ default_train_params = {
     "disease_weight": 1e-2,
     "clip": 0.0,
     "save_top_k": 1,
+    "pin_memory": True,
 }
 
 
@@ -245,6 +246,7 @@ class LightningModel(pl.LightningModule):
             batch_size=batch_size or self.train_params["batch_size"],
             shuffle=True,
             num_workers=num_workers or self.train_params["num_workers"],
+            pin_memory=self.train_params.get("pin_memory", False),
         )
 
     def make_test_loader(
@@ -261,6 +263,7 @@ class LightningModel(pl.LightningModule):
             batch_size=batch_size or self.train_params["batch_size"],
             shuffle=False,
             num_workers=num_workers or self.train_params["num_workers"],
+            pin_memory=self.train_params.get("pin_memory", False),
         )
 
     def make_predict_loader(
@@ -322,10 +325,10 @@ class LightningModel(pl.LightningModule):
         train_dataloader = self.make_train_loader(train_dataset)
         val_dataloader = self.make_test_loader(val_dataset)
 
-        if checkpoint_path is None:
+        # if checkpoint_path is None:
             # First validation pass
-            trainer.validate(model=self, dataloaders=val_dataloader)
-            self.val_metrics.reset()
+            # trainer.validate(model=self, dataloaders=val_dataloader)
+            # self.val_metrics.reset()
 
         # Add data parameters
         self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")

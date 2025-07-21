@@ -33,14 +33,26 @@ class DecimaModel(BaseModel):
             final_pool_func=None,
         )
 
+        if model in ["0", "1", "2", "3"]:  # replicate index
+            model = int(model)
+
         if init_borzoi:
             # Load state dict
-            wandb.login(host="https://api.wandb.ai/", anonymous="must")
-            api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
-            art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
-            with TemporaryDirectory() as d:
-                art.download(d)
-                state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
+            if Path(replicate).exists():
+                if replicate.endswith(".h5") or replicate.endswith(".pth") or replicate.endswith(".pt"):
+                    state_dict = torch.load(replicate)
+                elif replicate.endswith(".ckpt"):
+                    state_dict = torch.load(replicate)["state_dict"]
+                else:
+                    raise ValueError(f"Invalid replicate path: {replicate}")
+            else:
+                wandb.login(host="https://api.wandb.ai/", anonymous="must")
+                api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
+                art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
+                with TemporaryDirectory() as d:
+                    art.download(d)
+                    state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
+
             model.load_state_dict(state_dict)
 
         # Change head
