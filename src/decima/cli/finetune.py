@@ -7,7 +7,6 @@ from decima.model.lightning import LightningModel
 from decima.data.dataset import HDF5Dataset
 
 
-
 @click.command()
 @click.option("--name", required=True, help="Name of the run.")
 @click.option("--model", default="0", type=str, help="Model path or replication number. If a path is provided, the model will be loaded from the path. If a replication number is provided, the model will be loaded from the replication number.")

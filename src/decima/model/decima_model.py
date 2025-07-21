@@ -38,7 +38,7 @@ class DecimaModel(BaseModel):
 
         if init_borzoi:
             # Load state dict
-            if Path(replicate).exists():
+            if Path(str(replicate)).exists():
                 if replicate.endswith(".h5") or replicate.endswith(".pth") or replicate.endswith(".pt"):
                     state_dict = torch.load(replicate)
                 elif replicate.endswith(".ckpt"):

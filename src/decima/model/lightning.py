@@ -5,6 +5,7 @@ The LightningModel class.
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
+import numpy as np
 import pytorch_lightning as pl
 import torch
 from einops import rearrange
@@ -435,42 +436,33 @@ class LightningModel(pl.LightningModule):
 
         # Predict
         results = trainer.predict(self, dataloader)
-
         if isinstance(results[0], dict):
             expression = torch.concat([r["expression"] for r in results]).squeeze(-1)
+
             for r in results:
                 self.warning_counter.update(r["warnings"])
-
-            # Reshape predictions
-            expression = rearrange(
-                expression,
-                "(b n a) t -> b n a t",
-                n=dataset.n_augmented,
-                a=dataset.n_alleles,
-            )
-
-            # Convert predictions to numpy array
-            expression = expression.detach().cpu().numpy()
-
-            # Subtract alleles
-            expression = expression[:, :, 1, :] - expression[:, :, 0, :]  # BNT
-
-            # Average over augmentations
-            expression = expression.mean(1)
-
-            return {"expression": expression, "warnings": self.warning_counter.compute()}
-
         else:
-            # Reshape predictions
-            results = rearrange(
-                torch.concat(results),
-                "(b n) t 1 -> b n t",
-                n=dataset.n_augmented,
-            )
+            expression = torch.concat(results).squeeze(-1)
 
-            # Convert predictions to numpy array
-            results = results.detach().cpu().numpy()
-            return results.mean(1)  # B T
+        # Reshape predictions
+        expression = rearrange(
+            expression,
+            "(b n a) t -> b n a t",
+            n=dataset.n_augmented,
+            a=dataset.n_alleles,
+        )
+
+        # Convert predictions to numpy array
+        expression = expression.detach().cpu().float().numpy()
+
+        if dataset.n_alleles == 2:
+            expression = expression[:, :, 1, :] - expression[:, :, 0, :]  # BNT
+        else:
+            expression = expression.squeeze(2)  # B N T
+
+        expression = np.mean(expression, axis=-2)  # B T
+
+        return {"expression": expression, "warnings": self.warning_counter.compute()}
 
     def get_task_idxs(
         self,
@@ -516,6 +508,8 @@ class EnsembleLightningModel(LightningModel):
             data_params=models[0].data_params,
         )
         self.models = nn.ModuleList(models)
+        self.reset_transform()
+        self.name = "ensemble"
 
     def forward(self, x: Tensor) -> Tensor:
         return torch.concat([model(x) for model in self.models], dim=0)
@@ -569,5 +563,6 @@ class EnsembleLightningModel(LightningModel):
             model.add_transform(prediction_transform)
 
     def reset_transform(self) -> None:
-        for model in self.models:
-            model.reset_transform()
+        if hasattr(self, "models"):
+            for model in self.models:
+                model.reset_transform()
