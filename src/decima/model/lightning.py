@@ -567,3 +567,7 @@ class EnsembleLightningModel(LightningModel):
     def add_transform(self, prediction_transform: Callable) -> None:
         for model in self.models:
             model.add_transform(prediction_transform)
+
+    def reset_transform(self) -> None:
+        for model in self.models:
+            model.reset_transform()

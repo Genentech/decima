@@ -1,8 +1,5 @@
 import warnings
 import torch
-import numpy as np
-import pandas as pd
-import h5py
 import bioframe
 from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
@@ -11,96 +8,59 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
 from decima.constants import DECIMA_CONTEXT_SIZE
-from decima.data.read_hdf5 import index_genes, indices_to_one_hot, _extract_center
+from decima.data.read_hdf5 import _extract_center
 from decima.core.result import DecimaResult
 
 from decima.model.metrics import WarningType
 
 
-class HDF5Dataset(Dataset):
+class GeneDataset(Dataset):
     def __init__(
         self,
-        key,
-        h5_file,
-        ad=None,
-        seq_len=DECIMA_CONTEXT_SIZE,
+        genes=None,
+        metadata_anndata=None,
         max_seq_shift=0,
         seed=0,
         augment_mode="random",
     ):
         super().__init__()
 
-        # Save data params
-        self.h5_file = h5_file
-        self.seq_len = seq_len
-        self.key = key
+        self.result = DecimaResult.load(metadata_anndata)
+        self.genes = genes or list(self.result.genes)
 
         # Save augmentation params
         self.max_seq_shift = max_seq_shift
+        self.augment_mode = augment_mode
         self.augmenter = Augmenter(
             rc=False,
             max_seq_shift=self.max_seq_shift,
             max_pair_shift=0,
-            seq_len=self.seq_len,
+            seq_len=DECIMA_CONTEXT_SIZE,
             label_len=None,
             seed=seed,
             mode=augment_mode,
         )
         self.n_augmented = len(self.augmenter)
-        self.padded_seq_len = self.seq_len + (2 * self.max_seq_shift)
+        self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
 
-        # Index genes
-        self.gene_index = index_genes(self.h5_file, key=self.key)
-        self.n_seqs = len(self.gene_index)
-
-        # Setup
-        self.dataset = h5py.File(self.h5_file, "r")
-        self.extract_tasks(ad)
-        self.predict = False
+        self.n_seqs = len(self.genes) * self.n_augmented
         self.n_alleles = 1
+        self.predict = False
 
     def __len__(self):
-        return self.n_seqs * self.n_augmented
-
-    def close(self):
-        self.dataset.close()
-
-    def extract_tasks(self, ad=None):
-        tasks = np.array(self.dataset["tasks"]).astype(str)
-        if ad is not None:
-            assert np.all(tasks == ad.obs_names)
-            self.tasks = ad.obs
-        else:
-            self.tasks = pd.DataFrame(index=tasks)
-
-    def extract_seq(self, idx):
-        seq = self.dataset["sequences"][idx]
-        seq = indices_to_one_hot(seq)  # 4, L
-        mask = self.dataset["masks"][[idx]]  # 1, L
-        seq = np.concatenate([seq, mask])  # 5, L
-        seq = _extract_center(seq, seq_len=self.padded_seq_len)
-        return torch.Tensor(seq)
-
-    def extract_label(self, idx):
-        return torch.Tensor(self.dataset["labels"][idx])
+        return self.n_seqs
 
     def __getitem__(self, idx):
-        # Augment
         seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
 
-        # Extract the sequence
-        gene_idx = self.gene_index[seq_idx]
-        seq = self.extract_seq(gene_idx)
+        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift)
+        inputs = torch.vstack([seq, mask])
+        inputs = self.augmenter(seq=inputs, idx=augment_idx)
 
-        # Augment the sequence
-        seq = self.augmenter(seq=seq, idx=augment_idx)
+        return inputs
 
-        if self.predict:
-            return seq
-
-        else:
-            label = self.extract_label(gene_idx)
-            return seq, label
+    def collate_fn(self, batch):
+        return default_collate(batch)
 
 
 class VariantDataset(Dataset):
@@ -165,8 +125,8 @@ class VariantDataset(Dataset):
         self,
         variants,
         metadata_anndata=None,
-        seq_len=DECIMA_CONTEXT_SIZE,
         max_seq_shift=0,
+        seed=0,
         include_cols=None,
         gene_col=None,
         min_from_end=0,
@@ -176,7 +136,6 @@ class VariantDataset(Dataset):
     ):
         super().__init__()
 
-        self.seq_len = seq_len
         self.result = DecimaResult.load(metadata_anndata)
 
         self.variants = self._overlap_genes(
@@ -198,12 +157,13 @@ class VariantDataset(Dataset):
             rc=False,
             max_seq_shift=self.max_seq_shift,
             max_pair_shift=0,
-            seq_len=self.seq_len,
+            seq_len=DECIMA_CONTEXT_SIZE,
             label_len=None,
+            seed=seed,
             mode="serial",
         )
         self.n_augmented = len(self.augmenter)
-        self.padded_seq_len = self.seq_len + (2 * self.max_seq_shift)
+        self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
 
     @staticmethod
     def overlap_genes(
@@ -296,8 +256,7 @@ class VariantDataset(Dataset):
         # + 1 because gene start is 0 based, variant pos is 1 based and gene end is 1 based
         # TO CONSIDER: relative position is not valid for indels because of the shifting of the sequence.
         # so relative position of reference allele and alterantive allele is different
-        rel_pos = row.pos - (row.start + 1) if row.strand == "+" else row.end - row.pos
-        return rel_pos
+        return row.pos - (row.start + 1) if row.strand == "+" else row.end - row.pos
 
     def _overlap_genes(
         self,
@@ -333,14 +292,16 @@ class VariantDataset(Dataset):
         seq_idx, augment_idx, allele_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented, self.n_alleles))
 
         variant = self.variants.iloc[seq_idx]
+        rel_pos = variant.rel_pos + self.max_seq_shift
 
         warnings = list()
         if allele_idx:
             seq, mask = self.result.prepare_one_hot(
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.ref, "alt": variant.alt}],
+                padding=self.max_seq_shift,
             )
-            allele = seq[:, variant.rel_pos : variant.rel_pos + len(variant.alt)]
+            allele = seq[:, rel_pos : rel_pos + len(variant.alt)]
             allele_tx = variant.alt_tx
         else:
             if not self.validate_allele_seq(variant.gene, variant):
@@ -349,8 +310,9 @@ class VariantDataset(Dataset):
             seq, mask = self.result.prepare_one_hot(
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],
+                padding=self.max_seq_shift,
             )
-            allele = seq[:, variant.rel_pos : variant.rel_pos + len(variant.ref)]
+            allele = seq[:, rel_pos : rel_pos + len(variant.ref)]
             allele_tx = variant.ref_tx
 
         if len(variant.ref_tx) == len(variant.alt_tx):  # not SNV there would be shifts
