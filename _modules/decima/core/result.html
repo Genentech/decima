@@ -4,12 +4,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.core.result - decima 0.2.1 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>decima.core.result - decima 0.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
@@ -22,14 +22,14 @@
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
       }
     }
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.2.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -189,8 +189,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  
-  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -436,9 +435,27 @@
             <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">anndata</span><span class="p">[:,</span> <span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;preds&quot;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">genes</span><span class="p">)</span></div>
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pad_gene_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene_meta</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pad gene metadata with padding.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gene_meta: Gene metadata</span>
+<span class="sd">            padding: Padding to add to the gene metadata</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.Series: Padded gene metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gene_meta</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">padding</span>
+        <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">padding</span>
+        <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;gene_mask_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;gene_mask_start&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">padding</span>
+        <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;gene_mask_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="p">[</span><span class="s2">&quot;gene_mask_end&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">padding</span>
+        <span class="k">return</span> <span class="n">gene_meta</span>
+
 <div class="viewcode-block" id="DecimaResult.prepare_one_hot">
 <a class="viewcode-back" href="../../../api/decima.core.html#decima.DecimaResult.prepare_one_hot">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_one_hot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">variants</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_one_hot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">variants</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare one-hot encoding for a gene.</span>
 
 <span class="sd">        Args:</span>
@@ -448,7 +465,7 @@
 <span class="sd">            torch.Tensor: One-hot encoding of the gene</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">gene</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">genes</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gene</span><span class="si">}</span><span class="s2"> is not in the anndata object&quot;</span>
-        <span class="n">gene_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gene</span><span class="p">]</span>
+        <span class="n">gene_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad_gene_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span> <span class="n">padding</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">variants</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">seq</span> <span class="o">=</span> <span class="n">intervals_to_strings</span><span class="p">(</span><span class="n">gene_meta</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="s2">&quot;hg38&quot;</span><span class="p">)</span>
@@ -456,7 +473,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">seq</span><span class="p">,</span> <span class="p">(</span><span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">)</span> <span class="o">=</span> <span class="n">prepare_seq_alt_allele</span><span class="p">(</span><span class="n">gene_meta</span><span class="p">,</span> <span class="n">variants</span><span class="p">)</span>
 
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">gene_start</span><span class="p">:</span><span class="n">gene_end</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
@@ -605,9 +622,9 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=37f418d5"></script>
+</div><script src="../../../_static/documentation_options.js?v=000c92bf"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

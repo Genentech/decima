@@ -4,12 +4,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.data.preprocess - decima 0.2.1 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>decima.data.preprocess - decima 0.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
@@ -22,14 +22,14 @@
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
       }
     }
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.2.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -189,8 +189,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  
-  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -267,6 +266,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.format</span><span class="w"> </span><span class="kn">import</span> <span class="n">intervals_to_strings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_unique_length</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mygene</span>
+
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DECIMA_CONTEXT_SIZE</span>
 
@@ -491,7 +492,7 @@
 
 <div class="viewcode-block" id="load_ncbi_string">
 <a class="viewcode-back" href="../../../api/decima.data.html#decima.data.preprocess.load_ncbi_string">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_ncbi_string</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_ncbi_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">allow_dups</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">reports</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -502,39 +503,44 @@
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reports</span><span class="p">[</span><span class="s2">&quot;reports&quot;</span><span class="p">]):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">curr_dict</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="k">if</span> <span class="s2">&quot;query&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
-                    <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span>
+
+                <span class="c1"># Get gene metadata</span>
+                <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;query&quot;</span> <span class="ow">in</span> <span class="n">r</span> <span class="k">else</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span>
                 <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">]</span>
                 <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span>
                 <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;chr&quot;</span> <span class="o">+</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;chromosomes&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
 
+                <span class="c1"># Get ensembl ID</span>
                 <span class="k">if</span> <span class="s2">&quot;ensembl_gene_ids&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
                     <span class="n">eids</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;ensembl_gene_ids&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">eids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="k">pass</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">eids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;gene_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span>
 
-                <span class="k">for</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="s2">&quot;assembly_name&quot;</span> <span class="ow">in</span> <span class="n">annot</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">annot</span><span class="p">[</span><span class="s2">&quot;assembly_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;GRCh38.p14&quot;</span><span class="p">:</span>
-                            <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="s2">&quot;genomic_locations&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;genomic_range&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">]</span>
-                            <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="s2">&quot;genomic_locations&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;genomic_range&quot;</span><span class="p">][</span><span class="s2">&quot;end&quot;</span><span class="p">]</span>
-                            <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                                <span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">annot</span><span class="p">[</span><span class="s2">&quot;genomic_locations&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;genomic_range&quot;</span><span class="p">][</span><span class="s2">&quot;orientation&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;minus&quot;</span> <span class="k">else</span> <span class="s2">&quot;+&quot;</span>
-                            <span class="p">)</span>
+                <span class="c1"># Get genomic position</span>
+                <span class="n">annot</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;assembly_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;GRCh38.p14&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">loc</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="s2">&quot;genomic_locations&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;genomic_range&quot;</span><span class="p">]</span>
+
+                <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;begin&quot;</span><span class="p">]</span>
+                <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span>
+                <span class="n">curr_dict</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;orientation&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;minus&quot;</span> <span class="k">else</span> <span class="s2">&quot;+&quot;</span>
 
                 <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_dict</span><span class="p">)</span>
+
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_dups</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()[</span><span class="n">out</span><span class="o">.</span><span class="n">gene_name</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ncbi&quot;</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 
@@ -562,6 +568,59 @@
         <span class="s2">&quot;make_inputs() is deprecated and will be removed in a future version. &quot;</span>
         <span class="s2">&quot;Please use the DecimaResult.prepare_one_hot() directly instead.&quot;</span>
     <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="return_ensembl">
+<a class="viewcode-back" href="../../../api/decima.data.html#decima.data.preprocess.return_ensembl">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">return_ensembl</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;gene_id&quot;</span><span class="p">):</span>
+    <span class="n">mg</span> <span class="o">=</span> <span class="n">mygene</span><span class="o">.</span><span class="n">MyGeneInfo</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;ensembl.gene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;type_of_gene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;genomic_pos.chr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;genomic_pos.start&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;genomic_pos.end&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;genomic_pos.strand&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">queries</span><span class="p">):</span>
+        <span class="c1"># Make the query</span>
+        <span class="k">if</span> <span class="n">on</span> <span class="o">==</span> <span class="s2">&quot;gene_id&quot;</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ensembl.gene:</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)[</span><span class="s2">&quot;hits&quot;</span><span class="p">]</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;symbol&quot;</span> <span class="ow">in</span> <span class="n">hit</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;ensembl&quot;</span> <span class="ow">in</span> <span class="n">hit</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="n">on</span> <span class="o">==</span> <span class="s2">&quot;gene_name&quot;</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)[</span><span class="s2">&quot;hits&quot;</span><span class="p">]</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;symbol&quot;</span> <span class="ow">in</span> <span class="n">hit</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;ensembl&quot;</span> <span class="ow">in</span> <span class="n">hit</span><span class="p">)]</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit</span><span class="p">[</span><span class="s2">&quot;ensembl&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;ensembl&quot;</span><span class="p">][</span><span class="s2">&quot;gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ENSG&quot;</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">query</span><span class="p">]</span>
+
+        <span class="c1"># Format the query</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hit</span> <span class="o">=</span> <span class="n">hits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">hit</span><span class="p">[</span><span class="s2">&quot;genomic_pos&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;genomic_pos&quot;</span><span class="p">][</span><span class="s2">&quot;chr&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;strand&quot;</span><span class="p">]:</span>
+                    <span class="n">hit</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;genomic_pos&quot;</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;genomic_pos&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">on</span> <span class="o">==</span> <span class="s2">&quot;gene_id&quot;</span><span class="p">:</span>
+                    <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;gene_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+                <span class="k">elif</span> <span class="n">on</span> <span class="o">==</span> <span class="s2">&quot;gene_name&quot;</span><span class="p">:</span>
+                    <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;gene_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;ensembl&quot;</span><span class="p">][</span><span class="s2">&quot;gene&quot;</span><span class="p">]</span>
+                    <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;gene_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+                <span class="k">del</span> <span class="n">hit</span><span class="p">[</span><span class="s2">&quot;ensembl&quot;</span><span class="p">]</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">hit</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">strand</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">})</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;mygene&quot;</span>
+    <span class="k">return</span> <span class="n">df</span></div>
 
 </pre></div>
         </article>
@@ -595,9 +654,9 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=37f418d5"></script>
+</div><script src="../../../_static/documentation_options.js?v=000c92bf"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

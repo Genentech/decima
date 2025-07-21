@@ -5,12 +5,12 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.plot package" href="decima.plot.html" /><link rel="prev" title="decima.interpret package" href="decima.interpret.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>decima.model package - decima 0.2.1 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>decima.model package - decima 0.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
 
@@ -23,14 +23,14 @@
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   
       }
     }
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.2.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.2.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,8 +190,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  
-  <span class="sidebar-brand-text">decima 0.2.1 documentation</span>
+  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -348,6 +347,17 @@ e.g. machine has 4 gpu’s but only want to use 2 for predictions</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Model predictions as a numpy array or dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.EnsembleLightningModel.reset_transform">
+<span class="sig-name descname"><span class="pre">reset_transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.reset_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.reset_transform" title="Link to this definition">¶</a></dt>
+<dd><p>Remove a prediction transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1025,6 +1035,76 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.metrics.</span></span><span class="sig-name descname"><span class="pre">GenePearsonCorrCoef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#GenePearsonCorrCoef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></p>
+<p>Metric class to calculate the Pearson correlation coefficient for each gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>average</strong> – If true, return the average metric across genes.
+Otherwise, return a separate value for each gene</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>As input to forward and update the metric accepts the following input:</dt><dd><p>preds: Predictions of shape (N, n_tasks, L)
+target: Ground truth labels of shape (N, n_tasks, L)</p>
+</dd>
+<dt>As output of forward and compute the metric returns the following output:</dt><dd><p>output: A tensor with the Pearson coefficient.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.__abstractmethods__">
+<span class="sig-name descname"><span class="pre">__abstractmethods__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({})</span></em><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.__abstractmethods__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'__call__':</span> <span class="pre">'Callable[...,</span> <span class="pre">Any]',</span> <span class="pre">'__jit_ignored_attributes__':</span> <span class="pre">'ClassVar[list[str]]',</span> <span class="pre">'__jit_unused_properties__':</span> <span class="pre">'ClassVar[list[str]]',</span> <span class="pre">'_backward_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_backward_pre_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_buffers':</span> <span class="pre">'dict[str,</span> <span class="pre">Optional[Tensor]]',</span> <span class="pre">'_cache':</span> <span class="pre">'Optional[dict[str,</span> <span class="pre">Union[List[Tensor],</span> <span class="pre">Tensor]]]',</span> <span class="pre">'_compiled_call_impl':</span> <span class="pre">'Optional[Callable]',</span> <span class="pre">'_defaults':</span> <span class="pre">'dict[str,</span> <span class="pre">Union[list,</span> <span class="pre">Tensor]]',</span> <span class="pre">'_forward_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_forward_hooks_always_called':</span> <span class="pre">'dict[int,</span> <span class="pre">bool]',</span> <span class="pre">'_forward_hooks_with_kwargs':</span> <span class="pre">'dict[int,</span> <span class="pre">bool]',</span> <span class="pre">'_forward_pre_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_forward_pre_hooks_with_kwargs':</span> <span class="pre">'dict[int,</span> <span class="pre">bool]',</span> <span class="pre">'_is_full_backward_hook':</span> <span class="pre">'Optional[bool]',</span> <span class="pre">'_load_state_dict_post_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_load_state_dict_pre_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_modules':</span> <span class="pre">&quot;dict[str,</span> <span class="pre">Optional['Module']]&quot;,</span> <span class="pre">'_non_persistent_buffers_set':</span> <span class="pre">'set[str]',</span> <span class="pre">'_parameters':</span> <span class="pre">'dict[str,</span> <span class="pre">Optional[Parameter]]',</span> <span class="pre">'_persistent':</span> <span class="pre">'dict[str,</span> <span class="pre">bool]',</span> <span class="pre">'_reductions':</span> <span class="pre">'dict[str,</span> <span class="pre">Union[str,</span> <span class="pre">Callable[...,</span> <span class="pre">Any],</span> <span class="pre">None]]',</span> <span class="pre">'_state_dict_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_state_dict_pre_hooks':</span> <span class="pre">'dict[int,</span> <span class="pre">Callable]',</span> <span class="pre">'_version':</span> <span class="pre">'int',</span> <span class="pre">'call_super_init':</span> <span class="pre">'bool',</span> <span class="pre">'compute':</span> <span class="pre">'Callable',</span> <span class="pre">'dump_patches':</span> <span class="pre">'bool',</span> <span class="pre">'forward':</span> <span class="pre">'Callable[...,</span> <span class="pre">Any]',</span> <span class="pre">'full_state_update':</span> <span class="pre">'Optional[bool]',</span> <span class="pre">'higher_is_better':</span> <span class="pre">'Optional[bool]',</span> <span class="pre">'is_differentiable':</span> <span class="pre">'Optional[bool]',</span> <span class="pre">'plot_legend_name':</span> <span class="pre">'Optional[str]',</span> <span class="pre">'plot_lower_bound':</span> <span class="pre">'Optional[float]',</span> <span class="pre">'plot_upper_bound':</span> <span class="pre">'Optional[float]',</span> <span class="pre">'training':</span> <span class="pre">'bool',</span> <span class="pre">'update':</span> <span class="pre">'Callable'}</span></em><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#GenePearsonCorrCoef.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.compute">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#GenePearsonCorrCoef.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.compute" title="Link to this definition">¶</a></dt>
+<dd><p>Override this method to compute the final metric value.</p>
+<p>This method will automatically synchronize state variables when running in distributed backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#GenePearsonCorrCoef.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.reset" title="Link to this definition">¶</a></dt>
+<dd><p>Reset metric state variables to their default value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.metrics.GenePearsonCorrCoef.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#GenePearsonCorrCoef.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.GenePearsonCorrCoef.update" title="Link to this definition">¶</a></dt>
+<dd><p>Override this method to update the state variables of your metric class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="decima.model.metrics.WarningCounter">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.metrics.</span></span><span class="sig-name descname"><span class="pre">WarningCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warning_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/metrics.html#WarningCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.metrics.WarningCounter" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></p>
@@ -1175,6 +1255,7 @@ including a dedicated category for ‘unknown’ warnings.</p>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.forward"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.forward()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.load_from_checkpoints"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.load_from_checkpoints()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.predict_on_dataset"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.predict_on_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.reset_transform"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.reset_transform()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.test_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.test_step()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.training_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.training_step()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.validation_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.validation_step()</span></code></a></li>
@@ -1226,6 +1307,15 @@ including a dedicated category for ‘unknown’ warnings.</p>
 <li><a class="reference internal" href="#decima.model.metrics.DiseaseLfcMSE.update"><code class="docutils literal notranslate"><span class="pre">DiseaseLfcMSE.update()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef</span></code></a><ul>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.__abstractmethods__</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.__annotations__"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.__init__"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.compute"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.compute()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.reset"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.reset()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.metrics.GenePearsonCorrCoef.update"><code class="docutils literal notranslate"><span class="pre">GenePearsonCorrCoef.update()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#decima.model.metrics.WarningCounter"><code class="docutils literal notranslate"><span class="pre">WarningCounter</span></code></a><ul>
 <li><a class="reference internal" href="#decima.model.metrics.WarningCounter.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">WarningCounter.__abstractmethods__</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.metrics.WarningCounter.__annotations__"><code class="docutils literal notranslate"><span class="pre">WarningCounter.__annotations__</span></code></a></li>
@@ -1255,9 +1345,9 @@ including a dedicated category for ‘unknown’ warnings.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=37f418d5"></script>
+</div><script src="../_static/documentation_options.js?v=000c92bf"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

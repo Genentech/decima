@@ -12,6 +12,14 @@ decima.tools.evaluate module
    :show-inheritance:
    :undoc-members:
 
+decima.tools.inference module
+-----------------------------
+
+.. automodule:: decima.tools.inference
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 decima.tools.interpret module
 -----------------------------
 
