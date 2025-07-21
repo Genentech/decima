@@ -157,7 +157,25 @@ class DecimaResult:
         else:
             return pd.DataFrame(self.anndata[:, genes].layers["preds"], index=self.cells, columns=genes)
 
-    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None) -> torch.Tensor:
+    def _pad_gene_metadata(self, gene_meta: pd.Series, padding: int = 0) -> pd.Series:
+        """
+        Pad gene metadata with padding.
+
+        Args:
+            gene_meta: Gene metadata
+            padding: Padding to add to the gene metadata
+
+        Returns:
+            pd.Series: Padded gene metadata
+        """
+        gene_meta = gene_meta.copy()
+        gene_meta["start"] = gene_meta["start"] - padding
+        gene_meta["end"] = gene_meta["end"] + padding
+        gene_meta["gene_mask_start"] = gene_meta["gene_mask_start"] + padding
+        gene_meta["gene_mask_end"] = gene_meta["gene_mask_end"] + padding
+        return gene_meta
+
+    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0) -> torch.Tensor:
         """Prepare one-hot encoding for a gene.
 
         Args:
@@ -167,7 +185,7 @@ class DecimaResult:
             torch.Tensor: One-hot encoding of the gene
         """
         assert gene in self.genes, f"{gene} is not in the anndata object"
-        gene_meta = self.gene_metadata.loc[gene]
+        gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
         if variants is None:
             seq = intervals_to_strings(gene_meta, genome="hg38")
@@ -175,7 +193,7 @@ class DecimaResult:
         else:
             seq, (gene_start, gene_end) = prepare_seq_alt_allele(gene_meta, variants)
 
-        mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE))
+        mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE + padding * 2))
         mask[0, gene_start:gene_end] += 1
         mask = torch.from_numpy(mask).float()
 
