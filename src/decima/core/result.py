@@ -171,10 +171,8 @@ class DecimaResult:
         gene_meta = gene_meta.copy()
         gene_meta["start"] = gene_meta["start"] - padding
         gene_meta["end"] = gene_meta["end"] + padding
-        gene_meta["gene_start"] = gene_meta["gene_start"] - padding
-        gene_meta["gene_end"] = gene_meta["gene_end"] + padding
-        gene_meta["gene_mask_start"] = gene_meta["gene_mask_start"] - padding
-        gene_meta["gene_mask_end"] = gene_meta["gene_mask_end"] - padding
+        gene_meta["gene_mask_start"] = gene_meta["gene_mask_start"] + padding
+        gene_meta["gene_mask_end"] = gene_meta["gene_mask_end"] + padding
         return gene_meta
 
     def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0) -> torch.Tensor:

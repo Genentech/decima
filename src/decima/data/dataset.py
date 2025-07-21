@@ -10,7 +10,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
 from decima.constants import DECIMA_CONTEXT_SIZE
-from decima.data.read_hdf5 import _extract_center, index_genes, indices_to_one_hot, _extract_center
+from decima.data.read_hdf5 import _extract_center, index_genes, indices_to_one_hot
 from decima.core.result import DecimaResult
 
 from decima.model.metrics import WarningType

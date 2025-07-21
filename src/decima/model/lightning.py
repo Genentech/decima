@@ -326,10 +326,10 @@ class LightningModel(pl.LightningModule):
         train_dataloader = self.make_train_loader(train_dataset)
         val_dataloader = self.make_test_loader(val_dataset)
 
-        # if checkpoint_path is None:
+        if checkpoint_path is None:
             # First validation pass
-            # trainer.validate(model=self, dataloaders=val_dataloader)
-            # self.val_metrics.reset()
+            trainer.validate(model=self, dataloaders=val_dataloader)
+            self.val_metrics.reset()
 
         # Add data parameters
         self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
