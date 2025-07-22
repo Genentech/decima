@@ -3,6 +3,7 @@ import anndata
 import numpy as np
 import torch
 import pandas as pd
+
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
 from decima.constants import DECIMA_CONTEXT_SIZE
@@ -143,7 +144,9 @@ class DecimaResult:
             raise KeyError(f"Cell {cell} not found in dataset. See avaliable cells with `result.cells`.")
         return CellMetadata.from_series(cell, self.cell_metadata.loc[cell])
 
-    def predicted_expression_matrix(self, genes: Optional[List[str]] = None) -> pd.DataFrame:
+    def predicted_expression_matrix(
+        self, genes: Optional[List[str]] = None, model_name: Optional[str] = None
+    ) -> pd.DataFrame:
         """Get predicted expression matrix for all or specific genes.
 
         Args:
@@ -152,10 +155,14 @@ class DecimaResult:
         Returns:
             pd.DataFrame: Predicted expression matrix (cells x genes)
         """
+        model_name = "preds" if (model_name is None) or (model_name == "ensemble") else model_name
         if genes is None:
-            return pd.DataFrame(self.anndata.layers["preds"], index=self.cells, columns=self.genes)
+            return pd.DataFrame(self.anndata.layers[model_name], index=self.cells, columns=self.genes)
         else:
-            return pd.DataFrame(self.anndata[:, genes].layers["preds"], index=self.cells, columns=genes)
+            return pd.DataFrame(self.anndata[:, genes].layers[model_name], index=self.cells, columns=genes)
+
+    def predicted_gene_expression(self, gene, model_name):
+        return torch.from_numpy(self.anndata[:, gene].layers[model_name].ravel())
 
     def _pad_gene_metadata(self, gene_meta: pd.Series, padding: int = 0) -> pd.Series:
         """
@@ -184,6 +191,7 @@ class DecimaResult:
         Returns:
             torch.Tensor: One-hot encoding of the gene
         """
+
         assert gene in self.genes, f"{gene} is not in the anndata object"
         gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
@@ -201,6 +209,7 @@ class DecimaResult:
 
     def gene_sequence(self, gene: str, stranded: bool = True) -> str:
         """Get sequence for a gene."""
+
         try:
             assert gene in self.genes, f"{gene} is not in the anndata object"
         except AssertionError:

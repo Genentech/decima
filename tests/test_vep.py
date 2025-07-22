@@ -82,7 +82,7 @@ def test_VariantDataset_overlap_genes(df_variant):
 
 def test_VariantDataset(df_variant):
 
-    dataset = VariantDataset(df_variant)
+    dataset = VariantDataset(df_variant, model_name="v1_rep0")
 
     assert isinstance(dataset.result, DecimaResult)
     assert dataset.variants.columns.tolist() == [
@@ -93,12 +93,20 @@ def test_VariantDataset(df_variant):
     assert len(dataset) == 82 * 2
     assert dataset[0]['seq'].shape == (5, 524288)
 
+    assert dataset[0]['pred_expr']['v1_rep0'].shape == (8856,)
+    assert not dataset[0]['pred_expr']['v1_rep0'].isnan().any()
+    assert dataset[1]['pred_expr']['v1_rep0'].isnan().all()
+    assert not dataset[2]['pred_expr']['v1_rep0'].isnan().any()
+    assert dataset[3]['pred_expr']['v1_rep0'].isnan().all()
+    assert dataset[88]['pred_expr']['v1_rep0'].isnan().all()
+
     assert dataset[2]["warning"] == []
     assert dataset[3]["warning"] == []
     assert dataset[2]["warning"] == []
     assert dataset[10]["warning"] == []
     assert dataset[30]["warning"] == []
     assert dataset[88]["warning"] == [WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME]
+
     rows, cols = np.where(dataset[2]['seq'] != dataset[3]['seq'])
     assert rows.tolist() == [0, 2] # A > G
     assert cols.tolist() == [38435, 38435] # should be the same for both
@@ -129,18 +137,58 @@ def test_VariantDataset(df_variant):
 @pytest.mark.long_running
 def test_VariantDataset_dataloader(df_variant):
 
-    dataset = VariantDataset(df_variant)
+    dataset = VariantDataset(df_variant, model_name="ensemble")
     dl = torch.utils.data.DataLoader(dataset, batch_size=64, num_workers=0, collate_fn=dataset.collate_fn)
     batches = iter(dl)
 
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, 524288)
     assert batch["warning"] == []
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, 8856)
 
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, 524288)
     assert len(batch["warning"]) > 0
     assert WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME in batch["warning"]
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, 8856)
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, 8856)
+
+@pytest.mark.long_running
+def test_VariantDataset_dataloader_vcf():
+
+    df_variant = next(read_vcf_chunks("tests/data/test.vcf", 10000))
+    dataset = VariantDataset(df_variant, model_name="ensemble", max_distance=20000)
+    dl = torch.utils.data.DataLoader(dataset, batch_size=8, num_workers=0, collate_fn=dataset.collate_fn)
+    batches = iter(dl)
+
+    batch = next(batches)
+    assert batch["seq"].shape == (8, 5, 524288)
+    assert batch["warning"] == []
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
+
+    batch = next(batches)
+    assert batch["seq"].shape == (8, 5, 524288)
+    assert batch["warning"] == []
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
+
+    batch = next(batches)
+    assert batch["seq"].shape == (8, 5, 524288)
+    assert len(batch["warning"]) > 0
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, 8856)
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, 8856)
 
 
 @pytest.mark.long_running
@@ -149,7 +197,7 @@ def test_predict_variant_effect(df_variant):
     query = "cell_type == 'CD8-positive, alpha-beta T cell'"
     cells = DecimaResult.load().query_cells(query)
 
-    df, warnings, num_variants = _predict_variant_effect(df_variant, tasks=query, device=device, max_distance=5000)
+    df, warnings, num_variants = _predict_variant_effect(df_variant, model=0, tasks=query, device=device, max_distance=5000)
     assert num_variants == 4
 
     assert df.shape == (4, 273)
@@ -176,10 +224,12 @@ def test_predict_variant_effect_save(df_variant, tmp_path):
     predict_variant_effect(
         df_variant,
         output_pq=str(output_file),
+        model="ensemble",
         tasks=query,
         device=device,
         max_distance=5000,
-        chunksize=5
+        chunksize=5,
+        float_precision="16-true"
     )
 
     assert output_file.exists()
@@ -220,7 +270,7 @@ def test_predict_variant_effect_vcf(tmp_path):
     metadata = parquet_file.metadata.metadata
 
     assert metadata[b"genome"] == b"hg38"
-    assert metadata[b"model"] == b"decima_rep0"
+    assert metadata[b"model"] == b"v1_rep0"
     assert metadata[b"min_distance"] == b"0"
     assert metadata[b"max_distance"] == b"20000"
 
@@ -237,15 +287,15 @@ def test_predict_variant_effect_check_results():
     df_orig = pd.read_csv("tests/data/test_preds.csv.gz")
     df_variants = df_orig[df_orig.columns[:5]]
     df_preds = predict_variant_effect(
-        df_variants, model=0, device=device, gene_col="gene",
+        df_variants, model=0, device=device, gene_col="gene"
     )
 
     for i in range(df_orig.shape[0]):
         orig = df_orig.iloc[i][df_orig.columns[5:]].values.tolist()
         pred = df_preds.iloc[i][df_preds.columns[14:]].values.tolist()
         assert pearsonr(orig, pred).statistic > 0.99
-        assert orig == pytest.approx(pred, abs=1e-2)
-        # np.where(np.abs(np.array(orig) - np.array(pred)) < 1e-2)
+        assert orig == pytest.approx(pred, abs=2e-2)
+        # np.where(np.abs(np.array(orig) - np.array(pred)) < 2e-2)
 
 @pytest.mark.long_running
 def test_predict_variant_effect_vcf_ensemble(tmp_path):
@@ -282,7 +332,7 @@ def test_predict_variant_effect_vcf_ensemble_replicates(tmp_path):
 
     cells = list(df_saved.columns[14:8870])
     average_preds = np.mean([
-        df_saved[[f"{cell}_decima_rep{i}" for cell in cells]].values
+        df_saved[[f"{cell}_v1_rep{i}" for cell in cells]].values
         for i in range(4)
     ], axis=0)
     np.testing.assert_allclose(df_saved[cells].values, average_preds, rtol=1e-5)

@@ -68,6 +68,17 @@ from decima.vep import predict_variant_effect
     is_flag=True,
     help="Save the replicates in the output parquet file. Default: False.",
 )
+@click.option(
+    "--disable-reference-cache",
+    is_flag=True,
+    help="Disables the reference cache which significantly speeds up the computation by caching the reference expression predictios in the metadata.",
+)
+@click.option(
+    "--float-precision",
+    type=str,
+    default="32",
+    help="Floating-point precision to be used in calculations. Avaliable options include: '16-true', '16-mixed', 'bf16-true', 'bf16-mixed', '32-true', '64-true', '32', '16', and 'bf16'.",
+)
 def cli_predict_variant_effect(
     variants,
     output_pq,
@@ -85,6 +96,8 @@ def cli_predict_variant_effect(
     gene_col,
     genome,
     save_replicates,
+    disable_reference_cache,
+    float_precision,
 ):
     """Predict variant effect and save to parquet
 
@@ -108,6 +121,8 @@ def cli_predict_variant_effect(
 
         >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --genome "path/to/fasta/hg38.fa"  # use custom genome build
     """
+    reference_cache = not disable_reference_cache
+
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
 
@@ -137,6 +152,8 @@ def cli_predict_variant_effect(
         gene_col=gene_col,
         genome=genome,
         save_replicates=save_replicates,
+        reference_cache=reference_cache,
+        float_precision=float_precision,
     )
 
 

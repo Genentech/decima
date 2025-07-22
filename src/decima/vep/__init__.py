@@ -13,7 +13,7 @@ from decima.utils import get_compute_device
 from decima.utils.dataframe import chunk_df, ChunkDataFrameWriter
 from decima.utils.io import read_vcf_chunks
 from decima.data.dataset import VariantDataset
-from decima.hub import load_decima_model, get_model_name
+from decima.hub import load_decima_model
 
 
 def _predict_variant_effect(
@@ -31,6 +31,8 @@ def _predict_variant_effect(
     max_distance: Optional[float] = float("inf"),
     genome: str = "hg38",
     save_replicates: bool = False,
+    reference_cache: bool = True,
+    float_precision: str = "32",
 ) -> pd.DataFrame:
     """Predict variant effect on a set of variants
 
@@ -55,6 +57,8 @@ def _predict_variant_effect(
         raise ValueError(f"Genome {genome} not supported. Currently only hg38 is supported.")
     include_cols = include_cols or list()
 
+    model = load_decima_model(model=model, device=device)
+
     try:
         dataset = VariantDataset(
             df_variant,
@@ -64,6 +68,8 @@ def _predict_variant_effect(
             distance_type=distance_type,
             min_distance=min_distance,
             max_distance=max_distance,
+            model_name=model.name,
+            reference_cache=reference_cache,
         )
     except ValueError as e:
         if str(e).startswith("NoOverlapError"):
@@ -76,13 +82,17 @@ def _predict_variant_effect(
 
     if tasks is not None:
         tasks = dataset.result.query_cells(tasks)
+
+        model.reset_transform()
         agg_transform = Aggregate(tasks=tasks, model=model)
         model.add_transform(agg_transform)
     else:
         tasks = dataset.result.cells
 
     logging.getLogger("decima").info(f"Performing predictions on {dataset}")
-    results = model.predict_on_dataset(dataset, devices=device, batch_size=batch_size, num_workers=num_workers)
+    results = model.predict_on_dataset(
+        dataset, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
+    )
 
     df = dataset.variants.reset_index(drop=True)
     df_pred = pd.DataFrame(results["expression"], columns=tasks)
@@ -118,6 +128,8 @@ def predict_variant_effect(
     max_distance: Optional[float] = float("inf"),
     genome: str = "hg38",
     save_replicates: bool = False,
+    reference_cache: bool = True,
+    float_precision: str = "32",
 ) -> None:
     """Predict variant effect and save to parquet
 
@@ -158,6 +170,8 @@ def predict_variant_effect(
             f"Unsupported input type: {type(df_variant)}. Must be pd.DataFrame or str (path to .tsv or .vcf)."
         )
 
+    model = load_decima_model(model=model, device=device)
+
     results = (
         _predict_variant_effect(
             df_variant=df_chunk,
@@ -174,6 +188,8 @@ def predict_variant_effect(
             max_distance=max_distance,
             genome=genome,
             save_replicates=save_replicates,
+            reference_cache=reference_cache,
+            float_precision=float_precision,
         )
         for df_chunk in chunks
     )
@@ -191,7 +207,7 @@ def predict_variant_effect(
     if output_pq is not None:
         metadata = {
             "genome": genome,
-            "model": get_model_name(model),
+            "model": model.name,
             "min_distance": int(min_distance) if min_distance is not None else None,
             "max_distance": max_distance,
         }

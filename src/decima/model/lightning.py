@@ -2,6 +2,7 @@
 The LightningModel class.
 """
 
+import json
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
@@ -17,6 +18,7 @@ from torch import Tensor, nn, optim
 from torch.utils.data import DataLoader
 from torch.utils.data.dataloader import default_collate
 from torchmetrics import MetricCollection
+import safetensors
 
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
@@ -52,9 +54,10 @@ class LightningModel(pl.LightningModule):
             training.
     """
 
-    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}) -> None:
+    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}, name: str = "") -> None:
         super().__init__()
 
+        self.name = name
         self.save_hyperparameters(ignore=["model"])
 
         # Add default training parameters
@@ -332,7 +335,8 @@ class LightningModel(pl.LightningModule):
             self.val_metrics.reset()
 
         # Add data parameters
-        self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
+        if "tasks" not in self.data_params:
+            self.data_params["tasks"] = train_dataset.tasks.reset_index(names="name").to_dict(orient="list")
 
         for attr, value in self._get_dataset_attrs(train_dataset):
             self.data_params["train_" + attr] = value
@@ -379,15 +383,20 @@ class LightningModel(pl.LightningModule):
         Returns:
             Dictionary containing predictions and warnings or a tensor of predictions
         """
-
-        seq = batch["seq"] if isinstance(batch, dict) else batch
-
-        expression = self(seq)
-
         if isinstance(batch, dict):
+            seq = batch["seq"]
+            if "pred_expr" in batch:
+                pred_expr = batch["pred_expr"][self.name]
+                pred_expr = self.transform(pred_expr.unsqueeze(-1))
+                expression = torch.zeros_like(pred_expr)
+                precomputed = ~pred_expr.isnan()
+                expression[precomputed] = pred_expr[precomputed]
+                expression[~precomputed] = self(seq[~precomputed.all(axis=(1, 2))]).view(-1)
+            else:
+                expression = self(seq)
             return {"expression": expression, "warnings": batch["warning"]}
         else:
-            return expression
+            return self(batch)
 
     def predict_on_dataset(
         self,
@@ -397,6 +406,7 @@ class LightningModel(pl.LightningModule):
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
         compare_func: Optional[Union[str, Callable]] = None,
+        float_precision: str = "32",
     ):
         """
         Predict for a dataset of sequences or variants
@@ -422,9 +432,9 @@ class LightningModel(pl.LightningModule):
             accelerator = "gpu" if torch.cuda.is_available() else "auto"
 
         if accelerator == "auto":
-            trainer = pl.Trainer(accelerator=accelerator, logger=False)
+            trainer = pl.Trainer(accelerator=accelerator, logger=False, precision=float_precision)
         else:
-            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False)
+            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False, precision=float_precision)
 
         # Make dataloader
         dataloader = self.make_predict_loader(
@@ -499,6 +509,19 @@ class LightningModel(pl.LightningModule):
         if invert:
             return [i for i in range(self.model_params["n_tasks"]) if i not in make_list(tasks)]
 
+    @classmethod
+    def load_safetensor(cls, path: str, device: str = "cpu"):
+        with safetensors.safe_open(path, framework="pt") as f:
+            metadata = f.metadata()
+            model = cls(
+                name=metadata["name"],
+                model_params=json.loads(metadata["model_params"]),
+                data_params=json.loads(metadata["data_params"]),
+            )
+        state_dict = safetensors.torch.load_file(path)
+        model.model.load_state_dict(state_dict)
+        return model.to(device)
+
 
 class EnsembleLightningModel(LightningModel):
     def __init__(self, models: List[LightningModel]):
@@ -531,6 +554,7 @@ class EnsembleLightningModel(LightningModel):
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
         compare_func: Optional[Union[str, Callable]] = None,
+        float_precision: str = "32",
     ):
         preds = super().predict_on_dataset(
             dataset=dataset,
@@ -539,6 +563,7 @@ class EnsembleLightningModel(LightningModel):
             batch_size=batch_size,
             augment_aggfunc=augment_aggfunc,
             compare_func=compare_func,
+            float_precision=float_precision,
         )
         expression = rearrange(
             preds["expression"],
@@ -566,3 +591,26 @@ class EnsembleLightningModel(LightningModel):
         if hasattr(self, "models"):
             for model in self.models:
                 model.reset_transform()
+
+    def transform(self, x: Tensor) -> Tensor:
+        return self.models[0].transform(x)
+
+    def predict_step(self, batch, batch_idx, dataloader_idx=0) -> Union[dict, Tensor]:
+        """
+        Predict for a single batch of sequences or variants
+
+        Args:
+            batch: Batch of sequences or variants
+            batch_idx: Index of the batch
+            dataloader_idx: Index of the dataloader
+
+        Returns:
+            Dictionary containing predictions and warnings or a tensor of predictions
+        """
+        if isinstance(batch, dict):
+            expression = torch.concat(
+                [model.predict_step(batch, batch_idx, dataloader_idx)["expression"] for model in self.models]
+            )
+            return {"expression": expression, "warnings": batch["warning"]}
+        else:
+            return self(batch)

@@ -50,6 +50,7 @@ class GeneMetadata:
     gene_id: str
     pearson: float
     size_factor_pearson: float
+    ensembl_canonical_tss: Optional[bool]
 
     @classmethod
     def from_series(cls, name: str, series: pd.Series) -> "GeneMetadata":
