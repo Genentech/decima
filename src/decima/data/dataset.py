@@ -1,6 +1,9 @@
 import warnings
 import torch
+import h5py
 import bioframe
+import numpy as np
+import pandas as pd
 from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
 from grelu.sequence.format import indices_to_strings
@@ -12,6 +15,92 @@ from decima.data.read_hdf5 import _extract_center
 from decima.core.result import DecimaResult
 
 from decima.model.metrics import WarningType
+
+
+class HDF5Dataset(Dataset):
+    def __init__(
+        self,
+        key,
+        h5_file,
+        ad=None,
+        seq_len=DECIMA_CONTEXT_SIZE,
+        max_seq_shift=0,
+        seed=0,
+        augment_mode="random",
+    ):
+        super().__init__()
+
+        # Save data params
+        self.h5_file = h5_file
+        self.seq_len = seq_len
+        self.key = key
+
+        # Save augmentation params
+        self.max_seq_shift = max_seq_shift
+        self.augmenter = Augmenter(
+            rc=False,
+            max_seq_shift=self.max_seq_shift,
+            max_pair_shift=0,
+            seq_len=self.seq_len,
+            label_len=None,
+            seed=seed,
+            mode=augment_mode,
+        )
+        self.n_augmented = len(self.augmenter)
+        self.padded_seq_len = self.seq_len + (2 * self.max_seq_shift)
+
+        # Index genes
+        self.gene_index = index_genes(self.h5_file, key=self.key)
+        self.n_seqs = len(self.gene_index)
+
+        # Setup
+        self.dataset = h5py.File(self.h5_file, "r")
+        self.extract_tasks(ad)
+        self.predict = False
+        self.n_alleles = 1
+
+    def __len__(self):
+        return self.n_seqs * self.n_augmented
+
+    def close(self):
+        self.dataset.close()
+
+    def extract_tasks(self, ad=None):
+        tasks = np.array(self.dataset["tasks"]).astype(str)
+        if ad is not None:
+            assert np.all(tasks == ad.obs_names)
+            self.tasks = ad.obs
+        else:
+            self.tasks = pd.DataFrame(index=tasks)
+
+    def extract_seq(self, idx):
+        seq = self.dataset["sequences"][idx]
+        seq = indices_to_one_hot(seq)  # 4, L
+        mask = self.dataset["masks"][[idx]]  # 1, L
+        seq = np.concatenate([seq, mask])  # 5, L
+        seq = _extract_center(seq, seq_len=self.padded_seq_len)
+        return torch.Tensor(seq)
+
+    def extract_label(self, idx):
+        return torch.Tensor(self.dataset["labels"][idx])
+
+    def __getitem__(self, idx):
+        # Augment
+        seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
+
+        # Extract the sequence
+        gene_idx = self.gene_index[seq_idx]
+        seq = self.extract_seq(gene_idx)
+
+        # Augment the sequence
+        seq = self.augmenter(seq=seq, idx=augment_idx)
+
+        if self.predict:
+            return seq
+
+        else:
+            label = self.extract_label(gene_idx)
+            return seq, label
 
 
 class GeneDataset(Dataset):
