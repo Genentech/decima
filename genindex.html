@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 --><title>Index - decima 0.2.2 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 --><title>Index - decima 0.3.0 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -165,7 +165,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">decima 0.2.2 documentation</div></a>
+      <a href="index.html"><div class="brand">decima 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.3.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -860,12 +860,14 @@
           <li><a href="api/decima.interpret.html#decima.interpret.attributions.Attribution.end">(decima.interpret.attributions.Attribution property)</a>
 </li>
         </ul></li>
-        <li><a href="api/decima.utils.html#decima.utils.dataframe.ensemble_predictions">ensemble_predictions() (in module decima.utils.dataframe)</a>
+        <li><a href="api/decima.core.html#decima.core.metadata.GeneMetadata.ensembl_canonical_tss">ensembl_canonical_tss (decima.core.metadata.GeneMetadata attribute)</a>
 </li>
-        <li><a href="api/decima.model.html#decima.model.lightning.EnsembleLightningModel">EnsembleLightningModel (class in decima.model.lightning)</a>
+        <li><a href="api/decima.utils.html#decima.utils.dataframe.ensemble_predictions">ensemble_predictions() (in module decima.utils.dataframe)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/decima.model.html#decima.model.lightning.EnsembleLightningModel">EnsembleLightningModel (class in decima.model.lightning)</a>
+</li>
         <li><a href="api/decima.data.html#decima.data.read_hdf5.extract_gene_data">extract_gene_data() (in module decima.data.read_hdf5)</a>
 </li>
         <li><a href="api/decima.data.html#decima.data.dataset.HDF5Dataset.extract_label">extract_label() (decima.data.dataset.HDF5Dataset method)</a>
@@ -956,10 +958,10 @@
         </ul></li>
         <li><a href="api/decima.core.html#decima.core.metadata.GeneMetadata.gene_type">gene_type (decima.core.metadata.GeneMetadata attribute)</a>, <a href="api/decima.core.html#id29">[1]</a>
 </li>
-        <li><a href="api/decima.data.html#decima.data.dataset.GeneDataset">GeneDataset (class in decima.data.dataset)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/decima.data.html#decima.data.dataset.GeneDataset">GeneDataset (class in decima.data.dataset)</a>
+</li>
         <li><a href="api/decima.core.html#decima.core.metadata.GeneMetadata">GeneMetadata (class in decima.core.metadata)</a>
 </li>
         <li><a href="api/decima.model.html#decima.model.metrics.GenePearsonCorrCoef">GenePearsonCorrCoef (class in decima.model.metrics)</a>
@@ -990,8 +992,6 @@
           <li><a href="api/decima.html#decima.DecimaResult.get_gene_metadata">(decima.DecimaResult method)</a>
 </li>
         </ul></li>
-        <li><a href="api/decima.hub.html#decima.hub.get_model_name">get_model_name() (in module decima.hub)</a>
-</li>
         <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.get_task_idxs">get_task_idxs() (decima.model.lightning.LightningModel method)</a>
 </li>
     </ul></td>
@@ -1046,10 +1046,10 @@
         </ul></li>
         <li><a href="api/decima.hub.html#decima.hub.load_decima_metadata">load_decima_metadata() (in module decima.hub)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/decima.hub.html#decima.hub.load_decima_model">load_decima_model() (in module decima.hub)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/decima.model.html#decima.model.lightning.EnsembleLightningModel.load_from_checkpoints">load_from_checkpoints() (decima.model.lightning.EnsembleLightningModel class method)</a>
 </li>
         <li><a href="api/decima.core.html#decima.core.result.DecimaResult.load_model">load_model() (decima.core.result.DecimaResult method)</a>
@@ -1059,6 +1059,8 @@
 </li>
         </ul></li>
         <li><a href="api/decima.data.html#decima.data.preprocess.load_ncbi_string">load_ncbi_string() (in module decima.data.preprocess)</a>
+</li>
+        <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.load_safetensor">load_safetensor() (decima.model.lightning.LightningModel class method)</a>
 </li>
         <li><a href="api/decima.hub.html#decima.hub.login_wandb">login_wandb() (in module decima.hub)</a>
 </li>
@@ -1271,26 +1273,38 @@
           <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.predict_on_dataset">(decima.model.lightning.LightningModel method)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/decima.html#decima.predict_save_attributions">predict_save_attributions() (in module decima)</a>
 
         <ul>
           <li><a href="api/decima.interpret.html#decima.interpret.save_attributions.predict_save_attributions">(in module decima.interpret.save_attributions)</a>
 </li>
         </ul></li>
-        <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.predict_step">predict_step() (decima.model.lightning.LightningModel method)</a>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/decima.model.html#decima.model.lightning.EnsembleLightningModel.predict_step">predict_step() (decima.model.lightning.EnsembleLightningModel method)</a>
+
+        <ul>
+          <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.predict_step">(decima.model.lightning.LightningModel method)</a>
 </li>
+        </ul></li>
         <li><a href="api/decima.html#decima.predict_variant_effect">predict_variant_effect() (in module decima)</a>
 
         <ul>
           <li><a href="api/decima.vep.html#decima.vep.predict_variant_effect">(in module decima.vep)</a>
 </li>
         </ul></li>
+        <li><a href="api/decima.data.html#decima.data.dataset.VariantDataset.predicted_expression_cache">predicted_expression_cache() (decima.data.dataset.VariantDataset method)</a>
+</li>
         <li><a href="api/decima.core.html#decima.core.result.DecimaResult.predicted_expression_matrix">predicted_expression_matrix() (decima.core.result.DecimaResult method)</a>
 
         <ul>
           <li><a href="api/decima.html#decima.DecimaResult.predicted_expression_matrix">(decima.DecimaResult method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/decima.core.html#decima.core.result.DecimaResult.predicted_gene_expression">predicted_gene_expression() (decima.core.result.DecimaResult method)</a>
+
+        <ul>
+          <li><a href="api/decima.html#decima.DecimaResult.predicted_gene_expression">(decima.DecimaResult method)</a>
 </li>
         </ul></li>
         <li><a href="api/decima.core.html#decima.core.result.DecimaResult.prepare_one_hot">prepare_one_hot() (decima.core.result.DecimaResult method)</a>
@@ -1439,6 +1453,8 @@
           <li><a href="api/decima.model.html#decima.model.lightning.LightningModel.training_step">(decima.model.lightning.LightningModel method)</a>
 </li>
         </ul></li>
+        <li><a href="api/decima.model.html#decima.model.lightning.EnsembleLightningModel.transform">transform() (decima.model.lightning.EnsembleLightningModel method)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -1537,7 +1553,7 @@
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=000c92bf"></script>
+</div><script src="_static/documentation_options.js?v=e259d695"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

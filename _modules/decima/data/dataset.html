@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
-        <title>decima.data.dataset - decima 0.2.2 documentation</title>
+        <title>decima.data.dataset - decima 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.2.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -189,7 +189,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.3.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -259,16 +259,17 @@
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bioframe</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">more_itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">flatten</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">default_collate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.format</span><span class="w"> </span><span class="kn">import</span> <span class="n">indices_to_strings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.data.augment</span><span class="w"> </span><span class="kn">import</span> <span class="n">Augmenter</span><span class="p">,</span> <span class="n">_split_overall_idx</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse_complement</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DECIMA_CONTEXT_SIZE</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.read_hdf5</span><span class="w"> </span><span class="kn">import</span> <span class="n">_extract_center</span><span class="p">,</span> <span class="n">index_genes</span><span class="p">,</span> <span class="n">indices_to_one_hot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">,</span> <span class="n">ENSEMBLE_MODELS_NAMES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.read_hdf5</span><span class="w"> </span><span class="kn">import</span> <span class="n">_extract_center</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningType</span>
@@ -522,9 +523,12 @@
         <span class="n">distance_type</span><span class="o">=</span><span class="s2">&quot;tss&quot;</span><span class="p">,</span>
         <span class="n">min_distance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">max_distance</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reference_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_cache</span> <span class="o">=</span> <span class="n">reference_cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">variants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_overlap_genes</span><span class="p">(</span>
@@ -552,7 +556,20 @@
             <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;serial&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_augmented</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">augmenter</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">padded_seq_len</span> <span class="o">=</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_shift</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padded_seq_len</span> <span class="o">=</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_shift</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">model_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">reference_cache</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>  <span class="c1"># no reference caching</span>
+        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;ensemble&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span> <span class="o">=</span> <span class="n">ENSEMBLE_MODELS_NAMES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">anndata</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> not found in the metadata annotation. &quot;</span>
+                <span class="s2">&quot;You may not using the correct metadata file for this model.&quot;</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="VariantDataset.overlap_genes">
@@ -682,9 +699,16 @@
 <a class="viewcode-back" href="../../../api/decima.data.html#decima.data.dataset.VariantDataset.validate_allele_seq">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_allele_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">,</span> <span class="n">variant</span><span class="p">):</span>
         <span class="n">seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">gene_sequence</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>
-        <span class="n">vstart</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="n">rel_pos</span>
-        <span class="n">vend</span> <span class="o">=</span> <span class="n">vstart</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">ref</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">vstart</span><span class="p">:</span><span class="n">vend</span><span class="p">]</span> <span class="o">==</span> <span class="n">variant</span><span class="o">.</span><span class="n">ref_tx</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">vstart</span><span class="p">:</span><span class="n">vend</span><span class="p">]</span> <span class="o">==</span> <span class="n">variant</span><span class="o">.</span><span class="n">alt_tx</span><span class="p">)</span></div>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="n">rel_pos</span>
+        <span class="n">ref_match</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span> <span class="p">:</span> <span class="n">pos</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">ref</span><span class="p">)]</span> <span class="o">==</span> <span class="n">variant</span><span class="o">.</span><span class="n">ref_tx</span>
+        <span class="n">alt_match</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span> <span class="p">:</span> <span class="n">pos</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">alt</span><span class="p">)]</span> <span class="o">==</span> <span class="n">variant</span><span class="o">.</span><span class="n">alt_tx</span>
+        <span class="k">return</span> <span class="n">ref_match</span><span class="p">,</span> <span class="n">alt_match</span></div>
+
+
+<div class="viewcode-block" id="VariantDataset.predicted_expression_cache">
+<a class="viewcode-back" href="../../../api/decima.data.html#decima.data.dataset.VariantDataset.predicted_expression_cache">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predicted_expression_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">model_name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_gene_expression</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="VariantDataset.__getitem__">
@@ -695,6 +719,11 @@
         <span class="n">variant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variants</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">seq_idx</span><span class="p">]</span>
         <span class="n">rel_pos</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="n">rel_pos</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_shift</span>
 
+        <span class="c1"># by default cache values are nan if matched with reference genome</span>
+        <span class="c1"># then it will be replaced with the predicted expression from cache.</span>
+        <span class="n">pred_expr</span> <span class="o">=</span> <span class="p">{</span><span class="n">model_name</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span> <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">}</span>
+        <span class="n">ref_match</span><span class="p">,</span> <span class="n">alt_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_allele_seq</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">variant</span><span class="p">)</span>
+
         <span class="n">warnings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">allele_idx</span><span class="p">:</span>
             <span class="n">seq</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">prepare_one_hot</span><span class="p">(</span>
@@ -704,8 +733,11 @@
             <span class="p">)</span>
             <span class="n">allele</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[:,</span> <span class="n">rel_pos</span> <span class="p">:</span> <span class="n">rel_pos</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">alt</span><span class="p">)]</span>
             <span class="n">allele_tx</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="n">alt_tx</span>
+
+            <span class="k">if</span> <span class="n">alt_match</span><span class="p">:</span>
+                <span class="n">pred_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted_expression_cache</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">gene</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_allele_seq</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">variant</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ref_match</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">alt_match</span><span class="p">):</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">WarningType</span><span class="o">.</span><span class="n">ALLELE_MISMATCH_WITH_REFERENCE_GENOME</span><span class="p">)</span>
 
             <span class="n">seq</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">prepare_one_hot</span><span class="p">(</span>
@@ -716,26 +748,36 @@
             <span class="n">allele</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[:,</span> <span class="n">rel_pos</span> <span class="p">:</span> <span class="n">rel_pos</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">ref</span><span class="p">)]</span>
             <span class="n">allele_tx</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="n">ref_tx</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">ref_tx</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">alt_tx</span><span class="p">):</span>  <span class="c1"># not SNV there would be shifts</span>
+            <span class="k">if</span> <span class="n">ref_match</span><span class="p">:</span>
+                <span class="n">pred_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted_expression_cache</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">gene</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">ref</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">alt</span><span class="p">):</span>  <span class="c1"># not SNV there would be shifts</span>
             <span class="k">assert</span> <span class="n">indices_to_strings</span><span class="p">(</span><span class="n">allele</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="n">allele_tx</span>
 
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">seq</span><span class="p">,</span> <span class="n">mask</span><span class="p">])</span>
-
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">_extract_center</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">seq_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padded_seq_len</span><span class="p">)</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">augmenter</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">augment_idx</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;seq&quot;</span><span class="p">:</span> <span class="n">inputs</span><span class="p">,</span>
             <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="n">warnings</span><span class="p">,</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pred_expr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_expr</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="VariantDataset.collate_fn">
 <a class="viewcode-back" href="../../../api/decima.data.html#decima.data.dataset.VariantDataset.collate_fn">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">collate_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
+        <span class="n">_batch</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;seq&quot;</span><span class="p">:</span> <span class="n">default_collate</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;seq&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]),</span>
             <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;warning&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">])),</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="s2">&quot;pred_expr&quot;</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">_batch</span><span class="p">[</span><span class="s2">&quot;pred_expr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_collate</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;pred_expr&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">_batch</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -786,7 +828,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=000c92bf"></script>
+</div><script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.plot package" href="decima.plot.html" /><link rel="prev" title="decima.interpret package" href="decima.interpret.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
-        <title>decima.model package - decima 0.2.2 documentation</title>
+        <title>decima.model package - decima 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.2.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.3.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -271,8 +271,18 @@
 <span id="decima-model-decima-model-module"></span><h2>decima.model.decima_model module<a class="headerlink" href="#module-decima.model.decima_model" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decima.model.decima_model.DecimaModel">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.decima_model.</span></span><span class="sig-name descname"><span class="pre">DecimaModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_borzoi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/decima_model.html#DecimaModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.decima_model.DecimaModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.decima_model.</span></span><span class="sig-name descname"><span class="pre">DecimaModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borzoi_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_borzoi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/decima_model.html#DecimaModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.decima_model.DecimaModel" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Decima model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of tasks.</p></li>
+<li><p><strong>mask</strong> – Whether to use a mask.</p></li>
+<li><p><strong>borzoi_kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span>) – Keyword arguments for the Borzoi model.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="decima.model.decima_model.DecimaModel.__annotations__">
 <span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.model.decima_model.DecimaModel.__annotations__" title="Link to this definition">¶</a></dt>
@@ -280,7 +290,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.model.decima_model.DecimaModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_borzoi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/decima_model.html#DecimaModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.decima_model.DecimaModel.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borzoi_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_borzoi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/decima_model.html#DecimaModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.decima_model.DecimaModel.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize internal Module state, shared by both nn.Module and ScriptModule.</p>
 </dd></dl>
 
@@ -333,7 +343,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.model.lightning.EnsembleLightningModel.predict_on_dataset">
-<span class="sig-name descname"><span class="pre">predict_on_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_aggfunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.predict_on_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.predict_on_dataset" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict_on_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_aggfunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.predict_on_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.predict_on_dataset" title="Link to this definition">¶</a></dt>
 <dd><p>Predict for a dataset of sequences or variants</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -347,6 +357,27 @@ e.g. machine has 4 gpu’s but only want to use 2 for predictions</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Model predictions as a numpy array or dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.EnsembleLightningModel.predict_step">
+<span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.predict_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.predict_step" title="Link to this definition">¶</a></dt>
+<dd><p>Predict for a single batch of sequences or variants</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – Batch of sequences or variants</p></li>
+<li><p><strong>batch_idx</strong> – Index of the batch</p></li>
+<li><p><strong>dataloader_idx</strong> – Index of the dataloader</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.12/library/typing.html#typing.Union" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.12/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing predictions and warnings or a tensor of predictions</p>
 </dd>
 </dl>
 </dd></dl>
@@ -438,6 +469,16 @@ normalized by <code class="docutils literal notranslate"><span class="pre">accum
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.EnsembleLightningModel.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.transform" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="decima.model.lightning.EnsembleLightningModel.validation_step">
 <span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#EnsembleLightningModel.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.EnsembleLightningModel.validation_step" title="Link to this definition">¶</a></dt>
 <dd><p>Operates on a single batch of data from the validation set. In this step you’d might generate examples or
@@ -518,7 +559,7 @@ the model goes back to training mode and gradients are enabled.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="decima.model.lightning.LightningModel">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.lightning.</span></span><span class="sig-name descname"><span class="pre">LightningModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.lightning.</span></span><span class="sig-name descname"><span class="pre">LightningModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></p>
 <p>Wrapper for predictive sequence models</p>
 <dl class="field-list simple">
@@ -539,7 +580,7 @@ training.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.model.lightning.LightningModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel.__init__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -621,6 +662,11 @@ output.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.LightningModel.load_safetensor">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_safetensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel.load_safetensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel.load_safetensor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.model.lightning.LightningModel.make_predict_loader">
@@ -713,7 +759,7 @@ There is no need for you to store anything about training.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="decima.model.lightning.LightningModel.predict_on_dataset">
-<span class="sig-name descname"><span class="pre">predict_on_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_aggfunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel.predict_on_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel.predict_on_dataset" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict_on_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_aggfunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#LightningModel.predict_on_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.LightningModel.predict_on_dataset" title="Link to this definition">¶</a></dt>
 <dd><p>Predict for a dataset of sequences or variants</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1255,9 +1301,11 @@ including a dedicated category for ‘unknown’ warnings.</p>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.forward"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.forward()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.load_from_checkpoints"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.load_from_checkpoints()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.predict_on_dataset"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.predict_on_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.predict_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.predict_step()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.reset_transform"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.reset_transform()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.test_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.test_step()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.training_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.training_step()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.transform"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.transform()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.validation_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.validation_step()</span></code></a></li>
 </ul>
 </li>
@@ -1270,6 +1318,7 @@ including a dedicated category for ‘unknown’ warnings.</p>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.format_input"><code class="docutils literal notranslate"><span class="pre">LightningModel.format_input()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.forward"><code class="docutils literal notranslate"><span class="pre">LightningModel.forward()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.get_task_idxs"><code class="docutils literal notranslate"><span class="pre">LightningModel.get_task_idxs()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.LightningModel.load_safetensor"><code class="docutils literal notranslate"><span class="pre">LightningModel.load_safetensor()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.make_predict_loader"><code class="docutils literal notranslate"><span class="pre">LightningModel.make_predict_loader()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.make_test_loader"><code class="docutils literal notranslate"><span class="pre">LightningModel.make_test_loader()</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.make_train_loader"><code class="docutils literal notranslate"><span class="pre">LightningModel.make_train_loader()</span></code></a></li>
@@ -1345,7 +1394,7 @@ including a dedicated category for ‘unknown’ warnings.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=000c92bf"></script>
+</div><script src="../_static/documentation_options.js?v=e259d695"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
