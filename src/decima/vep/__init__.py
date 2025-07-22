@@ -78,6 +78,8 @@ def _predict_variant_effect(
         else:
             raise e
 
+    model = load_decima_model(model=model)
+
     if tasks is not None:
         tasks = dataset.result.query_cells(tasks)
 

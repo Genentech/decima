@@ -43,13 +43,26 @@ class DecimaModel(BaseModel):
         }
         model = BorzoiModel(**borzoi_kwargs)
 
+        if model in ["0", "1", "2", "3"]:  # replicate index
+            model = int(model)
+
         if init_borzoi:
-            wandb.login(host="https://api.wandb.ai/", anonymous="must")
-            api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
-            art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
-            with TemporaryDirectory() as d:
-                art.download(d)
-                state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
+            # Load state dict
+            if Path(str(replicate)).exists():
+                if replicate.endswith(".h5") or replicate.endswith(".pth") or replicate.endswith(".pt"):
+                    state_dict = torch.load(replicate)
+                elif replicate.endswith(".ckpt"):
+                    state_dict = torch.load(replicate)["state_dict"]
+                else:
+                    raise ValueError(f"Invalid replicate path: {replicate}")
+            else:
+                wandb.login(host="https://api.wandb.ai/", anonymous="must")
+                api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
+                art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
+                with TemporaryDirectory() as d:
+                    art.download(d)
+                    state_dict = torch.load(Path(d) / f"fold{replicate}.h5")
+
             model.load_state_dict(state_dict)
 
         head = ConvHead(n_tasks=n_tasks, in_channels=1920, pool_func="avg")
