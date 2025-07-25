@@ -614,3 +614,29 @@ class EnsembleLightningModel(LightningModel):
             return {"expression": expression, "warnings": batch["warning"]}
         else:
             return self(batch)
+
+
+class GeneMaskLightningModel(LightningModel):
+    def __init__(
+        self,
+        gene_mask_start,
+        gene_mask_end,
+        model_params: dict,
+        train_params: dict = {},
+        data_params: dict = {},
+        name: str = "",
+    ):
+        super().__init__(
+            model_params=model_params,
+            train_params=train_params,
+            data_params=data_params,
+            name=name,
+        )
+        self.gene_mask_start = gene_mask_start
+        self.gene_mask_end = gene_mask_end
+
+    def forward(self, x: Union[Tuple[Tensor, Tensor], Tensor, str, List[str]], logits: bool = False):
+        mask = torch.zeros((x.shape[0], 1, x.shape[2]), device=x.device, dtype=x.dtype)
+        mask[:, :, self.gene_mask_start : self.gene_mask_end] = 1
+        x = torch.cat([x, mask], dim=1)
+        return super().forward(x, logits)
