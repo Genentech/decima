@@ -6,12 +6,12 @@ import numpy as np
 import pandas as pd
 from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
-from grelu.sequence.format import indices_to_strings
+from grelu.sequence.format import indices_to_strings, indices_to_one_hot
 from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.utils import reverse_complement
 
 from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES
-from decima.data.read_hdf5 import _extract_center
+from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
 
 from decima.model.metrics import WarningType
