@@ -2,7 +2,7 @@ import pytest
 import torch
 from decima.constants import DECIMA_CONTEXT_SIZE, NUM_CELLS
 from decima.data.dataset import VariantDataset
-from decima.model.lightning import LightningModel, GenenMaskLightningModel
+from decima.model.lightning import LightningModel, GeneMaskLightningModel
 from decima.model.metrics import WarningType
 
 from conftest import device
@@ -59,7 +59,7 @@ def test_LightningModel_predict_on_dataset_ensemble(lightning_model, df_variant)
 @pytest.mark.long_running
 def test_GeneMaskLightningModel_forward():
     seq = torch.randn(1, 4, DECIMA_CONTEXT_SIZE).to(device)
-    model = GenenMaskLightningModel(
+    model = GeneMaskLightningModel(
         gene_mask_start=200_000, gene_mask_end=300_000,
         model_params={"n_tasks": NUM_CELLS, "init_borzoi": False}, name="v1_rep0"
     ).to(device)

@@ -616,7 +616,7 @@ class EnsembleLightningModel(LightningModel):
             return self(batch)
 
 
-class GenenMaskLightningModel(LightningModel):
+class GeneMaskLightningModel(LightningModel):
     def __init__(
         self,
         gene_mask_start,
