@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="decima.plot package" href="decima.plot.html" /><link rel="prev" title="decima.interpret package" href="decima.interpret.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
-        <title>decima.model package - decima 0.3.0 documentation</title>
+        <title>decima.model package - decima 0.3.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.3.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.3.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.3.0 documentation</span>
+  <span class="sidebar-brand-text">decima 0.3.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -553,6 +553,28 @@ setting the default value of 0 so that you can quickly switch between single and
 and PyTorch gradients have been disabled. At the end of validation,
 the model goes back to training mode and gradients are enabled.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.model.lightning.GeneMaskLightningModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.model.lightning.</span></span><span class="sig-name descname"><span class="pre">GeneMaskLightningModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#GeneMaskLightningModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.GeneMaskLightningModel" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#decima.model.lightning.LightningModel" title="decima.model.lightning.LightningModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.model.lightning.GeneMaskLightningModel.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.model.lightning.GeneMaskLightningModel.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.GeneMaskLightningModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#GeneMaskLightningModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.GeneMaskLightningModel.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.model.lightning.GeneMaskLightningModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/model/lightning.html#GeneMaskLightningModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.model.lightning.GeneMaskLightningModel.forward" title="Link to this definition">¶</a></dt>
+<dd><p>Forward pass</p>
 </dd></dl>
 
 </dd></dl>
@@ -1309,6 +1331,12 @@ including a dedicated category for ‘unknown’ warnings.</p>
 <li><a class="reference internal" href="#decima.model.lightning.EnsembleLightningModel.validation_step"><code class="docutils literal notranslate"><span class="pre">EnsembleLightningModel.validation_step()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#decima.model.lightning.GeneMaskLightningModel"><code class="docutils literal notranslate"><span class="pre">GeneMaskLightningModel</span></code></a><ul>
+<li><a class="reference internal" href="#decima.model.lightning.GeneMaskLightningModel.__annotations__"><code class="docutils literal notranslate"><span class="pre">GeneMaskLightningModel.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.GeneMaskLightningModel.__init__"><code class="docutils literal notranslate"><span class="pre">GeneMaskLightningModel.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.model.lightning.GeneMaskLightningModel.forward"><code class="docutils literal notranslate"><span class="pre">GeneMaskLightningModel.forward()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel"><code class="docutils literal notranslate"><span class="pre">LightningModel</span></code></a><ul>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.__annotations__"><code class="docutils literal notranslate"><span class="pre">LightningModel.__annotations__</span></code></a></li>
 <li><a class="reference internal" href="#decima.model.lightning.LightningModel.__init__"><code class="docutils literal notranslate"><span class="pre">LightningModel.__init__()</span></code></a></li>
@@ -1394,7 +1422,7 @@ including a dedicated category for ‘unknown’ warnings.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e259d695"></script>
+</div><script src="../_static/documentation_options.js?v=4621528c"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
