@@ -1,5 +1,5 @@
 from typing import List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import pandas as pd
 
 
@@ -44,13 +44,16 @@ class GeneMetadata:
     gene_length: int
     gene_mask_start: int
     gene_mask_end: int
-    frac_N: float
     fold: List[str]
     dataset: str
     gene_id: str
     pearson: float
     size_factor_pearson: float
-    ensembl_canonical_tss: Optional[bool]
+    frac_N: Optional[float] = field(default=None)
+    max_counts: Optional[int] = field(default=None)
+    ensembl_canonical_tss: Optional[bool] = field(default=None)
+    upstream_bases: Optional[int] = field(default=None)
+    downstream_bases: Optional[int] = field(default=None)
 
     @classmethod
     def from_series(cls, name: str, series: pd.Series) -> "GeneMetadata":
@@ -58,6 +61,12 @@ class GeneMetadata:
         data = series.to_dict()
         data["name"] = name
         data["fold"] = [f.strip() for f in data["fold"].strip("[]").replace("'", "").split(",")]
+        if "Upstream bases" in data:
+            data["upstream_bases"] = data["Upstream bases"]
+            del data["Upstream bases"]
+        if "Downstream bases" in data:
+            data["downstream_bases"] = data["Downstream bases"]
+            del data["Downstream bases"]
         return cls(**data)
 
 
