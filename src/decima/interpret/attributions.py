@@ -5,7 +5,6 @@ import pandas as pd
 import torch
 import pyBigWig
 from pyfaidx import Faidx
-from captum.attr import InputXGradient, Saliency, IntegratedGradients
 from grelu.interpret.motifs import scan_sequences
 from grelu.sequence.format import convert_input_type, strings_to_one_hot
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
@@ -15,27 +14,10 @@ from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
 from decima.hub import load_decima_model
 from decima.model.lightning import LightningModel
+from decima.interpret.attributer import get_attribution_method
 from decima.utils import get_compute_device
 from decima.plot.visualize import plot_peaks
 from grelu.visualize import plot_attributions
-
-
-def get_attribution_method(method: str):
-    """Get attribution method from string.
-
-    Args:
-        method: Method to use for attribution analysis
-
-    Returns:
-        Attribution: Attribution analysis results for the gene and tasks
-    """
-    if method == "saliency":
-        return Saliency
-    elif method == "inputxgradient":
-        return InputXGradient
-    elif method == "integratedgradients":
-        return IntegratedGradients
-    return method
 
 
 def attributions(

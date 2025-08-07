@@ -9,6 +9,7 @@ from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
+from decima.tools.evaluate import marker_zscores
 from decima.utils.inject import prepare_seq_alt_allele
 
 
@@ -76,6 +77,8 @@ class DecimaResult:
             return cls(anndata.read_h5ad(anndata_path))
         elif isinstance(anndata_path, anndata.AnnData):
             return cls(anndata_path)
+        elif isinstance(anndata_path, DecimaResult):
+            return anndata_path
         else:
             raise ValueError(f"Invalid anndata path: {anndata_path}")
 
@@ -116,6 +119,12 @@ class DecimaResult:
         if reliable is not None:
             raise NotImplementedError("Not implemented and with low pearson correlation should be not reliable.")
         return self.anndata.var_names
+
+    def assert_genes(self, genes: List[str]) -> bool:
+        """Check if the genes are in the dataset."""
+        missing_genes = set(genes) - set(self.genes)
+        if missing_genes:
+            raise ValueError(f"Genes {missing_genes} are not in the dataset. See avaliable genes with `result.genes`.")
 
     @property
     def cells(self) -> List[str]:
@@ -291,6 +300,47 @@ class DecimaResult:
             off_tasks = self.query_cells(off_tasks)
 
         return tasks, off_tasks
+
+    def marker_zscores(self, tasks, off_tasks=None, layer="preds"):
+        """Compute marker z-scores to identify differentially expressed genes.
+
+        Args:
+            tasks: Target cells. Query string or list of cell IDs.
+            off_tasks: Background cells. Query string, list of cell IDs, or None
+                (uses all other cells).
+            layer: Expression data layer. "preds" (default), "expression", or
+                custom layer name.
+
+        Returns:
+            pandas.DataFrame: Columns are 'gene', 'score' (z-score), 'task'.
+
+        Examples:
+            >>> # Classical monocytes vs all others
+            >>> markers = result.marker_zscores(
+            ...     "cell_type == 'classical monocyte'"
+            ... )
+            >>> top_genes = markers.nlargest(
+            ...     10, "score"
+            ... )
+
+            >>> markers = result.marker_zscores(
+            ...     tasks="cell_type == 'classical monocyte'",
+            ...     off_tasks="cell_type == 'lymphoid progenitor'",
+            ... )
+        """
+        off_tasks = off_tasks or []
+
+        if layer == "expression":
+            layer = None  # use ground truth expression
+
+        tasks, off_tasks = self.query_tasks(tasks, off_tasks)
+        all_tasks = set(tasks).union(set(off_tasks))
+
+        ad = self.anndata[self.anndata.obs.index.isin(all_tasks)].copy()
+        ad.obs.loc[off_tasks, "task"] = "off"
+        ad.obs.loc[tasks, "task"] = "on"
+
+        return marker_zscores(ad, key="task", layer=layer).sort_values(by="score", ascending=False)
 
     @property
     def shape(self) -> tuple:

@@ -8,6 +8,7 @@ from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
 from decima.cli.finetune import cli_finetune
 from decima.cli.vep import cli_vep_ensemble
+from decima.cli.modisco import cli_modisco_attributions, cli_modisco_patterns, cli_modisco_reports, cli_modisco
 
 
 logger = logging.getLogger("decima")
@@ -35,6 +36,10 @@ main.add_command(cli_query_cell, name="query-cell")
 main.add_command(cli_predict_variant_effect, name="vep")
 main.add_command(cli_finetune, name="finetune")
 main.add_command(cli_vep_ensemble, name="vep-ensemble")
+main.add_command(cli_modisco_attributions, name="modisco-attributions")
+main.add_command(cli_modisco_patterns, name="modisco-patterns")
+main.add_command(cli_modisco_reports, name="modisco-reports")
+main.add_command(cli_modisco, name="modisco")
 
 
 if __name__ == "__main__":

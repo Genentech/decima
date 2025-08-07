@@ -8,8 +8,8 @@ from grelu.sequence.format import strings_to_one_hot
 from captum.attr import Saliency, InputXGradient, IntegratedGradients
 from decima.interpret.attributions import Attribution
 from decima import predict_save_attributions
-from decima.interpret.attributions import get_attribution_method
 from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.interpret.attributer import DecimaAttributer, get_attribution_method
 
 from conftest import device
 
@@ -183,3 +183,28 @@ def test_predict_save_attributions_seqs(tmp_path):
     output_dir = tmp_path / "seqs"
     seqs = pd.read_csv('tests/data/seqs.csv', index_col=0)
     predict_save_attributions(output_dir=str(output_dir), seqs=seqs, tasks="cell_type == 'classical monocyte'", device=device)
+
+
+@pytest.mark.long_running
+def test_DecimaAttributer():
+    attributer = DecimaAttributer.load_decima_attributer(
+        model_name=0,
+        tasks=["agg_0", "agg_1", "agg_2"],
+        method="inputxgradient",
+        device=device
+    )
+    assert attributer.method == "inputxgradient"
+    assert attributer.transform == "specificity"
+    assert attributer.model is not None
+
+    batch_size = 1
+    dna_seq = 'A' * DECIMA_CONTEXT_SIZE
+    one_hot_seq = strings_to_one_hot(dna_seq).unsqueeze(0)
+    gene_mask = torch.zeros(batch_size, 1, DECIMA_CONTEXT_SIZE)
+    gene_mask[:, :, 150_000:151_000] = 1
+    inputs = torch.cat([one_hot_seq, gene_mask], dim=1).to(device)
+
+    attrs = attributer.attribute(inputs)
+
+    assert attrs.shape == (batch_size, 4, DECIMA_CONTEXT_SIZE)
+    assert attrs.dtype == torch.float32
