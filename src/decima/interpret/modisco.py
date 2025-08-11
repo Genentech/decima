@@ -206,7 +206,7 @@ def modisco_patterns(
     attributions = list()
 
     for attributions_file in tqdm(attributions_files, desc="Loading attributions and sequences..."):
-        with AttributionResult(attributions_file, metadata_anndata, tss_distance, correct_grad) as attributions_result:
+        with AttributionResult(attributions_file, result, tss_distance, correct_grad) as attributions_result:
             seqs, attrs = attributions_result.load(all_genes)
             sequences.append(seqs)
             attributions.append(attrs)

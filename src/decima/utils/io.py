@@ -125,11 +125,10 @@ class BigWigWriter:
             if chrom not in self.measures:
                 continue
             data = self.measures[chrom]
-            values = data["values"] / data["count"]
-            pos = np.where(np.abs(values) > self.threshold)[0]
-            values = values[pos]
-            if len(values) == 0:
+            pos = np.where(np.abs(data["values"]) > self.threshold)[0]
+            if len(pos) == 0:
                 continue
+            values = data["values"][pos] / data["count"][pos]
             self.bw.addEntries(chrom, pos, values=values, span=1, step=1)
         self.bw.close()
 
