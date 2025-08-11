@@ -85,18 +85,12 @@ class BigWigWriter:
         ...     )
     """
 
-    def __init__(self, path, genome: str = "hg38", threshold: float = 0.001):
+    def __init__(self, path, genome: str = "hg38", threshold: float = 1e-5):
         self.path = path
         self.genome = genome
         self.threshold = threshold
         self.sizes = genomepy.Genome(genome).sizes
-        self.measures = {
-            chrom: {
-                "values": np.zeros(size),
-                "count": np.zeros(size, dtype=int),
-            }
-            for chrom, size in self.sizes.items()
-        }
+        self.measures = dict()
 
     def open(self):
         """Open BigWig file for writing and add chromosome header."""
@@ -117,6 +111,11 @@ class BigWigWriter:
             end: End position.
             values: Array of values for each position.
         """
+        if chrom not in self.measures:
+            self.measures[chrom] = {
+                "values": np.zeros(self.sizes[chrom]),
+                "count": np.zeros(self.sizes[chrom], dtype=int),
+            }
         self.measures[chrom]["values"][start:end] += values
         self.measures[chrom]["count"][start:end] += 1
 
