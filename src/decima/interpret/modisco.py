@@ -153,7 +153,7 @@ def modisco_patterns(
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,
-    # num_workers: int = 4,
+    num_workers: int = 4,
     # tfmodisco parameters
     sliding_window_size: int = 20,
     flank_size: int = 10,
@@ -187,12 +187,10 @@ def modisco_patterns(
     min_ic_in_window: float = 0.6,
     min_ic_windowsize: int = 6,
     ppm_pseudocount: float = 0.001,
-    # stranded: bool = False,
-    # pattern_type: str = "both",  # "both", "pos", or "neg"
+    stranded: bool = False,
+    pattern_type: str = "both",  # "both", "pos", or "neg"
 ):
     logger = logging.getLogger("decima")
-
-    # TODO: attribution result
     logger.info("Loading metadata")
     result = DecimaResult.load(metadata_anndata)
 
@@ -246,10 +244,10 @@ def modisco_patterns(
         min_ic_in_window=min_ic_in_window,
         min_ic_windowsize=min_ic_windowsize,
         ppm_pseudocount=ppm_pseudocount,
-        # stranded=stranded,
-        # pattern_type=pattern_type,
-        # num_cores=num_workers,
-        # verbose=True,
+        stranded=stranded,
+        pattern_type=pattern_type,
+        num_cores=num_workers,
+        verbose=True,
     )
     modiscolite.io.save_hdf5(
         Path(output_prefix).with_suffix(".modisco.h5").as_posix(),
@@ -269,7 +267,7 @@ def modisco_reports(
     trim_threshold: float = 0.3,
     trim_min_length: int = 3,
     tomtomlite: bool = False,
-    # num_workers: int = 4,
+    num_workers: int = 4,
 ):
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -283,8 +281,8 @@ def modisco_reports(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         ttl=tomtomlite,
-        # num_cores=num_workers,
-        # verbose=True,
+        num_cores=num_workers,
+        verbose=True,
     )
 
 
@@ -337,8 +335,8 @@ def modisco(
     min_ic_in_window: float = 0.6,
     min_ic_windowsize: int = 6,
     ppm_pseudocount: float = 0.001,
-    # stranded: bool = False,
-    # pattern_type: str = "both",  # "both", "pos", or "neg"
+    stranded: bool = False,
+    pattern_type: str = "both",  # "both", "pos", or "neg"
     # reports parameters
     img_path_suffix: Optional[str] = "",
     meme_motif_db: Optional[Union[Path, str]] = "hocomoco_v13",
@@ -386,7 +384,7 @@ def modisco(
         genes=genes,
         top_n_markers=top_n_markers,
         correct_grad=correct_grad,
-        # num_workers=num_workers,
+        num_workers=num_workers,
         # tfmodisco parameters
         sliding_window_size=sliding_window_size,
         flank_size=flank_size,
@@ -415,8 +413,8 @@ def modisco(
         min_ic_in_window=min_ic_in_window,
         min_ic_windowsize=min_ic_windowsize,
         ppm_pseudocount=ppm_pseudocount,
-        # stranded=stranded,
-        # pattern_type=pattern_type,
+        stranded=stranded,
+        pattern_type=pattern_type,
     )
     modisco_reports(
         output_prefix=output_prefix,
@@ -428,5 +426,5 @@ def modisco(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         tomtomlite=tomtomlite,
-        # num_workers=num_workers,
+        num_workers=num_workers,
     )

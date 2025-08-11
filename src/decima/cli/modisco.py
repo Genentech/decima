@@ -118,14 +118,14 @@ def cli_modisco_attributions(
     show_default=True,
     help="Additional flank added at the end of motif discovery.",
 )
-# @click.option("--stranded", is_flag=True, help="Treat input as stranded so do not add reverse-complement.")
-# @click.option(
-#     "--pattern-type",
-#     type=click.Choice(["both", "pos", "neg"]),
-#     default="both",
-#     show_default=True,
-#     help="Which pattern signs to compute: both, pos, or neg.",
-# )
+@click.option("--stranded", is_flag=True, help="Treat input as stranded so do not add reverse-complement.")
+@click.option(
+    "--pattern-type",
+    type=click.Choice(["both", "pos", "neg"]),
+    default="both",
+    show_default=True,
+    help="Which pattern signs to compute: both, pos, or neg.",
+)
 def cli_modisco_patterns(
     output_prefix: str,
     attributions: str,
@@ -135,7 +135,7 @@ def cli_modisco_patterns(
     metadata: Optional[str] = None,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
-    # num_workers: int = 4,
+    num_workers: int = 4,
     # modisco parameters
     max_seqlets: int = 20_000,
     n_leiden: int = 16,
@@ -144,8 +144,8 @@ def cli_modisco_patterns(
     flank_size: int = 5,
     initial_flank_to_add: int = 10,
     final_flank_to_add: int = 0,
-    # stranded: bool = False,
-    # pattern_type: str = "both",
+    stranded: bool = False,
+    pattern_type: str = "both",
 ):
     if isinstance(attributions, str):
         attributions = attributions.split(",")
@@ -162,7 +162,7 @@ def cli_modisco_patterns(
         metadata_anndata=metadata,
         genes=genes,
         top_n_markers=top_n_markers,
-        # num_workers=num_workers,
+        num_workers=num_workers,
         # modisco parameters
         max_seqlets_per_metacluster=max_seqlets,
         n_leiden_runs=n_leiden,
@@ -171,8 +171,8 @@ def cli_modisco_patterns(
         flank_size=flank_size,
         initial_flank_to_add=initial_flank_to_add,
         final_flank_to_add=final_flank_to_add,
-        # stranded=stranded,
-        # pattern_type=pattern_type,
+        stranded=stranded,
+        pattern_type=pattern_type,
     )
 
 
@@ -188,7 +188,7 @@ def cli_modisco_patterns(
 @click.option("--trim-threshold", type=float, default=0.3, show_default=True, help="Trim threshold.")
 @click.option("--trim-min-length", type=int, default=3, show_default=True, help="Trim minimum length.")
 @click.option("--tomtomlite", type=bool, default=False, show_default=True, help="Whether to use TomtomLite.")
-# @click.option("--num-workers", type=int, default=4, show_default=True, help="Number of workers for the prediction.")
+@click.option("--num-workers", type=int, default=4, show_default=True, help="Number of workers for the prediction.")
 def cli_modisco_reports(
     output_prefix: str,
     modisco_h5: str,
@@ -199,7 +199,7 @@ def cli_modisco_reports(
     trim_threshold: float,
     trim_min_length: int,
     tomtomlite: bool,
-    # num_workers: int,
+    num_workers: int,
 ):
     modisco_reports(
         output_prefix=output_prefix,
@@ -211,7 +211,7 @@ def cli_modisco_reports(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         tomtomlite=tomtomlite,
-        # num_workers=num_workers,
+        num_workers=num_workers,
     )
 
 
@@ -274,14 +274,14 @@ def cli_modisco_reports(
     show_default=True,
     help="Additional flank added at the end of motif discovery.",
 )
-# @click.option("--stranded", is_flag=True, help="Treat input as stranded so do not add reverse-complement.")
-# @click.option(
-#     "--pattern-type",
-#     type=click.Choice(["both", "pos", "neg"]),
-#     default="both",
-#     show_default=True,
-#     help="Which pattern signs to compute: both, pos, or neg.",
-# )
+@click.option("--stranded", is_flag=True, help="Treat input as stranded so do not add reverse-complement.")
+@click.option(
+    "--pattern-type",
+    type=click.Choice(["both", "pos", "neg"]),
+    default="both",
+    show_default=True,
+    help="Which pattern signs to compute: both, pos, or neg.",
+)
 @click.option(
     "--meme-motif-db", type=str, default="hocomoco_v13", show_default=True, help="Path to the MEME motif database."
 )
@@ -313,8 +313,8 @@ def cli_modisco(
     flank_size: int = 5,
     initial_flank_to_add: int = 10,
     final_flank_to_add: int = 0,
-    # stranded: bool = False,
-    # pattern_type: str = "both",
+    stranded: bool = False,
+    pattern_type: str = "both",
     # reports parameters
     meme_motif_db: str = "hocomoco_v13",
     img_path_suffix: str = "",
@@ -355,8 +355,8 @@ def cli_modisco(
         flank_size=flank_size,
         initial_flank_to_add=initial_flank_to_add,
         final_flank_to_add=final_flank_to_add,
-        # stranded=stranded,
-        # pattern_type=pattern_type,
+        stranded=stranded,
+        pattern_type=pattern_type,
         # reports parameters
         img_path_suffix=img_path_suffix,
         meme_motif_db=meme_motif_db,
