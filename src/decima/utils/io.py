@@ -121,7 +121,10 @@ class BigWigWriter:
 
     def close(self):
         """Write accumulated data to BigWig file and close."""
-        for chrom, data in self.measures.items():
+        for chrom in self.sizes.keys():
+            if chrom not in self.measures:
+                continue
+            data = self.measures[chrom]
             values = data["values"] / data["count"]
             pos = np.where(np.abs(values) > self.threshold)[0]
             values = values[pos]
