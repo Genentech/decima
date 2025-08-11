@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
-import h5py
 import numpy as np
 import modiscolite
 from tqdm import tqdm
@@ -12,10 +11,12 @@ from torch.utils.data import DataLoader
 from grelu.resources import get_meme_file_path
 
 
+from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
 from decima.data.dataset import GeneDataset
 from decima.utils import get_compute_device
 from decima.utils.io import AttributionWriter
+from decima.core.attribution import AttributionResult
 from decima.interpret.attributer import DecimaAttributer
 
 
@@ -65,6 +66,7 @@ def predict_save_modisco_attributions(
     model: Optional[int] = 0,
     metadata_anndata: Optional[str] = None,
     method: str = "saliency",
+    transform: str = "specificity",
     batch_size: int = 2,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
@@ -114,7 +116,7 @@ def predict_save_modisco_attributions(
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
     all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
 
-    attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, device=device)
+    attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
 
     dl = DataLoader(
         GeneDataset(genes=all_genes, metadata_anndata=result),
@@ -151,7 +153,7 @@ def modisco_patterns(
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,
-    num_workers: int = 4,
+    # num_workers: int = 4,
     # tfmodisco parameters
     sliding_window_size: int = 20,
     flank_size: int = 10,
@@ -185,8 +187,8 @@ def modisco_patterns(
     min_ic_in_window: float = 0.6,
     min_ic_windowsize: int = 6,
     ppm_pseudocount: float = 0.001,
-    stranded: bool = False,
-    pattern_type: str = "both",  # "both", "pos", or "neg"
+    # stranded: bool = False,
+    # pattern_type: str = "both",  # "both", "pos", or "neg"
 ):
     logger = logging.getLogger("decima")
 
@@ -202,33 +204,14 @@ def modisco_patterns(
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
     all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
 
-    window = int(tss_distance)
-    tss_pos = result.gene_metadata.loc[all_genes, "gene_mask_start"].values
-    window_start = tss_pos - window
-    window_end = tss_pos + window
-
-    logger.info("Loading attributions and sequences")
-
-    attributions = list()
     sequences = list()
+    attributions = list()
 
-    # TODO: ensemble multiple models
     for attributions_file in tqdm(attributions_files, desc="Loading attributions and sequences..."):
-        with h5py.File(attributions_file, "r") as f:
-            genes_idx = {gene.decode("utf-8"): i for i, gene in enumerate(f["genes"][:])}
-            idx = list(sorted(genes_idx[gene] for gene in all_genes))
-            seqs = f["sequence"][idx].astype("float32")
-            attrs = f["attribution"][idx].astype("float32")
-
-        if correct_grad:
-            # The following line applies a trick from Madjdandzic et al. to center the attributions.
-            # By subtracting the mean attribution for each sequence, we ensure that the contributions of individual base
-            # substitutions "speak for themselves." This prevents downstream tasks, like motif discovery, from being
-            # influenced by the overall importance of a site rather than the specific mutational consequence of each base.
-            attrs = attrs - attrs.mean(1, keepdims=True)  # Madjdandzic et al. trick
-
-        sequences.append(np.stack([seqs[i, :, ws:we] for i, (ws, we) in enumerate(zip(window_start, window_end))]))
-        attributions.append(np.array([attrs[i, :, ws:we] for i, (ws, we) in enumerate(zip(window_start, window_end))]))
+        with AttributionResult(attributions_file, metadata_anndata, tss_distance, correct_grad) as attributions_result:
+            seqs, attrs = attributions_result.load(all_genes)
+            sequences.append(seqs)
+            attributions.append(attrs)
 
     sequences = np.mean(sequences, axis=0)
     attributions = np.mean(attributions, axis=0)
@@ -263,13 +246,16 @@ def modisco_patterns(
         min_ic_in_window=min_ic_in_window,
         min_ic_windowsize=min_ic_windowsize,
         ppm_pseudocount=ppm_pseudocount,
-        stranded=stranded,
-        pattern_type=pattern_type,
-        num_cores=num_workers,
-        verbose=True,
+        # stranded=stranded,
+        # pattern_type=pattern_type,
+        # num_cores=num_workers,
+        # verbose=True,
     )
     modiscolite.io.save_hdf5(
-        Path(output_prefix).with_suffix(".modisco.h5").as_posix(), pos_patterns, neg_patterns, window_size=window * 2
+        Path(output_prefix).with_suffix(".modisco.h5").as_posix(),
+        pos_patterns,
+        neg_patterns,
+        window_size=tss_distance * 2 if tss_distance is not None else DECIMA_CONTEXT_SIZE,
     )
 
 
@@ -283,7 +269,7 @@ def modisco_reports(
     trim_threshold: float = 0.3,
     trim_min_length: int = 3,
     tomtomlite: bool = False,
-    num_workers: int = 4,
+    # num_workers: int = 4,
 ):
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -297,8 +283,8 @@ def modisco_reports(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         ttl=tomtomlite,
-        num_cores=num_workers,
-        verbose=True,
+        # num_cores=num_workers,
+        # verbose=True,
     )
 
 
@@ -351,8 +337,8 @@ def modisco(
     min_ic_in_window: float = 0.6,
     min_ic_windowsize: int = 6,
     ppm_pseudocount: float = 0.001,
-    stranded: bool = False,
-    pattern_type: str = "both",  # "both", "pos", or "neg"
+    # stranded: bool = False,
+    # pattern_type: str = "both",  # "both", "pos", or "neg"
     # reports parameters
     img_path_suffix: Optional[str] = "",
     meme_motif_db: Optional[Union[Path, str]] = "hocomoco_v13",
@@ -365,10 +351,10 @@ def modisco(
     output_prefix = Path(output_prefix)
 
     if model == "ensemble":
-        attrs_output_prefix = output_prefix.with_suffix(".{model}")
+        attrs_output_prefix = str(output_prefix) + "_{model}"
         models = [0, 1, 2, 3]
         attributions = [
-            Path(str(attrs_output_prefix).format(model=model)).with_suffix(".attributions.h5") for model in models
+            Path(attrs_output_prefix.format(model=model)).with_suffix(".attributions.h5") for model in models
         ]
     else:
         attrs_output_prefix = output_prefix
@@ -395,13 +381,12 @@ def modisco(
         attributions=attributions,
         tasks=tasks,
         off_tasks=off_tasks,
-        model=model,
         tss_distance=tss_distance,
         metadata_anndata=metadata_anndata,
         genes=genes,
         top_n_markers=top_n_markers,
         correct_grad=correct_grad,
-        num_workers=num_workers,
+        # num_workers=num_workers,
         # tfmodisco parameters
         sliding_window_size=sliding_window_size,
         flank_size=flank_size,
@@ -430,8 +415,8 @@ def modisco(
         min_ic_in_window=min_ic_in_window,
         min_ic_windowsize=min_ic_windowsize,
         ppm_pseudocount=ppm_pseudocount,
-        stranded=stranded,
-        pattern_type=pattern_type,
+        # stranded=stranded,
+        # pattern_type=pattern_type,
     )
     modisco_reports(
         output_prefix=output_prefix,
@@ -443,5 +428,5 @@ def modisco(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         tomtomlite=tomtomlite,
-        num_workers=num_workers,
+        # num_workers=num_workers,
     )

@@ -85,11 +85,18 @@ class BigWigWriter:
         ...     )
     """
 
-    def __init__(self, path, genome: str = "hg38"):
+    def __init__(self, path, genome: str = "hg38", threshold: float = 0.001):
         self.path = path
         self.genome = genome
+        self.threshold = threshold
         self.sizes = genomepy.Genome(genome).sizes
-        self.measures = list()
+        self.measures = {
+            chrom: {
+                "values": np.zeros(size),
+                "count": np.zeros(size, dtype=int),
+            }
+            for chrom, size in self.sizes.items()
+        }
 
     def open(self):
         """Open BigWig file for writing and add chromosome header."""
@@ -110,22 +117,18 @@ class BigWigWriter:
             end: End position.
             values: Array of values for each position.
         """
-        self.measures.append(
-            pd.DataFrame(
-                {
-                    "chrom": chrom,
-                    "pos": list(range(start, end)),
-                    "values": values,
-                }
-            )
-        )
+        self.measures[chrom]["values"][start:end] += values
+        self.measures[chrom]["count"][start:end] += 1
 
     def close(self):
         """Write accumulated data to BigWig file and close."""
-        measures = pd.concat(self.measures)
-        for chrom, _df in measures.groupby("chrom"):
-            _df = _df.groupby("pos").agg({"values": "mean"}).reset_index()
-            self.bw.addEntries(chrom, _df["pos"].values, values=_df["values"].values, span=1, step=1)
+        for chrom, data in self.measures.items():
+            values = data["values"] / data["count"]
+            pos = np.where(np.abs(values) > self.threshold)[0]
+            values = values[pos]
+            if len(values) == 0:
+                continue
+            self.bw.addEntries(chrom, pos, values=values, span=1, step=1)
         self.bw.close()
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -201,7 +204,7 @@ class AttributionWriter:
             "sequence",
             (len(self.genes), 4, DECIMA_CONTEXT_SIZE),
             chunks=(1, 4, DECIMA_CONTEXT_SIZE),
-            dtype="float32",
+            dtype="i1",
             compression="gzip",
         )
         if self.bigwig:
@@ -221,7 +224,7 @@ class AttributionWriter:
             attrs: Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).
             seqs: One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).
         """
-        self.h5_writer["sequence"][self.idx[gene], :, :] = seqs.astype("float32")
+        self.h5_writer["sequence"][self.idx[gene], :, :] = seqs.astype("i1")
         self.h5_writer["attribution"][self.idx[gene], :, :] = attrs.astype("float32")
 
         if self.bigwig:

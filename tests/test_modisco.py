@@ -29,26 +29,21 @@ def test_predict_save_modisco_attributions(tmp_path):
 
 @pytest.mark.long_running
 def test_modisco(tmp_path):
-    # TODO: ensemble check name of the attributions
     output_prefix = tmp_path / "test_modisco"
     modisco(
         output_prefix=output_prefix,
-        tasks="(cell_type == 'classical monocyte') and (tissue == 'blood')",
-        off_tasks="tissue == 'blood'",
-        # tasks="cell_type == 'goblet cell'",
-        # off_tasks="tissue == 'blood'",
-        top_n_markers=50,
-        model=1,
-        # model='ensemble',
+        tasks="cell_type == 'classical monocyte' and tissue == 'blood'",
+        off_tasks="cell_type != 'classical monocyte' and tissue == 'blood'",
+        top_n_markers=5,
+        model='ensemble',
         max_seqlets_per_metacluster=10_000,
         device=device,
+        tss_distance=5_000,
         n_leiden_runs=1,
-        # method="inputxgradient",
     )
-    # assert output_prefix.with_suffix(".0.attributions.h5").exists()
-    # assert output_prefix.with_suffix(".1.attributions.h5").exists()
-    # assert output_prefix.with_suffix(".2.attributions.h5").exists()
-    # assert output_prefix.with_suffix(".3.attributions.h5").exists()
+    assert Path(str(output_prefix) + "_0.attributions.h5").exists()
+    assert Path(str(output_prefix) + "_1.attributions.h5").exists()
+    assert Path(str(output_prefix) + "_2.attributions.h5").exists()
+    assert Path(str(output_prefix) + "_3.attributions.h5").exists()
     assert output_prefix.with_suffix(".modisco.h5").exists()
-    # TODO: check top motifs after ensembling
     assert Path(str(output_prefix) + "_report").exists()

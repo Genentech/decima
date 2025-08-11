@@ -56,6 +56,12 @@ class DecimaAttributer:
 
     @classmethod
     def load_decima_attributer(
-        cls, model_name, tasks, off_tasks=None, method: str = "inputxgradient", device="cpu", **kwargs
+        cls,
+        model_name,
+        tasks,
+        off_tasks=None,
+        method: str = "inputxgradient",
+        transform="specificity",
+        device="cpu",
     ):
-        return cls(load_decima_model(model_name, device=device), tasks, off_tasks, method, **kwargs)
+        return cls(load_decima_model(model_name, device=device), tasks, off_tasks, method, transform)
