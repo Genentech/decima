@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import h5py
 import pytest
@@ -259,3 +260,38 @@ def test_cli_vep_all_tasks_ensemble(tmp_path):
     df_saved = pd.read_parquet(output_file)
     assert df_saved.shape[0] > 0
     assert df_saved.shape[1] == 14 + 8856 * 5
+
+
+@pytest.mark.long_running
+def test_cli_modisco_attributions(tmp_path):
+    output_prefix = tmp_path / "test_modisco"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "modisco-attributions",
+        "--output-prefix", str(output_prefix),
+        "--top-n-markers", "5",
+        "--tasks", "cell_type == 'classical monocyte'",
+        "--model", "0",
+        "--device", device,
+    ])
+    assert result.exit_code == 0
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+
+
+@pytest.mark.long_running
+def test_cli_modisco(tmp_path):
+    output_prefix = tmp_path / "test_modisco"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "modisco",
+        "--output-prefix", str(output_prefix),
+        "--tasks", "cell_type == 'classical monocyte'",
+        "--top-n-markers", "5",
+        "--model", "0",
+        "--device", device,
+    ])
+    assert result.exit_code == 0
+
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".modisco.h5")).exists()
+    assert Path(str(output_prefix) + "_report").exists()
