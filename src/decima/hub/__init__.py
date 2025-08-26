@@ -61,7 +61,7 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
         else:
             warnings.warn(
                 f"Model `{model_name}` provided in environment variables, "
-                f"but not found in `{os.environ[model_name.upper()]}`"
+                f"but not found in `{os.environ[model_name.upper()]}` "
                 f"Trying to download `{model_name}` from wandb."
             )
 
@@ -89,7 +89,7 @@ def load_decima_metadata(path: Optional[str] = None):
         else:
             warnings.warn(
                 f"Metadata `{os.environ['DECIMA_METADATA']}` provided in environment variables, "
-                f"but not found in `{os.environ['DECIMA_METADATA']}`"
+                f"but not found in `{os.environ['DECIMA_METADATA']}` "
                 f"Trying to download `metadata` from wandb."
             )
 
