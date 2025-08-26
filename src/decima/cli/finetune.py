@@ -1,4 +1,5 @@
 """Finetune the Decima model."""
+
 import logging
 import click
 import anndata
@@ -9,7 +10,12 @@ from decima.data.dataset import HDF5Dataset
 
 @click.command()
 @click.option("--name", required=True, help="Name of the run.")
-@click.option("--model", default="0", type=str, help="Model path or replication number. If a path is provided, the model will be loaded from the path. If a replication number is provided, the model will be loaded from the replication number.")
+@click.option(
+    "--model",
+    default="0",
+    type=str,
+    help="Model path or replication number. If a path is provided, the model will be loaded from the path. If a replication number is provided, the model will be loaded from the replication number.",
+)
 @click.option("--matrix-file", required=True, help="Matrix file path.")
 @click.option("--h5-file", required=True, help="H5 file path.")
 @click.option("--outdir", required=True, help="Output directory path to save model checkpoints.")
@@ -24,7 +30,24 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--logger", default="wandb", type=str, help="Logger.")
 @click.option("--num-workers", default=16, type=int, help="Number of workers.")
 @click.option("--seed", default=0, type=int, help="Random seed.")
-def cli_finetune(name, model, matrix_file, h5_file , outdir, learning_rate, loss_total_weight, gradient_accumulation, batch_size, max_seq_shift, gradient_clipping, save_top_k, epochs, logger, num_workers, seed):
+def cli_finetune(
+    name,
+    model,
+    matrix_file,
+    h5_file,
+    outdir,
+    learning_rate,
+    loss_total_weight,
+    gradient_accumulation,
+    batch_size,
+    max_seq_shift,
+    gradient_clipping,
+    save_top_k,
+    epochs,
+    logger,
+    num_workers,
+    seed,
+):
     """Finetune the Decima model."""
     train_logger = logger
     logger = logging.getLogger("decima")
@@ -62,6 +85,7 @@ def cli_finetune(name, model, matrix_file, h5_file , outdir, learning_rate, loss
     }
     model_params = {
         "n_tasks": ad.shape[0],
+        "init_borzoi": True,
         "replicate": model,
     }
     logger.info(f"train_params: {train_params}")

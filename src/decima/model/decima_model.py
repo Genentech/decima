@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -47,8 +48,10 @@ class DecimaModel(BaseModel):
             model = int(model)
 
         if init_borzoi:
+            logger = logging.getLogger("decima")
             # Load state dict
             if Path(str(replicate)).exists():
+                logger.info(f"Initializing weights from Borzoi model using file: {replicate}")
                 if replicate.endswith(".h5") or replicate.endswith(".pth") or replicate.endswith(".pt"):
                     state_dict = torch.load(replicate)
                 elif replicate.endswith(".ckpt"):
@@ -56,6 +59,7 @@ class DecimaModel(BaseModel):
                 else:
                     raise ValueError(f"Invalid replicate path: {replicate}")
             else:
+                logger.info(f"Initializing weights from Borzoi model using wandb for replicate: {replicate}")
                 wandb.login(host="https://api.wandb.ai/", anonymous="must")
                 api = wandb.Api(overrides={"base_url": "https://api.wandb.ai/"})
                 art = api.artifact(f"grelu/borzoi/human_state_dict_fold{replicate}:latest")
