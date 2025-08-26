@@ -208,3 +208,21 @@ def test_DecimaAttributer():
 
     assert attrs.shape == (batch_size, 4, DECIMA_CONTEXT_SIZE)
     assert attrs.dtype == torch.float32
+
+    with pytest.raises(ValueError):
+        attributer = DecimaAttributer.load_decima_attributer(
+            model_name=0,
+            tasks=["agg_0", "agg_1", "agg_2"],
+            transform="aggregate",
+            off_tasks=["agg_4", "agg_5", "agg_6"],
+            device=device
+        )
+
+    with pytest.warns(UserWarning):
+        attributer = DecimaAttributer.load_decima_attributer(
+            model_name=0,
+            tasks=["agg_0", "agg_1", "agg_2"],
+            transform="specificity",
+            off_tasks=None,
+            device=device
+        )

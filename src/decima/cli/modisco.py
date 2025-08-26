@@ -5,13 +5,27 @@ from decima.interpret.modisco import predict_save_modisco_attributions, modisco_
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
-@click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")
 @click.option(
-    "--off-tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted."
+    "--tasks",
+    type=str,
+    default=None,
+    help="Set of tasks respect to which attributions will be computed. If not provided, all tasks will be computed.",
+)
+@click.option(
+    "--off-tasks",
+    type=str,
+    default=None,
+    help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
 @click.option("--model", type=str, default="0", help="Model to use for the prediction.")
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
-@click.option("--method", type=str, default="saliency", show_default=True, help="Method to use for the prediction.")
+@click.option(
+    "--method",
+    type=str,
+    default=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    show_default=True,
+    help="Method to use for attribution analysis.",
+)
 @click.option(
     "--transform",
     type=click.Choice(["specificity", "aggregate"]),
@@ -81,9 +95,17 @@ def cli_modisco_attributions(
     required=True,
     help="Path to the attributions HDF5 file. If multiple files are provided, they will be averaged.",
 )
-@click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")
 @click.option(
-    "--off-tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted."
+    "--tasks",
+    type=str,
+    default=None,
+    help="Set of tasks respect to which attributions will be computed. If not provided, all tasks will be computed.",
+)
+@click.option(
+    "--off-tasks",
+    type=str,
+    default=None,
+    help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
 @click.option("--tss-distance", type=int, default=10_000, show_default=True, help="TSS distance for the prediction.")
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
@@ -217,14 +239,28 @@ def cli_modisco_reports(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
-@click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")
 @click.option(
-    "--off-tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted."
+    "--tasks",
+    type=str,
+    default=None,
+    help="Set of tasks respect to which attributions will be computed. If not provided, all tasks will be computed.",
+)
+@click.option(
+    "--off-tasks",
+    type=str,
+    default=None,
+    help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
 @click.option("--tss-distance", type=int, default=10_000, show_default=True, help="TSS distance for the prediction.")
 @click.option("--model", type=str, default="ensemble", show_default=True, help="Model to use for the prediction.")
 @click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
-@click.option("--method", type=str, default="saliency", show_default=True, help="Method to use for the prediction.")
+@click.option(
+    "--method",
+    type=str,
+    default=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    show_default=True,
+    help="Method to use for attribution analysis.",
+)
 @click.option("--batch-size", type=int, default=2, show_default=True, help="Batch size for the prediction.")
 @click.option(
     "--genes",

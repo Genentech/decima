@@ -1,3 +1,4 @@
+import warnings
 import torch
 from captum.attr import InputXGradient, Saliency, IntegratedGradients
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
@@ -38,7 +39,14 @@ class DecimaAttributer:
                     compare_func="subtract",
                 )
             )
+            if off_tasks is None:
+                warnings.warn("`off_tasks` is not provided. Using all other tasks as off_tasks.")
+
         elif transform == "aggregate":
+            if off_tasks is not None:
+                raise ValueError(
+                    "`off_tasks` is not allowed with `aggregate` transform. Please use `specificity` instead."
+                )
             self.model.add_transform(Aggregate(tasks=tasks, task_aggfunc="mean", model=model))
 
         self.model.eval()
