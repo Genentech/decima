@@ -1,9 +1,10 @@
 from pathlib import Path
+
 import pytest
 import h5py
 import pandas as pd
 
-from decima.interpret.modisco import predict_save_modisco_attributions, modisco, modisco_seqlet_bed
+from decima.interpret.modisco import predict_save_modisco_attributions, modisco_patterns, modisco_reports, modisco, modisco_seqlet_bed
 from decima.constants import DECIMA_CONTEXT_SIZE
 
 from conftest import device
