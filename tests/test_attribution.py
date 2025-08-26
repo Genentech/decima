@@ -54,8 +54,12 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
 
         assert ar.genes == attribution_data['genes']
         genes = attribution_data['genes']
-        seqs, attrs = ar.load(genes)
 
+        seqs, attrs = ar._load(str(attribution_h5_file), 0, 163_840, 10_000, True)
+        assert seqs.shape == (4, 20_000)
+        assert attrs.shape == (4, 20_000)
+
+        seqs, attrs = ar.load(genes)
         assert seqs.shape == (10, 4, 20_000)
         assert attrs.shape == (10, 4, 20_000)
 

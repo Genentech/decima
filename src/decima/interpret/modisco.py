@@ -3,19 +3,21 @@ import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
+import h5py
 import numpy as np
+import pandas as pd
 import modiscolite
 from tqdm import tqdm
 from more_itertools import chunked
 from torch.utils.data import DataLoader
 from grelu.resources import get_meme_file_path
 
-
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
-from decima.data.dataset import GeneDataset
 from decima.utils import get_compute_device
 from decima.utils.io import AttributionWriter
+from decima.utils.motifs import trim_attributions, motif_start_end
+from decima.data.dataset import GeneDataset
 from decima.core.attribution import AttributionResult
 from decima.interpret.attributer import DecimaAttributer
 
@@ -70,6 +72,8 @@ def predict_save_modisco_attributions(
     batch_size: int = 2,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
+    bigwig: bool = True,
+    correct_grad_bigwig: bool = True,
     num_workers: int = 4,
     device: Optional[str] = None,
     genome: str = "hg38",
@@ -89,6 +93,8 @@ def predict_save_modisco_attributions(
         batch_size: Batch size for the prediction.
         genes: List of genes to analyze attributions for.
         top_n_markers: Top n markers to predict. If not provided, all markers will be predicted.
+        bigwig: Whether to save bigwig file.
+        correct_grad_bigwig: Whether to correct gradient for bigwig file.
         num_workers: Number of workers for the prediction.
         device: Device to use for attribution analysis.
         genome: Genome name or path to the genome fasta file.
@@ -133,7 +139,8 @@ def predict_save_modisco_attributions(
         model_name=attributer.model.name,
         metadata_anndata=result,
         genome=genome,
-        bigwig=True,
+        bigwig=bigwig,
+        correct_grad_bigwig=correct_grad_bigwig,
     ) as writer:
         for i, inputs in enumerate(tqdm(dl, desc="Computing attributions...")):
             attrs = attributer.attribute(inputs.to(device)).detach().cpu().numpy()
@@ -202,17 +209,21 @@ def modisco_patterns(
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
     all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
 
-    sequences = list()
-    attributions = list()
-
-    for attributions_file in tqdm(attributions_files, desc="Loading attributions and sequences..."):
+    model_names = list()
+    for i, attributions_file in enumerate(attributions_files):
         with AttributionResult(attributions_file, result, tss_distance, correct_grad) as attributions_result:
-            seqs, attrs = attributions_result.load(all_genes)
-            sequences.append(seqs)
-            attributions.append(attrs)
+            if i == 0:
+                sequences, attributions = attributions_result.load(all_genes)
+                genome = attributions_result.genome
+            else:
+                seqs, attrs = attributions_result.load(all_genes)
+                sequences += seqs
+                attributions += attrs
+                assert attributions_result.genome == genome
+            model_names.append(attributions_result.model_name)
 
-    sequences = np.mean(sequences, axis=0)
-    attributions = np.mean(attributions, axis=0)
+    sequences = sequences / len(attributions_files)
+    attributions = attributions / len(attributions_files)
 
     pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
@@ -249,12 +260,17 @@ def modisco_patterns(
         num_cores=num_workers,
         verbose=True,
     )
+    h5_path = Path(output_prefix).with_suffix(".modisco.h5").as_posix()
     modiscolite.io.save_hdf5(
-        Path(output_prefix).with_suffix(".modisco.h5").as_posix(),
+        h5_path,
         pos_patterns,
         neg_patterns,
         window_size=tss_distance * 2 if tss_distance is not None else DECIMA_CONTEXT_SIZE,
     )
+    with h5py.File(h5_path, "a") as f:
+        f.create_dataset("genes", data=np.array(all_genes, dtype="S100"))
+        f.attrs["tss_distance"] = tss_distance
+        f.attrs["model_names"] = ",".join(model_names)
 
 
 def modisco_reports(
@@ -286,7 +302,77 @@ def modisco_reports(
     )
 
 
-# all three function in one
+def modisco_seqlet_bed(
+    output_prefix: str,
+    modisco_h5: str,
+    metadata_anndata: str = None,
+    trim_threshold: float = 0.2,
+):
+    result = DecimaResult.load(metadata_anndata)
+
+    df = list()
+
+    with h5py.File(modisco_h5, "r") as f:
+        tss_distance = f.attrs["tss_distance"]
+        genes = [gene.decode("utf-8") for gene in f["genes"][:]]
+        genes_idx = dict(enumerate(genes))
+        df_genes = result.gene_metadata.loc[genes]
+
+        for pattern_type in ["pos_patterns", "neg_patterns"]:
+            if pattern_type in f:
+                for pattern_name in tqdm(f[pattern_type].keys(), desc=f"Processing {pattern_type} patterns..."):
+                    pattern = f[pattern_type][pattern_name]
+                    pattern_seqlets = pattern["seqlets"]
+
+                    _genes = [genes_idx[idx] for idx in pattern_seqlets["example_idx"][:]]
+
+                    cwm_seqlet = pattern_seqlets["contrib_scores"][:]
+                    motif_starts, motif_ends = motif_start_end(
+                        cwm_seqlet,
+                        trim_attributions(pattern["contrib_scores"], trim_threshold=trim_threshold),
+                    )
+                    df.append(
+                        pd.DataFrame(
+                            {
+                                "_start": pattern_seqlets["start"][:].tolist(),
+                                "_end": pattern_seqlets["end"][:].tolist(),
+                                "name": [
+                                    f"{pattern_type}.{pattern_name}.seqlet_{i}.{gene}" for i, gene in enumerate(_genes)
+                                ],
+                                "score": cwm_seqlet.mean((1, 2)).tolist(),
+                                "revcomp": pattern_seqlets["is_revcomp"][:].tolist(),
+                                "gene": _genes,
+                                "_motif_start": motif_starts,
+                                "_motif_end": motif_ends,
+                            }
+                        )
+                    )
+
+    df = pd.concat(df).set_index("gene").join(df_genes[["chrom", "strand", "gene_start", "gene_end"]], on="gene")
+
+    # `_strand` of the seqlet, `strand` of the gene, `revcomp` of the motif respect to the gene
+    df["_strand"] = np.where(df["revcomp"], df["strand"].replace({"+": "-", "-": "+"}), df["strand"])
+    tss_pos = np.where(df["strand"] == "+", df["gene_start"], df["gene_end"])
+
+    start = np.where(df["strand"] == "+", df["_start"], 2 * tss_distance - df["_end"])
+    end = np.where(df["strand"] == "+", df["_end"], 2 * tss_distance - df["_start"])
+
+    lengths = df["_end"] - df["_start"]
+    motif_start = np.where(df["revcomp"], lengths - df["_motif_end"], df["_motif_start"])
+    motif_end = np.where(df["revcomp"], lengths - df["_motif_start"], df["_motif_end"])
+
+    region_start = tss_pos - tss_distance
+    df["start"] = region_start + start
+    df["end"] = region_start + end
+    df["motif_start"] = df["start"] + motif_start
+    df["motif_end"] = df["start"] + motif_end + 1
+    df["color"] = "65,105,225"  # blue # TO THINK: can be colored by significance
+
+    df[["chrom", "start", "end", "name", "score", "_strand", "motif_start", "motif_end", "color"]].sort_values(
+        ["chrom", "start"]
+    ).to_csv(Path(output_prefix).with_suffix(".seqlets.bed"), sep="\t", header=False, index=False)
+
+
 def modisco(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
@@ -345,6 +431,8 @@ def modisco(
     trim_threshold: float = 0.3,
     trim_min_length: int = 3,
     tomtomlite: bool = False,
+    # seqlet thresholds
+    seqlet_motif_trim_threshold: float = 0.2,
 ):
     output_prefix = Path(output_prefix)
 
@@ -370,6 +458,7 @@ def modisco(
             top_n_markers=top_n_markers,
             method=method,
             batch_size=batch_size,
+            correct_grad_bigwig=correct_grad,
             device=device,
             num_workers=num_workers,
             genome=genome,
@@ -427,4 +516,10 @@ def modisco(
         trim_min_length=trim_min_length,
         tomtomlite=tomtomlite,
         num_workers=num_workers,
+    )
+    modisco_seqlet_bed(
+        output_prefix=output_prefix,
+        modisco_h5=output_prefix.with_suffix(".modisco.h5").as_posix(),
+        metadata_anndata=metadata_anndata,
+        trim_threshold=seqlet_motif_trim_threshold,
     )

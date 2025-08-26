@@ -1,6 +1,12 @@
 import click
 from typing import List, Optional, Union
-from decima.interpret.modisco import predict_save_modisco_attributions, modisco_patterns, modisco_reports, modisco
+from decima.interpret.modisco import (
+    predict_save_modisco_attributions,
+    modisco_patterns,
+    modisco_reports,
+    modisco_seqlet_bed,
+    modisco,
+)
 
 
 @click.command()
@@ -27,6 +33,10 @@ from decima.interpret.modisco import predict_save_modisco_attributions, modisco_
     default=None,
     help="Top n markers to predict. If not provided, all markers will be predicted.",
 )
+@click.option("--disable-bigwig", is_flag=True, help="Whether to disable bigwig file.")
+@click.option(
+    "--disable-correct-grad-bigwig", is_flag=True, help="Whether to disable correct gradient for bigwig file."
+)
 @click.option("--device", type=str, default=None, help="Device to use. If not provided, the best device will be used.")
 @click.option(
     "--genome", type=str, default="hg38", show_default=True, help="Genome name or path to the genome fasta file."
@@ -43,6 +53,8 @@ def cli_modisco_attributions(
     batch_size: int = 4,
     genes: Optional[str] = None,
     top_n_markers: Optional[int] = None,
+    disable_bigwig: bool = False,
+    disable_correct_grad_bigwig: bool = False,
     device: Optional[str] = None,
     num_workers: int = 4,
     genome: str = "hg38",
@@ -67,6 +79,8 @@ def cli_modisco_attributions(
         batch_size=batch_size,
         genes=genes,
         top_n_markers=top_n_markers,
+        bigwig=not disable_bigwig,
+        correct_grad_bigwig=not disable_correct_grad_bigwig,
         num_workers=num_workers,
         device=device,
         genome=genome,
@@ -94,7 +108,8 @@ def cli_modisco_attributions(
     default=None,
     help="Top n markers to predict. If not provided, all markers will be predicted.",
 )
-# @click.option("--num-workers", type=int, default=4, show_default=True, help="Number of workers for the prediction.")
+@click.option("--correct-grad", type=bool, default=True, show_default=True, help="Whether to correct gradient.")
+@click.option("--num-workers", type=int, default=4, show_default=True, help="Number of workers for the prediction.")
 @click.option(
     "--max-seqlets", type=int, default=20_000, show_default=True, help="The maximum number of seqlets per metacluster."
 )
@@ -135,6 +150,7 @@ def cli_modisco_patterns(
     metadata: Optional[str] = None,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
+    correct_grad: bool = True,
     num_workers: int = 4,
     # modisco parameters
     max_seqlets: int = 20_000,
@@ -162,6 +178,7 @@ def cli_modisco_patterns(
         metadata_anndata=metadata,
         genes=genes,
         top_n_markers=top_n_markers,
+        correct_grad=correct_grad,
         num_workers=num_workers,
         # modisco parameters
         max_seqlets_per_metacluster=max_seqlets,
@@ -217,6 +234,25 @@ def cli_modisco_reports(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
+@click.option("--modisco_h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
+@click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
+@click.option("--trim-threshold", type=float, default=0.2, show_default=True, help="Trim threshold.")
+def cli_modisco_seqlet_bed(
+    output_prefix: str,
+    modisco_h5: str,
+    metadata: Optional[str] = None,
+    trim_threshold: float = 0.2,
+):
+    modisco_seqlet_bed(
+        output_prefix=output_prefix,
+        modisco_h5=modisco_h5,
+        metadata_anndata=metadata,
+        trim_threshold=trim_threshold,
+    )
+
+
+@click.command()
+@click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
 @click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")
 @click.option(
     "--off-tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted."
@@ -240,6 +276,7 @@ def cli_modisco_reports(
     default=None,
     help="Top n markers to predict. If not provided, all markers will be predicted.",
 )
+@click.option("--correct-grad", type=bool, default=True, show_default=True, help="Whether to correct gradient.")
 @click.option(
     "--device",
     type=str,
@@ -291,6 +328,13 @@ def cli_modisco_reports(
 @click.option("--trim-threshold", type=float, default=0.3, show_default=True, help="Trim threshold.")
 @click.option("--trim-min-length", type=int, default=3, show_default=True, help="Trim minimum length.")
 @click.option("--tomtomlite", type=bool, default=False, show_default=True, help="Whether to use TomtomLite.")
+@click.option(
+    "--seqlet-motif-trim-threshold",
+    type=float,
+    default=0.2,
+    show_default=True,
+    help="Trim threshold for motifs in seqlets bed file.",
+)
 def cli_modisco(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
@@ -302,6 +346,7 @@ def cli_modisco(
     batch_size: int = 4,
     genes: Optional[List[str]] = None,  # TODO: list of genes
     top_n_markers: Optional[int] = None,
+    correct_grad: bool = True,
     device: Optional[str] = None,
     num_workers: int = 4,
     genome: str = "hg38",
@@ -323,6 +368,8 @@ def cli_modisco(
     trim_threshold: float = 0.3,
     trim_min_length: int = 3,
     tomtomlite: bool = False,
+    # seqlet thresholds
+    seqlet_motif_trim_threshold: float = 0.2,
 ):
     if model in ["0", "1", "2", "3"]:
         model = int(model)
@@ -344,6 +391,7 @@ def cli_modisco(
         batch_size=batch_size,
         genes=genes,
         top_n_markers=top_n_markers,
+        correct_grad=correct_grad,
         device=device,
         num_workers=num_workers,
         genome=genome,
@@ -365,4 +413,6 @@ def cli_modisco(
         trim_threshold=trim_threshold,
         trim_min_length=trim_min_length,
         tomtomlite=tomtomlite,
+        # seqlet thresholds
+        seqlet_motif_trim_threshold=seqlet_motif_trim_threshold,
     )

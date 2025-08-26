@@ -1,7 +1,10 @@
 from typing import List, Optional
 import h5py
 import numpy as np
+from tqdm import tqdm
+from joblib import Parallel, delayed
 
+from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
 
 
@@ -12,11 +15,13 @@ class AttributionResult:
         metadata_anndata: Optional[str] = None,
         tss_distance: Optional[int] = None,
         correct_grad=True,
+        num_workers: Optional[int] = -1,
     ):
         self.attribution_h5 = attribution_h5
         self.result = DecimaResult.load(metadata_anndata)
         self.tss_distance = tss_distance
         self.correct_grad = correct_grad
+        self.num_workers = num_workers
 
     def open(self):
         self.h5 = h5py.File(self.attribution_h5, "r")
@@ -33,35 +38,50 @@ class AttributionResult:
         self.open()
         return self
 
-    def load(self, genes: List[str]):
-        idx = [(self._idx[gene], gene) for gene in genes]
-        sorted_idx, sorted_genes = zip(*sorted(idx, key=lambda x: x[0]))
-        sorted_idx = list(sorted_idx)
-        seqs = self.h5["sequence"][sorted_idx].astype(np.float32)
-        attrs = self.h5["attribution"][sorted_idx].astype(np.float32)
+    @staticmethod
+    def _load(attribution_h5, idx: int, tss_pos: int, tss_distance: int, correct_grad: bool):
+        with h5py.File(attribution_h5, "r") as f:
+            seqs = np.zeros((4, DECIMA_CONTEXT_SIZE + (tss_distance or 0)))
+            attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + (tss_distance or 0)))
 
-        if self.correct_grad:
+            seqs[:, :DECIMA_CONTEXT_SIZE] = f["sequence"][idx].astype(np.float32)
+            attrs[:, :DECIMA_CONTEXT_SIZE] = f["attribution"][idx].astype(np.float32)
+
+        if tss_distance is not None:
+            start = tss_pos - tss_distance
+            end = start + tss_distance * 2
+
+            seqs = seqs[:, start:end]
+            attrs = attrs[:, start:end]
+
+        if correct_grad:
             # The following line applies a trick from Madjdandzic et al. to center the attributions.
             # By subtracting the mean attribution for each sequence, we ensure that the contributions of individual base
             # substitutions "speak for themselves." This prevents downstream tasks, like motif discovery, from being
             # influenced by the overall importance of a site rather than the specific mutational consequence of each base.
-            attrs = attrs - attrs.mean(1, keepdims=True)
-
-        seqs = {gene: seq for gene, seq in zip(sorted_genes, seqs)}
-        attrs = {gene: attr for gene, attr in zip(sorted_genes, attrs)}
-
-        if self.tss_distance is not None:
-            tss_pos = self.result.gene_metadata.loc[genes, "gene_mask_start"].values
-            window_start = tss_pos - self.tss_distance
-            window_end = tss_pos + self.tss_distance
-
-            seqs = np.array([seqs[gene][:, ws:we] for (gene, ws, we) in zip(genes, window_start, window_end)])
-            attrs = np.array([attrs[gene][:, ws:we] for (gene, ws, we) in zip(genes, window_start, window_end)])
-        else:
-            seqs = np.array([seqs[gene] for gene in genes])
-            attrs = np.array([attrs[gene] for gene in genes])
+            attrs = attrs - attrs.mean(0, keepdims=True)
 
         return seqs, attrs
 
+    def load(self, genes: List[str]):
+        tss_pos = self.result.gene_metadata.loc[genes, "gene_mask_start"].values
+
+        seqs, attrs = zip(
+            *Parallel(n_jobs=self.num_workers)(
+                delayed(self._load)(self.attribution_h5, self._idx[gene], tss_pos, self.tss_distance, self.correct_grad)
+                for gene, tss_pos in tqdm(
+                    zip(genes, tss_pos), desc="Loading attributions and sequences...", total=len(genes)
+                )
+            )
+        )
+
+        return np.array(seqs), np.array(attrs)
+
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
+
+    def __repr__(self):
+        return f"AttributionResult({self.attribution_h5})"
+
+    def __str__(self):
+        return f"AttributionResult({self.attribution_h5})"
