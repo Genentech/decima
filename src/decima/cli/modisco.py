@@ -21,8 +21,8 @@ from decima.interpret.modisco import predict_save_modisco_attributions, modisco_
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
 @click.option(
     "--method",
-    type=str,
-    default=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    default="saliency",
     show_default=True,
     help="Method to use for attribution analysis.",
 )
@@ -256,8 +256,8 @@ def cli_modisco_reports(
 @click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
 @click.option(
     "--method",
-    type=str,
-    default=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    default="saliency",
     show_default=True,
     help="Method to use for attribution analysis.",
 )
