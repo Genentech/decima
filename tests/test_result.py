@@ -119,3 +119,16 @@ def test_DecimaResult_prepare_one_hot_indel():
     assert isinstance(one_hot, torch.Tensor)
     assert one_hot.shape == (4, DECIMA_CONTEXT_SIZE)
     assert gene_mask.shape == (1, DECIMA_CONTEXT_SIZE)
+
+def test_DecimaResult_marker_zscores():
+    result = DecimaResult.load()
+
+    df_marker = result.marker_zscores(tasks="cell_type == 'classical monocyte'", off_tasks="cell_type == 'Amygdala excitatory'")
+    assert isinstance(df_marker, pd.DataFrame)
+    assert df_marker.shape == (len(result.genes) * 2, 3)
+    assert all(c in df_marker.columns for c in ["gene", "score", "task"])
+
+    df_marker = result.marker_zscores(tasks="cell_type == 'classical monocyte'")
+    assert isinstance(df_marker, pd.DataFrame)
+    assert df_marker.shape == (len(result.genes), 3)
+    assert all(c in df_marker.columns for c in ["gene", "score", "task"])
