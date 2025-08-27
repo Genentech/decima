@@ -11,12 +11,13 @@ from tqdm import tqdm
 from more_itertools import chunked
 from torch.utils.data import DataLoader
 from grelu.resources import get_meme_file_path
+from grelu.interpret.motifs import trim_pwm
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
 from decima.utils import get_compute_device
 from decima.utils.io import AttributionWriter
-from decima.utils.motifs import trim_attributions, motif_start_end
+from decima.utils.motifs import motif_start_end
 from decima.data.dataset import GeneDataset
 from decima.core.attribution import AttributionResult
 from decima.interpret.attributer import DecimaAttributer
@@ -329,7 +330,7 @@ def modisco_seqlet_bed(
                     cwm_seqlet = pattern_seqlets["contrib_scores"][:]
                     motif_starts, motif_ends = motif_start_end(
                         cwm_seqlet,
-                        trim_attributions(pattern["contrib_scores"], trim_threshold=trim_threshold),
+                        trim_pwm(pattern["contrib_scores"][:].T, trim_threshold=trim_threshold).T,
                     )
                     df.append(
                         pd.DataFrame(

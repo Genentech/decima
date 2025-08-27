@@ -30,19 +30,6 @@ def test_trim_ppm():
     assert trimmed.shape == (4, 2)
 
 
-def test_trim_attributions():
-    attributions = np.array([
-        [0.1, 0.0, 0.0, 0.0],
-        [0.8, 0.1, 0.05, 0.05],
-        [0.9, 0.05, 0.025, 0.025],
-        [0.1, 0.05, 0.025, 0.025],
-        [0.2, 0.1, 0.05, 0.05]
-    ])
-
-    trimmed = trim_attributions(attributions, trim_threshold=0.3)
-    assert trimmed.shape == (3, 4)
-
-
 def test_motif_start_end():
     attributions = np.array([
         [[0.1, 0.0, 0.0, 0.0],

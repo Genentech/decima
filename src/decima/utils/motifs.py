@@ -51,19 +51,6 @@ def trim_ppm(ppm, background=None, trim_threshold=0.2, pseudocount=1e-5):
     return ppm[:, ic > trim_threshold * ic.max()]
 
 
-def trim_attributions(attributions, trim_threshold=0.2):
-    """Trim the attributions to the positions with the highest information content.
-
-    Args:
-        attributions: Attribution scores with shape (seq_len, 4)
-        trim_threshold: Threshold for trimming the attributions. Defaults to 0.2.
-
-    Returns:
-    """
-    amax = np.abs(attributions).sum(axis=1)
-    return attributions[amax > amax.max() * trim_threshold]
-
-
 def motif_start_end(attributions: np.ndarray, motif: np.ndarray):
     """
     Get the start and end of the motif attributions and motif matrix and returns start and end positions for the window with maximum score.
