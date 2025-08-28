@@ -340,7 +340,7 @@ def modisco_seqlet_bed(
                                 "name": [
                                     f"{pattern_type}.{pattern_name}.seqlet_{i}.{gene}" for i, gene in enumerate(_genes)
                                 ],
-                                "score": cwm_seqlet.mean((1, 2)).tolist(),
+                                "score": cwm_seqlet.sum((1, 2)).tolist(),
                                 "revcomp": pattern_seqlets["is_revcomp"][:].tolist(),
                                 "gene": _genes,
                                 "_motif_start": motif_starts,
