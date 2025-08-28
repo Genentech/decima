@@ -4,19 +4,134 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 import h5py
+from more_itertools import chunked
 import numpy as np
 import pandas as pd
 import torch
+from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from pyfaidx import Faidx
+from grelu.sequence.format import convert_input_type
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
+from decima.data.dataset import GeneDataset, SeqDataset
 from decima.hub import load_decima_model
+from decima.interpret.attributer import DecimaAttributer
 from decima.interpret.attributions import Attribution
 from decima.utils import get_compute_device
-from decima.utils.io import read_fasta_gene_mask
+from decima.utils.io import AttributionWriter, read_fasta_gene_mask
+from decima.utils.task import _get_on_off_tasks, _get_genes
+from decima.utils.qc import QCLogger
+
+
+def _predict_save_attributions(
+    output_prefix: str,
+    tasks: Optional[List[str]] = None,
+    off_tasks: Optional[List[str]] = None,
+    model: Optional[int] = 0,
+    metadata_anndata: Optional[str] = None,
+    method: str = "inputxgradient",
+    transform: str = "specificity",
+    batch_size: int = 2,
+    genes: Optional[List[str]] = None,
+    seqs: Optional[Union[str, pd.DataFrame, np.ndarray, torch.Tensor]] = None,
+    top_n_markers: Optional[int] = None,
+    bigwig: bool = True,
+    correct_grad_bigwig: bool = True,
+    num_workers: int = 4,
+    device: Optional[str] = None,
+    genome: str = "hg38",
+):
+    warnings.filterwarnings("ignore", category=FutureWarning, module="tangermeme")
+
+    logger = logging.getLogger("decima")
+
+    device = get_compute_device(device)
+    logger.info(f"Using device: {device}")
+
+    logger.info("Loading model and metadata to compute attributions...")
+    result = DecimaResult.load(metadata_anndata)
+
+    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
+
+    with QCLogger(output_prefix + "_attributions.qc.log", metadata_anndata=metadata_anndata) as qc:
+        # TODO: qc.log_correlation(tasks, off_tasks)
+        # TODO: qc.plot_correlation(tasks, off_tasks) save the plot to output_prefix + "qc/correlation.qc.png"
+
+        attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
+
+        if (genes is not None) and (seqs is not None):
+            raise ValueError("Only one of `genes` or `seqs` arguments must be provided not both.")
+        elif seqs is not None:
+            all_genes = [f"seq{i}" for i in range(len(seqs))]
+
+            if isinstance(seqs, str):
+                dataset = SeqDataset.from_fasta(seqs)
+            elif isinstance(seqs, pd.DataFrame):
+                dataset = SeqDataset.from_dataframe(seqs)
+            elif isinstance(seqs, torch.Tensor) or isinstance(seqs, np.ndarray):
+                assert seqs.shape[1] == 5, (
+                    "`seqs` must be 5-dimensional with shape (batch_size, 5, seq_len) "
+                    "where the 2th dimension is a one_hot encoded seq and binary mask gene mask."
+                )
+                dataset = TensorDataset(seqs)
+                dataset.seqs = convert_input_type(seqs, output_type="strings")
+            else:
+                raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
+        else:
+            all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
+            dataset = GeneDataset(genes=all_genes, metadata_anndata=result)
+            genes = list(chunked(all_genes, batch_size))
+
+        dl = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            pin_memory=True,
+            num_workers=num_workers,
+        )
+
+        with AttributionWriter(
+            path=Path(output_prefix).with_suffix(".attributions.h5"),
+            genes=all_genes,
+            model_name=attributer.model.name,
+            metadata_anndata=result,
+            genome=genome,
+            bigwig=bigwig,
+            correct_grad_bigwig=correct_grad_bigwig,
+        ) as writer:
+            for i, inputs in enumerate(tqdm(dl, desc="Computing attributions...")):
+                attrs = attributer.attribute(inputs.to(device)).detach().cpu().numpy()
+                seqs = inputs[:, :4].detach().cpu().numpy()
+
+                for gene, attr, seq in zip(genes[i], attrs, seqs):
+                    writer.add(gene=gene, seqs=seq, attrs=attr)
+                    qc.log_gene(gene, threshold=0.7)
+
+        if seqs is not None:
+            logger.info("Saving sequences...")
+            fasta_path = str(output_prefix + ".seqs.fasta")
+            with open(fasta_path, "w") as f:
+                for i, seq in tqdm(zip(all_genes, dataset.seqs), desc="Saving sequences..."):
+                    f.write(f">{i}\n{seq}\n")
+            Faidx(fasta_path, build_index=True)
+
+
+def recursive_seqlet_calling(
+    output_prefix: str,
+    attributions: Union[str, List[str]],
+    tasks: Optional[List[str]] = None,
+    off_tasks: Optional[List[str]] = None,
+    tss_distance: int = 10_000,
+    metadata_anndata: Optional[str] = None,
+    genes: Optional[List[str]] = None,
+    top_n_markers: Optional[int] = None,
+    correct_grad: bool = True,
+    num_workers: int = 4,
+):
+    raise NotImplementedError("Recursive seqlet calling is not implemented yet.")
 
 
 def predict_save_attributions(
@@ -111,20 +226,9 @@ def predict_save_attributions(
         if isinstance(genes, str):
             genes = genes.split(",")
 
-        with open(output_dir / "qc.warnings.log", "w") as f:
+        with QCLogger(output_dir / "qc.warnings.log", metadata_anndata=metadata_anndata) as qc:
             for gene in genes:
-                if gene not in result.genes:
-                    raise ValueError(
-                        f"Gene {gene} not found in metadata."
-                        " Check `DecimaResult.load().gene_metadata` to see avaliable genes."
-                    )
-
-                gene_metadata = result.get_gene_metadata(gene)
-                if gene_metadata.pearson < 0.7:
-                    f.write(
-                        f"Gene {gene} has low correlation with the model. Pearson: {gene_metadata.pearson}. "
-                        "Be careful with the predictions of the model for this gene."
-                    )
+                qc.log_gene(gene, threshold=0.7)
 
         for gene in tqdm(genes, desc="Computing attributions..."):
             attributions.append(result.attributions(gene, tasks, off_tasks, method=method))

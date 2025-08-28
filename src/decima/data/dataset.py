@@ -1,3 +1,4 @@
+from typing import List
 import warnings
 import torch
 import h5py
@@ -8,11 +9,14 @@ from more_itertools import flatten
 from torch.utils.data import Dataset, default_collate
 from grelu.sequence.format import indices_to_strings, indices_to_one_hot
 from grelu.data.augment import Augmenter, _split_overall_idx
+from grelu.sequence.format import strings_to_one_hot
 from grelu.sequence.utils import reverse_complement
 
 from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES
 from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
+from decima.utils.io import read_fasta_gene_mask
+from decima.utils.sequence import prepare_mask_gene
 
 from decima.model.metrics import WarningType
 
@@ -150,6 +154,103 @@ class GeneDataset(Dataset):
 
     def collate_fn(self, batch):
         return default_collate(batch)
+
+
+class SeqDataset(Dataset):
+    """
+    Dataset for sequence prediction with the masked gene sequence.
+
+    Args:
+        seqs: List of sequences as strings.
+        gene_mask_starts: List of gene mask starts.
+        gene_mask_ends: List of gene mask ends.
+        max_seq_shift: Maximum sequence shift.
+        seed: Seed for the random number generator.
+        augment_mode: Augmentation mode.
+
+    Returns:
+        Dataset: Dataset for sequence prediction with the masked gene sequence.
+    """
+
+    def __init__(
+        self,
+        seqs: List[str],
+        gene_mask_starts: List[int],
+        gene_mask_ends: List[int],
+        max_seq_shift: int = 0,
+        seed: int = 0,
+        augment_mode: str = "random",
+    ):
+        assert (
+            len(seqs) == len(gene_mask_starts) == len(gene_mask_ends)
+        ), "Lengths of `seqs`, `gene_mask_starts`, and `gene_mask_ends` must match."
+
+        self.seqs = seqs
+        self.gene_mask_starts = gene_mask_starts
+        self.gene_mask_ends = gene_mask_ends
+
+        # Save augmentation params
+        self.max_seq_shift = max_seq_shift
+        self.augment_mode = augment_mode
+        self.augmenter = Augmenter(
+            rc=False,
+            max_seq_shift=self.max_seq_shift,
+            max_pair_shift=0,
+            seq_len=DECIMA_CONTEXT_SIZE,
+            label_len=None,
+            seed=seed,
+            mode=augment_mode,
+        )
+        self.n_augmented = len(self.augmenter)
+        self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
+
+        self.n_seqs = len(self.genes) * self.n_augmented
+        self.n_alleles = 1
+        self.predict = False
+
+    def __len__(self):
+        return self.n_seqs
+
+    def __getitem__(self, idx):
+        seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
+        seq = self.seqs[seq_idx]
+        gene_mask_start = self.gene_mask_starts[seq_idx]
+        gene_mask_end = self.gene_mask_ends[seq_idx]
+
+        inputs = torch.vstack(
+            [
+                strings_to_one_hot(seq),
+                prepare_mask_gene(gene_mask_start, gene_mask_end, padding=self.max_seq_shift),
+            ]
+        )
+        inputs = self.augmenter(seq=inputs, idx=augment_idx)
+
+        return inputs
+
+    def collate_fn(self, batch):
+        return default_collate(batch)
+
+    @classmethod
+    def from_dataframe(cls, df: pd.DataFrame, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
+        assert "seq" in df.columns, "`df` must contain `seq` column"
+        assert "gene_mask_start" in df.columns, "`df` must contain `gene_mask_start` column"
+        assert "gene_mask_end" in df.columns, "`df` must contain `gene_mask_end` column"
+
+        return cls(
+            df["seq"].tolist(),
+            df["gene_mask_start"].tolist(),
+            df["gene_mask_end"].tolist(),
+            max_seq_shift=max_seq_shift,
+            seed=seed,
+            augment_mode=augment_mode,
+        )
+
+    def from_fasta(cls, fasta_file: str, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
+        seqs = read_fasta_gene_mask(fasta_file)
+        return cls.from_dataframe(seqs, max_seq_shift=max_seq_shift, seed=seed, augment_mode=augment_mode)
+
+    def __str__(self):
+        return f"SeqDataset(n_seqs={self.n_seqs}, n_augmented={self.n_augmented}, n_alleles={self.n_alleles})"
 
 
 class VariantDataset(Dataset):

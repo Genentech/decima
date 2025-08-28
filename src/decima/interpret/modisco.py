@@ -1,4 +1,3 @@
-import warnings
 import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
@@ -8,58 +7,15 @@ import numpy as np
 import pandas as pd
 import modiscolite
 from tqdm import tqdm
-from more_itertools import chunked
-from torch.utils.data import DataLoader
 from grelu.resources import get_meme_file_path
 from grelu.interpret.motifs import trim_pwm
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
-from decima.utils import get_compute_device
-from decima.utils.io import AttributionWriter
 from decima.utils.motifs import motif_start_end
-from decima.data.dataset import GeneDataset
+from decima.utils.task import _get_on_off_tasks, _get_genes
 from decima.core.attribution import AttributionResult
-from decima.interpret.attributer import DecimaAttributer
-
-
-def _get_on_off_tasks(result: DecimaResult, tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
-    if tasks is None:
-        tasks = result.cell_metadata.index.tolist()
-    elif isinstance(tasks, str):
-        tasks = result.query_cells(tasks)
-    if isinstance(off_tasks, str):
-        off_tasks = result.query_cells(off_tasks)
-
-    return tasks, off_tasks
-
-
-def _get_genes(
-    result: DecimaResult,
-    genes: Optional[List[str]] = None,
-    top_n_markers: Optional[int] = None,
-    tasks: Optional[List[str]] = None,
-    off_tasks: Optional[List[str]] = None,
-):
-    if (top_n_markers is not None) and (genes is None):
-        all_genes = (
-            result.marker_zscores(tasks=tasks, off_tasks=off_tasks)
-            .query('task == "on"')
-            .sort_values("score", ascending=False)
-            .drop_duplicates(subset="gene", keep="first")
-            .iloc[:top_n_markers]
-            .gene.tolist()
-        )
-    elif genes is not None:
-        if top_n_markers is not None:
-            raise ValueError(
-                "Cannot specify arguments `genes` and `top_n_markers` at the same time. Only one can be specified."
-            )
-        all_genes = genes
-    else:
-        all_genes = list(result.genes)
-
-    return all_genes
+from decima.interpret.save_attributions import _predict_save_attributions
 
 
 def predict_save_modisco_attributions(
@@ -104,51 +60,28 @@ def predict_save_modisco_attributions(
         FileExistsError: If output directory already exists.
 
     Examples:
-    >>> predict_save_attributions(
+    >>> predict_save_modisco_attributions(
     ...     output_dir="output_dir",
     ...     tasks="cell_type == 'classical monocyte'",
     ... )
     """
-    warnings.filterwarnings("ignore", category=FutureWarning, module="tangermeme")
-
-    # TODO: QC how well model predicts on tasks from on tasks
-    logger = logging.getLogger("decima")
-
-    device = get_compute_device(device)
-    logger.info(f"Using device: {device}")
-
-    logger.info("Loading model and metadata to compute attributions...")
-    result = DecimaResult.load(metadata_anndata)
-
-    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
-    all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-
-    attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
-
-    dl = DataLoader(
-        GeneDataset(genes=all_genes, metadata_anndata=result),
+    _predict_save_attributions(
+        output_prefix=output_prefix,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        model=model,
+        metadata_anndata=metadata_anndata,
+        method=method,
+        transform=transform,
         batch_size=batch_size,
-        shuffle=False,
-        pin_memory=True,
-        num_workers=num_workers,
-    )
-    genes = list(chunked(all_genes, batch_size))
-
-    with AttributionWriter(
-        path=Path(output_prefix).with_suffix(".attributions.h5"),
-        genes=all_genes,
-        model_name=attributer.model.name,
-        metadata_anndata=result,
-        genome=genome,
+        genes=genes,
+        top_n_markers=top_n_markers,
         bigwig=bigwig,
         correct_grad_bigwig=correct_grad_bigwig,
-    ) as writer:
-        for i, inputs in enumerate(tqdm(dl, desc="Computing attributions...")):
-            attrs = attributer.attribute(inputs.to(device)).detach().cpu().numpy()
-            seqs = inputs[:, :4].detach().cpu().numpy()
-
-            for gene, attr, seq in zip(genes[i], attrs, seqs):
-                writer.add(gene=gene, seqs=seq, attrs=attr)
+        num_workers=num_workers,
+        device=device,
+        genome=genome,
+    )
 
 
 def modisco_patterns(
