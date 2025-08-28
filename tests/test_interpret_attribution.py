@@ -44,14 +44,14 @@ def attributions():
 
 
 def test_Attribution_peak_finding(attributions):
-    assert len(attributions.peaks) == 2
+    assert len(attributions.peaks) == 1
     row = attributions.peaks.iloc[0]
-    assert row["peak"] == "TEST2@10"
-    assert row["start"] == 360
-    assert row["end"] == 364
+    assert row["peak"] == "TEST2@8"
+    assert row["start"] == 358
+    assert row["end"] == 366
     assert row["attribution"] > 0
     assert row["p-value"] < 1e-2
-    assert row["from_tss"] == 10
+    assert row["from_tss"] == 8
 
 
 def test_Attribution_scan_motifs(attributions):
@@ -63,7 +63,7 @@ def test_Attribution_scan_motifs(attributions):
     assert "p-value" in df_motifs.columns
     assert "peak" in df_motifs.columns
     assert "GATA1.H12CORE.1.PSM.A" in set(df_motifs["motif"])
-    assert "TEST2@10" in set(df_motifs["peak"])
+    assert "TEST2@8" in set(df_motifs["peak"])
 
     df_motifs = df_motifs[df_motifs["peak"] == "TEST2@10"]
     assert (df_motifs["start"] - 350 == df_motifs["from_tss"]).all()
@@ -72,23 +72,23 @@ def test_Attribution_scan_motifs(attributions):
 def test_Attribution_peaks_to_bed(attributions):
     df_peaks = attributions.peaks_to_bed()
     assert isinstance(df_peaks, pd.DataFrame)
-    assert len(df_peaks) == 2
+    assert len(df_peaks) == 1
 
     assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand"]
 
     row = df_peaks.iloc[0]
     assert row["chrom"] == "chr1"
-    assert row["start"] == 1360
-    assert row["end"] == 1364
-    assert row["name"] == "TEST2@10"
+    assert row["start"] == 1358
+    assert row["end"] == 1366
+    assert row["name"] == "TEST2@8"
     assert row["score"] > 2
     assert row["strand"] == "."
 
     attributions._strand = "-"
     df_peaks = attributions.peaks_to_bed()
     assert df_peaks.iloc[0]["strand"] == "."
-    assert row["start"] == 1360
-    assert row["end"] == 1364
+    assert row["start"] == 1358
+    assert row["end"] == 1366
 
 
 @pytest.mark.long_running
@@ -113,9 +113,9 @@ def test_Attribution_save_bigwig(attributions, tmp_path):
     assert bigwig_path.exists()
 
     bw = pyBigWig.open(str(bigwig_path))
-    attrs = bw.values("chr1", 1360, 1364)
-    assert len(attrs) == 4
-    assert attrs[0] == pytest.approx(40)
+    attrs = bw.values("chr1", 1358, 1366)
+    assert len(attrs) == 8
+    assert attrs[2:6] == [40, 40, 40, 40]
     bw.close()
 
 @pytest.mark.long_running
