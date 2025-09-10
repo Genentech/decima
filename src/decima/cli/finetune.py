@@ -73,6 +73,9 @@ def cli_finetune(
     )
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
+    if isinstance(device, str) and device.isdigit():
+        device = int(device)
+        
     train_params = {
         "name": name,
         "batch_size": batch_size,
@@ -101,10 +104,12 @@ def cli_finetune(
     logger.info("Initializing model")
     model = LightningModel(model_params=model_params, train_params=train_params)
 
-    logger.info("Training")
-    if logger == "wandb":
-        wandb.login(host="https://genentech.wandb.io")
+    if train_logger == "wandb":
+        logger.info("Connecting to wandb.")
+        wandb.login(host="https://genentech.wandb.io", anonymous="never")
         run = wandb.init(project="decima", dir=name, name=name)
+
+    logger.info("Training")
     model.train_on_dataset(train_dataset, val_dataset)
     train_dataset.close()
     val_dataset.close()
