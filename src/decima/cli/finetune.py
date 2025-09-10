@@ -16,6 +16,12 @@ from decima.data.dataset import HDF5Dataset
     type=str,
     help="Model path or replication number. If a path is provided, the model will be loaded from the path. If a replication number is provided, the model will be loaded from the replication number.",
 )
+@click.option(
+    "--device",
+    type=str,
+    default="0",
+    help="Device to use. Default: 0",
+)
 @click.option("--matrix-file", required=True, help="Matrix file path.")
 @click.option("--h5-file", required=True, help="H5 file path.")
 @click.option("--outdir", required=True, help="Output directory path to save model checkpoints.")
@@ -33,6 +39,7 @@ from decima.data.dataset import HDF5Dataset
 def cli_finetune(
     name,
     model,
+    device,
     matrix_file,
     h5_file,
     outdir,
@@ -70,7 +77,7 @@ def cli_finetune(
         "name": name,
         "batch_size": batch_size,
         "num_workers": num_workers,
-        "devices": 0,
+        "devices": device,
         "logger": train_logger,
         "save_dir": outdir,
         "max_epochs": epochs,
