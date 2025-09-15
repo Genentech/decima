@@ -4,7 +4,7 @@ from grelu.sequence.format import convert_input_type
 from grelu.sequence.utils import get_unique_length
 
 
-def write_hdf5(file, ad, pad=0):
+def write_hdf5(file, ad, pad=0, genome="hg38"):
     # Calculate seq_len
     seq_len = get_unique_length(ad.var)
 
@@ -45,7 +45,7 @@ def write_hdf5(file, ad, pad=0):
         arr = ad.var[["chrom", "start", "end", "strand"]].copy()
         arr.start = arr.start - pad
         arr.end = arr.end + pad
-        arr = convert_input_type(arr, "indices", genome="hg38")
+        arr = convert_input_type(arr, "indices", genome=genome)
         print(f"Writing sequence array of shape: {arr.shape}")
         f.create_dataset("sequences", shape=arr.shape, dtype=np.int8, data=arr)
 
