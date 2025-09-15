@@ -132,3 +132,13 @@ def test_DecimaResult_marker_zscores():
     assert isinstance(df_marker, pd.DataFrame)
     assert df_marker.shape == (len(result.genes), 3)
     assert all(c in df_marker.columns for c in ["gene", "score", "task"])
+
+
+def test_DecimaResult_correlation():
+    result = DecimaResult.load()
+
+    with pytest.raises(ValueError):
+        result.correlation(tasks="cell_type == 'classical monocyte'", off_tasks="tissue == 'brain'")
+
+    with pytest.raises(ValueError):
+        result.plot_correlation(tasks="cell_type == 'classical monocyte'", off_tasks="tissue == 'brain'")

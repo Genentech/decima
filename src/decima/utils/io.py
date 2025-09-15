@@ -1,11 +1,15 @@
-from typing import Iterator
-import h5py
+from typing import Iterator, Optional
 from pathlib import Path
+
+import h5py
+import torch
 import numpy as np
+import pandas as pd
 import pyBigWig
 import genomepy
-import pandas as pd
 from pyfaidx import Fasta
+from grelu.sequence.format import convert_input_type
+
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
 
@@ -22,9 +26,16 @@ def import_cyvcf2():
 
 
 def read_fasta_gene_mask(fasta_file: str) -> pd.DataFrame:
+    """Read the fasta file and return the gene mask
+
+    Args:
+        fasta_file (str): Path to the fasta file
+
+    Returns:
+        pd.DataFrame: DataFrame with the gene mask
+    """
     df = list()
     with Fasta(fasta_file) as fasta:
-        # fasta = Fasta(fasta_file)
         for record in fasta:
             name, start, end = record.name.split("|")
             start_label, start = start.split("=")
@@ -33,11 +44,24 @@ def read_fasta_gene_mask(fasta_file: str) -> pd.DataFrame:
                 "First boundary label must be `gene_mask_start` and second boundary label must be `gene_mask_end` "
                 "for example: `>seq|gene_mask_start=1|gene_mask_end=10`."
             )
-            df.append({"gene": name, "seq": str(record[:]), "gene_mask_start": int(start), "gene_mask_end": int(end)})
+            seq = str(record[:])
+            assert (
+                len(seq) == DECIMA_CONTEXT_SIZE
+            ), f"Sequence length must be equal to {DECIMA_CONTEXT_SIZE}. Found {len(seq)} in the fasta file: {fasta_file}"
+            df.append({"gene": name, "seq": seq, "gene_mask_start": int(start), "gene_mask_end": int(end)})
         return pd.DataFrame(df).set_index("gene")
 
 
 def read_vcf_chunks(vcf_file: str, chunksize: int) -> Iterator[pd.DataFrame]:
+    """Read the vcf file and return the chunks
+
+    Args:
+        vcf_file (str): Path to the vcf file
+        chunksize (int): Size of the chunks
+
+    Returns:
+        Iterator[pd.DataFrame]: Iterator of DataFrames with the chunks
+    """
     VCF = import_cyvcf2()
     vcf = VCF(vcf_file)
     df = list()
@@ -89,7 +113,14 @@ class BigWigWriter:
         self.path = path
         self.genome = genome
         self.threshold = threshold
-        self.sizes = genomepy.Genome(genome).sizes
+        if isinstance(genome, str):
+            self.sizes = genomepy.Genome(genome).sizes
+        elif isinstance(genome, list):
+            self.sizes = {g: DECIMA_CONTEXT_SIZE for g in genome}
+        else:
+            raise ValueError(
+                f"Invalid type for genome: {type(genome)}. Either provide genome name like `hg38` or list of gene names."
+            )
         self.measures = dict()
 
     def open(self):
@@ -102,7 +133,7 @@ class BigWigWriter:
         self.open()
         return self
 
-    def add(self, chrom, start, end, values):
+    def add(self, chrom: str, start: int, end: int, values: np.ndarray):
         """Add genomic interval data to be written.
 
         Args:
@@ -155,6 +186,8 @@ class AttributionWriter:
         metadata_anndata: Gene metadata source. None uses default Decima data.
         genome: Reference genome version.
         bigwig: Create BigWig file for genome browser.
+        correct_grad_bigwig: Correct gradient bigwig for bias.
+        custom_genes: If True, do not assert that the genes are in the result.
 
     Examples:
         >>> with (
@@ -180,6 +213,7 @@ class AttributionWriter:
         genome: str = "hg38",
         bigwig: bool = True,
         correct_grad_bigwig: bool = True,
+        custom_genes: bool = False,
     ):
         self.path = path
         self.genes = genes
@@ -189,10 +223,12 @@ class AttributionWriter:
         self.idx = {g: i for i, g in enumerate(self.genes)}
         self.result = DecimaResult.load(metadata_anndata)
         self.correct_grad_bigwig = correct_grad_bigwig
+        self.custom_genes = custom_genes
 
     def open(self):
         """Open HDF5 file and optional BigWig file for writing."""
-        self.result.assert_genes(self.genes)
+        if not self.custom_genes:
+            self.result.assert_genes(self.genes)
 
         self.h5_writer = h5py.File(self.path, "w")
         self.h5_writer.attrs["model_name"] = self.model_name
@@ -201,6 +237,18 @@ class AttributionWriter:
             "genes",
             (len(self.genes),),
             dtype="S100",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
+            "gene_mask_start",
+            (len(self.genes),),
+            dtype="i4",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
+            "gene_mask_end",
+            (len(self.genes),),
+            dtype="i4",
             compression="gzip",
         )
         self.h5_writer["genes"][:] = np.array(self.genes, dtype="S100")
@@ -213,13 +261,16 @@ class AttributionWriter:
         )
         self.h5_writer.create_dataset(
             "sequence",
-            (len(self.genes), 4, DECIMA_CONTEXT_SIZE),
-            chunks=(1, 4, DECIMA_CONTEXT_SIZE),
+            (len(self.genes), DECIMA_CONTEXT_SIZE),
+            chunks=(1, DECIMA_CONTEXT_SIZE),
             dtype="i1",
             compression="gzip",
         )
         if self.bigwig:
-            self.bigwig_writer = BigWigWriter(Path(self.path).with_suffix(".bigwig").as_posix(), self.genome)
+            self.bigwig_writer = BigWigWriter(
+                Path(self.path).with_suffix(".bigwig").as_posix(),
+                genome=self.genes if self.custom_genes else self.genome,
+            )
             self.bigwig_writer.open()
 
     def __enter__(self):
@@ -227,24 +278,69 @@ class AttributionWriter:
         self.open()
         return self
 
-    def add(self, gene, seqs, attrs):
+    def add(
+        self,
+        gene: str,
+        seqs: np.ndarray,
+        attrs: np.ndarray,
+        gene_mask_start: Optional[int] = None,
+        gene_mask_end: Optional[int] = None,
+    ):
         """Add attribution data for a gene.
 
         Args:
             gene: Gene name from the genes list.
             attrs: Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).
             seqs: One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).
+            gene_mask_start: Gene mask start position. If None, the gene mask start position will be loaded from the result.
+            gene_mask_end: Gene mask end position. If None, the gene mask end position will be loaded from the result.
         """
-        self.h5_writer["sequence"][self.idx[gene], :, :] = seqs.astype("i1")
+        assert seqs.shape == (
+            4,
+            DECIMA_CONTEXT_SIZE,
+        ), "`seqs` must be 4-dimensional with shape (4, DECIMA_CONTEXT_SIZE)."
+        assert attrs.shape == (
+            4,
+            DECIMA_CONTEXT_SIZE,
+        ), "`attrs` must be 4-dimensional with shape (4, DECIMA_CONTEXT_SIZE)."
+
+        if (gene_mask_start is None) and (gene_mask_end is None):
+            assert (
+                not self.custom_genes
+            ), "`gene_mask_start` and `gene_mask_end` must be provided if `custom_genes` is True."
+            gene_mask_start = self.result.gene_metadata.loc[gene, "gene_mask_start"].astype("i4")
+            gene_mask_end = self.result.gene_metadata.loc[gene, "gene_mask_end"].astype("i4")
+        elif (gene_mask_start is not None) and (gene_mask_end is not None):
+            pass
+        else:
+            raise ValueError(
+                "Either `gene_mask_start` and `gene_mask_end` must be provided together or both must be None."
+            )
+
+        self.h5_writer["gene_mask_start"][self.idx[gene]] = int(gene_mask_start)
+        self.h5_writer["gene_mask_end"][self.idx[gene]] = int(gene_mask_end)
+        self.h5_writer["sequence"][self.idx[gene], :] = convert_input_type(
+            torch.from_numpy(seqs),  # convert_input_type only support Tensor
+            "indices",
+            input_type="one_hot",
+        )[np.newaxis].astype("i1")
         self.h5_writer["attribution"][self.idx[gene], :, :] = attrs.astype("float32")
 
         if self.bigwig:
-            gene_meta = self.result.get_gene_metadata(gene)
+            if self.custom_genes:
+                chrom = gene
+                start = 0
+                end = DECIMA_CONTEXT_SIZE
+            else:
+                gene_meta = self.result.get_gene_metadata(gene)
+                chrom = gene_meta.chrom
+                start = gene_meta.start
+                end = gene_meta.end
 
             if self.correct_grad_bigwig:
                 attrs = attrs - attrs.mean(axis=0, keepdims=True)
 
-            self.bigwig_writer.add(gene_meta.chrom, gene_meta.start, gene_meta.end, (attrs * seqs).mean(axis=0))
+            self.bigwig_writer.add(chrom, start, end, (attrs * seqs).mean(axis=0))
 
     def close(self):
         """Close HDF5 file and optional BigWig file."""

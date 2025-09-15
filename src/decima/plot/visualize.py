@@ -1,9 +1,19 @@
 import numpy as np
 import pandas as pd
-import plotnine as p9
 import bioframe as bf
 
-from ..tools.evaluate import match_criteria
+from decima.tools.evaluate import match_criteria
+
+
+def import_plotnine():
+    try:
+        import plotnine
+
+        return plotnine
+    except ImportError:
+        raise ImportError(
+            "plotnine is not installed. Please install plot dependencies with `pip install decima[plot]`."
+        )
 
 
 def plot_gene_scatter(
@@ -18,6 +28,7 @@ def plot_gene_scatter(
     corrx=None,
     corry=None,
 ):
+    p9 = import_plotnine()
     # Extract data
     df = pd.DataFrame(
         {
@@ -27,7 +38,6 @@ def plot_gene_scatter(
         index=ad.obs_names,
     )
 
-    # Make plot
     g = (
         p9.ggplot(df, p9.aes(x="true", y="pred"))
         + p9.geom_pointdensity(size=size, alpha=alpha)
@@ -65,6 +75,7 @@ def plot_track_scatter(
     corrx=None,
     corry=None,
 ):
+    p9 = import_plotnine()
     # Extract data
     df = pd.DataFrame(
         {
@@ -77,7 +88,6 @@ def plot_track_scatter(
         df["true"] = df["true"] - ad[off_track, :].X.squeeze()
         df["pred"] = df["pred"] - ad[off_track, :].layers["preds"].squeeze()
 
-    # Make plot
     g = (
         p9.ggplot(df, p9.aes(x="true", y="pred"))
         + p9.geom_pointdensity(size=size, alpha=alpha)
@@ -115,6 +125,7 @@ def plot_marker_box(
     include_preds=True,
     fill=True,
 ):
+    p9 = import_plotnine()
     # Get criteria to filter
     if isinstance(marker_features, list):
         marker_features = ad.var.loc[gene, marker_features].to_dict()
@@ -205,6 +216,8 @@ def plot_peaks(attrs, tss_pos, df_peaks=None, overlapping_min_dist=1000, figsize
     Returns:
         plotnine.ggplot: The plotted figure
     """
+    p9 = import_plotnine()
+
     to_plot = pd.DataFrame(
         {
             "distance from TSS": [x - tss_pos for x in range(attrs.shape[1])],

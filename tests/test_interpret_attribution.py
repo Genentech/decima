@@ -1,3 +1,5 @@
+from pathlib import Path
+import h5py
 import numba
 import pytest
 import torch
@@ -6,12 +8,13 @@ import numpy as np
 import pandas as pd
 from grelu.sequence.format import strings_to_one_hot
 from captum.attr import Saliency, InputXGradient, IntegratedGradients
-from decima.interpret.attributions import Attribution
-from decima import predict_save_attributions
+from decima.core.attribution import Attribution
+from decima import predict_attributions_seqlet_calling
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.interpret.attributer import DecimaAttributer, get_attribution_method
+from decima.interpret.attributions import predict_save_attributions, recursive_seqlet_calling, plot_attributions
 
-from conftest import device
+from conftest import device, fasta_file, attribution_h5_file
 
 
 def test_get_attribution_method():
@@ -31,6 +34,7 @@ def attributions():
     np.random.seed(42)
     attrs = np.random.rand(4, 500) / 10 - 0.05
     attrs[:, 360:364] = 10
+    attrs[:, 260:264] = -1
     return Attribution(
         gene=gene,
         inputs=inputs,
@@ -44,17 +48,37 @@ def attributions():
 
 
 def test_Attribution_peak_finding(attributions):
-    assert len(attributions.peaks) == 1
+    assert len(attributions.peaks) == 2
     row = attributions.peaks.iloc[0]
-    assert row["peak"] == "TEST2@8"
+    assert row["peak"] == "pos.TEST2@8"
     assert row["start"] == 358
     assert row["end"] == 366
     assert row["attribution"] > 0
     assert row["p-value"] < 1e-2
     assert row["from_tss"] == 8
 
+    row = attributions.peaks.iloc[1]
+    assert row["peak"] == "neg.TEST2@-92"
+    assert row["start"] == 258
+    assert row["end"] == 266
+    assert row["attribution"] < 0
+    assert row["p-value"] < 1e-2
+    assert row["from_tss"] == -92
+
 
 def test_Attribution_scan_motifs(attributions):
+    attrs = attributions._get_attrs(-10, 20)
+    assert attrs.shape == (4, 30)
+    assert np.allclose(attrs[:, :10], 0)
+
+    attrs = attributions._get_attrs(360, 370)
+    assert attrs.shape == (4, 10)
+    assert np.allclose(attrs[:, :4], 10)
+
+    attrs = attributions._get_attrs(490, 510)
+    assert attrs.shape == (4, 20)
+    assert np.allclose(attrs[:, 10:], 0)
+
     df_motifs = attributions.scan_motifs()
     assert isinstance(df_motifs, pd.DataFrame)
     assert len(df_motifs) > 0
@@ -62,25 +86,25 @@ def test_Attribution_scan_motifs(attributions):
     assert "motif" in df_motifs.columns
     assert "p-value" in df_motifs.columns
     assert "peak" in df_motifs.columns
-    assert "GATA1.H12CORE.1.PSM.A" in set(df_motifs["motif"])
-    assert "TEST2@8" in set(df_motifs["peak"])
+    assert 'GATA1.H13CORE.0.P.B' in set(df_motifs["motif"])
+    assert {'neg.TEST2@-92', 'pos.TEST2@8'} == set(df_motifs["peak"])
 
-    df_motifs = df_motifs[df_motifs["peak"] == "TEST2@10"]
+    df_motifs = df_motifs[df_motifs["peak"] == "pos.TEST2@8"]
     assert (df_motifs["start"] - 350 == df_motifs["from_tss"]).all()
 
 
 def test_Attribution_peaks_to_bed(attributions):
     df_peaks = attributions.peaks_to_bed()
     assert isinstance(df_peaks, pd.DataFrame)
-    assert len(df_peaks) == 1
+    assert len(df_peaks) == 2
 
-    assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand"]
+    assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand", "attribution"]
 
     row = df_peaks.iloc[0]
     assert row["chrom"] == "chr1"
     assert row["start"] == 1358
     assert row["end"] == 1366
-    assert row["name"] == "TEST2@8"
+    assert row["name"] == "pos.TEST2@8"
     assert row["score"] > 2
     assert row["strand"] == "."
 
@@ -98,6 +122,7 @@ def test_Attribution_from_seq(tmp_path):
         gene_mask_start=0,
         gene_mask_end=DECIMA_CONTEXT_SIZE,
     )
+
     bigwig_path = tmp_path / "test.bigwig"
     attributions.save_bigwig(str(bigwig_path))
     bw = pyBigWig.open(str(bigwig_path))
@@ -118,71 +143,157 @@ def test_Attribution_save_bigwig(attributions, tmp_path):
     assert attrs[2:6] == [40, 40, 40, 40]
     bw.close()
 
+
+@pytest.mark.long_running
+def test__predict_save_attributions(tmp_path):
+    output_prefix = tmp_path / "test"
+    predict_save_attributions(
+        output_prefix=output_prefix,
+        tasks="(cell_type == 'classical monocyte') and (tissue == 'blood')",
+        off_tasks="(cell_type != 'classical monocyte') and (tissue == 'blood')",
+        top_n_markers=5,
+        model=0,
+        device=device,
+    )
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    attribution_file = tmp_path / "test.attributions.h5"
+    with h5py.File(attribution_file, "r") as f:
+        assert f["attribution"].shape == (5, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (5, DECIMA_CONTEXT_SIZE)
+        assert list(f["genes"][:]) == [b'MEFV', b'AQP9', b'CLEC5A', b'CLEC4D', b'PLA2G7']
+        assert list(f["gene_mask_start"][:]) == [163840, 163840, 163840, 163840, 163840]
+        assert list(f["gene_mask_end"][:]) == [178439, 211582, 183490, 176731, 195332]
+        assert f.attrs['model_name'] == 'v1_rep0'
+
+
+@pytest.mark.long_running
+def test__predict_save_attributions_seqs(tmp_path):
+    output_prefix = tmp_path / "test"
+    predict_save_attributions(
+        output_prefix=output_prefix,
+        seqs=fasta_file,
+        model=0,
+        device=device,
+    )
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    attribution_file = tmp_path / "test.attributions.h5"
+    with h5py.File(attribution_file, "r") as f:
+        assert list(f["genes"][:]) == [b"CD68", b"SPI1"]
+        assert f["attribution"].shape == (2, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (2, DECIMA_CONTEXT_SIZE)
+        assert list(f["gene_mask_start"][:]) == [163840, 163840]
+        assert list(f["gene_mask_end"][:]) == [166460, 187556]
+        assert f.attrs['model_name'] == 'v1_rep0'
+
+
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene(tmp_path):
-    output_dir = tmp_path / "SPI1"
-    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], tasks="cell_type == 'classical monocyte'", device=device)
+    output_prefix = tmp_path / "SPI1"
+    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], tasks="cell_type == 'classical monocyte'", device=device)
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.warnings.log").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["SPI1"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "SPI1.peaks.png").exists()
+    assert ((plot_dir / "SPI1_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_saliency(tmp_path):
-    output_dir = tmp_path / "SPI1"
-    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="saliency", tasks="cell_type == 'classical monocyte'", device=device)
+    output_prefix = tmp_path / "SPI1"
+    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="saliency", tasks="cell_type == 'classical monocyte'", device=device)
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.warnings.log").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["SPI1"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "SPI1.peaks.png").exists()
+    assert ((plot_dir / "SPI1_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_inputxgradient(tmp_path):
-    output_dir = tmp_path / "SPI1"
-    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="inputxgradient", tasks="cell_type == 'classical monocyte'", device=device)
+    output_prefix = tmp_path / "SPI1"
+    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="inputxgradient", tasks="cell_type == 'classical monocyte'", device=device)
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.warnings.log").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["SPI1"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "SPI1.peaks.png").exists()
+    assert ((plot_dir / "SPI1_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_integratedgradients(tmp_path):
-    output_dir = tmp_path / "SPI1"
-    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1"], method="integratedgradients", tasks="cell_type == 'classical monocyte'", device=device)
+    output_prefix = tmp_path / "SPI1"
+    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="integratedgradients", tasks="cell_type == 'classical monocyte'", device=device)
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.warnings.log").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["SPI1"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "SPI1.peaks.png").exists()
+    assert ((plot_dir / "SPI1_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
 def test_predict_save_attributions_multiple_genes(tmp_path):
-    output_dir = tmp_path / "SPI1_CD68"
-    predict_save_attributions(output_dir=str(output_dir), genes=["SPI1", "CD68"], tasks="cell_type == 'classical monocyte'", device=device)
+    output_prefix = tmp_path / "SPI1_CD68"
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1", "CD68"],
+        tasks="cell_type == 'classical monocyte'",
+        device=device
+    )
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "qc.warnings.log").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["CD68"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "CD68.peaks.png").exists()
+    assert ((plot_dir / "CD68_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
 def test_predict_save_attributions_seqs(tmp_path):
-    output_dir = tmp_path / "seqs"
+    output_prefix = tmp_path / "seqs"
     seqs = pd.read_csv('tests/data/seqs.csv', index_col=0)
-    predict_save_attributions(output_dir=str(output_dir), seqs=seqs, tasks="cell_type == 'classical monocyte'", device=device)
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        seqs=seqs,
+        tasks="cell_type == 'classical monocyte'",
+        device=device,
+        num_workers=1,
+    )
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".seqs.fasta")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
+
+    plot_attributions(output_prefix=output_prefix, genes=["CD68"])
+    plot_dir = Path(str(output_prefix) + "_plots")
+    assert (plot_dir / "CD68.peaks.png").exists()
+    assert ((plot_dir / "CD68_seqlogos").is_dir())
 
 
 @pytest.mark.long_running
@@ -226,3 +337,16 @@ def test_DecimaAttributer():
             off_tasks=None,
             device=device
         )
+
+
+@pytest.mark.long_running
+def test_recursive_seqlet_calling(tmp_path, attribution_h5_file):
+    output_prefix = tmp_path / "test"
+    recursive_seqlet_calling(
+        output_prefix=output_prefix,
+        attributions=attribution_h5_file,
+        genes=['PDIA3', 'EIF2S3', 'PCNP', 'SELENOT'],
+        agg_func="mean"
+    )
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()

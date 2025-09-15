@@ -164,6 +164,7 @@ class SeqDataset(Dataset):
         seqs: List of sequences as strings.
         gene_mask_starts: List of gene mask starts.
         gene_mask_ends: List of gene mask ends.
+        genes: List of gene names.
         max_seq_shift: Maximum sequence shift.
         seed: Seed for the random number generator.
         augment_mode: Augmentation mode.
@@ -177,6 +178,7 @@ class SeqDataset(Dataset):
         seqs: List[str],
         gene_mask_starts: List[int],
         gene_mask_ends: List[int],
+        genes: List[str] = None,
         max_seq_shift: int = 0,
         seed: int = 0,
         augment_mode: str = "random",
@@ -204,9 +206,15 @@ class SeqDataset(Dataset):
         self.n_augmented = len(self.augmenter)
         self.padded_seq_len = DECIMA_CONTEXT_SIZE + (2 * self.max_seq_shift)
 
-        self.n_seqs = len(self.genes) * self.n_augmented
+        self.n_seqs = len(self.seqs) * self.n_augmented
         self.n_alleles = 1
         self.predict = False
+
+        if genes is None:
+            self.genes = [f"seq{i}" for i in range(len(self.seqs))]
+        else:
+            assert len(genes) == len(self.seqs), "Length of `genes` must match length of `seqs`"
+            self.genes = [str(i) for i in genes]
 
     def __len__(self):
         return self.n_seqs
@@ -240,11 +248,13 @@ class SeqDataset(Dataset):
             df["seq"].tolist(),
             df["gene_mask_start"].tolist(),
             df["gene_mask_end"].tolist(),
+            genes=df.index.tolist(),
             max_seq_shift=max_seq_shift,
             seed=seed,
             augment_mode=augment_mode,
         )
 
+    @classmethod
     def from_fasta(cls, fasta_file: str, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
         seqs = read_fasta_gene_mask(fasta_file)
         return cls.from_dataframe(seqs, max_seq_shift=max_seq_shift, seed=seed, augment_mode=augment_mode)

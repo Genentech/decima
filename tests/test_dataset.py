@@ -1,5 +1,7 @@
+import pandas as pd
+
 from decima.constants import DECIMA_CONTEXT_SIZE
-from decima.data.dataset import GeneDataset
+from decima.data.dataset import GeneDataset, SeqDataset
 
 
 def test_gene_dataset():
@@ -18,3 +20,29 @@ def test_gene_dataset():
 
     ds = GeneDataset(max_seq_shift=100, augment_mode="serial")
     assert len(ds) == 18457 * 201
+
+
+def test_SeqDataset():
+    dataset = SeqDataset(
+        seqs=["A" * DECIMA_CONTEXT_SIZE, "T" * DECIMA_CONTEXT_SIZE, "C" * DECIMA_CONTEXT_SIZE],
+        gene_mask_starts=[1, 1, 1],
+        gene_mask_ends=[2, 2, 2],
+    )
+    assert len(dataset) == 3
+    assert dataset[0].shape == (5, DECIMA_CONTEXT_SIZE)
+    assert dataset[1].shape == (5, DECIMA_CONTEXT_SIZE)
+
+    df = pd.DataFrame(
+        {
+            "seq": ["A" * DECIMA_CONTEXT_SIZE, "T" * DECIMA_CONTEXT_SIZE, "C" * DECIMA_CONTEXT_SIZE],
+            "gene_mask_start": [1, 1, 1],
+            "gene_mask_end": [2, 2, 2],
+        }
+    )
+    dataset = SeqDataset.from_dataframe(df)
+    assert len(dataset) == 3
+    assert dataset[0].shape == (5, DECIMA_CONTEXT_SIZE)
+
+    dataset = SeqDataset.from_fasta("tests/data/seqs.fasta")
+    assert len(dataset) == 2
+    assert dataset[0].shape == (5, DECIMA_CONTEXT_SIZE)

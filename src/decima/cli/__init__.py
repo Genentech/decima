@@ -3,7 +3,7 @@ import click
 
 from decima.cli.predict_genes import cli_predict_genes
 from decima.cli.download import cli_download
-from decima.cli.attributions import cli_attributions
+from decima.cli.attributions import cli_attributions, cli_attributions_plot, cli_attributions_predict
 from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
 from decima.cli.finetune import cli_finetune
@@ -36,16 +36,18 @@ def main():
 
 main.add_command(cli_predict_genes, name="predict-genes")
 main.add_command(cli_download, name="download")
-main.add_command(cli_attributions, name="attributions")
 main.add_command(cli_query_cell, name="query-cell")
+main.add_command(cli_attributions, name="attributions")
+main.add_command(cli_attributions_predict, name="attributions-predict")
+main.add_command(cli_attributions_plot, name="attributions-plot")
 main.add_command(cli_predict_variant_effect, name="vep")
-main.add_command(cli_finetune, name="finetune")
 main.add_command(cli_vep_ensemble, name="vep-ensemble")
+main.add_command(cli_finetune, name="finetune")
+main.add_command(cli_modisco, name="modisco")
 main.add_command(cli_modisco_attributions, name="modisco-attributions")
 main.add_command(cli_modisco_patterns, name="modisco-patterns")
 main.add_command(cli_modisco_reports, name="modisco-reports")
 main.add_command(cli_modisco_seqlet_bed, name="modisco-seqlet-bed")
-main.add_command(cli_modisco, name="modisco")
 
 
 if __name__ == "__main__":

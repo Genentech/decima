@@ -55,6 +55,17 @@ class DecimaAttributer:
         self._attributer = attribution_method(self.model)
 
     def attribute(self, inputs, **kwargs):
+        """Attribute inputs.
+
+        Args:
+            inputs: Inputs to attribute.
+            **kwargs: Additional arguments to pass to the attribution method.
+
+        Returns:
+            torch.Tensor: Attribution analysis results for the gene and tasks
+        """
+        inputs = inputs.to(self.model.device)
+
         if self.method == "saliency":
             kwargs = {**kwargs, "abs": False}
 

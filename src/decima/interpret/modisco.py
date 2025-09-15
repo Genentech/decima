@@ -12,10 +12,10 @@ from grelu.interpret.motifs import trim_pwm
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
+from decima.utils import _get_on_off_tasks, _get_genes
 from decima.utils.motifs import motif_start_end
-from decima.utils.task import _get_on_off_tasks, _get_genes
 from decima.core.attribution import AttributionResult
-from decima.interpret.save_attributions import _predict_save_attributions
+from decima.interpret.attributions import predict_save_attributions
 
 
 def predict_save_modisco_attributions(
@@ -65,7 +65,7 @@ def predict_save_modisco_attributions(
     ...     tasks="cell_type == 'classical monocyte'",
     ... )
     """
-    _predict_save_attributions(
+    predict_save_attributions(
         output_prefix=output_prefix,
         tasks=tasks,
         off_tasks=off_tasks,
@@ -143,21 +143,10 @@ def modisco_patterns(
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
     all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
 
-    model_names = list()
-    for i, attributions_file in enumerate(attributions_files):
-        with AttributionResult(attributions_file, result, tss_distance, correct_grad) as attributions_result:
-            if i == 0:
-                sequences, attributions = attributions_result.load(all_genes)
-                genome = attributions_result.genome
-            else:
-                seqs, attrs = attributions_result.load(all_genes)
-                sequences += seqs
-                attributions += attrs
-                assert attributions_result.genome == genome
-            model_names.append(attributions_result.model_name)
-
-    sequences = sequences / len(attributions_files)
-    attributions = attributions / len(attributions_files)
+    with AttributionResult(attributions_files, tss_distance, correct_grad, num_workers=1, agg_func="mean") as ar:
+        sequences, attributions = ar.load(all_genes)
+        genome = ar.genome
+        model_names = ar.model_name
 
     pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
@@ -205,6 +194,7 @@ def modisco_patterns(
         f.create_dataset("genes", data=np.array(all_genes, dtype="S100"))
         f.attrs["tss_distance"] = tss_distance
         f.attrs["model_names"] = ",".join(model_names)
+        f.attrs["genome"] = genome
 
 
 def modisco_reports(

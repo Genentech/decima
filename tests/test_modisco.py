@@ -4,7 +4,7 @@ import pytest
 import h5py
 import pandas as pd
 
-from decima.interpret.modisco import predict_save_modisco_attributions, modisco_patterns, modisco_reports, modisco, modisco_seqlet_bed
+from decima.interpret.modisco import predict_save_modisco_attributions, modisco, modisco_seqlet_bed
 from decima.constants import DECIMA_CONTEXT_SIZE
 
 from conftest import device
@@ -24,9 +24,10 @@ def test_predict_save_modisco_attributions(tmp_path):
     attribution_file = tmp_path / "test_modisco.attributions.h5"
     with h5py.File(attribution_file, "r") as f:
         assert f["attribution"].shape == (5, 4, DECIMA_CONTEXT_SIZE)
-        assert f["sequence"].shape == (5, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (5, DECIMA_CONTEXT_SIZE)
         assert list(f["genes"][:]) == [b'MEFV', b'AQP9', b'CLEC5A', b'CLEC4D', b'PLA2G7']
         assert f.attrs['model_name'] == 'v1_rep0'
+
 
 @pytest.mark.long_running
 def test_modisco(tmp_path):

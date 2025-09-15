@@ -6,6 +6,7 @@ from click.testing import CliRunner
 from decima.cli import main
 
 from conftest import device
+from decima.constants import DECIMA_CONTEXT_SIZE
 
 
 def test_cli_main():
@@ -23,111 +24,119 @@ def test_cli_download():
 
 @pytest.mark.long_running
 def test_cli_attributions_single_gene(tmp_path):
-    output_dir = tmp_path / "SPI1"
+    output_prefix = tmp_path / "SPI1"
     runner = CliRunner()
     result = runner.invoke(main, [
         "attributions",
         "--genes", "SPI1",
         "--tasks", "cell_type == 'classical monocyte'",
-        "--output_dir", str(output_dir),
+        "--output-prefix", str(output_prefix),
         "--model", "0",
         "--device", device,
-        "--plot_seqlogo"
     ])
     assert result.exit_code == 0
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots" / "SPI1.png").exists()
-    assert (output_dir / "qc.warnings.log").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "seqlogos").is_dir()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".attributions.bigwig")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
 
-    with h5py.File(output_dir / "attributions.h5", "r") as f:
-        assert "SPI1" in f
+    with h5py.File(output_prefix.with_suffix(".attributions.h5"), "r") as f:
+        assert list(f.keys()) == ['attribution', 'gene_mask_end', 'gene_mask_start', 'genes', 'sequence']
+        assert f["genes"][:]== [b"SPI1"]
+        assert f["attribution"].shape == (1, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (1, DECIMA_CONTEXT_SIZE)
+        assert f.attrs["model_name"] == "v1_rep0"
+        assert f.attrs["genome"] == "hg38"
 
-    df_peaks = pd.read_csv(output_dir / "peaks.bed", sep="\t", header=None)
-    genes = set(df_peaks[3].str.split("@").str[0])
+    df_peaks = pd.read_csv(output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=None)
+    genes = set(df_peaks[3].str.split(".").str[1].str.split("@").str[0])
     assert "SPI1" in genes
 
-    df_motifs = pd.read_csv(output_dir / "motifs.tsv", sep="\t")
-    genes = set(df_motifs['peak'].str.split("@").str[0])
+    df_motifs = pd.read_csv(output_prefix.with_suffix(".motifs.tsv"), sep="\t")
+    genes = set(df_motifs['peak'].str.split(".").str[1].str.split("@").str[0])
     assert "SPI1" in genes
+
 
 @pytest.mark.long_running
 def test_cli_attributions_multiple_genes(tmp_path):
-    output_dir = tmp_path / "SPI1_CD68_BRD3"
+    output_prefix = tmp_path / "SPI1_CD68_BRD3"
     runner = CliRunner()
     result = runner.invoke(main, [
         "attributions",
         "--genes", "SPI1,CD68,BRD3",
         "--tasks", "cell_type == 'classical monocyte'",
-        "--output_dir", str(output_dir),
+        "--output-prefix", str(output_prefix),
         "--model", "0",
         "--device", device
     ])
     assert result.exit_code == 0
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots" / "SPI1.png").exists()
-    assert (output_dir / "peaks_plots" / "CD68.png").exists()
-    assert (output_dir / "peaks_plots" / "CD68.png").exists()
-    assert (output_dir / "qc.warnings.log").exists()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "attributions.h5").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".attributions.bigwig")).exists()
+    assert (output_prefix.with_suffix(".warnings.qc.log")).exists()
 
-    with open(output_dir / "qc.warnings.log", "r") as f:
+    with open(output_prefix.with_suffix(".warnings.qc.log"), "r") as f:
         assert "BRD3" in f.read() # gene with low correlation
 
-    with h5py.File(output_dir / "attributions.h5", "r") as f:
-        assert "SPI1" in f
-        assert "CD68" in f
-        assert "BRD3" in f
+    with h5py.File(output_prefix.with_suffix(".attributions.h5"), "r") as f:
+        assert list(f.keys()) == ['attribution', 'gene_mask_end', 'gene_mask_start', 'genes', 'sequence']
+        assert f["genes"][:].tolist() == [b"SPI1", b"CD68", b"BRD3"]
+        assert f["attribution"].shape == (3, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (3, DECIMA_CONTEXT_SIZE)
+        assert f.attrs["model_name"] == "v1_rep0"
+        assert f.attrs["genome"] == "hg38"
 
-    df_peaks = pd.read_csv(output_dir / "peaks.bed", sep="\t", header=None)
-    genes = set(df_peaks[3].str.split("@").str[0])
+    df_peaks = pd.read_csv(output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=None)
+    genes = set(df_peaks[3].str.split(".").str[1].str.split("@").str[0])
     assert "SPI1" in genes
     assert "CD68" in genes
     assert "BRD3" in genes
 
-    df_motifs = pd.read_csv(output_dir / "motifs.tsv", sep="\t")
-    genes = set(df_motifs['peak'].str.split("@").str[0])
+    df_motifs = pd.read_csv(output_prefix.with_suffix(".motifs.tsv"), sep="\t")
+    genes = set(df_motifs['peak'].str.split(".").str[1].str.split("@").str[0])
     assert "SPI1" in genes
     assert "CD68" in genes
     assert "BRD3" in genes
 
 @pytest.mark.long_running
 def test_cli_attributions_sequences(tmp_path):
-    output_dir = tmp_path / "seqs"
+    output_prefix = tmp_path / "seqs"
     runner = CliRunner()
     result = runner.invoke(main, [
         "attributions",
         "--seqs", "tests/data/seqs.fasta",
         "--tasks", "cell_type == 'classical monocyte'",
-        "--output_dir", str(output_dir),
+        "--output-prefix", str(output_prefix),
         "--model", "0",
         "--device", device,
     ])
     assert result.exit_code == 0
 
-    assert (output_dir / "peaks.bed").exists()
-    assert (output_dir / "peaks_plots").is_dir()
-    assert (output_dir / "motifs.tsv").exists()
-    assert (output_dir / "attributions.h5").exists()
-    assert (output_dir / "seqs.fasta").exists()
-    assert (output_dir / "seqs.fasta.fai").exists()
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert (output_prefix.with_suffix(".attributions.h5")).exists()
+    assert (output_prefix.with_suffix(".seqs.fasta")).exists()
+    assert (output_prefix.with_suffix(".seqs.fasta.fai")).exists()
 
-    with h5py.File(output_dir / "attributions.h5", "r") as f:
-        assert "SPI1" in f
-        assert "CD68" in f
+    with h5py.File(output_prefix.with_suffix(".attributions.h5"), "r") as f:
+        assert list(f.keys()) == ['attribution', 'gene_mask_end', 'gene_mask_start', 'genes', 'sequence']
+        assert f["genes"][:].tolist() == [b"CD68", b"SPI1"]
+        assert f["attribution"].shape == (2, 4, DECIMA_CONTEXT_SIZE)
+        assert f["sequence"].shape == (2, DECIMA_CONTEXT_SIZE)
+        assert f.attrs["model_name"] == "v1_rep0"
+        assert f.attrs["genome"] == "hg38"
 
-    df_peaks = pd.read_csv(output_dir / "peaks.bed", sep="\t", header=None)
-    genes = set(df_peaks[3].str.split("@").str[0])
+    df_peaks = pd.read_csv(output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=None)
+    genes = set(df_peaks[3].str.split(".").str[1].str.split("@").str[0])
     assert "CD68" in genes
     assert "SPI1" in genes
 
-    df_motifs = pd.read_csv(output_dir / "motifs.tsv", sep="\t")
-    genes = set(df_motifs['peak'].str.split("@").str[0])
+    df_motifs = pd.read_csv(output_prefix.with_suffix(".motifs.tsv"), sep="\t")
+    genes = set(df_motifs['peak'].str.split(".").str[1].str.split("@").str[0])
     assert "CD68" in genes
     assert "SPI1" in genes
 
