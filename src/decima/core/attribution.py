@@ -587,7 +587,7 @@ class AttributionResult:
                 f["sequence"][idx].astype("int"), "one_hot", input_type="indices"
             )
 
-            attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + (tss_distance or 0)))
+            attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + padding * 2))
             attrs[:, padding : DECIMA_CONTEXT_SIZE + padding] = f["attribution"][idx].astype(np.float32)
 
         if tss_distance is not None:
