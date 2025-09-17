@@ -125,11 +125,10 @@ class BigWigWriter:
             if chrom not in self.measures:
                 continue
             data = self.measures[chrom]
-            values = data["values"] / data["count"]
-            pos = np.where(np.abs(values) > self.threshold)[0]
-            values = values[pos]
-            if len(values) == 0:
+            pos = np.where(np.abs(data["values"]) > self.threshold)[0]
+            if len(pos) == 0:
                 continue
+            values = data["values"][pos] / data["count"][pos]
             self.bw.addEntries(chrom, pos, values=values, span=1, step=1)
         self.bw.close()
 
@@ -172,7 +171,16 @@ class AttributionWriter:
         ...     )
     """
 
-    def __init__(self, path, genes, model_name, metadata_anndata=None, genome: str = "hg38", bigwig: bool = True):
+    def __init__(
+        self,
+        path,
+        genes,
+        model_name,
+        metadata_anndata=None,
+        genome: str = "hg38",
+        bigwig: bool = True,
+        correct_grad_bigwig: bool = True,
+    ):
         self.path = path
         self.genes = genes
         self.genome = genome
@@ -180,6 +188,7 @@ class AttributionWriter:
         self.model_name = model_name
         self.idx = {g: i for i, g in enumerate(self.genes)}
         self.result = DecimaResult.load(metadata_anndata)
+        self.correct_grad_bigwig = correct_grad_bigwig
 
     def open(self):
         """Open HDF5 file and optional BigWig file for writing."""
@@ -231,7 +240,11 @@ class AttributionWriter:
 
         if self.bigwig:
             gene_meta = self.result.get_gene_metadata(gene)
-            self.bigwig_writer.add(gene_meta.chrom, gene_meta.start, gene_meta.end, attrs.mean(axis=0))
+
+            if self.correct_grad_bigwig:
+                attrs = attrs - attrs.mean(axis=0, keepdims=True)
+
+            self.bigwig_writer.add(gene_meta.chrom, gene_meta.start, gene_meta.end, (attrs * seqs).mean(axis=0))
 
     def close(self):
         """Close HDF5 file and optional BigWig file."""

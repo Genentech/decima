@@ -8,7 +8,13 @@ from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
 from decima.cli.finetune import cli_finetune
 from decima.cli.vep import cli_vep_ensemble
-from decima.cli.modisco import cli_modisco_attributions, cli_modisco_patterns, cli_modisco_reports, cli_modisco
+from decima.cli.modisco import (
+    cli_modisco_attributions,
+    cli_modisco_patterns,
+    cli_modisco_reports,
+    cli_modisco_seqlet_bed,
+    cli_modisco,
+)
 
 
 logger = logging.getLogger("decima")
@@ -28,7 +34,6 @@ def main():
     pass
 
 
-# main.add_command(cli_finetune, name="finetune")
 main.add_command(cli_predict_genes, name="predict-genes")
 main.add_command(cli_download, name="download")
 main.add_command(cli_attributions, name="attributions")
@@ -39,6 +44,7 @@ main.add_command(cli_vep_ensemble, name="vep-ensemble")
 main.add_command(cli_modisco_attributions, name="modisco-attributions")
 main.add_command(cli_modisco_patterns, name="modisco-patterns")
 main.add_command(cli_modisco_reports, name="modisco-reports")
+main.add_command(cli_modisco_seqlet_bed, name="modisco-seqlet-bed")
 main.add_command(cli_modisco, name="modisco")
 
 

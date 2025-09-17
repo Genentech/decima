@@ -1,5 +1,6 @@
 import os
 from typing import Union, Optional
+import warnings
 import wandb
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -45,6 +46,8 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
     elif isinstance(model, str):
         if Path(model).exists():
             return LightningModel.load_safetensor(model, device=device)
+        else:
+            model_name = model
     elif model in {0, 1, 2, 3}:
         model_name = f"rep{model}"
     else:
@@ -52,9 +55,15 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
             f"Invalid model: {model} it need to be a string of model_name on wandb "
             "or an integer of replicate number {0, 1, 2, 3}, or a path to a local model"
         )
-
     if model_name.upper() in os.environ:
-        return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)
+        if Path(os.environ[model_name.upper()]).exists():
+            return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)
+        else:
+            warnings.warn(
+                f"Model `{model_name}` provided in environment variables, "
+                f"but not found in `{os.environ[model_name.upper()]}` "
+                f"Trying to download `{model_name}` from wandb."
+            )
 
     art = get_artifact(model_name, project="decima")
     with TemporaryDirectory() as d:
@@ -75,7 +84,14 @@ def load_decima_metadata(path: Optional[str] = None):
         return anndata.read_h5ad(path)
 
     if "DECIMA_METADATA" in os.environ:
-        return anndata.read_h5ad(os.environ["DECIMA_METADATA"])
+        if Path(os.environ["DECIMA_METADATA"]).exists():
+            return anndata.read_h5ad(os.environ["DECIMA_METADATA"])
+        else:
+            warnings.warn(
+                f"Metadata `{os.environ['DECIMA_METADATA']}` provided in environment variables, "
+                f"but not found in `{os.environ['DECIMA_METADATA']}` "
+                f"Trying to download `metadata` from wandb."
+            )
 
     art = get_artifact("metadata", project="decima")
     with TemporaryDirectory() as d:
