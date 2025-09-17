@@ -50,7 +50,7 @@ class QCLogger:
                 level="warning",
             )
 
-    def log_correlation(self, tasks, off_tasks, plot=True):
+    def log_correlation(self, tasks, off_tasks=None, plot=True):
         """Log the correlation between tasks and off_tasks
 
         Args:
@@ -64,7 +64,7 @@ class QCLogger:
         )
         if plot:
             g = self.result.plot_correlation(tasks, off_tasks)
-            g.save(self.log_file.replace(".log", "_correlation.qc.png"))
+            g.save(self.log_file.replace(".warnings.qc.log", "_correlation.qc.png"))
 
     def open(self):
         self._log_file = open(self.log_file, "w")

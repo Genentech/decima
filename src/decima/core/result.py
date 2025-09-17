@@ -356,7 +356,7 @@ class DecimaResult:
 
         return marker_zscores(ad, key="task", layer=layer).sort_values(by="score", ascending=False)
 
-    def _correlation(self, tasks, off_tasks, dataset="test"):
+    def _correlation(self, tasks, off_tasks=None, dataset="test"):
         if self.ground_truth is None:
             raise ValueError(
                 "Anndata object does not have expression data. Cannot compute correlations between tasks and off tasks."
@@ -364,10 +364,14 @@ class DecimaResult:
 
         tasks, off_tasks = self.query_tasks(tasks, off_tasks)
         tasks = self.anndata.obs.index.isin(tasks)
-        off_tasks = self.anndata.obs.index.isin(off_tasks)
 
-        preds = self.anndata.layers["preds"][tasks].mean(axis=0) - self.anndata.layers["preds"][off_tasks].mean(axis=0)
-        true = self.anndata.X[tasks].mean(axis=0) - self.anndata.X[off_tasks].mean(axis=0)
+        preds = self.anndata.layers["preds"][tasks].mean(axis=0)
+        true = self.anndata.X[tasks].mean(axis=0)
+
+        if off_tasks is not None:
+            off_tasks = self.anndata.obs.index.isin(off_tasks)
+            preds = preds - self.anndata.layers["preds"][off_tasks].mean(axis=0)
+            true = true - self.anndata.X[off_tasks].mean(axis=0)
 
         if dataset is not None:
             genes = self.anndata.var.dataset == dataset

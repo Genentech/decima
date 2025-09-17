@@ -2,6 +2,7 @@ import click
 from decima.interpret.attributions import (
     plot_attributions,
     predict_save_attributions,
+    recursive_seqlet_calling,
     predict_attributions_seqlet_calling,
 )
 
@@ -250,6 +251,93 @@ def cli_attributions(
         pattern_type=pattern_type,
         meme_motif_db=meme_motif_db,
         genome=genome,
+    )
+
+
+@click.command()
+@click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files")
+@click.option("--attributions", type=str, required=True, help="Path to the attribution files")
+@click.option(
+    "--tasks",
+    type=str,
+    required=False,
+    help="Query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte'')",
+)
+@click.option(
+    "--off-tasks", type=str, required=False, help="Optional query string to filter cell types to contrast against."
+)
+@click.option("--tss-distance", type=int, required=False, default=None, help="TSS distance for attribution analysis.")
+@click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
+@click.option("--genes", type=str, required=False, help="Comma-separated list of gene symbols or IDs to analyze.")
+@click.option(
+    "--top-n-markers",
+    type=int,
+    required=False,
+    default=None,
+    help="Top n markers to predict. If not provided, all markers will be predicted.",
+)
+@click.option("--num-workers", type=int, required=False, default=4, help="Number of workers for attribution analysis.")
+@click.option(
+    "--agg-func", type=str, required=False, default="mean", help="Aggregation function for attribution analysis."
+)
+@click.option("--threshold", type=float, required=False, default=5e-4, help="Threshold for attribution analysis.")
+@click.option("--min-seqlet-len", type=int, required=False, default=4, help="Minimum length for seqlet calling.")
+@click.option("--max-seqlet-len", type=int, required=False, default=25, help="Maximum length for seqlet calling.")
+@click.option("--additional-flanks", type=int, required=False, default=0, help="Additional flanks for seqlet calling.")
+@click.option(
+    "--pattern-type",
+    type=click.Choice(["both", "pos", "neg"]),
+    required=False,
+    default="both",
+    help="Type of pattern to call.",
+)
+@click.option("--custom-genome", is_flag=True, help="Use custom genome")
+@click.option(
+    "--meme-motif-db", type=str, default="hocomoco_v13", show_default=True, help="Path to the MEME motif database."
+)
+def cli_attributions_recursive_seqlet_calling(
+    output_prefix,
+    attributions,
+    tasks,
+    off_tasks,
+    tss_distance,
+    metadata,
+    genes,
+    top_n_markers,
+    num_workers,
+    agg_func,
+    threshold,
+    min_seqlet_len,
+    max_seqlet_len,
+    additional_flanks,
+    pattern_type,
+    custom_genome,
+    meme_motif_db,
+):
+    if isinstance(attributions, str):
+        attributions = attributions.split(",")
+
+    if genes is not None:
+        genes = genes.split(",")
+
+    recursive_seqlet_calling(
+        output_prefix=output_prefix,
+        attributions=attributions,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        tss_distance=tss_distance,
+        metadata_anndata=metadata,
+        genes=genes,
+        top_n_markers=top_n_markers,
+        num_workers=num_workers,
+        agg_func=agg_func,
+        threshold=threshold,
+        min_seqlet_len=min_seqlet_len,
+        max_seqlet_len=max_seqlet_len,
+        additional_flanks=additional_flanks,
+        pattern_type=pattern_type,
+        custom_genome=custom_genome,
+        meme_motif_db=meme_motif_db,
     )
 
 

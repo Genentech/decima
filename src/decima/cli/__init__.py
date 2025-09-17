@@ -3,7 +3,12 @@ import click
 
 from decima.cli.predict_genes import cli_predict_genes
 from decima.cli.download import cli_download
-from decima.cli.attributions import cli_attributions, cli_attributions_plot, cli_attributions_predict
+from decima.cli.attributions import (
+    cli_attributions,
+    cli_attributions_plot,
+    cli_attributions_predict,
+    cli_attributions_recursive_seqlet_calling,
+)
 from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
 from decima.cli.finetune import cli_finetune
@@ -40,6 +45,7 @@ main.add_command(cli_query_cell, name="query-cell")
 main.add_command(cli_attributions, name="attributions")
 main.add_command(cli_attributions_predict, name="attributions-predict")
 main.add_command(cli_attributions_plot, name="attributions-plot")
+main.add_command(cli_attributions_recursive_seqlet_calling, name="attributions-recursive-seqlet-calling")
 main.add_command(cli_predict_variant_effect, name="vep")
 main.add_command(cli_vep_ensemble, name="vep-ensemble")
 main.add_command(cli_finetune, name="finetune")

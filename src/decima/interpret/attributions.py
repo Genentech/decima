@@ -146,8 +146,8 @@ def recursive_seqlet_calling(
     custom_genome: bool = False,
     meme_motif_db: str = "hocomoco_v13",
 ):
-    warnings.filterwarnings("ignore", category=FutureWarning, module="tangermeme")
-    warnings.filterwarnings("ignore", category=FutureWarning, module="memelite")
+    # TODO: update dependencies so we do not get future errors.
+    warnings.filterwarnings("ignore", category=FutureWarning)
 
     logger = logging.getLogger("decima")
     logger.info("Loading model and metadata to compute attributions...")
