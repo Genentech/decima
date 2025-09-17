@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Optional
 import h5py
 import numpy as np
@@ -41,14 +42,16 @@ class AttributionResult:
     @staticmethod
     def _load(attribution_h5, idx: int, tss_pos: int, tss_distance: int, correct_grad: bool):
         with h5py.File(attribution_h5, "r") as f:
-            seqs = np.zeros((4, DECIMA_CONTEXT_SIZE + (tss_distance or 0)))
-            attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + (tss_distance or 0)))
+            # add padding to the left and right with length of tss distance
+            padding = tss_distance or 0
+            seqs = np.zeros((4, DECIMA_CONTEXT_SIZE + padding * 2))
+            attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + padding * 2))
 
-            seqs[:, :DECIMA_CONTEXT_SIZE] = f["sequence"][idx].astype(np.float32)
-            attrs[:, :DECIMA_CONTEXT_SIZE] = f["attribution"][idx].astype(np.float32)
+            seqs[:, padding : DECIMA_CONTEXT_SIZE + padding] = f["sequence"][idx].astype(np.float32)
+            attrs[:, padding : DECIMA_CONTEXT_SIZE + padding] = f["attribution"][idx].astype(np.float32)
 
         if tss_distance is not None:
-            start = tss_pos - tss_distance
+            start = padding + tss_pos - tss_distance
             end = start + tss_distance * 2
 
             seqs = seqs[:, start:end]
@@ -66,10 +69,21 @@ class AttributionResult:
     def load(self, genes: List[str]):
         tss_pos = self.result.gene_metadata.loc[genes, "gene_mask_start"].values
 
+        if self.tss_distance is not None:
+            padded_genes = [
+                gene
+                for gene, pos in zip(genes, tss_pos)
+                if (pos + self.tss_distance > DECIMA_CONTEXT_SIZE) or (pos - self.tss_distance < 0)
+            ]
+            if len(padded_genes) > 0:
+                warnings.warn(
+                    f"Region of interest is greater than the context size and adding zero padding to genes:`{padded_genes}`."
+                )
+
         seqs, attrs = zip(
             *Parallel(n_jobs=self.num_workers)(
-                delayed(self._load)(self.attribution_h5, self._idx[gene], tss_pos, self.tss_distance, self.correct_grad)
-                for gene, tss_pos in tqdm(
+                delayed(self._load)(self.attribution_h5, self._idx[gene], pos, self.tss_distance, self.correct_grad)
+                for gene, pos in tqdm(
                     zip(genes, tss_pos), desc="Loading attributions and sequences...", total=len(genes)
                 )
             )

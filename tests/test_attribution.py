@@ -77,3 +77,10 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
         assert seqs.shape == (1, 4, DECIMA_CONTEXT_SIZE)
         assert attrs.shape == (1, 4, DECIMA_CONTEXT_SIZE)
         assert np.allclose(seqs, attribution_data['sequences'][8:9].astype(np.float32))
+
+    with AttributionResult(str(attribution_h5_file), tss_distance=1_000_000) as ar:
+        genes = attribution_data['genes']
+        seqs, attrs = ar.load(genes)
+
+        assert seqs.shape == (10, 4, 2_000_000)
+        assert attrs.shape == (10, 4, 2_000_000)
