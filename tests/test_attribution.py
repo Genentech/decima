@@ -1,10 +1,6 @@
 from pathlib import Path
 
-import pytest
-import h5py
 import numpy as np
-import pandas as pd
-import anndata as ad
 import torch
 from grelu.sequence.format import convert_input_type
 
@@ -79,6 +75,12 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
         assert ar.genes == attribution_data['genes']
         assert ar.model_name == ['test_model', 'test_model']
         assert ar.genome == 'hg38'
+
+    with AttributionResult(str(attribution_h5_file), tss_distance=1_000_000) as ar:
+        genes = attribution_data['genes']
+        seqs, attrs = ar.load(genes)
+        assert seqs.shape == (10, 4, 2_000_000)
+        assert attrs.shape == (10, 4, 2_000_000)
 
 
 def test_AttributionResult_recursive_seqlet_calling(attribution_h5_file, attribution_data):

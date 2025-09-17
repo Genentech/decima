@@ -28,7 +28,6 @@ def test_predict_save_modisco_attributions(tmp_path):
         assert list(f["genes"][:]) == [b'MEFV', b'AQP9', b'CLEC5A', b'CLEC4D', b'PLA2G7']
         assert f.attrs['model_name'] == 'v1_rep0'
 
-
 @pytest.mark.long_running
 def test_modisco(tmp_path):
     output_prefix = tmp_path / "test_modisco"
