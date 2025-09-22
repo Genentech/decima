@@ -184,7 +184,9 @@ def recursive_seqlet_calling(
         )
 
     output_prefix = Path(output_prefix)
-    df_peaks.to_csv(output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=False, index=False)
+    df_peaks.sort_values(["chrom", "start"]).to_csv(
+        output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=False, index=False
+    )
     df_motifs.to_csv(output_prefix.with_suffix(".motifs.tsv"), sep="\t", index=False)
 
 

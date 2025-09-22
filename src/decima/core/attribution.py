@@ -489,7 +489,7 @@ class Attribution:
         # np.maximum because of https://github.com/jmschrei/tangermeme/issues/40
         df["score"] = -np.log10(np.maximum(df["p-value"], 0) + 1e-50)
         df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
-        return df[["chrom", "start", "end", "name", "score", "strand", "attribution"]]
+        return df[["chrom", "start", "end", "name", "score", "strand", "attribution"]].sort_values(["chrom", "start"])
 
     def save_peaks(self, bed_path: str):
         """
@@ -520,14 +520,12 @@ class AttributionResult:
         if isinstance(self.attribution_h5, list):
             self.h5 = [h5py.File(str(attribution_h5), "r") for attribution_h5 in self.attribution_h5]
             self._idx = defaultdict(list)
-            self.tss_pos = defaultdict(list)
 
             for attribution_h5_file in self.attribution_h5:
                 with h5py.File(str(attribution_h5_file), "r") as f:
                     for i, gene in enumerate(f["genes"][:]):
                         gene = gene.decode("utf-8")
                         self._idx[gene].append(i)
-                        # TODO: self.
             self._idx = dict(self._idx)
 
             assert all(
@@ -573,10 +571,19 @@ class AttributionResult:
     @staticmethod
     def _load(attribution_h5, idx: int, tss_distance: int, correct_grad: bool, gene_mask: bool = False):
         with h5py.File(str(attribution_h5), "r") as f:
-            padding = tss_distance or 0
+            gene = f["genes"][idx].decode("utf-8")
             gene_mask_start = f["gene_mask_start"][idx].astype(int)
             gene_mask_end = f["gene_mask_end"][idx].astype(int)
 
+            if tss_distance is not None:
+                if (gene_mask_start + tss_distance > DECIMA_CONTEXT_SIZE) or (gene_mask_start - tss_distance < 0):
+                    warnings.warn(
+                        f"Window around the TSS is greater than the context size and adding zero padding to `{gene}`"
+                        f" where window around the TSS: `{gene_mask_start} ± {tss_distance}`."
+                        f" The context size of decima is `{DECIMA_CONTEXT_SIZE}`."
+                    )
+
+            padding = tss_distance or 0
             if gene_mask:
                 seqs = np.zeros((5, DECIMA_CONTEXT_SIZE + padding * 2))
                 seqs[-1, padding + gene_mask_start : padding + gene_mask_end] = 1
@@ -638,17 +645,6 @@ class AttributionResult:
         if isinstance(self.attribution_h5, list):
             load_func = self._load_multiple
             load_kwargs["agg_func"] = self.agg_func
-
-        # if self.tss_distance is not None:
-        #     padded_genes = [
-        #         gene
-        #         for gene, pos in zip(genes, tss_pos)
-        #         if (pos + self.tss_distance > DECIMA_CONTEXT_SIZE) or (pos - self.tss_distance < 0)
-        #     ]
-        #     if len(padded_genes) > 0:
-        #         warnings.warn(
-        #             f"Region of interest is greater than the context size and adding zero padding to genes:`{padded_genes}`."
-        #         )
 
         seqs, attrs = zip(
             *Parallel(n_jobs=self.num_workers)(
