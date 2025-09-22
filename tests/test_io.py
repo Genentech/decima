@@ -1,6 +1,8 @@
 import numpy as np
 import h5py
+import torch
 import pytest
+from grelu.sequence.format import convert_input_type
 
 from decima.utils.io import read_fasta_gene_mask, BigWigWriter, AttributionWriter
 from decima.constants import DECIMA_CONTEXT_SIZE
@@ -39,15 +41,25 @@ def test_AttributionWriter(tmp_path):
     assert h5_file.exists()
 
     with h5py.File(h5_file, "r") as f:
-        assert set(f.keys()) == {"genes", "attribution", "sequence"}
+        assert set(f.keys()) == {"genes", "attribution", "sequence", "gene_mask_start", "gene_mask_end"}
         assert f.attrs["model_name"] == "test_model"
         assert f["attribution"].shape == (1, 4, DECIMA_CONTEXT_SIZE)
-        np.testing.assert_array_equal(f["sequence"][0], seqs)
+        np.testing.assert_array_equal(convert_input_type(f["sequence"][0], "one_hot", input_type="indices"), seqs)
         np.testing.assert_array_almost_equal(f["attribution"][0], attrs)
         assert [g.decode('utf-8') for g in f["genes"][:]] == ["STRADA"]
+        assert f["gene_mask_start"][0] == 163840
+        assert f["gene_mask_end"][0] == 223490
 
     h5_file = tmp_path / "test_bigwig.h5"
     with AttributionWriter(str(h5_file), genes, "test_model", bigwig=True) as writer:
         writer.add("STRADA", seqs, attrs)
 
     assert h5_file.with_suffix(".bigwig").exists()
+
+    h5_file = tmp_path / "test_bigwig_custom.h5"
+    with AttributionWriter(str(h5_file), genes, "test_model", bigwig=True, custom_genes=True) as writer:
+        writer.add("STRADA", seqs, attrs, gene_mask_start=100, gene_mask_end=200)
+
+    with h5py.File(h5_file, "r") as f:
+        assert f["gene_mask_start"][0] == 100
+        assert f["gene_mask_end"][0] == 200
