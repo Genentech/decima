@@ -265,10 +265,10 @@ class VariantDataset(Dataset):
             self.model_names = [model_name]
 
         for model_name in self.model_names:
-            assert model_name in self.result.anndata.layers.keys(), (
-                f"Model {model_name} not found in the metadata annotation. "
-                "You may not using the correct metadata file for this model."
-            )
+            if model_name not in self.result.anndata.layers.keys():
+                warnings.warn(
+                    f"Model {model_name} not found in the metadata annotation. You may not be using the correct metadata file for this model."
+                )
 
     @staticmethod
     def overlap_genes(
