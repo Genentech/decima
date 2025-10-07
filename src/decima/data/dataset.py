@@ -16,7 +16,7 @@ from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES
 from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
 from decima.utils.io import read_fasta_gene_mask
-from decima.utils.sequence import prepare_mask_gene
+from decima.utils.sequence import prepare_mask_gene, one_hot_to_seq
 
 from decima.model.metrics import WarningType
 
@@ -120,6 +120,8 @@ class GeneDataset(Dataset):
 
         self.result = DecimaResult.load(metadata_anndata)
         self.genes = genes or list(self.result.genes)
+        self.gene_mask_starts = self.result.gene_metadata.loc[self.genes, "gene_mask_start"].values
+        self.gene_mask_ends = self.result.gene_metadata.loc[self.genes, "gene_mask_end"].values
 
         # Save augmentation params
         self.max_seq_shift = max_seq_shift
@@ -258,6 +260,42 @@ class SeqDataset(Dataset):
     def from_fasta(cls, fasta_file: str, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
         seqs = read_fasta_gene_mask(fasta_file)
         return cls.from_dataframe(seqs, max_seq_shift=max_seq_shift, seed=seed, augment_mode=augment_mode)
+
+    @classmethod
+    def from_one_hot(
+        cls,
+        one_hot: torch.Tensor,
+        gene_mask_starts: List[int] = None,
+        gene_mask_ends: List[int] = None,
+        max_seq_shift: int = 0,
+        seed: int = 0,
+        augment_mode: str = "random",
+    ):
+        assert len(one_hot.shape) == 3, "`one_hot` must be 3-dimensional with shape (batch_size, 4 or 5, seq_len)"
+        assert (
+            one_hot.shape[2] == DECIMA_CONTEXT_SIZE
+        ), "`one_hot` must have the same sequence length as DECIMA_CONTEXT_SIZE"
+        seqs = one_hot_to_seq(one_hot)
+
+        if (gene_mask_starts is None) and (gene_mask_ends is None):
+            assert one_hot.shape[1] == 5, (
+                "`seqs` must be 5-dimensional with shape (batch_size, 5, seq_len) "
+                "where the 2th dimension is a one_hot encoded seq and binary mask gene mask."
+            )
+            gene_mask_starts = [int(torch.where(i[4] == 1)[0].min()) for i in one_hot]
+            gene_mask_ends = [int(torch.where(i[4] == 1)[0].max()) for i in one_hot]
+
+        elif (gene_mask_starts is not None) and (gene_mask_ends is not None):
+            assert (
+                len(gene_mask_starts) == len(gene_mask_ends) == len(one_hot)
+            ), "Lengths of `gene_mask_starts`, `gene_mask_ends`, and `one_hot` must match."
+        else:
+            raise ValueError(
+                "Either `gene_mask_starts` and `gene_mask_ends` must be provided or `one_hot` should contain gene masks."
+            )
+        return cls(
+            seqs, gene_mask_starts, gene_mask_ends, max_seq_shift=max_seq_shift, seed=seed, augment_mode=augment_mode
+        )
 
     def __str__(self):
         return f"SeqDataset(n_seqs={self.n_seqs}, n_augmented={self.n_augmented}, n_alleles={self.n_alleles})"

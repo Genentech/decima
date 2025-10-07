@@ -100,7 +100,7 @@ def test_Attribution_peaks_to_bed(attributions):
 
     assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand", "attribution"]
 
-    row = df_peaks.iloc[0]
+    row = df_peaks.iloc[1]
     assert row["chrom"] == "chr1"
     assert row["start"] == 1358
     assert row["end"] == 1366

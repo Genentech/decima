@@ -9,9 +9,8 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 from more_itertools import chunked
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader
 from pyfaidx import Faidx
-from grelu.sequence.format import convert_input_type
 
 from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
@@ -40,6 +39,9 @@ def predict_save_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
+
     logger = logging.getLogger("decima")
 
     device = get_compute_device(device)
@@ -70,24 +72,17 @@ def predict_save_attributions(
                     "`seqs` must be 5-dimensional with shape (batch_size, 5, seq_len) "
                     "where the 2th dimension is a one_hot encoded seq and binary mask gene mask."
                 )
-                dataset = TensorDataset(seqs)
-                dataset.seqs = convert_input_type(seqs, output_type="strings")
-                dataset.genes = [f"seq{i}" for i in range(len(dataset.seqs))]
+                dataset = SeqDataset.from_one_hot(seqs)
             else:
                 raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
-
-            all_genes = dataset.genes
-            gene_mask_start = dataset.gene_mask_starts
-            gene_mask_end = dataset.gene_mask_ends
         else:
-            all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-            dataset = GeneDataset(genes=all_genes, metadata_anndata=result)
-            gene_mask_start = result.gene_metadata.loc[all_genes, "gene_mask_start"].values
-            gene_mask_end = result.gene_metadata.loc[all_genes, "gene_mask_end"].values
+            dataset = GeneDataset(
+                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result
+            )
 
-        genes_batch = list(chunked(all_genes, batch_size))
-        gene_mask_start = list(chunked(gene_mask_start, batch_size))
-        gene_mask_end = list(chunked(gene_mask_end, batch_size))
+        genes_batch = list(chunked(dataset.genes, batch_size))
+        gene_mask_starts = list(chunked(dataset.gene_mask_starts, batch_size))
+        gene_mask_ends = list(chunked(dataset.gene_mask_ends, batch_size))
 
         dl = DataLoader(
             dataset,
@@ -99,7 +94,7 @@ def predict_save_attributions(
 
         with AttributionWriter(
             path=Path(output_prefix).with_suffix(".attributions.h5"),
-            genes=all_genes,
+            genes=dataset.genes,
             model_name=attributer.model.name,
             metadata_anndata=result,
             genome=genome,
@@ -112,7 +107,7 @@ def predict_save_attributions(
                 _seqs = inputs[:, :4].detach().cpu().numpy()
 
                 for gene, seq, attr, g_start, g_end in zip(
-                    genes_batch[i], _seqs, attrs, gene_mask_start[i], gene_mask_end[i]
+                    genes_batch[i], _seqs, attrs, gene_mask_starts[i], gene_mask_ends[i]
                 ):
                     writer.add(gene=gene, seqs=seq, attrs=attr, gene_mask_start=g_start, gene_mask_end=g_end)
                     if seqs is None:
@@ -122,7 +117,7 @@ def predict_save_attributions(
             logger.info("Saving sequences...")
             fasta_path = str(Path(output_prefix).with_suffix(".seqs.fasta"))
             with open(fasta_path, "w") as f:
-                for i, seq in tqdm(zip(all_genes, dataset.seqs), desc="Saving sequences..."):
+                for i, seq in tqdm(zip(dataset.genes, dataset.seqs), desc="Saving sequences..."):
                     f.write(f">{i}\n{seq}\n")
             Faidx(fasta_path, build_index=True)
 
@@ -146,6 +141,9 @@ def recursive_seqlet_calling(
     custom_genome: bool = False,
     meme_motif_db: str = "hocomoco_v13",
 ):
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
+
     # TODO: update dependencies so we do not get future errors.
     warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -183,7 +181,6 @@ def recursive_seqlet_calling(
             meme_motif_db,
         )
 
-    output_prefix = Path(output_prefix)
     df_peaks.sort_values(["chrom", "start"]).to_csv(
         output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=False, index=False
     )
@@ -196,7 +193,7 @@ def predict_attributions_seqlet_calling(
     seqs: Optional[Union[pd.DataFrame, np.ndarray, torch.Tensor]] = None,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = 0,
+    model: Optional[Union[str, int]] = "ensemble",
     metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     transform: str = "specificity",
@@ -219,11 +216,17 @@ def predict_attributions_seqlet_calling(
 
     output_dir/
     ├── peaks.bed                # List of attribution peaks in BED format
+
     ├── peaks.png                # Plot showing peak locations
+
     ├── qc.log                   # QC warnings about prediction reliability
+
     ├── motifs.tsv               # Detected motifs in peak regions
+
     ├── attributions.h5          # Raw attribution score matrix
+
     ├── attributions.bigwig      # Genome browser track of attribution scores
+
     └── attributions_seq_logos/  # Directory containing attribution plots
         └── {peak}.png           # Attribution plot for each peak region
 
@@ -251,6 +254,7 @@ def predict_attributions_seqlet_calling(
     ... )
     """
     output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
     if model == "ensemble":
         attrs_output_prefix = str(output_prefix) + "_{model}"

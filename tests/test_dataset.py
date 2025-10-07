@@ -1,4 +1,6 @@
 import pandas as pd
+import torch
+from grelu.sequence.format import strings_to_one_hot
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.data.dataset import GeneDataset, SeqDataset
@@ -46,3 +48,13 @@ def test_SeqDataset():
     dataset = SeqDataset.from_fasta("tests/data/seqs.fasta")
     assert len(dataset) == 2
     assert dataset[0].shape == (5, DECIMA_CONTEXT_SIZE)
+
+    one_hot = torch.cat([
+        strings_to_one_hot(["A" * DECIMA_CONTEXT_SIZE, "T" * DECIMA_CONTEXT_SIZE]),
+        torch.ones(2, 1, DECIMA_CONTEXT_SIZE),
+    ], dim=1)
+    dataset = SeqDataset.from_one_hot(one_hot)
+    assert len(dataset) == 2
+    assert dataset[0].shape == (5, DECIMA_CONTEXT_SIZE)
+    assert dataset.gene_mask_starts == [0, 0]
+    assert dataset.gene_mask_ends == [524287, 524287]

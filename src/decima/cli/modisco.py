@@ -39,7 +39,7 @@ from decima.interpret.modisco import (
     show_default=True,
     help="Transform to use for attribution analysis.",
 )
-@click.option("--batch-size", type=int, default=2, show_default=True, help="Batch size for the prediction.")
+@click.option("--batch-size", type=int, default=1, show_default=True, help="Batch size for the prediction.")
 @click.option("--genes", type=str, default=None, help="Genes to predict. If not provided, all genes will be predicted.")
 @click.option(
     "--top-n-markers",
@@ -64,7 +64,7 @@ def cli_modisco_attributions(
     metadata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",
-    batch_size: int = 4,
+    batch_size: int = 1,
     genes: Optional[str] = None,
     top_n_markers: Optional[int] = None,
     disable_bigwig: bool = False,
@@ -217,7 +217,7 @@ def cli_modisco_patterns(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
-@click.option("--modisco_h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
+@click.option("--modisco-h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
 @click.option(
     "--meme-motif-db", type=str, default="hocomoco_v13", show_default=True, help="Path to the MEME motif database."
 )
@@ -256,7 +256,7 @@ def cli_modisco_reports(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
-@click.option("--modisco_h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
+@click.option("--modisco-h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
 @click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
 @click.option("--trim-threshold", type=float, default=0.2, show_default=True, help="Trim threshold.")
 def cli_modisco_seqlet_bed(
@@ -297,7 +297,7 @@ def cli_modisco_seqlet_bed(
     show_default=True,
     help="Method to use for attribution analysis.",
 )
-@click.option("--batch-size", type=int, default=2, show_default=True, help="Batch size for the prediction.")
+@click.option("--batch-size", type=int, default=1, show_default=True, help="Batch size for the prediction.")
 @click.option(
     "--genes",
     type=str,
@@ -379,7 +379,7 @@ def cli_modisco(
     model: Optional[Union[str, int]] = "ensemble",
     metadata: Optional[str] = None,
     method: str = "saliency",
-    batch_size: int = 4,
+    batch_size: int = 1,
     genes: Optional[str] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,

@@ -26,7 +26,7 @@ def predict_save_modisco_attributions(
     metadata_anndata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",
-    batch_size: int = 2,
+    batch_size: int = 1,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     bigwig: bool = True,

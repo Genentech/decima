@@ -1,4 +1,5 @@
 import click
+from pathlib import Path
 from decima.tools.inference import predict_gene_expression
 
 
@@ -29,7 +30,7 @@ from decima.tools.inference import predict_gene_expression
     default=None,
     help="Device to use. Default: None which automatically selects the best device.",
 )
-@click.option("--batch-size", type=int, default=8, help="Batch size for the model. Default: 8")
+@click.option("--batch-size", type=int, default=1, help="Batch size for the model. Default: 8")
 @click.option("--num-workers", type=int, default=4, help="Number of workers for the loader. Default: 4")
 @click.option("--max_seq_shift", default=0, help="Maximum jitter for augmentation.")
 @click.option("--genome", type=str, default="hg38", help="Genome build. Default: hg38.")
@@ -81,4 +82,6 @@ def cli_predict_genes(
         save_replicates=save_replicates,
         float_precision=float_precision,
     )
+    output = Path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
     ad.write_h5ad(output)

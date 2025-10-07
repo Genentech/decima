@@ -35,7 +35,7 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--device", type=str, default=None, help="Device to use. Default: None which automatically selects the best device."
 )
-@click.option("--batch-size", type=int, default=8, help="Batch size for the model. Default: 8")
+@click.option("--batch-size", type=int, default=1, help="Batch size for the model. Default: 8")
 @click.option("--num-workers", type=int, default=4, help="Number of workers for the loader. Default: 4")
 @click.option("--distance-type", type=str, default="tss", help="Type of distance. Default: tss.")
 @click.option(

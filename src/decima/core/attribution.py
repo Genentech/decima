@@ -488,7 +488,7 @@ class Attribution:
         df["strand"] = "."
         # np.maximum because of https://github.com/jmschrei/tangermeme/issues/40
         df["score"] = -np.log10(np.maximum(df["p-value"], 0) + 1e-50)
-        df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
+        df["score"] = df["score"].round(5).clip(lower=0, upper=50)
         return df[["chrom", "start", "end", "name", "score", "strand", "attribution"]].sort_values(["chrom", "start"])
 
     def save_peaks(self, bed_path: str):
