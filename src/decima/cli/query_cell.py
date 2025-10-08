@@ -1,3 +1,22 @@
+"""
+Query Cell CLI.
+
+This module contains the CLI for querying the cell metadata.
+
+`decima query-cell` is the command for querying the cell metadata.
+
+Examples:
+
+    >>> decima query-cell 'cell_type == "classical monocyte"'
+    ...
+
+    >>> decima query-cell 'cell_type == "classical monocyte" and disease == "healthy" and tissue == "blood"'
+    ...
+
+    >>> decima query-cell 'cell_type.str.contains("monocyte") and disease == "healthy"'
+    ...
+"""
+
 import click
 from decima.core.result import DecimaResult
 

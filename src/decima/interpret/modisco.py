@@ -1,3 +1,19 @@
+"""Modisco module perform modisco motif clustering from attributions.
+
+Examples:
+    >>> predict_save_modisco_attributions(
+    ...     output_prefix="output_prefix",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+"""
+
 import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
@@ -131,6 +147,63 @@ def modisco_patterns(
     stranded: bool = False,
     pattern_type: str = "both",  # "both", "pos", or "neg"
 ):
+    """Perform modisco motif clustering from attributions.
+
+    Args:
+        output_prefix: Path to save modisco results.
+        attributions: Path to attributions file.
+        tasks: List of tasks to analyze.
+        off_tasks: List of off tasks to analyze.
+        tss_distance: TSS distance.
+        metadata_anndata: Path to metadata anndata file.
+        genes: List of genes to analyze.
+        top_n_markers: Top n markers to analyze.
+        correct_grad: Whether to correct gradient.
+        num_workers: Number of workers.
+        sliding_window_size: Sliding window size.
+        flank_size: Flank size.
+        min_metacluster_size: Min metacluster size.
+        weak_threshold_for_counting_sign: Weak threshold for counting sign.
+        max_seqlets_per_metacluster: Max seqlets per metacluster.
+        target_seqlet_fdr: Target seqlet FDR.
+        min_passing_windows_frac: Min passing windows fraction.
+        max_passing_windows_frac: Max passing windows fraction.
+        n_leiden_runs: Number of Leiden runs.
+        n_leiden_iterations: Number of Leiden iterations.
+        min_overlap_while_sliding: Min overlap while sliding.
+        nearest_neighbors_to_compute: Nearest neighbors to compute.
+        affmat_correlation_threshold: Affmat correlation threshold.
+        tsne_perplexity: TSNE perplexity.
+        frac_support_to_trim_to: Frac support to trim to.
+        min_num_to_trim_to: Min num to trim to.
+        trim_to_window_size: Trim to window size.
+        initial_flank_to_add: Initial flank to add.
+        final_flank_to_add: Final flank to add.
+        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.
+        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.
+        subcluster_perplexity: Subcluster perplexity.
+        merging_max_seqlets_subsample: Merging max seqlets subsample.
+        final_min_cluster_size: Final min cluster size.
+        min_ic_in_window: Min IC in window.
+        min_ic_windowsize: Min IC windowsize.
+        ppm_pseudocount: PPM pseudocount.
+        stranded: Stranded.
+        pattern_type: Pattern type.
+
+    Examples:
+        >>> modisco_patterns(
+        ...     output_prefix="output_prefix",
+        ...     attributions="attributions.h5",
+        ...     tasks=[
+        ...         "agg1",
+        ...         "agg2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "agg3",
+        ...         "agg4",
+        ...     ],
+        ... )
+    """
     logger = logging.getLogger("decima")
     logger.info("Loading metadata")
     result = DecimaResult.load(metadata_anndata)
@@ -209,6 +282,28 @@ def modisco_reports(
     tomtomlite: bool = False,
     num_workers: int = 4,
 ):
+    """Perform modisco motif clustering from attributions.
+
+    Args:
+        output_prefix: Path to save modisco results.
+        modisco_h5: Path to modisco h5 file.
+        meme_motif_db: Path to meme motif db.
+        img_path_suffix: Image path suffix.
+        is_writing_tomtom_matrix: Whether to write tomtom matrix.
+        top_n_matches: Top n matches.
+        trim_threshold: Trim threshold.
+        trim_min_length: Trim min length.
+        tomtomlite: Whether to use tomtomlite.
+        num_workers: Number of workers.
+
+    Examples:
+        >>> modisco_reports(
+        ...     output_prefix="output_prefix",
+        ...     modisco_h5="modisco.h5",
+        ...     meme_motif_db="hocomoco_v13",
+        ...     img_path_suffix="",
+        ... )
+    """
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
     modiscolite.report.report_motifs(
@@ -232,6 +327,14 @@ def modisco_seqlet_bed(
     metadata_anndata: str = None,
     trim_threshold: float = 0.2,
 ):
+    """Perform modisco seqlet bed from attributions.
+
+    Args:
+        output_prefix: Path to save modisco results.
+        modisco_h5: Path to modisco h5 file.
+        metadata_anndata: Path to metadata anndata file.
+        trim_threshold: Trim threshold.
+    """
     result = DecimaResult.load(metadata_anndata)
 
     df = list()
@@ -358,6 +461,61 @@ def modisco(
     # seqlet thresholds
     seqlet_motif_trim_threshold: float = 0.2,
 ):
+    """Perform modisco motif clustering from attributions.
+
+    Args:
+        output_prefix: Path to save modisco results.
+        tasks: List of tasks to analyze.
+        off_tasks: List of off tasks to analyze.
+        model: Model to analyze.
+        tss_distance: TSS distance.
+        metadata_anndata: Path to metadata anndata file.
+        genes: List of genes to analyze.
+        top_n_markers: Top n markers to analyze.
+        correct_grad: Whether to correct gradient.
+        num_workers: Number of workers.
+        genome: Genome.
+        method: Method to analyze.
+        batch_size: Batch size.
+        device: Device to analyze.
+        sliding_window_size: Sliding window size.
+        flank_size: Flank size.
+        min_metacluster_size: Min metacluster size.
+        weak_threshold_for_counting_sign: Weak threshold for counting sign.
+        max_seqlets_per_metacluster: Max seqlets per metacluster.
+        target_seqlet_fdr: Target seqlet FDR.
+        min_passing_windows_frac: Min passing windows fraction.
+        max_passing_windows_frac: Max passing windows fraction.
+        n_leiden_runs: Number of Leiden runs.
+        n_leiden_iterations: Number of Leiden iterations.
+        min_overlap_while_sliding: Min overlap while sliding.
+        nearest_neighbors_to_compute: Nearest neighbors to compute.
+        affmat_correlation_threshold: Affmat correlation threshold.
+        tsne_perplexity: TSNE perplexity.
+        frac_support_to_trim_to: Frac support to trim to.
+        min_num_to_trim_to: Min num to trim to.
+        trim_to_window_size: Trim to window size.
+        initial_flank_to_add: Initial flank to add.
+        final_flank_to_add: Final flank to add.
+        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.
+        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.
+        subcluster_perplexity: Subcluster perplexity.
+        merging_max_seqlets_subsample: Merging max seqlets subsample.
+        final_min_cluster_size: Final min cluster size.
+        min_ic_in_window: Min IC in window.
+        min_ic_windowsize: Min IC windowsize.
+        ppm_pseudocount: PPM pseudocount.
+        stranded: Stranded.
+        pattern_type: Pattern type.
+        img_path_suffix: Image path suffix.
+        meme_motif_db: Meme motif db.
+        is_writing_tomtom_matrix: Whether to write tomtom matrix.
+        top_n_matches: Top n matches.
+        trim_threshold: Trim threshold.
+        trim_min_length: Trim min length.
+        tomtomlite: Whether to use tomtomlite.
+        seqlet_motif_trim_threshold: Seqlet motif trim threshold.
+    """
     output_prefix = Path(output_prefix)
 
     if model == "ensemble":

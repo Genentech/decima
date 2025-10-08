@@ -1,3 +1,21 @@
+"""
+Attributions CLI.
+
+This module contains the CLI for the attributions module performing attribution analysis, seqlet calling, and motif discovery.
+
+`decima attributions` is the main command for performing attribution analysis, seqlet calling, and motif discovery.
+
+It includes subcommands for:
+- Predicting attributions for a given gene or sequence. `attributions-predict`
+- Seqlet calling on the attributions. `attributions`
+- Motif discovery on the attributions. `attributions-recursive-seqlet-calling`
+- Plotting the attributions. `attributions-plot`
+
+Examples:
+    >>> decima attributions -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
+    ...
+"""
+
 import click
 from decima.interpret.attributions import (
     plot_attributions,
@@ -123,6 +141,15 @@ def cli_attributions_predict(
     device,
     genome,
 ):
+    """Predict and save attributions for specified genes or sequences using the chosen decima model.
+
+    Output files:
+
+    ├── {output_prefix}.attributions.h5      # Raw attribution score matrix per gene.
+
+    └── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file.
+    """
+
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
 
@@ -239,8 +266,7 @@ def cli_attributions(
     device,
     genome,
 ):
-    """
-    Generate and save attribution analysis results for a gene or a set of sequences.
+    """Generate and save attribution analysis results for a gene or a set of sequences and perform seqlet calling on the attributions.
 
     Output files:
 
@@ -353,6 +379,20 @@ def cli_attributions_recursive_seqlet_calling(
     custom_genome,
     meme_motif_db,
 ):
+    """Performs recursive seqlet calling on the pre computed attributions.
+
+    Output files:
+
+        ├── {output_prefix}.seqlets.bed          # List of attribution peaks in BED format.
+
+        ├── {output_prefix}.motifs.tsv           # Detected motifs in peak regions.
+
+        └── {output_prefix}.warnings.qc.log      # QC warnings about prediction reliability.
+
+    Examples:
+
+        >>> decima attributions-recursive-seqlet-calling --attributions attributions_0.h5,attributions_1.h5 -o output_prefix  --genes SPI1
+    """
     if isinstance(attributions, str):
         attributions = attributions.split(",")
 
@@ -397,6 +437,18 @@ def cli_attributions_plot(
     custom_genome,
     dpi,
 ):
+    """Plots the attributions for the specified genes.
+
+    Output files:
+
+        ├── {output_prefix}.attributions.png  # Attributions plot.
+
+        └── {output_prefix}.seqlogo.png       # Sequence logo plot.
+
+        Examples:
+
+            >>> decima attributions-plot -o output_prefix -g SPI1
+    """
     genes = genes.split(",")
 
     plot_attributions(

@@ -1,3 +1,7 @@
+"""
+Attribution analysis from decima model.
+"""
+
 import warnings
 from collections import defaultdict
 from typing import List, Optional, Union
@@ -292,6 +296,19 @@ class Attribution:
     def find_peaks(
         attrs, threshold=5e-4, min_seqlet_len=4, max_seqlet_len=25, additional_flanks=0, pattern_type="both"
     ):
+        """Find peaks in attribution scores.
+
+        Args:
+            attrs: Attribution scores
+            threshold: Threshold for peak finding
+            min_seqlet_len: Minimum sequence length for peak finding
+            max_seqlet_len: Maximum sequence length for peak finding
+            additional_flanks: Additional flanks to add to the gene
+            pattern_type: Pattern type to use for peak finding default is "both"
+
+        Returns:
+            df: DataFrame of peaks.
+        """
         attrs = attrs.sum(0, keepdims=True)
         if pattern_type == "both":
             return pd.concat(
@@ -502,6 +519,23 @@ class Attribution:
 
 
 class AttributionResult:
+    """
+    Attribution result from decima model.
+
+    Args:
+        attribution_h5: Path to attribution h5 file or list of paths to attribution h5 files.
+        tss_distance: Distance from the TSS to include in the attribution analysis.
+        correct_grad: Whether to correct the gradient for the attribution analysis.
+        num_workers: Number of workers to use for the attribution analysis.
+        agg_func: Function to aggregate the attribution scores.
+
+
+    Examples:
+        with AttributionResult(attribution_h5=["example/attribution.h5", "example/attribution2.h5"]) as ar:
+            seqs, attrs = ar.load(genes=["SPI1"])
+            attribution = ar.load_attribution(gene="SPI1")
+    """
+
     def __init__(
         self,
         attribution_h5: Union[str, List[str]],
@@ -517,6 +551,7 @@ class AttributionResult:
         self.agg_func = agg_func
 
     def open(self):
+        """Open the attribution h5 files."""
         if isinstance(self.attribution_h5, list):
             self.h5 = [h5py.File(str(attribution_h5), "r") for attribution_h5 in self.attribution_h5]
             self._idx = defaultdict(list)
@@ -547,6 +582,7 @@ class AttributionResult:
         self.genes = list(self._idx.keys())
 
     def close(self):
+        """Close the attribution h5 files."""
         if isinstance(self.attribution_h5, list):
             for h5 in self.h5:
                 h5.close()
@@ -559,6 +595,7 @@ class AttributionResult:
 
     @staticmethod
     def aggregate(seqs, attrs, agg_func: Optional[str] = None):
+        """Aggregate the attribution scores."""
         if agg_func is None:
             return seqs, attrs
         elif agg_func == "mean":
@@ -570,6 +607,7 @@ class AttributionResult:
 
     @staticmethod
     def _load(attribution_h5, idx: int, tss_distance: int, correct_grad: bool, gene_mask: bool = False):
+        """Load the attribution scores."""
         with h5py.File(str(attribution_h5), "r") as f:
             gene = f["genes"][idx].decode("utf-8")
             gene_mask_start = f["gene_mask_start"][idx].astype(int)
@@ -622,6 +660,7 @@ class AttributionResult:
         gene_mask: bool = False,
         agg_func: Optional[str] = None,
     ):
+        """Load the attribution scores from multiple attribution h5 files."""
         seqs, attrs = zip(
             *(
                 AttributionResult._load(attribution_h5_file, idx, tss_distance, correct_grad, gene_mask)
@@ -631,6 +670,16 @@ class AttributionResult:
         return AttributionResult.aggregate(np.array(seqs), np.array(attrs), agg_func)
 
     def load(self, genes: List[str], gene_mask: bool = False):
+        """Load the attribution scores for a list of genes.
+
+        Args:
+            genes: List of genes to load.
+            gene_mask: Whether to mask the gene.
+
+        Returns:
+            seqs: Array of sequences.
+            attrs: Array of attribution scores.
+        """
         if getattr(self, "h5", None) is None:
             raise ValueError(
                 "AttributionResult is not open. Please open it with `with AttributionResult(attribution_h5) as ar:`."
@@ -731,6 +780,21 @@ class AttributionResult:
         additional_flanks: int = 0,
         pattern_type: str = "both",
     ):
+        """Load the attribution scores for a gene.
+
+        Args:
+            gene: Gene to load.
+            metadata_anndata: Metadata anndata object.
+            custom_genome: Whether to use custom genome.
+            threshold: Threshold for peak finding.
+            min_seqlet_len: Minimum sequence length for peak finding.
+            max_seqlet_len: Maximum sequence length for peak finding.
+            additional_flanks: Additional flanks to add to the gene.
+            pattern_type: Pattern type to use for peak finding.
+
+        Returns:
+            Attribution object.
+        """
         chroms, starts, ends = self._get_metadata(gene, metadata_anndata, custom_genome)
         return self._load_attribution(
             self.attribution_h5,
@@ -797,6 +861,23 @@ class AttributionResult:
         pattern_type: str = "both",
         meme_motif_db: str = "hocomoco_v13",
     ):
+        """Perform recursive seqlet calling on the attribution scores.
+
+        Args:
+            genes: List of genes to perform recursive seqlet calling on.
+            metadata_anndata: Metadata anndata object.
+            custom_genome: Whether to use custom genome.
+            threshold: Threshold for peak finding.
+            min_seqlet_len: Minimum sequence length for peak finding.
+            max_seqlet_len: Maximum sequence length for peak finding.
+            additional_flanks: Additional flanks to add to the gene.
+            pattern_type: Pattern type to use for peak finding.
+            meme_motif_db: MEME motif database to use for motif discovery.
+
+        Returns:
+            df_peaks: DataFrame of peaks.
+            df_motifs: DataFrame of motifs.
+        """
         if genes is None:
             genes = self.genes
 

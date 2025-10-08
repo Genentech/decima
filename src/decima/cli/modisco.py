@@ -1,3 +1,27 @@
+"""
+Modisco CLI.
+
+This module contains the CLI for the modisco module performing motif discovery and analysis.
+
+`decima modisco` is the main command for performing motif discovery and analysis.
+
+It includes subcommands for:
+- Computing attributions for a given gene or sequence. `modisco-attributions`
+- Discovering motifs on the attributions. `modisco-patterns`
+- Reporting the motifs. `modisco-reports`
+- Extracting the seqlets from the modisco results. `modisco-seqlet-bed`
+
+Examples:
+    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
+    ...
+
+    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
+    ...
+
+    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
+    ...
+"""
+
 import click
 from typing import List, Optional, Union
 from decima.interpret.modisco import (

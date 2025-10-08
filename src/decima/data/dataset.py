@@ -1,3 +1,13 @@
+"""
+pytorch Datasets for Decima.
+
+This module contains the datasets for Decima, including:
+- HDF5Dataset: Dataset for HDF5 files.
+- GeneDataset: Dataset for gene expression prediction.
+- SeqDataset: Dataset for sequence prediction.
+- VariantDataset: Dataset for variant effect prediction.
+"""
+
 from typing import List
 import warnings
 import torch
@@ -22,6 +32,23 @@ from decima.model.metrics import WarningType
 
 
 class HDF5Dataset(Dataset):
+    """
+    Dataset for HDF5 files.
+
+    Args:
+        key: Key to use to access the data in the HDF5 file.
+        h5_file: Path to the HDF5 file.
+        ad: AnnData object to use for extracting tasks.
+        seq_len: Length of the sequence.
+        max_seq_shift: Maximum sequence shift.
+        seed: Seed for the random number generator.
+        augment_mode: Augmentation mode.
+
+    Returns:
+        Dataset: Dataset for HDF5 files.
+
+    """
+
     def __init__(
         self,
         key,
@@ -108,6 +135,40 @@ class HDF5Dataset(Dataset):
 
 
 class GeneDataset(Dataset):
+    """
+    Dataset for gene expression prediction.
+
+    Args:
+        genes: List of genes to include in the dataset.
+        metadata_anndata: AnnData object to use for extracting gene metadata.
+        max_seq_shift: Maximum sequence shift.
+        seed: Seed for the random number generator.
+        augment_mode: Augmentation mode.
+
+    Returns:
+        Dataset: Dataset for gene expression prediction.
+
+    Examples:
+        >>> genes = [
+        ...     "SPI1",
+        ...     "SPI2",
+        ... ]
+        >>> dataset = (
+        ...     GeneDataset(
+        ...         genes=genes
+        ...     )
+        ... )
+        >>> dl = torch.data.DataLoader(
+        ...     dataset,
+        ...     batch_size=1,
+        ...     shuffle=True,
+        ...     collate_fn=dataset.collate_fn,
+        ... )
+        >>> for batch in dl:
+            print(batch)
+        ... (2, 524288, 5)
+    """
+
     def __init__(
         self,
         genes=None,
@@ -173,6 +234,64 @@ class SeqDataset(Dataset):
 
     Returns:
         Dataset: Dataset for sequence prediction with the masked gene sequence.
+
+    Examples:
+        >>> seqs = [
+        ...     "ATCG...",
+        ...     "ATCG..",
+        ...     "ATCG...",
+        ... ]
+        >>> gene_mask_starts = [
+        ...     0,
+        ...     0,
+        ...     0,
+        ... ]
+        >>> gene_mask_ends = [
+        ...     4,
+        ...     4,
+        ...     4,
+        ... ]
+        >>> dataset = SeqDataset(
+        ...     seqs=seqs,
+        ...     gene_mask_starts=gene_mask_starts,
+        ...     gene_mask_ends=gene_mask_ends,
+        ... )
+        >>> dl = torch.data.DataLoader(
+        ...     dataset,
+        ...     batch_size=1,
+        ...     shuffle=True,
+        ...     collate_fn=dataset.collate_fn,
+        ... )
+        >>> for batch in dl:
+            print(batch)
+        ... (2, 524288, 5)
+
+        >>> dataset = SeqDataset.from_fasta(
+        ...     fasta_file="example/seqs.fasta"
+        ... )
+
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "seq": [
+        ...             "ATCG..",
+        ...             "ATCG...",
+        ...             "ATCG......",
+        ...         ],
+        ...         "gene_mask_start": [
+        ...             0,
+        ...             0,
+        ...             0,
+        ...         ],
+        ...         "gene_mask_end": [
+        ...             4,
+        ...             4,
+        ...             4,
+        ...         ],
+        ...     }
+        ... )
+        >>> dataset = SeqDataset.from_dataframe(
+        ...     df
+        ... )
     """
 
     def __init__(
@@ -242,6 +361,51 @@ class SeqDataset(Dataset):
 
     @classmethod
     def from_dataframe(cls, df: pd.DataFrame, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
+        """
+        Create a SeqDataset from a pandas DataFrame.
+
+        Args:
+            df: pandas DataFrame containing `seq`, `gene_mask_start`, and `gene_mask_end` columns.
+            max_seq_shift: Maximum sequence shift.
+            seed: Seed for the random number generator.
+            augment_mode: Augmentation mode.
+
+        Returns:
+            SeqDataset: SeqDataset object.
+
+        Examples:
+            >>> df = pd.DataFrame(
+            ...     {
+            ...         "seq": [
+            ...             "ATCG..",
+            ...             "ATCG...",
+            ...             "ATCG......",
+            ...         ],
+            ...         "gene_mask_start": [
+            ...             0,
+            ...             0,
+            ...             0,
+            ...         ],
+            ...         "gene_mask_end": [
+            ...             4,
+            ...             4,
+            ...             4,
+            ...         ],
+            ...     }
+            ... )
+            >>> dataset = SeqDataset.from_dataframe(
+            ...     df
+            ... )
+            >>> dl = torch.data.DataLoader(
+            ...     dataset,
+            ...     batch_size=1,
+            ...     shuffle=True,
+            ...     collate_fn=dataset.collate_fn,
+            ... )
+            >>> for batch in dl:
+                print(batch)
+            ... (2, 524288, 5)
+        """
         assert "seq" in df.columns, "`df` must contain `seq` column"
         assert "gene_mask_start" in df.columns, "`df` must contain `gene_mask_start` column"
         assert "gene_mask_end" in df.columns, "`df` must contain `gene_mask_end` column"
@@ -258,6 +422,32 @@ class SeqDataset(Dataset):
 
     @classmethod
     def from_fasta(cls, fasta_file: str, max_seq_shift: int = 0, seed: int = 0, augment_mode: str = "random"):
+        """
+        Create a SeqDataset from a FASTA file.
+
+        Args:
+            fasta_file: Path to the FASTA file with header as gene name, maks and sequence as the sequence: ">gene_name|gene_mask_start=10000|gene_mask_end=10000\nATACG...".
+            max_seq_shift: Maximum sequence shift.
+            seed: Seed for the random number generator.
+            augment_mode: Augmentation mode.
+
+        Returns:
+            SeqDataset: SeqDataset object.
+
+        Examples:
+            >>> dataset = SeqDataset.from_fasta(
+            ...     fasta_file="example/seqs.fasta"
+            ... )
+            >>> dl = torch.data.DataLoader(
+            ...     dataset,
+            ...     batch_size=1,
+            ...     shuffle=True,
+            ...     collate_fn=dataset.collate_fn,
+            ... )
+            >>> for batch in dl:
+                print(batch)
+            ... (2, 524288, 5)
+        """
         seqs = read_fasta_gene_mask(fasta_file)
         return cls.from_dataframe(seqs, max_seq_shift=max_seq_shift, seed=seed, augment_mode=augment_mode)
 
@@ -271,6 +461,19 @@ class SeqDataset(Dataset):
         seed: int = 0,
         augment_mode: str = "random",
     ):
+        """Create a SeqDataset from a one-hot encoded tensor.
+
+        Args:
+            one_hot: One-hot encoded tensor with shape (batch_size, 4 or 5, seq_len).
+            gene_mask_starts: List of gene mask starts.
+            gene_mask_ends: List of gene mask ends.
+            max_seq_shift: Maximum sequence shift.
+            seed: Seed for the random number generator.
+            augment_mode: Augmentation mode.
+
+        Returns:
+            SeqDataset: SeqDataset object.
+        """
         assert len(one_hot.shape) == 3, "`one_hot` must be 3-dimensional with shape (batch_size, 4 or 5, seq_len)"
         assert (
             one_hot.shape[2] == DECIMA_CONTEXT_SIZE
@@ -302,8 +505,7 @@ class SeqDataset(Dataset):
 
 
 class VariantDataset(Dataset):
-    """
-    Dataset for variant effect prediction
+    """Dataset for variant effect prediction
 
     Args:
         variants (pd.DataFrame): DataFrame with variants
@@ -340,6 +542,25 @@ class VariantDataset(Dataset):
                         [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],
                         [0.0000, 0.0000, 0.0000,  ..., 1.0000, 0.0000, 0.0000],
                         [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]), 'warning': []}
+        >>> dl = torch.data.DataLoader(
+        ...     dataset,
+        ...     batch_size=1,
+        ...     shuffle=True,
+        ...     collate_fn=dataset.collate_fn,
+        ... )
+        >>> for batch in dl:
+            print(batch)
+        ... {
+            'seq': tensor([[1.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 1.0000],
+                            [0.0000, 1.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+                            [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],
+                            [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]),
+            'warning': [],
+            'pred_expression': tensor([[0.0000, 0.0000],
+                            [0.0000, 0.0000],
+                            [0.0000, 0.0000],
+                            [0.0000, 0.0000]]),
+        }
     """
 
     DEFAULT_COLUMNS = [
@@ -430,6 +651,96 @@ class VariantDataset(Dataset):
         min_distance=0,
         max_distance=float("inf"),
     ):
+        """Overlap genes with variants.
+
+        Args:
+            df_variants: pandas DataFrame containing variants.
+            df_genes: pandas DataFrame containing genes.
+            gene_col: Column name for gene names.
+            include_cols: List of columns to include in the output.
+            min_from_end: Minimum distance from the end of the gene.
+            distance_type: Type of distance.
+            min_distance: Minimum distance from the TSS.
+            max_distance: Maximum distance from the TSS.
+
+        Returns:
+            pandas DataFrame containing the overlap between genes and variants.
+
+        Examples:
+            >>> df_variants = pd.DataFrame(
+            ...     {
+            ...         "chrom": [
+            ...             "1",
+            ...             "1",
+            ...             "1",
+            ...         ],
+            ...         "pos": [
+            ...             10000,
+            ...             10000,
+            ...             10000,
+            ...         ],
+            ...         "ref": [
+            ...             "A",
+            ...             "A",
+            ...             "A",
+            ...         ],
+            ...         "alt": [
+            ...             "G",
+            ...             "G",
+            ...             "G",
+            ...         ],
+            ...         "gene": [
+            ...             "SPI1",
+            ...             "SPI2",
+            ...             "SPI3",
+            ...         ],
+            ...     }
+            ... )
+            >>> df_genes = pd.DataFrame(
+            ...     {
+            ...         "gene": [
+            ...             "SPI1",
+            ...             "SPI2",
+            ...             "SPI3",
+            ...         ],
+            ...         "start": [
+            ...             10000,
+            ...             10000,
+            ...             10000,
+            ...         ],
+            ...         "end": [
+            ...             10000,
+            ...             10000,
+            ...             10000,
+            ...         ],
+            ...         "strand": [
+            ...             "+",
+            ...             "+",
+            ...             "+",
+            ...         ],
+            ...         "gene_mask_start": [
+            ...             0,
+            ...             0,
+            ...             0,
+            ...         ],
+            ...         "gene_mask_end": [
+            ...             4,
+            ...             4,
+            ...             4,
+            ...         ],
+            ...     }
+            ... )
+
+            >>> df = VariantDataset.overlap_genes(
+            ...     df_variants,
+            ...     df_genes,
+            ... )
+            >>> print(df)
+            ...    chrom  pos ref alt gene  start end strand  gene_mask_start  gene_mask_end  rel_pos ref_tx alt_tx  tss_dist
+            ... 0     1  10000   A   G  SPI1  10000 10000      +              0              4      0      A     G        0
+            ... 1     1  10000   A   G  SPI2  10000 10000      +              0              4      0      A     G        0
+            ... 2     1  10000   A   G  SPI3  10000 10000      +              0              4      0      A     G        0
+        """
         assert min_distance < max_distance, "`min_distance` must be less than `max_distance`"
         include_cols = include_cols or list()
 
@@ -544,6 +855,14 @@ class VariantDataset(Dataset):
         return ref_match, alt_match
 
     def predicted_expression_cache(self, gene):
+        """Get predicted expression for a gene.
+
+        Args:
+            gene: Gene name.
+
+        Returns:
+            dict: Dictionary of predicted expression for each model.
+        """
         return {model_name: self.result.predicted_gene_expression(gene, model_name) for model_name in self.model_names}
 
     def __getitem__(self, idx):

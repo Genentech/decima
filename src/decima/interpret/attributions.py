@@ -1,3 +1,31 @@
+"""Attributions module predict attributes and performs recursive seqlet calling.
+
+Examples:
+    >>> predict_save_attributions(
+    ...     output_prefix="output_prefix",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+    >>> recursive_seqlet_calling(
+    ...     output_prefix="output_prefix",
+    ...     attributions="attributions.h5",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+"""
+
 import glob
 import warnings
 import logging
@@ -39,6 +67,56 @@ def predict_save_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
+    """
+    Generate and save attribution analysis results for a gene.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        tasks: Tasks to attribute.
+        off_tasks: Off tasks to attribute.
+        model: Model to attribute.
+        metadata_anndata: Metadata anndata.
+        method: Method to use for attribution analysis.
+        transform: Transform to use for attribution analysis.
+        batch_size: Batch size.
+        genes: Genes to attribute.
+        seqs: Sequences to attribute.
+        top_n_markers: Top n markers.
+        bigwig: Whether to save attribution scores as a bigwig file.
+        correct_grad_bigwig: Whether to correct the gradient bigwig file.
+        num_workers: Number of workers.
+        device: Device to use for attribution analysis.
+        genome: Genome to use for attribution analysis.
+
+    Examples:
+        >>> predict_save_attributions(
+        ...     output_prefix="output_prefix",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ...     model=0,
+        ...     metadata_anndata="metadata_anndata.h5ad",
+        ...     method="inputxgradient",
+        ...     transform="specificity",
+        ...     batch_size=1,
+        ...     genes=[
+        ...         "gene1",
+        ...         "gene2",
+        ...     ],
+        ...     seqs="seqs.fasta",
+        ...     top_n_markers=10,
+        ...     bigwig=True,
+        ...     correct_grad_bigwig=True,
+        ...     num_workers=4,
+        ...     device="cuda",
+        ...     genome="hg38",
+        ... )
+    """
     output_prefix = Path(output_prefix)
     output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
@@ -141,6 +219,42 @@ def recursive_seqlet_calling(
     custom_genome: bool = False,
     meme_motif_db: str = "hocomoco_v13",
 ):
+    """
+    Recursive seqlet calling for attribution analysis.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        attributions: Attributions to use for recursive seqlet calling.
+        tasks: Tasks to attribute.
+        off_tasks: Off tasks to attribute.
+        tss_distance: TSS distance.
+        metadata_anndata: Metadata anndata.
+        genes: Genes to attribute.
+        top_n_markers: Top n markers.
+        num_workers: Number of workers.
+        agg_func: Agg func.
+        threshold: Threshold.
+        min_seqlet_len: Min seqlet len.
+        max_seqlet_len: Max seqlet len.
+        additional_flanks: Additional flanks.
+        pattern_type: Pattern type.
+        custom_genome: Custom genome.
+        meme_motif_db: Meme motif db.
+
+    Examples:
+        >>> recursive_seqlet_calling(
+        ...     output_prefix="output_prefix",
+        ...     attributions="attributions.h5",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ... )
+    """
     output_prefix = Path(output_prefix)
     output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
@@ -319,6 +433,18 @@ def plot_attributions(
     custom_genome: bool = False,
     dpi: int = 100,
 ):
+    """Plot attributions.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        genes: Genes to attribute.
+        metadata_anndata: Metadata anndata.
+        tss_distance: TSS distance.
+        seqlogo_window: Seqlogo window.
+        agg_func: Agg func.
+        custom_genome: Custom genome.
+        dpi: DPI.
+    """
     plot_dir = Path(str(output_prefix) + "_plots")
     plot_dir.mkdir(parents=True, exist_ok=True)
 

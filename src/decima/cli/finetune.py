@@ -1,4 +1,13 @@
-"""Finetune the Decima model."""
+"""
+Finetune the Decima model.
+
+This module contains the CLI for finetuning the Decima model.
+
+`decima finetune` is the main command for finetuning the Decima model.
+
+It includes subcommands for:
+- Finetuning the Decima model. `finetune`
+"""
 
 import logging
 import click

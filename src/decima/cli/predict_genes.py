@@ -1,3 +1,11 @@
+"""
+Predict Genes CLI.
+
+This module contains the CLI for predicting the gene expression of a given gene or sequence.
+
+`decima predict-genes` is the command for predicting the gene expression of a given gene or sequence.
+"""
+
 import click
 from pathlib import Path
 from decima.tools.inference import predict_gene_expression

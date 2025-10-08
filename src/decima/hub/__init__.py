@@ -10,6 +10,7 @@ from decima.model.lightning import LightningModel, EnsembleLightningModel
 
 
 def login_wandb():
+    """Login to wandb either as anonymous or as a user."""
     try:
         wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), anonymous="never", timeout=0)
     except wandb.errors.UsageError:  # login anonymously if not logged in already

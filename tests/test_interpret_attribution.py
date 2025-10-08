@@ -217,6 +217,7 @@ def test_predict_save_attributions_single_gene_saliency(tmp_path):
         genes=["SPI1"],
         method="saliency",
         tasks="cell_type == 'classical monocyte'",
+        model=0,
         device=device
     )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
