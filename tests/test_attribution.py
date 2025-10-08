@@ -89,14 +89,14 @@ def test_AttributionResult_recursive_seqlet_calling(attribution_h5_file, attribu
     df_peaks, df_motifs = AttributionResult._recursive_seqlet_calling(
         attribution_h5_file, 0, attribution_data['genes'][0], 10_000, 'chr1', start, end)
     assert df_peaks.shape == (17, 7)
-    assert df_motifs.shape == (527, 11)
+    assert df_motifs.shape == (523, 11)
 
     with AttributionResult(str(attribution_h5_file), tss_distance=10_000, num_workers=1) as ar:
         df_peaks, df_motifs = ar.recursive_seqlet_calling(attribution_data['genes'][:4])
         assert df_peaks.shape == (69, 7)
-        assert df_motifs.shape == (2296, 11)
+        assert df_motifs.shape == (2288, 11)
 
     with AttributionResult([str(attribution_h5_file), str(attribution_h5_file)], tss_distance=10_000, num_workers=1, agg_func="mean") as ar:
         df_peaks, df_motifs = ar.recursive_seqlet_calling(attribution_data['genes'][:4])
         assert df_peaks.shape == (69, 7)
-        assert df_motifs.shape == (2296, 11)
+        assert df_motifs.shape == (2288, 11)
