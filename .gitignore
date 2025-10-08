@@ -180,6 +180,5 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 wandb/
-tutorials/example/
-
+docs/tutorials/example/
 docs/api
