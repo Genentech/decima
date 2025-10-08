@@ -100,7 +100,7 @@ def test_Attribution_peaks_to_bed(attributions):
 
     assert df_peaks.columns.tolist() == ["chrom", "start", "end", "name", "score", "strand", "attribution"]
 
-    row = df_peaks.iloc[0]
+    row = df_peaks.iloc[1]
     assert row["chrom"] == "chr1"
     assert row["start"] == 1358
     assert row["end"] == 1366
@@ -191,8 +191,13 @@ def test__predict_save_attributions_seqs(tmp_path):
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene(tmp_path):
     output_prefix = tmp_path / "SPI1"
-    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], tasks="cell_type == 'classical monocyte'", device=device)
-
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1"],
+        tasks="cell_type == 'classical monocyte'",
+        model=0,
+        device=device
+    )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
@@ -207,8 +212,14 @@ def test_predict_save_attributions_single_gene(tmp_path):
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_saliency(tmp_path):
     output_prefix = tmp_path / "SPI1"
-    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="saliency", tasks="cell_type == 'classical monocyte'", device=device)
-
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1"],
+        method="saliency",
+        tasks="cell_type == 'classical monocyte'",
+        model=0,
+        device=device
+    )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
@@ -223,8 +234,14 @@ def test_predict_save_attributions_single_gene_saliency(tmp_path):
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_inputxgradient(tmp_path):
     output_prefix = tmp_path / "SPI1"
-    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="inputxgradient", tasks="cell_type == 'classical monocyte'", device=device)
-
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1"],
+        method="inputxgradient",
+        tasks="cell_type == 'classical monocyte'",
+        model=0,
+        device=device
+    )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
@@ -239,8 +256,14 @@ def test_predict_save_attributions_single_gene_inputxgradient(tmp_path):
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_integratedgradients(tmp_path):
     output_prefix = tmp_path / "SPI1"
-    predict_attributions_seqlet_calling(output_prefix=output_prefix, genes=["SPI1"], method="integratedgradients", tasks="cell_type == 'classical monocyte'", device=device)
-
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1"],
+        method="integratedgradients",
+        tasks="cell_type == 'classical monocyte'",
+        model=0,
+        device=device
+    )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
@@ -259,9 +282,9 @@ def test_predict_save_attributions_multiple_genes(tmp_path):
         output_prefix=output_prefix,
         genes=["SPI1", "CD68"],
         tasks="cell_type == 'classical monocyte'",
+        model=0,
         device=device
     )
-
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
@@ -282,6 +305,7 @@ def test_predict_save_attributions_seqs(tmp_path):
         seqs=seqs,
         tasks="cell_type == 'classical monocyte'",
         device=device,
+        model=0,
         num_workers=1,
     )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()

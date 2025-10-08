@@ -11,7 +11,7 @@ def predict_gene_expression(
     model="ensemble",
     metadata_anndata=None,
     device=None,
-    batch_size=8,
+    batch_size=1,
     num_workers=4,
     max_seq_shift=0,
     genome="hg38",

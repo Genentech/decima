@@ -1,9 +1,27 @@
+"""Decima task-wise poisson multinomial loss."""
+
 import torch
 import torch.nn.functional as F
 from torch import Tensor, nn
 
 
 class TaskWisePoissonMultinomialLoss(nn.Module):
+    """Decima task-wise poisson multinomial loss.
+
+    Args:
+        total_weight: Weight for the total loss.
+        eps: Epsilon for the loss.
+        debug: Whether to print debug information.
+
+    Examples:
+        >>> loss = TaskWisePoissonMultinomialLoss(
+        ...     total_weight=1,
+        ...     eps=1e-7,
+        ...     debug=False,
+        ... )
+        >>> loss(input, target)
+    """
+
     def __init__(
         self,
         total_weight: float = 1,

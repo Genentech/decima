@@ -1,4 +1,13 @@
-"""Finetune the Decima model."""
+"""
+Finetune the Decima model.
+
+This module contains the CLI for finetuning the Decima model.
+
+`decima finetune` is the main command for finetuning the Decima model.
+
+It includes subcommands for:
+- Finetuning the Decima model. `finetune`
+"""
 
 import logging
 import click
@@ -28,7 +37,7 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--learning-rate", default=0.001, type=float, help="Learning rate.")
 @click.option("--loss-total-weight", required=True, type=float, help="Total weight parameter for the loss function.")
 @click.option("--gradient-accumulation", required=True, type=int, help="Gradient accumulation steps.")
-@click.option("--batch-size", default=4, type=int, help="Batch size.")
+@click.option("--batch-size", default=1, type=int, help="Batch size.")
 @click.option("--max-seq-shift", default=5000, type=int, help="Shift augmentation.")
 @click.option("--gradient-clipping", default=0.0, type=float, help="Gradient clipping.")
 @click.option("--save-top-k", default=1, type=int, help="Number of checkpoints to save.")
@@ -75,7 +84,7 @@ def cli_finetune(
 
     if isinstance(device, str) and device.isdigit():
         device = int(device)
-        
+
     train_params = {
         "name": name,
         "batch_size": batch_size,
