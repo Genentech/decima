@@ -52,6 +52,7 @@ class LightningModel(pl.LightningModule):
         data_params: Dictionary specifying parameters of the training data.
             This is empty by default and will be filled at the time of
             training.
+        name: Name of the model.
     """
 
     def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}, name: str = "") -> None:
@@ -617,6 +618,17 @@ class EnsembleLightningModel(LightningModel):
 
 
 class GeneMaskLightningModel(LightningModel):
+    """Decima lightning model with pre-defined gene mask.
+
+    Args:
+        gene_mask_start: Start of the gene mask.
+        gene_mask_end: End of the gene mask.
+        model_params: Parameters for the model.
+        train_params: Parameters for the training.
+        data_params: Parameters for the data.
+        name: Name of the model.
+    """
+
     def __init__(
         self,
         gene_mask_start,

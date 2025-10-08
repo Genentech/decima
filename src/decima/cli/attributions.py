@@ -1,3 +1,21 @@
+"""
+Attributions CLI.
+
+This module contains the CLI for the attributions module performing attribution analysis, seqlet calling, and motif discovery.
+
+`decima attributions` is the main command for performing attribution analysis, seqlet calling, and motif discovery.
+
+It includes subcommands for:
+- Predicting attributions for a given gene or sequence. `attributions-predict`
+- Seqlet calling on the attributions. `attributions`
+- Motif discovery on the attributions. `attributions-recursive-seqlet-calling`
+- Plotting the attributions. `attributions-plot`
+
+Examples:
+    >>> decima attributions -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
+    ...
+"""
+
 import click
 from decima.interpret.attributions import (
     plot_attributions,
@@ -13,10 +31,16 @@ from decima.interpret.attributions import (
     "--tasks",
     type=str,
     required=False,
-    help="Query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte'')",
+    default=None,
+    help="Query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.",
+    show_default=True,
 )
 @click.option(
-    "--off-tasks", type=str, required=False, help="Optional query string to filter cell types to contrast against."
+    "--off-tasks",
+    type=str,
+    required=False,
+    default=None,
+    help="Optional query string to filter cell types to contrast against. If not provided, no contrast will be performed.",
 )
 @click.option(
     "--model",
@@ -24,15 +48,22 @@ from decima.interpret.attributions import (
     required=False,
     default=0,
     help="Model to use for attribution analysis either replicate number or path to the model.",
+    show_default=True,
 )
 @click.option(
     "--metadata",
     type=click.Path(exists=True),
     default=None,
-    help="Path to the metadata anndata file. Default: None.",
+    help="Path to the metadata anndata file. If not provided, the default metadata will be downloaded from wandb.",
+    show_default=True,
 )
 @click.option(
-    "--method", type=str, required=False, default="inputxgradient", help="Method to use for attribution analysis."
+    "--method",
+    type=str,
+    required=False,
+    default="inputxgradient",
+    help="Method to use for attribution analysis.",
+    show_default=True,
 )
 @click.option(
     "--transform",
@@ -40,20 +71,59 @@ from decima.interpret.attributions import (
     required=False,
     default="specificity",
     help="Transform to use for attribution analysis.",
+    show_default=True,
 )
-@click.option("--batch-size", type=int, required=False, default=1, help="Batch size for attribution analysis.")
-@click.option("-g", "--genes", type=str, required=False, help="Comma-separated list of gene symbols or IDs to analyze.")
-@click.option("--seqs", type=str, required=False, help="Path to a file containing sequences to analyze")
+@click.option(
+    "--batch-size",
+    type=int,
+    required=False,
+    default=1,
+    help="Batch size for attribution analysis.",
+    show_default=True,
+)
+@click.option(
+    "-g",
+    "--genes",
+    type=str,
+    required=False,
+    help="Comma-separated list of gene symbols or IDs to analyze.",
+    show_default=True,
+)
+@click.option(
+    "--seqs",
+    type=str,
+    required=False,
+    help="Path to a fasta file containing sequences to analyze.",
+)
 @click.option(
     "--top-n-markers",
     type=int,
     default=None,
     help="Top n markers to predict. If not provided, all markers will be predicted.",
+    show_default=True,
 )
-@click.option("--num-workers", type=int, required=False, default=4, help="Number of workers for attribution analysis.")
-@click.option("--device", type=str, required=False, default=None, help="Device to use for attribution analysis.")
 @click.option(
-    "--genome", type=str, show_default=True, default="hg38", help="Genome name or path to the genome fasta file."
+    "--num-workers",
+    type=int,
+    required=False,
+    default=4,
+    help="Number of workers for attribution analysis.",
+    show_default=True,
+)
+@click.option(
+    "--device",
+    type=str,
+    required=False,
+    default=None,
+    help="Device to use for attribution analysis. If not provided, `cuda` will be used if available, otherwise `cpu` will be used.",
+    show_default=True,
+)
+@click.option(
+    "--genome",
+    type=str,
+    default="hg38",
+    help="Genome name or path to the genome fasta file.",
+    show_default=True,
 )
 def cli_attributions_predict(
     output_prefix,
@@ -71,6 +141,15 @@ def cli_attributions_predict(
     device,
     genome,
 ):
+    """Predict and save attributions for specified genes or sequences using the chosen decima model.
+
+    Output files:
+
+    ├── {output_prefix}.attributions.h5      # Raw attribution score matrix per gene.
+
+    └── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file.
+    """
+
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
 
@@ -117,8 +196,9 @@ def cli_attributions_predict(
     "--model",
     type=str,
     required=False,
-    default=0,
+    default="ensemble",
     help="Model to use for attribution analysis either replicate number or path to the model.",
+    show_default=True,
 )
 @click.option(
     "--metadata",
@@ -186,42 +266,27 @@ def cli_attributions(
     device,
     genome,
 ):
-    """
-    Generate and save attribution analysis results for a gene or a set of sequences.
+    """Generate and save attribution analysis results for a gene or a set of sequences and perform seqlet calling on the attributions.
 
     Output files:
 
-        output_dir/
+        ├── {output_prefix}.attributions.h5      # Raw attribution score matrix per gene.
 
-        ├── peaks.bed              # List of attribution peaks in BED format
+        ├── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file.
 
-        ├── peaks_plots/           # Directory containing peak plots
+        ├── {output_prefix}.seqlets.bed          # List of attribution peaks in BED format.
 
-        │   └── {gene}.png         # Plot showing peak locations for each gene
+        ├── {output_prefix}.motifs.tsv           # Detected motifs in peak regions.
 
-        ├── qc.warnings.log        # QC warnings about prediction reliability
-
-        ├── motifs.tsv             # Detected motifs in peak regions
-
-        ├── attributions.h5        # Raw attribution score matrix
-
-        ├── coverage/              # Directory containing bigwig files
-
-        │   └── {gene}.bw          # Genome browser track of attribution scores
-
-        └── seqlogos/              # Directory containing attribution plots
-
-            └── {peak}.png         # Attribution plot for each peak region
+        └── {output_prefix}.warnings.qc.log      # QC warnings about prediction reliability.
 
     Examples:
 
-        >>> decima attributions -o output_dir -g SPI1
+        >>> decima attributions -o output_prefix -g SPI1
 
-        >>> decima attributions -o output_dir -g SPI1,CD68 --tasks "cell_type == 'classical monocyte'" --device 0
+        >>> decima attributions -o output_prefix -g SPI1,CD68 --tasks "cell_type == 'classical monocyte'" --device 0
 
-        >>> decima attributions -o output_dir --seqs tests/data/seqs.fasta --tasks "cell_type == 'classical monocyte'" --device 0
-
-        >>> decima attributions -o output_dir --seqs tests/data/seqs.fasta --tasks "cell_type == 'classical monocyte'" --device 0 --plot_seqlogo
+        >>> decima attributions -o output_prefix --seqs tests/data/seqs.fasta --tasks "cell_type == 'classical monocyte'" --device 0
     """
     if model in ["0", "1", "2", "3"]:  # replicate index
         model = int(model)
@@ -314,6 +379,20 @@ def cli_attributions_recursive_seqlet_calling(
     custom_genome,
     meme_motif_db,
 ):
+    """Performs recursive seqlet calling on the pre computed attributions.
+
+    Output files:
+
+        ├── {output_prefix}.seqlets.bed          # List of attribution peaks in BED format.
+
+        ├── {output_prefix}.motifs.tsv           # Detected motifs in peak regions.
+
+        └── {output_prefix}.warnings.qc.log      # QC warnings about prediction reliability.
+
+    Examples:
+
+        >>> decima attributions-recursive-seqlet-calling --attributions attributions_0.h5,attributions_1.h5 -o output_prefix  --genes SPI1
+    """
     if isinstance(attributions, str):
         attributions = attributions.split(",")
 
@@ -358,6 +437,18 @@ def cli_attributions_plot(
     custom_genome,
     dpi,
 ):
+    """Plots the attributions for the specified genes.
+
+    Output files:
+
+        ├── {output_prefix}.attributions.png  # Attributions plot.
+
+        └── {output_prefix}.seqlogo.png       # Sequence logo plot.
+
+        Examples:
+
+            >>> decima attributions-plot -o output_prefix -g SPI1
+    """
     genes = genes.split(",")
 
     plot_attributions(

@@ -1,3 +1,5 @@
+"""Decima pytorch metrics."""
+
 from enum import Enum
 from collections import Counter
 from typing import List
@@ -7,6 +9,20 @@ from grelu.lightning.metrics import MSE
 
 
 class DiseaseLfcMSE(Metric):
+    """Decima disease LFC MSE.
+
+    Args:
+        pairs: Pairs of disease and healthy.
+        average: Whether to average the loss.
+
+    Examples:
+        >>> loss = DiseaseLfcMSE(
+        ...     pairs,
+        ...     average=True,
+        ... )
+        >>> loss(preds, target)
+    """
+
     def __init__(self, pairs, average: bool = True) -> None:
         super().__init__()
         self.mse = MSE(num_outputs=1, average=False)

@@ -1,3 +1,5 @@
+"""Decima constants."""
+
 import os
 
 

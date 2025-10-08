@@ -179,6 +179,15 @@ class DecimaResult:
             return pd.DataFrame(self.anndata[:, genes].layers[model_name], index=self.cells, columns=genes)
 
     def predicted_gene_expression(self, gene, model_name):
+        """Get predicted expression for a specific gene.
+
+        Args:
+            gene: Gene name
+            model_name: Model name
+
+        Returns:
+            torch.Tensor: Predicted expression for the gene
+        """
         return torch.from_numpy(self.anndata[:, gene].layers[model_name].ravel())
 
     def _pad_gene_metadata(self, gene_meta: pd.Series, padding: int = 0) -> pd.Series:
@@ -208,7 +217,6 @@ class DecimaResult:
         Returns:
             torch.Tensor: One-hot encoding of the gene
         """
-
         assert gene in self.genes, f"{gene} is not in the anndata object"
         gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
@@ -225,8 +233,15 @@ class DecimaResult:
         return strings_to_one_hot(seq), mask
 
     def gene_sequence(self, gene: str, stranded: bool = True) -> str:
-        """Get sequence for a gene."""
+        """Get sequence for a gene.
 
+        Args:
+            gene: Gene name
+            stranded: Whether to return stranded sequence
+
+        Returns:
+            str: Sequence for the gene
+        """
         try:
             assert gene in self.genes, f"{gene} is not in the anndata object"
         except AssertionError:
@@ -302,9 +317,42 @@ class DecimaResult:
         )
 
     def query_cells(self, query: str):
+        """Query cells based on a query string.
+
+        Args:
+            query: Query string
+
+        Returns:
+            List of cell names
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> cells = result.query_cells(
+            ...     "cell_type == 'classical monocyte'"
+            ... )
+            >>> cells
+            ['agg1', 'agg2', 'agg3', ...]
+        """
         return self.cell_metadata.query(query).index.tolist()
 
     def query_tasks(self, tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
+        """Query tasks based on a query string.
+
+        Args:
+            tasks: Query string
+            off_tasks: Query string
+
+        Returns:
+            List of tasks
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> tasks = result.query_tasks(
+            ...     "cell_type == 'classical monocyte'"
+            ... )
+            >>> tasks
+            [...]
+        """
         if tasks is None:
             tasks = self.cell_metadata.index.tolist()
         elif isinstance(tasks, str):
@@ -381,8 +429,7 @@ class DecimaResult:
         return true, preds
 
     def correlation(self, tasks, off_tasks, dataset="test"):
-        """
-        Compute the correlation between the ground truth and the predicted expression.
+        """Compute the correlation between the ground truth and the predicted expression.
 
         Args:
             tasks: List of cells to use as on task.
@@ -396,8 +443,22 @@ class DecimaResult:
         return stats.pearsonr(ground_truth, preds)
 
     def plot_correlation(self, tasks, off_tasks, dataset="test"):
-        """
-        Plot the correlation between the ground truth and the predicted expression.
+        """Plot the correlation between the ground truth and the predicted expression.
+
+        Args:
+            tasks: List of cells to use as on task.
+            off_tasks: List of cells to use as off task.
+            dataset: Dataset to use for computation.
+
+        Returns:
+            p9.ggplot: Plot of the correlation between the ground truth and the predicted expression.
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> result.plot_correlation(
+            ...     tasks="cell_type == 'classical monocyte'",
+            ...     off_tasks="cell_type == 'lymphoid progenitor'",
+            ... )
         """
         p9 = import_plotnine()
         true, preds = self._correlation(tasks, off_tasks, dataset)

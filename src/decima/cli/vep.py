@@ -1,3 +1,25 @@
+"""
+Variant Effect Prediction CLI.
+
+This module contains the CLI for predicting the variant effect.
+
+`decima vep` is the main command for predicting the variant effect.
+
+It includes subcommands for:
+- Predicting the variant effect. `vep`
+- Ensembling the variant effect predictions. `vep-ensemble`
+
+Examples:
+    >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet"
+    ...
+
+    >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --tasks "cell_type == 'classical monocyte'" # only predict for classical monocytes
+    ...
+
+    >>> decima vep -v "data/sample.vcf" -o "vep_results.parquet" --device 0 # use device gpu device 0
+    ...
+"""
+
 import click
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.utils.dataframe import ensemble_predictions
@@ -35,7 +57,7 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--device", type=str, default=None, help="Device to use. Default: None which automatically selects the best device."
 )
-@click.option("--batch-size", type=int, default=8, help="Batch size for the model. Default: 8")
+@click.option("--batch-size", type=int, default=1, help="Batch size for the model. Default: 8")
 @click.option("--num-workers", type=int, default=4, help="Number of workers for the loader. Default: 4")
 @click.option("--distance-type", type=str, default="tss", help="Type of distance. Default: tss.")
 @click.option(

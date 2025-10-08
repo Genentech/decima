@@ -1,3 +1,31 @@
+"""Attributions module predict attributes and performs recursive seqlet calling.
+
+Examples:
+    >>> predict_save_attributions(
+    ...     output_prefix="output_prefix",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+    >>> recursive_seqlet_calling(
+    ...     output_prefix="output_prefix",
+    ...     attributions="attributions.h5",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+"""
+
 import glob
 import warnings
 import logging
@@ -9,9 +37,8 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 from more_itertools import chunked
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader
 from pyfaidx import Faidx
-from grelu.sequence.format import convert_input_type
 
 from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
@@ -40,6 +67,59 @@ def predict_save_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
+    """
+    Generate and save attribution analysis results for a gene.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        tasks: Tasks to attribute.
+        off_tasks: Off tasks to attribute.
+        model: Model to attribute.
+        metadata_anndata: Metadata anndata.
+        method: Method to use for attribution analysis.
+        transform: Transform to use for attribution analysis.
+        batch_size: Batch size.
+        genes: Genes to attribute.
+        seqs: Sequences to attribute.
+        top_n_markers: Top n markers.
+        bigwig: Whether to save attribution scores as a bigwig file.
+        correct_grad_bigwig: Whether to correct the gradient bigwig file.
+        num_workers: Number of workers.
+        device: Device to use for attribution analysis.
+        genome: Genome to use for attribution analysis.
+
+    Examples:
+        >>> predict_save_attributions(
+        ...     output_prefix="output_prefix",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ...     model=0,
+        ...     metadata_anndata="metadata_anndata.h5ad",
+        ...     method="inputxgradient",
+        ...     transform="specificity",
+        ...     batch_size=1,
+        ...     genes=[
+        ...         "gene1",
+        ...         "gene2",
+        ...     ],
+        ...     seqs="seqs.fasta",
+        ...     top_n_markers=10,
+        ...     bigwig=True,
+        ...     correct_grad_bigwig=True,
+        ...     num_workers=4,
+        ...     device="cuda",
+        ...     genome="hg38",
+        ... )
+    """
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
+
     logger = logging.getLogger("decima")
 
     device = get_compute_device(device)
@@ -70,24 +150,17 @@ def predict_save_attributions(
                     "`seqs` must be 5-dimensional with shape (batch_size, 5, seq_len) "
                     "where the 2th dimension is a one_hot encoded seq and binary mask gene mask."
                 )
-                dataset = TensorDataset(seqs)
-                dataset.seqs = convert_input_type(seqs, output_type="strings")
-                dataset.genes = [f"seq{i}" for i in range(len(dataset.seqs))]
+                dataset = SeqDataset.from_one_hot(seqs)
             else:
                 raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
-
-            all_genes = dataset.genes
-            gene_mask_start = dataset.gene_mask_starts
-            gene_mask_end = dataset.gene_mask_ends
         else:
-            all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-            dataset = GeneDataset(genes=all_genes, metadata_anndata=result)
-            gene_mask_start = result.gene_metadata.loc[all_genes, "gene_mask_start"].values
-            gene_mask_end = result.gene_metadata.loc[all_genes, "gene_mask_end"].values
+            dataset = GeneDataset(
+                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result
+            )
 
-        genes_batch = list(chunked(all_genes, batch_size))
-        gene_mask_start = list(chunked(gene_mask_start, batch_size))
-        gene_mask_end = list(chunked(gene_mask_end, batch_size))
+        genes_batch = list(chunked(dataset.genes, batch_size))
+        gene_mask_starts = list(chunked(dataset.gene_mask_starts, batch_size))
+        gene_mask_ends = list(chunked(dataset.gene_mask_ends, batch_size))
 
         dl = DataLoader(
             dataset,
@@ -99,7 +172,7 @@ def predict_save_attributions(
 
         with AttributionWriter(
             path=Path(output_prefix).with_suffix(".attributions.h5"),
-            genes=all_genes,
+            genes=dataset.genes,
             model_name=attributer.model.name,
             metadata_anndata=result,
             genome=genome,
@@ -112,7 +185,7 @@ def predict_save_attributions(
                 _seqs = inputs[:, :4].detach().cpu().numpy()
 
                 for gene, seq, attr, g_start, g_end in zip(
-                    genes_batch[i], _seqs, attrs, gene_mask_start[i], gene_mask_end[i]
+                    genes_batch[i], _seqs, attrs, gene_mask_starts[i], gene_mask_ends[i]
                 ):
                     writer.add(gene=gene, seqs=seq, attrs=attr, gene_mask_start=g_start, gene_mask_end=g_end)
                     if seqs is None:
@@ -122,7 +195,7 @@ def predict_save_attributions(
             logger.info("Saving sequences...")
             fasta_path = str(Path(output_prefix).with_suffix(".seqs.fasta"))
             with open(fasta_path, "w") as f:
-                for i, seq in tqdm(zip(all_genes, dataset.seqs), desc="Saving sequences..."):
+                for i, seq in tqdm(zip(dataset.genes, dataset.seqs), desc="Saving sequences..."):
                     f.write(f">{i}\n{seq}\n")
             Faidx(fasta_path, build_index=True)
 
@@ -146,6 +219,45 @@ def recursive_seqlet_calling(
     custom_genome: bool = False,
     meme_motif_db: str = "hocomoco_v13",
 ):
+    """
+    Recursive seqlet calling for attribution analysis.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        attributions: Attributions to use for recursive seqlet calling.
+        tasks: Tasks to attribute.
+        off_tasks: Off tasks to attribute.
+        tss_distance: TSS distance.
+        metadata_anndata: Metadata anndata.
+        genes: Genes to attribute.
+        top_n_markers: Top n markers.
+        num_workers: Number of workers.
+        agg_func: Agg func.
+        threshold: Threshold.
+        min_seqlet_len: Min seqlet len.
+        max_seqlet_len: Max seqlet len.
+        additional_flanks: Additional flanks.
+        pattern_type: Pattern type.
+        custom_genome: Custom genome.
+        meme_motif_db: Meme motif db.
+
+    Examples:
+        >>> recursive_seqlet_calling(
+        ...     output_prefix="output_prefix",
+        ...     attributions="attributions.h5",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ... )
+    """
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
+
     # TODO: update dependencies so we do not get future errors.
     warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -183,7 +295,6 @@ def recursive_seqlet_calling(
             meme_motif_db,
         )
 
-    output_prefix = Path(output_prefix)
     df_peaks.sort_values(["chrom", "start"]).to_csv(
         output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=False, index=False
     )
@@ -196,7 +307,7 @@ def predict_attributions_seqlet_calling(
     seqs: Optional[Union[pd.DataFrame, np.ndarray, torch.Tensor]] = None,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = 0,
+    model: Optional[Union[str, int]] = "ensemble",
     metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     transform: str = "specificity",
@@ -219,11 +330,17 @@ def predict_attributions_seqlet_calling(
 
     output_dir/
     ├── peaks.bed                # List of attribution peaks in BED format
+
     ├── peaks.png                # Plot showing peak locations
+
     ├── qc.log                   # QC warnings about prediction reliability
+
     ├── motifs.tsv               # Detected motifs in peak regions
+
     ├── attributions.h5          # Raw attribution score matrix
+
     ├── attributions.bigwig      # Genome browser track of attribution scores
+
     └── attributions_seq_logos/  # Directory containing attribution plots
         └── {peak}.png           # Attribution plot for each peak region
 
@@ -251,6 +368,7 @@ def predict_attributions_seqlet_calling(
     ... )
     """
     output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
     if model == "ensemble":
         attrs_output_prefix = str(output_prefix) + "_{model}"
@@ -315,6 +433,18 @@ def plot_attributions(
     custom_genome: bool = False,
     dpi: int = 100,
 ):
+    """Plot attributions.
+
+    Args:
+        output_prefix: Prefix for the output files.
+        genes: Genes to attribute.
+        metadata_anndata: Metadata anndata.
+        tss_distance: TSS distance.
+        seqlogo_window: Seqlogo window.
+        agg_func: Agg func.
+        custom_genome: Custom genome.
+        dpi: DPI.
+    """
     plot_dir = Path(str(output_prefix) + "_plots")
     plot_dir.mkdir(parents=True, exist_ok=True)
 

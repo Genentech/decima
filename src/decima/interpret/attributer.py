@@ -25,6 +25,29 @@ def get_attribution_method(method: str):
 
 
 class DecimaAttributer:
+    """
+    DecimaAttributer class for attribution analysis.
+
+    Args:
+        model: Model to attribute.
+        tasks: Tasks to attribute.
+        off_tasks: Off tasks to attribute.
+        method: Method to use for attribution analysis.
+        transform: Transform to use for attribution analysis.
+
+    Examples:
+        >>> attributer = DecimaAttributer(
+        ...     model,
+        ...     tasks,
+        ...     off_tasks,
+        ...     method,
+        ...     transform,
+        ... )
+        >>> attributer.attribute(
+        ...     inputs
+        ... )
+    """
+
     def __init__(self, model, tasks, off_tasks=None, method: str = "inputxgradient", transform="specificity"):
         self.model = model
         self.method = method
