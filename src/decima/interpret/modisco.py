@@ -51,29 +51,27 @@ def predict_save_modisco_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
-    """Generate and save attribution analysis results for a gene.
-    This function performs attribution analysis for a given gene and cell types, saving
-    the following output files to the specified directory:
+    """Generate and save attribution analysis results optimized for MoDISco motif discovery.
+
+    This function performs attribution analysis for specified genes and cell types, generating
+    attribution scores that will be used downstream for MoDISco pattern discovery and motif analysis.
 
     Args:
-        output_prefix: Path to save attribution scores.
-        tasks: List of cell types to analyze attributions for.
-        off_tasks: Optional list of cell types to contrast against.
-        model: Optional model to use for attribution analysis.
-        metadata_anndata: Path to the metadata anndata file.
-        method: Method to use for attribution analysis.
-        chunk_size: Chunk size for the prediction.
-        batch_size: Batch size for the prediction.
-        genes: List of genes to analyze attributions for.
-        top_n_markers: Top n markers to predict. If not provided, all markers will be predicted.
-        bigwig: Whether to save bigwig file.
-        correct_grad_bigwig: Whether to correct gradient for bigwig file.
-        num_workers: Number of workers for the prediction.
-        device: Device to use for attribution analysis.
-        genome: Genome name or path to the genome fasta file.
-
-    Raises:
-        FileExistsError: If output directory already exists.
+        output_prefix: Prefix for the output files where attribution results will be saved.
+        tasks: Tasks to analyze for modisco attribution either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze for modisco attribution either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.
+        metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
+        batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.
+        genes: Genes to analyze for modisco attribution if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers for modisco attribution if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        bigwig: Whether to save attribution scores as a bigwig file default is True. Bigwig files can be loaded in genome browsers for visualization.
+        correct_grad_bigwig: Whether to correct the gradient bigwig file default is True. Applies gradient correction for better visualization quality.
+        num_workers: Number of workers for attribution analysis default is 4. Increasing number of workers will speed up the process but requires more memory.
+        device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
+        genome: Genome to use for attribution analysis default is "hg38". Can be genome name or path to custom genome fasta file.
 
     Examples:
     >>> predict_save_modisco_attributions(
@@ -147,19 +145,22 @@ def modisco_patterns(
     stranded: bool = False,
     pattern_type: str = "both",  # "both", "pos", or "neg"
 ):
-    """Perform modisco motif clustering from attributions.
+    """Perform TF-MoDISco pattern discovery and motif clustering from attribution data.
+
+    This function runs the core TF-MoDISco algorithm to discover recurring patterns (motifs)
+    in attribution data by clustering similar seqlets and identifying consensus motifs.
 
     Args:
-        output_prefix: Path to save modisco results.
-        attributions: Path to attributions file.
-        tasks: List of tasks to analyze.
-        off_tasks: List of off tasks to analyze.
-        tss_distance: TSS distance.
-        metadata_anndata: Path to metadata anndata file.
-        genes: List of genes to analyze.
-        top_n_markers: Top n markers to analyze.
-        correct_grad: Whether to correct gradient.
-        num_workers: Number of workers.
+        output_prefix: Prefix for the output files where MoDISco results will be saved. Results will be saved as "{output_prefix}.modisco.h5".
+        attributions: Path to attribution file(s) or list of attribution files containing computed attribution scores from previous analysis.
+        tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
+        tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used from the attribution files.
+        genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
         sliding_window_size: Sliding window size.
         flank_size: Flank size.
         min_metacluster_size: Min metacluster size.
@@ -282,19 +283,22 @@ def modisco_reports(
     tomtomlite: bool = False,
     num_workers: int = 4,
 ):
-    """Perform modisco motif clustering from attributions.
+    """Generate comprehensive HTML reports and motif comparisons from MoDISco results.
+
+    This function takes MoDISco pattern discovery results and generates detailed HTML reports
+    including motif visualizations, database comparisons, and statistical summaries.
 
     Args:
-        output_prefix: Path to save modisco results.
-        modisco_h5: Path to modisco h5 file.
-        meme_motif_db: Path to meme motif db.
-        img_path_suffix: Image path suffix.
-        is_writing_tomtom_matrix: Whether to write tomtom matrix.
-        top_n_matches: Top n matches.
-        trim_threshold: Trim threshold.
-        trim_min_length: Trim min length.
-        tomtomlite: Whether to use tomtomlite.
-        num_workers: Number of workers.
+        output_prefix: Prefix for the output report files where results will be saved. A "_report" suffix will be added to create the output directory.
+        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and motifs from previous MoDISco analysis.
+        meme_motif_db: MEME motif database for comparison default is "hocomoco_v13". Database used for motif comparison and annotation. Can be database name or path to custom MEME format database.
+        img_path_suffix: Image path suffix for output plots default is "". Optional suffix to add to image file paths for organizational purposes.
+        is_writing_tomtom_matrix: Whether to write TOMTOM comparison matrix default is False. If True, outputs detailed comparison matrix between discovered and database motifs for downstream analysis.
+        top_n_matches: Top n matches to report default is 3. Number of top database matches to report for each discovered motif in the HTML output.
+        trim_threshold: Trim threshold for motif boundaries default is 0.3. Threshold for determining where to trim motif boundaries based on information content when generating logos.
+        trim_min_length: Minimum trim length default is 3. Minimum number of positions to retain when trimming motifs to ensure meaningful motif representations.
+        tomtomlite: Whether to use TOMTOM lite mode default is False. If True, uses a faster but less comprehensive version of TOMTOM for motif comparison.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up report generation but requires more memory.
 
     Examples:
         >>> modisco_reports(
@@ -327,13 +331,25 @@ def modisco_seqlet_bed(
     metadata_anndata: str = None,
     trim_threshold: float = 0.2,
 ):
-    """Perform modisco seqlet bed from attributions.
+    """Extract seqlet locations from MoDISco results and save as BED format file.
+
+    This function processes MoDISco pattern discovery results to extract the genomic coordinates
+    of discovered seqlets (sequence motifs) and outputs them in standard BED format for
+    downstream analysis and visualization in genome browsers.
 
     Args:
-        output_prefix: Path to save modisco results.
-        modisco_h5: Path to modisco h5 file.
-        metadata_anndata: Path to metadata anndata file.
-        trim_threshold: Trim threshold.
+        output_prefix: Prefix for the output BED file where seqlet coordinates will be saved. The output will be saved as "{output_prefix}.seqlets.bed".
+        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and seqlet information from previous MoDISco analysis.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object default is None. Required for mapping seqlet coordinates to genomic positions. If not provided, relative coordinates will be used.
+        trim_threshold: Trim threshold for seqlet boundaries default is 0.2. Threshold for determining seqlet boundaries based on contribution scores - lower values result in longer seqlets.
+
+    Examples:
+        >>> modisco_seqlet_bed(
+        ...     output_prefix="my_analysis",
+        ...     modisco_h5="my_analysis.modisco.h5",
+        ...     metadata_anndata="metadata.h5ad",
+        ...     trim_threshold=0.15,
+        ... )
     """
     result = DecimaResult.load(metadata_anndata)
 
@@ -464,20 +480,20 @@ def modisco(
     """Perform modisco motif clustering from attributions.
 
     Args:
-        output_prefix: Path to save modisco results.
-        tasks: List of tasks to analyze.
-        off_tasks: List of off tasks to analyze.
-        model: Model to analyze.
-        tss_distance: TSS distance.
-        metadata_anndata: Path to metadata anndata file.
-        genes: List of genes to analyze.
-        top_n_markers: Top n markers to analyze.
-        correct_grad: Whether to correct gradient.
-        num_workers: Number of workers.
-        genome: Genome.
-        method: Method to analyze.
-        batch_size: Batch size.
-        device: Device to analyze.
+        output_prefix: Path prefix to save comprehensive modisco results where all output files will be written.
+        tasks: Tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.
+        tss_distance: Distance from TSS to call seqlets default is 1000. Controls the genomic window size around TSS for seqlet detection. If set to full context size of decima (524288), analyzes the entire accessible region.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
+        genes: List of genes to analyze for full modisco pipeline if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers to analyze for full modisco pipeline if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
+        genome: Genome reference to use default is "hg38". Can be genome name or path to custom genome fasta file.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.
+        device: Device to use for computation (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
         sliding_window_size: Sliding window size.
         flank_size: Flank size.
         min_metacluster_size: Min metacluster size.

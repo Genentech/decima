@@ -271,7 +271,7 @@ class DecimaResult:
             tasks: List of cells to use as on task
             off_tasks: List of cells to use as off task
             transform: Attribution transform method
-            method: Attribution method
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
             n_peaks: Number of peaks to find
             min_dist: Minimum distance between peaks
 

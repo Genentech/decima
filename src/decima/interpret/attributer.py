@@ -32,7 +32,7 @@ class DecimaAttributer:
         model: Model to attribute.
         tasks: Tasks to attribute.
         off_tasks: Off tasks to attribute.
-        method: Method to use for attribution analysis.
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
         transform: Transform to use for attribution analysis.
 
     Examples:
@@ -106,4 +106,14 @@ class DecimaAttributer:
         transform="specificity",
         device="cpu",
     ):
+        """Load DecimaAttributer.
+
+        Args:
+            model_name: Model name to load.
+            tasks: Tasks to attribute.
+            off_tasks: Off tasks to attribute.
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+            transform: Transform to use for attribution analysis.
+            device: Device to use for attribution analysis.
+        """
         return cls(load_decima_model(model_name, device=device), tasks, off_tasks, method, transform)

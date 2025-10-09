@@ -147,7 +147,7 @@ def cli_attributions_predict(
 
     ├── {output_prefix}.attributions.h5      # Raw attribution score matrix per gene.
 
-    └── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file.
+    └── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file obtained with averaging the attribution scores across the genes for genomics coordinates.
     """
 
     if model in ["0", "1", "2", "3"]:  # replicate index
