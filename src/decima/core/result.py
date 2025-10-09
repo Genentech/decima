@@ -3,6 +3,7 @@ import anndata
 import numpy as np
 import torch
 import pandas as pd
+from scipy import stats
 
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
@@ -10,7 +11,9 @@ from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.tools.evaluate import marker_zscores
+from decima.plot.visualize import import_plotnine
 from decima.utils.inject import prepare_seq_alt_allele
+from decima.interpret.attributer import DecimaAttributer  # to avoid circular import
 
 
 class DecimaResult:
@@ -141,6 +144,11 @@ class DecimaResult:
         """Gene metadata."""
         return self.anndata.var
 
+    @property
+    def ground_truth(self) -> pd.DataFrame:
+        """Ground truth expression matrix."""
+        return self.anndata.X
+
     def get_gene_metadata(self, gene: str) -> GeneMetadata:
         """Get metadata for a specific gene."""
         if gene not in self.genes:
@@ -171,6 +179,15 @@ class DecimaResult:
             return pd.DataFrame(self.anndata[:, genes].layers[model_name], index=self.cells, columns=genes)
 
     def predicted_gene_expression(self, gene, model_name):
+        """Get predicted expression for a specific gene.
+
+        Args:
+            gene: Gene name
+            model_name: Model name
+
+        Returns:
+            torch.Tensor: Predicted expression for the gene
+        """
         return torch.from_numpy(self.anndata[:, gene].layers[model_name].ravel())
 
     def _pad_gene_metadata(self, gene_meta: pd.Series, padding: int = 0) -> pd.Series:
@@ -200,7 +217,6 @@ class DecimaResult:
         Returns:
             torch.Tensor: One-hot encoding of the gene
         """
-
         assert gene in self.genes, f"{gene} is not in the anndata object"
         gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
@@ -217,8 +233,15 @@ class DecimaResult:
         return strings_to_one_hot(seq), mask
 
     def gene_sequence(self, gene: str, stranded: bool = True) -> str:
-        """Get sequence for a gene."""
+        """Get sequence for a gene.
 
+        Args:
+            gene: Gene name
+            stranded: Whether to return stranded sequence
+
+        Returns:
+            str: Sequence for the gene
+        """
         try:
             assert gene in self.genes, f"{gene} is not in the anndata object"
         except AssertionError:
@@ -248,7 +271,7 @@ class DecimaResult:
             tasks: List of cells to use as on task
             off_tasks: List of cells to use as off task
             transform: Attribution transform method
-            method: Attribution method
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
             n_peaks: Number of peaks to find
             min_dist: Minimum distance between peaks
 
@@ -260,19 +283,25 @@ class DecimaResult:
         one_hot_seq, gene_mask = self.prepare_one_hot(gene)
         inputs = torch.vstack([one_hot_seq, gene_mask])
 
-        from decima.interpret.attributions import Attribution, attributions  # to avoid circular import
-
-        attrs = attributions(
-            inputs=inputs.unsqueeze(0),
-            model=self.model,
-            tasks=tasks,
-            off_tasks=off_tasks,
-            transform=transform,
-            device=self.model.device,
-            method=method,
-        ).squeeze(0)
+        attrs = (
+            DecimaAttributer(
+                model=self.model,
+                tasks=tasks,
+                off_tasks=off_tasks,
+                transform=transform,
+                method=method,
+            )
+            .attribute(
+                inputs=inputs.unsqueeze(0),
+            )
+            .squeeze(0)
+            .cpu()
+            .numpy()
+        )
 
         gene_meta = self.gene_metadata.loc[gene]
+        from decima.core.attribution import Attribution  # to avoid circular import
+
         return Attribution(
             gene=gene,
             inputs=inputs,
@@ -288,9 +317,42 @@ class DecimaResult:
         )
 
     def query_cells(self, query: str):
+        """Query cells based on a query string.
+
+        Args:
+            query: Query string
+
+        Returns:
+            List of cell names
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> cells = result.query_cells(
+            ...     "cell_type == 'classical monocyte'"
+            ... )
+            >>> cells
+            ['agg1', 'agg2', 'agg3', ...]
+        """
         return self.cell_metadata.query(query).index.tolist()
 
     def query_tasks(self, tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
+        """Query tasks based on a query string.
+
+        Args:
+            tasks: Query string
+            off_tasks: Query string
+
+        Returns:
+            List of tasks
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> tasks = result.query_tasks(
+            ...     "cell_type == 'classical monocyte'"
+            ... )
+            >>> tasks
+            [...]
+        """
         if tasks is None:
             tasks = self.cell_metadata.index.tolist()
         elif isinstance(tasks, str):
@@ -341,6 +403,86 @@ class DecimaResult:
         ad.obs.loc[tasks, "task"] = "on"
 
         return marker_zscores(ad, key="task", layer=layer).sort_values(by="score", ascending=False)
+
+    def _correlation(self, tasks, off_tasks=None, dataset="test"):
+        if self.ground_truth is None:
+            raise ValueError(
+                "Anndata object does not have expression data. Cannot compute correlations between tasks and off tasks."
+            )
+
+        tasks, off_tasks = self.query_tasks(tasks, off_tasks)
+        tasks = self.anndata.obs.index.isin(tasks)
+
+        preds = self.anndata.layers["preds"][tasks].mean(axis=0)
+        true = self.anndata.X[tasks].mean(axis=0)
+
+        if off_tasks is not None:
+            off_tasks = self.anndata.obs.index.isin(off_tasks)
+            preds = preds - self.anndata.layers["preds"][off_tasks].mean(axis=0)
+            true = true - self.anndata.X[off_tasks].mean(axis=0)
+
+        if dataset is not None:
+            genes = self.anndata.var.dataset == dataset
+            preds = preds[genes]
+            true = true[genes]
+
+        return true, preds
+
+    def correlation(self, tasks, off_tasks, dataset="test"):
+        """Compute the correlation between the ground truth and the predicted expression.
+
+        Args:
+            tasks: List of cells to use as on task.
+            off_tasks: List of cells to use as off task.
+            dataset: Dataset to use for computation.
+
+        Returns:
+            float: Pearson correlation coefficient.
+        """
+        ground_truth, preds = self._correlation(tasks, off_tasks, dataset)
+        return stats.pearsonr(ground_truth, preds)
+
+    def plot_correlation(self, tasks, off_tasks, dataset="test"):
+        """Plot the correlation between the ground truth and the predicted expression.
+
+        Args:
+            tasks: List of cells to use as on task.
+            off_tasks: List of cells to use as off task.
+            dataset: Dataset to use for computation.
+
+        Returns:
+            p9.ggplot: Plot of the correlation between the ground truth and the predicted expression.
+
+        Examples:
+            >>> result = DecimaResult.load()
+            >>> result.plot_correlation(
+            ...     tasks="cell_type == 'classical monocyte'",
+            ...     off_tasks="cell_type == 'lymphoid progenitor'",
+            ... )
+        """
+        p9 = import_plotnine()
+        true, preds = self._correlation(tasks, off_tasks, dataset)
+        pearsonr = stats.pearsonr(true, preds)
+        df = pd.DataFrame(
+            {
+                "true": true,
+                "pred": preds,
+            }
+        )
+        return (
+            p9.ggplot(df, p9.aes(x="true", y="pred"))
+            + p9.geom_pointdensity(size=0.1)
+            + p9.xlab("Measured log FC")
+            + p9.ylab("Predicted logFC")
+            + p9.geom_text(
+                x=df["true"].min() * 0.5,
+                y=df["pred"].max() * 0.95,
+                label=f"rho={pearsonr[0]:.2f} (P={pearsonr[1]:.2e})",
+            )
+            + p9.geom_abline(slope=1, intercept=0)
+            + p9.geom_vline(xintercept=0, linetype="--")
+            + p9.geom_hline(yintercept=0, linetype="--")
+        )
 
     @property
     def shape(self) -> tuple:

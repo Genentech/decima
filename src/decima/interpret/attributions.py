@@ -1,496 +1,459 @@
-from typing import Optional, Union
+"""Attributions module predict attributes and performs recursive seqlet calling.
+
+Examples:
+    >>> predict_save_attributions(
+    ...     output_prefix="output_prefix",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+    >>> recursive_seqlet_calling(
+    ...     output_prefix="output_prefix",
+    ...     attributions="attributions.h5",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+"""
+
+import glob
 import warnings
+import logging
+from pathlib import Path
+from typing import List, Optional, Union
+
 import numpy as np
 import pandas as pd
 import torch
-import pyBigWig
+from tqdm import tqdm
+from more_itertools import chunked
+from torch.utils.data import DataLoader
 from pyfaidx import Faidx
-from grelu.interpret.motifs import scan_sequences
-from grelu.sequence.format import convert_input_type, strings_to_one_hot
-from grelu.transforms.prediction_transforms import Aggregate, Specificity
-from tangermeme.seqlet import recursive_seqlets
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
-from decima.hub import load_decima_model
-from decima.model.lightning import LightningModel
-from decima.interpret.attributer import get_attribution_method
-from decima.utils import get_compute_device
-from decima.plot.visualize import plot_peaks
-from grelu.visualize import plot_attributions
+from decima.data.dataset import GeneDataset, SeqDataset
+from decima.interpret.attributer import DecimaAttributer
+from decima.utils import get_compute_device, _get_on_off_tasks, _get_genes
+from decima.utils.io import AttributionWriter
+from decima.utils.qc import QCLogger
 
 
-def attributions(
-    inputs,
-    tasks,
-    off_tasks=None,
-    model=0,
-    transform="specificity",
-    method="inputxgradient",
-    device=None,
-    **kwargs,
+def predict_save_attributions(
+    output_prefix: str,
+    tasks: Optional[List[str]] = None,
+    off_tasks: Optional[List[str]] = None,
+    model: Optional[int] = 0,
+    metadata_anndata: Optional[str] = None,
+    method: str = "inputxgradient",
+    transform: str = "specificity",
+    batch_size: int = 1,
+    genes: Optional[List[str]] = None,
+    seqs: Optional[Union[str, pd.DataFrame, np.ndarray, torch.Tensor]] = None,
+    top_n_markers: Optional[int] = None,
+    bigwig: bool = True,
+    correct_grad_bigwig: bool = True,
+    num_workers: int = 4,
+    device: Optional[str] = None,
+    genome: str = "hg38",
 ):
-    """Compute attributions for a gene.
+    """
+    Generate and save attribution analysis results for a gene.
 
     Args:
-        gene: Gene symbol or ID to analyze
-        tasks: List of cell types to analyze attributions for
-        off_tasks: List of cell types to contrast against
-        model: Model to use for attribution analysis
-        device: Device to use for attribution analysis
-        inputs: One-hot encoded sequence
-        transform: Transformation to apply to attributions
-        method: Method to use for attribution analysis
-
-    Returns:
-        Attribution: Attribution analysis results for the gene and tasks
-    """
-    assert inputs.shape[1] == 5, "`inputs` must be 5-dimensional with shape (batch_size, 5, 524288)"
-    assert inputs.shape[2] == DECIMA_CONTEXT_SIZE, "`inputs` must have shape (batch_size, 5, 524288)"
-
-    if not isinstance(model, LightningModel):
-        model = load_decima_model(model, device)
-
-    if transform == "specificity":
-        model.add_transform(
-            Specificity(
-                on_tasks=tasks,
-                off_tasks=off_tasks,
-                model=model,
-                compare_func="subtract",
-            )
-        )
-    elif transform == "aggregate":
-        model.add_transform(Aggregate(tasks=tasks, task_aggfunc="mean", model=model))
-
-    model = model.eval()
-    device = get_compute_device(device)
-
-    inputs.requires_grad = True
-    attribution_method = get_attribution_method(method)
-    attributer = attribution_method(model.to(device))
-
-    if method == "saliency":
-        kwargs = {**kwargs, "abs": False}
-
-    with torch.no_grad():
-        attrs = attributer.attribute(inputs.to(device), **kwargs)
-        attrs = attrs.cpu().numpy()[:, :4]
-
-    model.reset_transform()
-    return attrs
-
-
-class Attribution:
-    """
-    Attribution analysis results for a gene.
-
-    Args:
-        gene: Gene symbol or ID to analyze
-        inputs: One-hot encoded sequence
-        attrs: Attribution scores
-        gene: Gene name
-        chrom: Chromosome name
-        start: Start position
-        end: End position
-        strand: Strand
-        threshold: Threshold for peak finding
-        min_seqlet_len: Minimum sequence length for peak finding
-        max_seqlet_len: Maximum sequence length for peak finding
-        additional_flanks: Additional flanks to add to the gene
-
-    Returns:
-        Attribution: Attribution analysis results for the gene and tasks
+        output_prefix: Prefix for the output files where attribution results will be saved.
+        tasks: Tasks to attribute for prediction either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to attribute for prediction either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        model: Model to attribute for prediction default is 0. Can be replicate number (0-3) or path to custom model.
+        metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients". Default is "inputxgradient".
+        transform: Transform to use for attribution analysis available options: "specificity", "aggregate". Default is "specificity".
+        batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.
+        genes: Genes to attribute for prediction if not provided, all genes will be used. Can be list of gene symbols or IDs.
+        seqs: Sequences to attribute for prediction. Can be path to fasta file, DataFrame, or numpy/torch tensor. Mutually exclusive with genes parameter.
+        top_n_markers: Top n markers for prediction if not provided, genes will be used. Useful for analyzing only the most important marker genes.
+        bigwig: Whether to save attribution scores as a bigwig file default is True. Bigwig files can be loaded in genome browsers for visualization.
+        correct_grad_bigwig: Whether to correct the gradient bigwig file default is True. Applies gradient correction for better visualization.
+        num_workers: Number of workers for attribution analysis default is 4. Increasing number of workers will speed up the process.
+        device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
+        genome: Genome to use for attribution analysis default is "hg38". Can be genome name or path to custom genome fasta file.
 
     Examples:
-        >>> attribution = Attribution(
-            gene="A1BG",
-            inputs=inputs,
-            attrs=attrs,
-            chrom="chr1",
-            start=100,
-            end=200,
-            strand="+",
-            threshold=5e-4,
-            min_seqlet_len=4,
-            max_seqlet_len=25,
-            additional_flanks=0,
-        )
-        >>> attribution.plot_peaks()
-        >>> attribution.scan_motifs()
-        >>> attribution.save_bigwig(
-        ...     "attributions.bigwig"
+        >>> predict_save_attributions(
+        ...     output_prefix="output_prefix",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ...     model=0,
+        ...     metadata_anndata="metadata_anndata.h5ad",
+        ...     method="inputxgradient",
+        ...     transform="specificity",
+        ...     batch_size=1,
+        ...     genes=[
+        ...         "gene1",
+        ...         "gene2",
+        ...     ],
+        ...     seqs="seqs.fasta",
+        ...     top_n_markers=10,
+        ...     bigwig=True,
+        ...     correct_grad_bigwig=True,
+        ...     num_workers=4,
+        ...     device="cuda",
+        ...     genome="hg38",
         ... )
-        >>> attribution.peaks_to_bed()
     """
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
-    def __init__(
-        self,
-        inputs: torch.Tensor,
-        attrs: np.ndarray,
-        gene: Optional[str] = "",
-        chrom: Optional[str] = None,
-        start: Optional[int] = None,
-        end: Optional[int] = None,
-        strand: Optional[str] = None,
-        threshold: Optional[float] = 5e-4,
-        min_seqlet_len: Optional[int] = 4,
-        max_seqlet_len: Optional[int] = 25,
-        additional_flanks: Optional[int] = 0,
-    ):
-        """Initialize Attribution.
+    logger = logging.getLogger("decima")
 
-        Args:
-            inputs: One-hot encoded sequence
-            attrs: Attribution scores
-            gene: Gene name
-            chrom: Chromosome name
-            start: Start position
-            end: End position
-            strand: Strand
-            threshold: Threshold for peak finding
-            min_seqlet_len: Minimum sequence length for peak finding
-            max_seqlet_len: Maximum sequence length for peak finding
-            additional_flanks: Additional flanks to add to the gene
-        """
-        assert (
-            inputs.shape[0] == 5
-        ), "`inputs` must be 5-dimensional with shape (5, seq_len) where the last dimension is a binary mask."
-        assert attrs.shape[0] == 4, "`attrs` must be 4-dimensional"
-        assert inputs.shape[1] == attrs.shape[1], "`inputs` and `attrs` must have the same length"
+    device = get_compute_device(device)
+    logger.info(f"Using device: {device}")
 
-        self.inputs = inputs
-        self.attrs = attrs
+    logger.info("Loading model and metadata to compute attributions...")
+    result = DecimaResult.load(metadata_anndata)
 
-        self.gene = gene
-        self._chrom = chrom
-        self._start = start
-        self._end = end
-        self._strand = strand
-        assert self.end - self.start == self.inputs.shape[1], "`end` - `start` must be equal to the length of `inputs`"
+    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
 
-        self.gene_mask_start = np.where(inputs[-1] == 1)[0][0]
-        self.gene_mask_end = np.where(inputs[-1] == 1)[-1][0]
+    with QCLogger(str(output_prefix) + ".warnings.qc.log", metadata_anndata=metadata_anndata) as qc:
+        if result.ground_truth is not None:
+            qc.log_correlation(tasks, off_tasks, plot=True)
 
-        self.peaks = self._find_peaks(
-            threshold=threshold,
-            min_seqlet_len=min_seqlet_len,
-            max_seqlet_len=max_seqlet_len,
-            additional_flanks=additional_flanks,
+        attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
+
+        if (genes is not None) and (seqs is not None):
+            raise ValueError("Only one of `genes` or `seqs` arguments must be provided not both.")
+        elif seqs is not None:
+            assert top_n_markers is None, "`top_n_markers` is not supported when `seqs` is provided."
+
+            if isinstance(seqs, str):
+                dataset = SeqDataset.from_fasta(seqs)
+            elif isinstance(seqs, pd.DataFrame):
+                dataset = SeqDataset.from_dataframe(seqs)
+            elif isinstance(seqs, torch.Tensor) or isinstance(seqs, np.ndarray):
+                assert seqs.shape[1] == 5, (
+                    "`seqs` must be 5-dimensional with shape (batch_size, 5, seq_len) "
+                    "where the 2th dimension is a one_hot encoded seq and binary mask gene mask."
+                )
+                dataset = SeqDataset.from_one_hot(seqs)
+            else:
+                raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
+        else:
+            dataset = GeneDataset(
+                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result
+            )
+
+        genes_batch = list(chunked(dataset.genes, batch_size))
+        gene_mask_starts = list(chunked(dataset.gene_mask_starts, batch_size))
+        gene_mask_ends = list(chunked(dataset.gene_mask_ends, batch_size))
+
+        dl = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            pin_memory=True,
+            num_workers=num_workers,
         )
 
-    @property
-    def chrom(self) -> str:
-        """Get the chromosome name."""
-        if self._chrom is None:
-            return "custom"
-        return self._chrom
+        with AttributionWriter(
+            path=Path(output_prefix).with_suffix(".attributions.h5"),
+            genes=dataset.genes,
+            model_name=attributer.model.name,
+            metadata_anndata=result,
+            genome=genome,
+            bigwig=bigwig,
+            correct_grad_bigwig=correct_grad_bigwig,
+            custom_genes=seqs is not None,
+        ) as writer:
+            for i, inputs in enumerate(tqdm(dl, desc="Computing attributions...")):
+                attrs = attributer.attribute(inputs.to(device)).detach().cpu().numpy()
+                _seqs = inputs[:, :4].detach().cpu().numpy()
 
-    @property
-    def start(self) -> int:
-        """Get the start position."""
-        if self._start is None:
-            return 0
-        return self._start
+                for gene, seq, attr, g_start, g_end in zip(
+                    genes_batch[i], _seqs, attrs, gene_mask_starts[i], gene_mask_ends[i]
+                ):
+                    writer.add(gene=gene, seqs=seq, attrs=attr, gene_mask_start=g_start, gene_mask_end=g_end)
+                    if seqs is None:
+                        qc.log_gene(gene, threshold=0.5)
 
-    @property
-    def end(self) -> int:
-        """Get the end position."""
-        if self._end is None:
-            return self.inputs.shape[1]
-        return self._end
+        if seqs is not None:
+            logger.info("Saving sequences...")
+            fasta_path = str(Path(output_prefix).with_suffix(".seqs.fasta"))
+            with open(fasta_path, "w") as f:
+                for i, seq in tqdm(zip(dataset.genes, dataset.seqs), desc="Saving sequences..."):
+                    f.write(f">{i}\n{seq}\n")
+            Faidx(fasta_path, build_index=True)
 
-    @property
-    def strand(self) -> str:
-        """Get the strand."""
-        if self._strand is None:
-            return "+"
-        return self._strand
 
-    @property
-    def gene_start(self) -> int:
-        """Get the gene start position."""
-        if self.strand == "-":
-            return self.end - self.gene_mask_end
-        return self.start + self.gene_mask_start
+def recursive_seqlet_calling(
+    output_prefix: str,
+    attributions: Union[str, List[str]],
+    tasks: Optional[List[str]] = None,
+    off_tasks: Optional[List[str]] = None,
+    tss_distance: Optional[int] = None,
+    metadata_anndata: Optional[str] = None,
+    genes: Optional[List[str]] = None,
+    top_n_markers: Optional[int] = None,
+    num_workers: int = 4,
+    agg_func: Optional[str] = "mean",
+    threshold: float = 5e-4,
+    min_seqlet_len: int = 4,
+    max_seqlet_len: int = 25,
+    additional_flanks: int = 0,
+    pattern_type: str = "both",
+    custom_genome: bool = False,
+    meme_motif_db: str = "hocomoco_v13",
+):
+    """
+    Recursive seqlet calling for attribution analysis.
 
-    @property
-    def gene_end(self) -> int:
-        """Get the gene end position."""
-        if self.strand == "-":
-            return self.end - self.gene_mask_start
-        return self.start + self.gene_mask_end
+    Args:
+        output_prefix: Prefix for the output files where seqlet calling results will be saved.
+        attributions: Attributions to use for recursive seqlet calling generated by `decima attributions-predict` or `decima attributions` commands. Can be single file path or list of attribution files.
+        tasks: Tasks to attribute for recursive seqlet calling either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to attribute for recursive seqlet calling either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        tss_distance: TSS distance for recursive seqlet calling default is full context size of decima of 524288. Controls the genomic window size around TSS for analysis.
+        metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be used from the attribution files.
+        genes: Genes to attribute for recursive seqlet calling if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers for recursive seqlet calling if not provided, genes will be used. Useful for analyzing only the most important marker genes for the specified tasks.
+        num_workers: Number of workers for recursive seqlet calling default is 4. Increasing number of workers will speed up the process but requires more memory.
+        agg_func: Aggregation function for recursive seqlet calling default is 'mean'. Available options: 'mean', 'max'. Determines how attribution scores are aggregated across replicates.
+        threshold: P-value threshold for recursive seqlet calling default is 5e-4. Lower values result in more stringent peak calling and fewer detected seqlets.
+        min_seqlet_len: Minimum seqlet length for recursive seqlet calling default is 4. Shorter sequences will be filtered out from the analysis.
+        max_seqlet_len: Maximum seqlet length for recursive seqlet calling default is 25. Longer sequences will be truncated or filtered based on the algorithm.
+        additional_flanks: Additional flanks for recursive seqlet calling default is 0. Extends seqlet regions by this number of base pairs on each side.
+        pattern_type: Pattern type for recursive seqlet calling default is 'both'. Available options: 'both', 'pos', 'neg'. Controls whether to consider positive peaks, negative peaks, or both.
+        custom_genome: Custom genome flag for recursive seqlet calling default is False. If True, bigwig files will be generated with each gene as a different chromosome for custom sequences.
+        meme_motif_db: MEME motif database for motif discovery default is 'hocomoco_v13'. Specifies which motif database to use for downstream motif enrichment analysis.
 
-    @classmethod
-    def from_seq(
-        cls,
-        inputs: Union[str, torch.Tensor, np.ndarray],
-        tasks: Optional[list] = None,
-        off_tasks: Optional[list] = None,
-        model: Optional[Union[str, int]] = 0,
-        transform: str = "specificity",
-        method: str = "inputxgradient",
-        device: Optional[str] = None,
-        result: Optional[DecimaResult] = None,
-        gene: Optional[str] = "",
-        chrom: Optional[str] = None,
-        start: Optional[int] = None,
-        end: Optional[int] = None,
-        strand: Optional[str] = None,
-        gene_mask_start: Optional[int] = None,
-        gene_mask_end: Optional[int] = None,
-        threshold: Optional[float] = 5e-4,
-        min_seqlet_len: Optional[int] = 4,
-        max_seqlet_len: Optional[int] = 25,
-        additional_flanks: Optional[int] = 0,
-    ):
-        """Initialize Attribution from sequence.
+    Examples:
+        >>> recursive_seqlet_calling(
+        ...     output_prefix="output_prefix",
+        ...     attributions="attributions.h5",
+        ...     tasks=[
+        ...         "task1",
+        ...         "task2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "task3",
+        ...         "task4",
+        ...     ],
+        ... )
+    """
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
-        Args:
-            inputs: Sequence to analyze either string of sequence,
-                torch.Tensor or np.ndarray with shape (4, 524288)
-                or (5, 524288) where the last dimension is a binary mask.
-                If 4-dimensional, gene_mask_start and gene_mask_end must be provided.
-            tasks: List of cell types to analyze attributions for
-            off_tasks: List of cell types to contrast against
-            model: Model to use for attribution analysis
-            transform: Transformation to apply to attributions
-            device: Device to use for attribution analysis
-            gene: Gene name
-            chrom: Chromosome name
-            start: Start position
-            end: End position
-            strand: Strand
-            gene_start: Gene start position
-            gene_end: Gene end position
-            threshold: Threshold for peak finding
-            min_seqlet_len: Minimum sequence length for peak finding
-            max_seqlet_len: Maximum sequence length for peak finding
-            additional_flanks: Additional flanks to add to the gene
-        """
-        if isinstance(inputs, np.ndarray):
-            inputs = torch.from_numpy(inputs).float()
+    # TODO: update dependencies so we do not get future errors.
+    warnings.filterwarnings("ignore", category=FutureWarning)
 
-        if isinstance(inputs, torch.Tensor):
-            if (inputs.shape[0] == 4) and (gene_mask_start is not None) and (gene_mask_end is not None):
-                mask = torch.zeros(1, DECIMA_CONTEXT_SIZE)
-                mask[0, gene_mask_start:gene_mask_end] = 1.0
-                inputs = torch.vstack([inputs, mask])
-            elif inputs.shape[0] == 5:
-                if (gene_mask_start is not None) or (gene_mask_end is not None):
-                    warnings.warn("Gene mask will be ignored as sequence is 5-dimensional.")
-                pass
-            else:
-                raise ValueError(
-                    "Sequence must be 4-dimensional with shape (4, seq_len) "
-                    "and gene start and end must be provided, or 5-dimensional "
-                    "with shape (5, seq_len) where the last dimension is a binary mask."
-                )
-        elif isinstance(inputs, str):
-            inputs = strings_to_one_hot(inputs)
-            assert (gene_mask_start is not None) and (
-                gene_mask_end is not None
-            ), "Gene start and end must be provided when seq is a string."
-            mask = torch.zeros(1, DECIMA_CONTEXT_SIZE)
-            mask[0, gene_mask_start:gene_mask_end] = 1.0
-            inputs = torch.vstack([inputs, mask])
+    logger = logging.getLogger("decima")
+    logger.info("Loading model and metadata to compute attributions...")
+
+    result = DecimaResult.load(metadata_anndata)
+
+    if isinstance(attributions, (str, Path)):
+        attributions_files = [Path(attributions).as_posix()]
+    else:
+        attributions_files = attributions
+
+    with AttributionResult(
+        attributions_files, tss_distance, correct_grad=False, num_workers=num_workers, agg_func=agg_func
+    ) as ar:
+        if top_n_markers is not None:
+            tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
+            all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
+        elif genes is not None:
+            all_genes = genes if isinstance(genes, list) else [genes]
         else:
-            raise ValueError("`inputs` must be a string, torch.Tensor, or np.ndarray")
+            all_genes = ar.genes
+            logger.info(f"No genes provided, using all {len(all_genes)} genes in the attribution files.")
 
-        if result is None:
-            result = DecimaResult.load()
-        tasks, off_tasks = result.query_tasks(tasks, off_tasks)
+        df_peaks, df_motifs = ar.recursive_seqlet_calling(
+            all_genes,
+            metadata_anndata,
+            custom_genome,
+            threshold,
+            min_seqlet_len,
+            max_seqlet_len,
+            additional_flanks,
+            pattern_type,
+            meme_motif_db,
+        )
 
-        attrs = attributions(
-            inputs=inputs.unsqueeze(0),
+    df_peaks.sort_values(["chrom", "start"]).to_csv(
+        output_prefix.with_suffix(".seqlets.bed"), sep="\t", header=False, index=False
+    )
+    df_motifs.to_csv(output_prefix.with_suffix(".motifs.tsv"), sep="\t", index=False)
+
+
+def predict_attributions_seqlet_calling(
+    output_prefix: str,
+    genes: Optional[Union[str, List[str]]] = None,
+    seqs: Optional[Union[pd.DataFrame, np.ndarray, torch.Tensor]] = None,
+    tasks: Optional[List[str]] = None,
+    off_tasks: Optional[List[str]] = None,
+    model: Optional[Union[str, int]] = "ensemble",
+    metadata_anndata: Optional[str] = None,
+    method: str = "inputxgradient",
+    transform: str = "specificity",
+    num_workers: int = 2,
+    tss_distance: Optional[int] = None,
+    batch_size: int = 1,
+    top_n_markers: Optional[int] = None,
+    device: Optional[str] = None,
+    threshold: float = 5e-4,
+    min_seqlet_len: int = 4,
+    max_seqlet_len: int = 25,
+    additional_flanks: int = 0,
+    pattern_type: str = "both",
+    meme_motif_db: str = "hocomoco_v13",
+    genome: str = "hg38",
+):
+    """Generate and save attribution analysis results for a gene.
+    This function performs attribution analysis for a given gene and cell types, saving
+    the following output files to the specified directory:
+
+    Output files:
+        ├── {output_prefix}.attributions.h5      # Raw attribution score matrix per gene.
+
+        ├── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file.
+
+        ├── {output_prefix}.seqlets.bed          # List of attribution peaks in BED format.
+
+        ├── {output_prefix}.motifs.tsv           # Detected motifs in peak regions.
+
+        └── {output_prefix}.warnings.qc.log      # QC warnings about prediction reliability.
+
+    Args:
+        output_dir: Directory to save output files
+        gene: Gene symbol or ID to analyze
+        tasks: List of cell types to analyze attributions for either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Optional list of cell types to contrast against either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
+        model: Optional model to use for attribution analysis either replicate number or path to the model.
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+        device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
+        dpi: DPI for attribution plots.
+
+    Raises:
+        FileExistsError: If output directory already exists.
+
+    Examples:
+    >>> predict_save_attributions(
+    ...     output_dir="output_dir",
+    ...     genes=[
+    ...         "SPI1",
+    ...         "CD68",
+    ...     ],
+    ...     tasks="cell_type == 'classical monocyte'",
+    ... )
+    """
+    output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
+
+    if model == "ensemble":
+        attrs_output_prefix = str(output_prefix) + "_{model}"
+        models = [0, 1, 2, 3]
+        attributions = [
+            Path(attrs_output_prefix.format(model=model)).with_suffix(".attributions.h5") for model in models
+        ]
+    else:
+        attrs_output_prefix = output_prefix
+        models = [model]
+        attributions = output_prefix.with_suffix(".attributions.h5").as_posix()
+
+    for model in models:
+        predict_save_attributions(
+            output_prefix=str(attrs_output_prefix).format(model=model),
+            genes=genes,
+            seqs=seqs,
             tasks=tasks,
             off_tasks=off_tasks,
             model=model,
-            transform=transform,
+            metadata_anndata=metadata_anndata,
             method=method,
+            transform=transform,
+            num_workers=num_workers,
+            batch_size=batch_size,
+            top_n_markers=top_n_markers,
             device=device,
-        ).squeeze(0)
-        return cls(
-            inputs=inputs,
-            attrs=attrs,
-            gene=gene,
-            chrom=chrom,
-            start=start,
-            end=end,
-            strand=strand,
-            threshold=threshold,
-            min_seqlet_len=min_seqlet_len,
-            max_seqlet_len=max_seqlet_len,
-            additional_flanks=additional_flanks,
+            genome=genome,
         )
 
-    @staticmethod
-    def find_peaks(attrs, threshold=5e-4, min_seqlet_len=4, max_seqlet_len=25, additional_flanks=0):
-        return recursive_seqlets(
-            attrs.sum(0, keepdims=True),
-            threshold=threshold,
-            min_seqlet_len=min_seqlet_len,
-            max_seqlet_len=max_seqlet_len,
-            additional_flanks=additional_flanks,
-        ).reset_index(drop=True)
+    custom_genome = False
+    if seqs is not None:
+        custom_genome = True
+        assert genes is None, "`genes` must be None when `seqs` is provided."
 
-    def _find_peaks(self, threshold=5e-4, min_seqlet_len=4, max_seqlet_len=25, additional_flanks=0):
-        df = self.find_peaks(self.attrs, threshold, min_seqlet_len, max_seqlet_len, additional_flanks)
-        del df["example_idx"]
-        df["from_tss"] = df["start"] - self.gene_mask_start
-        df["peak"] = self.gene + "@" + df["from_tss"].astype(str)
-        return df[["peak", "start", "end", "attribution", "p-value", "from_tss"]]
+    recursive_seqlet_calling(
+        output_prefix=output_prefix,
+        attributions=attributions,
+        metadata_anndata=metadata_anndata,
+        genes=genes,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        tss_distance=tss_distance,
+        num_workers=num_workers,
+        custom_genome=custom_genome,
+        threshold=threshold,
+        min_seqlet_len=min_seqlet_len,
+        max_seqlet_len=max_seqlet_len,
+        additional_flanks=additional_flanks,
+        pattern_type=pattern_type,
+        meme_motif_db=meme_motif_db,
+    )
 
-    def scan_motifs(self, motifs: str = "hocomoco_v12", window: int = 18, pthresh: float = 5e-4) -> pd.DataFrame:
-        """Scan for motifs in peak regions.
 
-        Args:
-            motifs: Motif database to use
-            window: Window size around peaks
-            pthresh: P-value threshold for motif matches
+def plot_attributions(
+    output_prefix: str,
+    genes: Optional[Union[str, List[str]]] = None,
+    metadata_anndata: Optional[str] = None,
+    tss_distance: Optional[int] = None,
+    seqlogo_window: int = 50,
+    agg_func: Optional[str] = "mean",
+    custom_genome: bool = False,
+    dpi: int = 100,
+):
+    """Plot attributions.
 
-        Returns:
-            pd.DataFrame: Motif scan results
-        """
-        mid = (self.peaks["start"] + self.peaks["end"]) // 2
-        peak_attrs = np.stack([self.attrs[:, i - window : i + window] for i in mid])
-        peak_seqs = torch.stack([self.inputs[:4, i - window : i + window] for i in mid])
+    Args:
+        output_prefix: Prefix for the output files.
+        genes: Genes to attribute if not provided, all genes will be used.
+        metadata_anndata: Metadata anndata.
+        tss_distance: TSS distance for attribution for plotting.
+        seqlogo_window: Seqlogo window.
+        agg_func: Agg func for aggregation of attributions across replicates. Available options: 'mean', 'max'.
+        custom_genome: Custom genome if custom genome bigwig files will be generated as each gene is difference chromosome.
+        dpi: DPI for attribution plots.
+    """
+    plot_dir = Path(str(output_prefix) + "_plots")
+    plot_dir.mkdir(parents=True, exist_ok=True)
 
-        df = scan_sequences(
-            seqs=convert_input_type(peak_seqs, "strings"),
-            seq_ids=self.peaks["peak"].tolist(),
-            motifs=motifs,
-            pthresh=pthresh,
-            rc=True,
-            attrs=peak_attrs,
-        ).rename(columns={"sequence": "peak"})
+    with AttributionResult(
+        glob.glob(str(output_prefix) + "*.attributions.h5"), tss_distance, correct_grad=False, agg_func=agg_func
+    ) as ar:
+        # TODO: if we save seqlets as h5 we do not need to recalculate them
+        # TODO: create html reports
+        for gene in tqdm(genes, desc="Plotting attributions..."):
+            attribution = ar.load_attribution(gene, metadata_anndata, custom_genome)
+            attribution.plot_peaks().save((plot_dir / f"{gene}.peaks.png"), dpi=dpi)
 
-        df = df.merge(
-            self.peaks[["peak", "from_tss", "start"]].assign(mid=mid).reset_index(drop=True),
-            on="peak",
-            suffixes=("", "_peak"),
-        )
-
-        df["start"] += df["mid"] - window
-        df["end"] += df["mid"] - window
-        df["from_tss"] = df["start"] - self.gene_mask_start
-        del df["start_peak"]
-        del df["seq_idx"]
-        del df["mid"]
-
-        return df.sort_values("p-value")
-
-    def plot_peaks(self, overlapping_min_dist=1000, figsize=(10, 2)):
-        """Plot attribution scores and highlight peaks.
-
-        Args:
-            overlapping_min_dist: Minimum distance between peaks to consider them overlapping
-            figsize: Figure size in inches (width, height)
-
-        Returns:
-            plotnine.ggplot: The plotted figure showing attribution scores with highlighted peaks
-        """
-        return plot_peaks(
-            self.attrs,
-            self.gene_mask_start,
-            self.peaks,
-            overlapping_min_dist=overlapping_min_dist,
-            figsize=figsize,
-        )
-
-    def plot_seqlogo(self, relative_loc=0, window=50, figsize=(10, 2)):
-        """Plot attribution scores around a relative location.
-
-        Args:
-            relative_loc: Position relative to TSS to center plot on
-            window: Number of bases to show on each side of center
-
-        Returns:
-            matplotlib.pyplot.Figure: Attribution plot
-        """
-        loc = self.gene_mask_start + relative_loc
-        return plot_attributions(self.attrs[:, loc - window : loc + window], figsize=figsize)
-
-    def __repr__(self):
-        return f"Attribution(gene={self.gene})"
-
-    def __str__(self):
-        return f"Attribution(gene={self.gene})"
-
-    def save_bigwig(self, bigwig_path: str):
-        """
-        Save attribution scores as a bigwig file.
-
-        Args:
-            bigwig_path: Path to save bigwig file.
-        """
-        attrs = self.attrs.sum(axis=0)
-        if self.strand == "-":
-            attrs = attrs[::-1]
-
-        bw = pyBigWig.open(bigwig_path, "w")
-
-        if self._chrom is not None:
-            name = self.chrom
-            import genomepy
-
-            sizes = genomepy.Genome("hg38").sizes
-            bw.addHeader([(chrom, size) for chrom, size in sizes.items()])
-        else:
-            name = self.gene or "custom"
-            bw.addHeader([(name, self.end - self.start)])
-
-        bw.addEntries(name, self.start, values=attrs, span=1, step=1)
-        bw.close()
-
-    def fasta_str(self):
-        """
-        Get attribution scores as a fasta string.
-        """
-        seq = convert_input_type(self.inputs[:4], "strings")
-        name = self.gene or "custom"
-        return f">{name}\n{seq}\n"
-
-    def save_fasta(self, fasta_path: str):
-        """
-        Save attribution scores as a fasta file.
-        """
-        with open(fasta_path, "w") as f:
-            f.write(self.fasta_str())
-        Faidx(fasta_path, build_index=True)
-
-    def peaks_to_bed(self):
-        """
-        Convert peaks to bed format.
-
-        Returns:
-            pd.DataFrame: Peaks in bed format where columns are:
-                - chrom: Chromosome name
-                - start: Start position in genome
-                - end: End position in genome
-                - name: Peak name in format "gene@from_tss"
-                - score: Score (-log10(p-value)) clipped to 0-100 based on the seqlet calling
-                - strand: Strand == '.'
-        """
-        df = self.peaks.copy().rename(columns={"peak": "name"})
-        df["chrom"] = self.chrom
-
-        if self.strand == "+":
-            df["start"], df["end"] = self.start + df["start"], self.start + df["end"]
-        else:
-            df["start"], df["end"] = self.end - df["end"], self.end - df["start"]
-
-        df["strand"] = "."
-        # np.maximum because of https://github.com/jmschrei/tangermeme/issues/40
-        df["score"] = -np.log10(np.maximum(df["p-value"], 0) + 1e-50)
-        df["score"] = df["score"].astype(int).clip(lower=0, upper=50)
-        return df[["chrom", "start", "end", "name", "score", "strand"]]
-
-    def save_peaks(self, bed_path: str):
-        """
-        Save peaks to bed file.
-
-        Args:
-            bed_path: Path to save bed file.
-        """
-        self.peaks_to_bed().to_csv(bed_path, sep="\t", header=False, index=False)
+            seqlogo_plot_dir = plot_dir / f"{gene}_seqlogos"
+            seqlogo_plot_dir.mkdir(parents=True, exist_ok=True)
+            for peak in attribution.peaks.itertuples():
+                logo = attribution.plot_seqlogo(relative_loc=peak.from_tss, window=seqlogo_window)
+                logo.ax.figure.savefig(seqlogo_plot_dir / f"{attribution.gene}@{peak.from_tss}.png", dpi=dpi)

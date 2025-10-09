@@ -1,3 +1,5 @@
+"""Decima pytorch model class."""
+
 import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -17,6 +19,22 @@ class DecimaModel(BaseModel):
         n_tasks: Number of tasks.
         mask: Whether to use a mask.
         borzoi_kwargs: Keyword arguments for the Borzoi model.
+        init_borzoi: Whether to initialize the Borzoi model.
+        replicate: Replicate to initialize the model from.
+
+    Examples:
+        >>> model = DecimaModel(
+        ...     n_tasks=10,
+        ...     mask=True,
+        ...     borzoi_kwargs=None,
+        ...     init_borzoi=False,
+        ...     replicate=0,
+        ... )
+        >>> model.load_state_dict(
+        ...     torch.load(
+        ...         "model.pth"
+        ...     )
+        ... )
     """
 
     def __init__(self, n_tasks: int, mask=True, borzoi_kwargs: dict = None, init_borzoi=False, replicate=0):

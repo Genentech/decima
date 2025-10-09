@@ -1,4 +1,19 @@
-import warnings
+"""Modisco module perform modisco motif clustering from attributions.
+
+Examples:
+    >>> predict_save_modisco_attributions(
+    ...     output_prefix="output_prefix",
+    ...     tasks=[
+    ...         "agg1",
+    ...         "agg2",
+    ...     ],
+    ...     off_tasks=[
+    ...         "agg3",
+    ...         "agg4",
+    ...     ],
+    ... )
+"""
+
 import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
@@ -8,58 +23,15 @@ import numpy as np
 import pandas as pd
 import modiscolite
 from tqdm import tqdm
-from more_itertools import chunked
-from torch.utils.data import DataLoader
 from grelu.resources import get_meme_file_path
 from grelu.interpret.motifs import trim_pwm
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.core.result import DecimaResult
-from decima.utils import get_compute_device
-from decima.utils.io import AttributionWriter
+from decima.utils import _get_on_off_tasks, _get_genes
 from decima.utils.motifs import motif_start_end
-from decima.data.dataset import GeneDataset
 from decima.core.attribution import AttributionResult
-from decima.interpret.attributer import DecimaAttributer
-
-
-def _get_on_off_tasks(result: DecimaResult, tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
-    if tasks is None:
-        tasks = result.cell_metadata.index.tolist()
-    elif isinstance(tasks, str):
-        tasks = result.query_cells(tasks)
-    if isinstance(off_tasks, str):
-        off_tasks = result.query_cells(off_tasks)
-
-    return tasks, off_tasks
-
-
-def _get_genes(
-    result: DecimaResult,
-    genes: Optional[List[str]] = None,
-    top_n_markers: Optional[int] = None,
-    tasks: Optional[List[str]] = None,
-    off_tasks: Optional[List[str]] = None,
-):
-    if (top_n_markers is not None) and (genes is None):
-        all_genes = (
-            result.marker_zscores(tasks=tasks, off_tasks=off_tasks)
-            .query('task == "on"')
-            .sort_values("score", ascending=False)
-            .drop_duplicates(subset="gene", keep="first")
-            .iloc[:top_n_markers]
-            .gene.tolist()
-        )
-    elif genes is not None:
-        if top_n_markers is not None:
-            raise ValueError(
-                "Cannot specify arguments `genes` and `top_n_markers` at the same time. Only one can be specified."
-            )
-        all_genes = genes
-    else:
-        all_genes = list(result.genes)
-
-    return all_genes
+from decima.interpret.attributions import predict_save_attributions
 
 
 def predict_save_modisco_attributions(
@@ -70,7 +42,7 @@ def predict_save_modisco_attributions(
     metadata_anndata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",
-    batch_size: int = 2,
+    batch_size: int = 1,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     bigwig: bool = True,
@@ -79,76 +51,51 @@ def predict_save_modisco_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
-    """Generate and save attribution analysis results for a gene.
-    This function performs attribution analysis for a given gene and cell types, saving
-    the following output files to the specified directory:
+    """Generate and save attribution analysis results optimized for MoDISco motif discovery.
+
+    This function performs attribution analysis for specified genes and cell types, generating
+    attribution scores that will be used downstream for MoDISco pattern discovery and motif analysis.
 
     Args:
-        output_prefix: Path to save attribution scores.
-        tasks: List of cell types to analyze attributions for.
-        off_tasks: Optional list of cell types to contrast against.
-        model: Optional model to use for attribution analysis.
-        metadata_anndata: Path to the metadata anndata file.
-        method: Method to use for attribution analysis.
-        chunk_size: Chunk size for the prediction.
-        batch_size: Batch size for the prediction.
-        genes: List of genes to analyze attributions for.
-        top_n_markers: Top n markers to predict. If not provided, all markers will be predicted.
-        bigwig: Whether to save bigwig file.
-        correct_grad_bigwig: Whether to correct gradient for bigwig file.
-        num_workers: Number of workers for the prediction.
-        device: Device to use for attribution analysis.
-        genome: Genome name or path to the genome fasta file.
-
-    Raises:
-        FileExistsError: If output directory already exists.
+        output_prefix: Prefix for the output files where attribution results will be saved.
+        tasks: Tasks to analyze for modisco attribution either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze for modisco attribution either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.
+        metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
+        batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.
+        genes: Genes to analyze for modisco attribution if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers for modisco attribution if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        bigwig: Whether to save attribution scores as a bigwig file default is True. Bigwig files can be loaded in genome browsers for visualization.
+        correct_grad_bigwig: Whether to correct the gradient bigwig file default is True. Applies gradient correction for better visualization quality.
+        num_workers: Number of workers for attribution analysis default is 4. Increasing number of workers will speed up the process but requires more memory.
+        device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
+        genome: Genome to use for attribution analysis default is "hg38". Can be genome name or path to custom genome fasta file.
 
     Examples:
-    >>> predict_save_attributions(
+    >>> predict_save_modisco_attributions(
     ...     output_dir="output_dir",
     ...     tasks="cell_type == 'classical monocyte'",
     ... )
     """
-    warnings.filterwarnings("ignore", category=FutureWarning, module="tangermeme")
-
-    # TODO: QC how well model predicts on tasks from on tasks
-    logger = logging.getLogger("decima")
-
-    device = get_compute_device(device)
-    logger.info(f"Using device: {device}")
-
-    logger.info("Loading model and metadata to compute attributions...")
-    result = DecimaResult.load(metadata_anndata)
-
-    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
-    all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-
-    attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
-
-    dl = DataLoader(
-        GeneDataset(genes=all_genes, metadata_anndata=result),
+    predict_save_attributions(
+        output_prefix=output_prefix,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        model=model,
+        metadata_anndata=metadata_anndata,
+        method=method,
+        transform=transform,
         batch_size=batch_size,
-        shuffle=False,
-        pin_memory=True,
-        num_workers=num_workers,
-    )
-    genes = list(chunked(all_genes, batch_size))
-
-    with AttributionWriter(
-        path=Path(output_prefix).with_suffix(".attributions.h5"),
-        genes=all_genes,
-        model_name=attributer.model.name,
-        metadata_anndata=result,
-        genome=genome,
+        genes=genes,
+        top_n_markers=top_n_markers,
         bigwig=bigwig,
         correct_grad_bigwig=correct_grad_bigwig,
-    ) as writer:
-        for i, inputs in enumerate(tqdm(dl, desc="Computing attributions...")):
-            attrs = attributer.attribute(inputs.to(device)).detach().cpu().numpy()
-            seqs = inputs[:, :4].detach().cpu().numpy()
-
-            for gene, attr, seq in zip(genes[i], attrs, seqs):
-                writer.add(gene=gene, seqs=seq, attrs=attr)
+        num_workers=num_workers,
+        device=device,
+        genome=genome,
+    )
 
 
 def modisco_patterns(
@@ -198,6 +145,66 @@ def modisco_patterns(
     stranded: bool = False,
     pattern_type: str = "both",  # "both", "pos", or "neg"
 ):
+    """Perform TF-MoDISco pattern discovery and motif clustering from attribution data.
+
+    This function runs the core TF-MoDISco algorithm to discover recurring patterns (motifs)
+    in attribution data by clustering similar seqlets and identifying consensus motifs.
+
+    Args:
+        output_prefix: Prefix for the output files where MoDISco results will be saved. Results will be saved as "{output_prefix}.modisco.h5".
+        attributions: Path to attribution file(s) or list of attribution files containing computed attribution scores from previous analysis.
+        tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
+        tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used from the attribution files.
+        genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
+        sliding_window_size: Sliding window size.
+        flank_size: Flank size.
+        min_metacluster_size: Min metacluster size.
+        weak_threshold_for_counting_sign: Weak threshold for counting sign.
+        max_seqlets_per_metacluster: Max seqlets per metacluster.
+        target_seqlet_fdr: Target seqlet FDR.
+        min_passing_windows_frac: Min passing windows fraction.
+        max_passing_windows_frac: Max passing windows fraction.
+        n_leiden_runs: Number of Leiden runs.
+        n_leiden_iterations: Number of Leiden iterations.
+        min_overlap_while_sliding: Min overlap while sliding.
+        nearest_neighbors_to_compute: Nearest neighbors to compute.
+        affmat_correlation_threshold: Affmat correlation threshold.
+        tsne_perplexity: TSNE perplexity.
+        frac_support_to_trim_to: Frac support to trim to.
+        min_num_to_trim_to: Min num to trim to.
+        trim_to_window_size: Trim to window size.
+        initial_flank_to_add: Initial flank to add.
+        final_flank_to_add: Final flank to add.
+        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.
+        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.
+        subcluster_perplexity: Subcluster perplexity.
+        merging_max_seqlets_subsample: Merging max seqlets subsample.
+        final_min_cluster_size: Final min cluster size.
+        min_ic_in_window: Min IC in window.
+        min_ic_windowsize: Min IC windowsize.
+        ppm_pseudocount: PPM pseudocount.
+        stranded: Stranded.
+        pattern_type: Pattern type.
+
+    Examples:
+        >>> modisco_patterns(
+        ...     output_prefix="output_prefix",
+        ...     attributions="attributions.h5",
+        ...     tasks=[
+        ...         "agg1",
+        ...         "agg2",
+        ...     ],
+        ...     off_tasks=[
+        ...         "agg3",
+        ...         "agg4",
+        ...     ],
+        ... )
+    """
     logger = logging.getLogger("decima")
     logger.info("Loading metadata")
     result = DecimaResult.load(metadata_anndata)
@@ -210,21 +217,10 @@ def modisco_patterns(
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
     all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
 
-    model_names = list()
-    for i, attributions_file in enumerate(attributions_files):
-        with AttributionResult(attributions_file, result, tss_distance, correct_grad) as attributions_result:
-            if i == 0:
-                sequences, attributions = attributions_result.load(all_genes)
-                genome = attributions_result.genome
-            else:
-                seqs, attrs = attributions_result.load(all_genes)
-                sequences += seqs
-                attributions += attrs
-                assert attributions_result.genome == genome
-            model_names.append(attributions_result.model_name)
-
-    sequences = sequences / len(attributions_files)
-    attributions = attributions / len(attributions_files)
+    with AttributionResult(attributions_files, tss_distance, correct_grad, num_workers=1, agg_func="mean") as ar:
+        sequences, attributions = ar.load(all_genes)
+        genome = ar.genome
+        model_names = ar.model_name
 
     pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
@@ -272,6 +268,7 @@ def modisco_patterns(
         f.create_dataset("genes", data=np.array(all_genes, dtype="S100"))
         f.attrs["tss_distance"] = tss_distance
         f.attrs["model_names"] = ",".join(model_names)
+        f.attrs["genome"] = genome
 
 
 def modisco_reports(
@@ -286,6 +283,31 @@ def modisco_reports(
     tomtomlite: bool = False,
     num_workers: int = 4,
 ):
+    """Generate comprehensive HTML reports and motif comparisons from MoDISco results.
+
+    This function takes MoDISco pattern discovery results and generates detailed HTML reports
+    including motif visualizations, database comparisons, and statistical summaries.
+
+    Args:
+        output_prefix: Prefix for the output report files where results will be saved. A "_report" suffix will be added to create the output directory.
+        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and motifs from previous MoDISco analysis.
+        meme_motif_db: MEME motif database for comparison default is "hocomoco_v13". Database used for motif comparison and annotation. Can be database name or path to custom MEME format database.
+        img_path_suffix: Image path suffix for output plots default is "". Optional suffix to add to image file paths for organizational purposes.
+        is_writing_tomtom_matrix: Whether to write TOMTOM comparison matrix default is False. If True, outputs detailed comparison matrix between discovered and database motifs for downstream analysis.
+        top_n_matches: Top n matches to report default is 3. Number of top database matches to report for each discovered motif in the HTML output.
+        trim_threshold: Trim threshold for motif boundaries default is 0.3. Threshold for determining where to trim motif boundaries based on information content when generating logos.
+        trim_min_length: Minimum trim length default is 3. Minimum number of positions to retain when trimming motifs to ensure meaningful motif representations.
+        tomtomlite: Whether to use TOMTOM lite mode default is False. If True, uses a faster but less comprehensive version of TOMTOM for motif comparison.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up report generation but requires more memory.
+
+    Examples:
+        >>> modisco_reports(
+        ...     output_prefix="output_prefix",
+        ...     modisco_h5="modisco.h5",
+        ...     meme_motif_db="hocomoco_v13",
+        ...     img_path_suffix="",
+        ... )
+    """
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
     modiscolite.report.report_motifs(
@@ -309,6 +331,26 @@ def modisco_seqlet_bed(
     metadata_anndata: str = None,
     trim_threshold: float = 0.2,
 ):
+    """Extract seqlet locations from MoDISco results and save as BED format file.
+
+    This function processes MoDISco pattern discovery results to extract the genomic coordinates
+    of discovered seqlets (sequence motifs) and outputs them in standard BED format for
+    downstream analysis and visualization in genome browsers.
+
+    Args:
+        output_prefix: Prefix for the output BED file where seqlet coordinates will be saved. The output will be saved as "{output_prefix}.seqlets.bed".
+        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and seqlet information from previous MoDISco analysis.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object default is None. Required for mapping seqlet coordinates to genomic positions. If not provided, relative coordinates will be used.
+        trim_threshold: Trim threshold for seqlet boundaries default is 0.2. Threshold for determining seqlet boundaries based on contribution scores - lower values result in longer seqlets.
+
+    Examples:
+        >>> modisco_seqlet_bed(
+        ...     output_prefix="my_analysis",
+        ...     modisco_h5="my_analysis.modisco.h5",
+        ...     metadata_anndata="metadata.h5ad",
+        ...     trim_threshold=0.15,
+        ... )
+    """
     result = DecimaResult.load(metadata_anndata)
 
     df = list()
@@ -435,6 +477,61 @@ def modisco(
     # seqlet thresholds
     seqlet_motif_trim_threshold: float = 0.2,
 ):
+    """Perform modisco motif clustering from attributions.
+
+    Args:
+        output_prefix: Path prefix to save comprehensive modisco results where all output files will be written.
+        tasks: Tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
+        off_tasks: Off tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
+        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.
+        tss_distance: Distance from TSS to call seqlets default is 1000. Controls the genomic window size around TSS for seqlet detection. If set to full context size of decima (524288), analyzes the entire accessible region.
+        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
+        genes: List of genes to analyze for full modisco pipeline if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
+        top_n_markers: Top n markers to analyze for full modisco pipeline if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
+        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality.
+        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
+        genome: Genome reference to use default is "hg38". Can be genome name or path to custom genome fasta file.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.
+        device: Device to use for computation (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
+        sliding_window_size: Sliding window size.
+        flank_size: Flank size.
+        min_metacluster_size: Min metacluster size.
+        weak_threshold_for_counting_sign: Weak threshold for counting sign.
+        max_seqlets_per_metacluster: Max seqlets per metacluster.
+        target_seqlet_fdr: Target seqlet FDR.
+        min_passing_windows_frac: Min passing windows fraction.
+        max_passing_windows_frac: Max passing windows fraction.
+        n_leiden_runs: Number of Leiden runs.
+        n_leiden_iterations: Number of Leiden iterations.
+        min_overlap_while_sliding: Min overlap while sliding.
+        nearest_neighbors_to_compute: Nearest neighbors to compute.
+        affmat_correlation_threshold: Affmat correlation threshold.
+        tsne_perplexity: TSNE perplexity.
+        frac_support_to_trim_to: Frac support to trim to.
+        min_num_to_trim_to: Min num to trim to.
+        trim_to_window_size: Trim to window size.
+        initial_flank_to_add: Initial flank to add.
+        final_flank_to_add: Final flank to add.
+        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.
+        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.
+        subcluster_perplexity: Subcluster perplexity.
+        merging_max_seqlets_subsample: Merging max seqlets subsample.
+        final_min_cluster_size: Final min cluster size.
+        min_ic_in_window: Min IC in window.
+        min_ic_windowsize: Min IC windowsize.
+        ppm_pseudocount: PPM pseudocount.
+        stranded: Stranded.
+        pattern_type: Pattern type.
+        img_path_suffix: Image path suffix.
+        meme_motif_db: Meme motif db.
+        is_writing_tomtom_matrix: Whether to write tomtom matrix.
+        top_n_matches: Top n matches.
+        trim_threshold: Trim threshold.
+        trim_min_length: Trim min length.
+        tomtomlite: Whether to use tomtomlite.
+        seqlet_motif_trim_threshold: Seqlet motif trim threshold.
+    """
     output_prefix = Path(output_prefix)
 
     if model == "ensemble":

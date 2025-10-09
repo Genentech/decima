@@ -180,3 +180,9 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 wandb/
+
+*.warnings.log
+
+docs/api
+docs/tutorials/example
+docs/wandb

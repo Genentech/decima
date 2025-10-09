@@ -1,5 +1,5 @@
 import pytest
-from decima.utils.inject import SeqBuilder, prepare_seq_alt_allele
+from decima.utils.inject import SeqBuilder
 
 
 def test_seq_builder():
