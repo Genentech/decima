@@ -208,7 +208,7 @@ class DecimaResult:
         gene_meta["gene_mask_end"] = gene_meta["gene_mask_end"] + padding
         return gene_meta
 
-    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0) -> torch.Tensor:
+    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0, genome: str = 'hg38') -> torch.Tensor:
         """Prepare one-hot encoding for a gene.
 
         Args:
@@ -221,9 +221,10 @@ class DecimaResult:
         gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
         if variants is None:
-            seq = intervals_to_strings(gene_meta, genome="hg38")
+            seq = intervals_to_strings(gene_meta, genome=genome)
             gene_start, gene_end = gene_meta.gene_mask_start, gene_meta.gene_mask_end
         else:
+            # Todo: fix for case where genome is not hg38
             seq, (gene_start, gene_end) = prepare_seq_alt_allele(gene_meta, variants)
 
         mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE + padding * 2))

@@ -144,6 +144,7 @@ class GeneDataset(Dataset):
         max_seq_shift: Maximum sequence shift.
         seed: Seed for the random number generator.
         augment_mode: Augmentation mode.
+        genome: Name of the genome
 
     Returns:
         Dataset: Dataset for gene expression prediction.
@@ -176,9 +177,11 @@ class GeneDataset(Dataset):
         max_seq_shift=0,
         seed=0,
         augment_mode="random",
+        genome="hg38",
     ):
         super().__init__()
 
+        self.genome = genome
         self.result = DecimaResult.load(metadata_anndata)
         self.genes = genes or list(self.result.genes)
         self.gene_mask_starts = self.result.gene_metadata.loc[self.genes, "gene_mask_start"].values
@@ -209,7 +212,7 @@ class GeneDataset(Dataset):
     def __getitem__(self, idx):
         seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
 
-        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift)
+        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift, genome=genome)
         inputs = torch.vstack([seq, mask])
         inputs = self.augmenter(seq=inputs, idx=augment_idx)
 

@@ -43,7 +43,7 @@ def predict_gene_expression(
 
     model = load_decima_model(model, device=device)
 
-    ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift)
+    ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift, genome=genome)
     preds = model.predict_on_dataset(
         ds, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
     )
