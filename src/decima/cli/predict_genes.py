@@ -17,14 +17,14 @@ from decima.tools.inference import predict_gene_expression
     "--genes",
     type=str,
     default=None,
-    help="List of genes to predict. Default: None (all genes). If provided, only these genes will be predicted.",
+    help="Comma-separated list of genes to predict. Default: None (all genes). If provided, only these genes will be predicted.",
 )
 @click.option(
     "-m",
     "--model",
     type=str,
     default="ensemble",
-    help="Path to the model checkpoint: `0`, `1`, `2`, `3`, `ensemble` or `path/to/model.ckpt`.",
+    help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to checkpoint files",
 )
 @click.option(
     "--metadata",
@@ -66,17 +66,22 @@ def cli_predict_genes(
     save_replicates,
     float_precision,
 ):
-    if model in ["0", "1", "2", "3"]:
-        model = int(model)
-
+    # Format the model
+    model = model.split(",")
+    if len(model) == 1:
+        model = model[0]
+        if model in ["0", "1", "2", "3"]:
+            model = int(model)
+    
+    # Format the device
     if isinstance(device, str) and device.isdigit():
         device = int(device)
 
     if genes is not None:
         genes = genes.split(",")
 
-    if save_replicates and (model != "ensemble"):
-        raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
+    if save_replicates and ((model != "ensemble") and (not isinstance(model, list))):
+        raise ValueError("`--save-replicates` is only supported for ensemble models.")
 
     ad = predict_gene_expression(
         genes=genes,
