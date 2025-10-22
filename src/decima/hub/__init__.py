@@ -40,7 +40,7 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
     # For standard model replicates or ensemble of replicates, get their model names
 
     elif model == "ensemble":
-        return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)]
+        return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
 
     elif model in {0, 1, 2, 3}:
         model_name = f"rep{model}"
