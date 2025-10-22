@@ -1,5 +1,5 @@
 import os
-from typing import Union, Optional
+from typing import Union, Optional, List
 import warnings
 import wandb
 from pathlib import Path
@@ -17,7 +17,7 @@ def login_wandb():
         wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), relogin=True, anonymous="must", timeout=0)
 
 
-def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
+def load_decima_model(model: Union[str, int, List] = 0, device: Optional[str] = None):
     """Load a pre-trained Decima model from wandb or local path.
 
     Args:
@@ -25,6 +25,7 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
             - int: Replicate number (0-3)
             - str: Model name on wandb
             - str: Path to local model checkpoint
+            - List: list of local model checkpoints
         device: Device to load the model on. If None, automatically selects the best available device.
 
     Returns:
@@ -46,6 +47,8 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
         )
     elif isinstance(model, str):
         if Path(model).exists():
+            if model.endswith('ckpt'):
+                return LightningModel.load_from_checkpoint(model, map_location=device)
             return LightningModel.load_safetensor(model, device=device)
         else:
             model_name = model
