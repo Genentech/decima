@@ -66,7 +66,7 @@ def predict_gene_expression(
         for i, (model, pred) in enumerate(zip(model.models, preds["ensemble_preds"])):
             key = f"preds_{i}" if model.name == "" else f"preds_{model.name}"
             ad.layers[key] = pred.T
-            
+
     logger.info("Evaluating performance")
     evaluate_gene_expression_predictions(ad)
     return ad
@@ -82,27 +82,19 @@ def evaluate_gene_expression_predictions(ad):
     preds = ad.layers["preds"]
 
     # Compute Pearson correlation per gene
-    ad.var["pearson"] = [
-        np.corrcoef(truth[:, i], preds[:, i])[0, 1] for i in range(n_genes)
-    ]
+    ad.var["pearson"] = [np.corrcoef(truth[:, i], preds[:, i])[0, 1] for i in range(n_genes)]
 
     if "size_factor" not in ad.obs.columns:
-        ad.obs['size_factor'] = ad.X.sum(1)
+        ad.obs["size_factor"] = ad.X.sum(1)
 
-    ad.var["size_factor_pearson"] = [
-        np.corrcoef(truth[:, i], ad.obs["size_factor"])[0, 1] for i in range(n_genes)
-    ]
+    ad.var["size_factor_pearson"] = [np.corrcoef(truth[:, i], ad.obs["size_factor"])[0, 1] for i in range(n_genes)]
 
     # compute correlations per pseudobulk
     for dataset in ad.var.dataset.unique():
-
         in_dataset = ad.var.dataset == dataset
 
         key = f"{dataset}_pearson"
-        ad.obs[key] = [
-            np.corrcoef(truth[i, in_dataset], preds[i, in_dataset])[0, 1]
-            for i in range(ad.shape[0])
-        ]
+        ad.obs[key] = [np.corrcoef(truth[i, in_dataset], preds[i, in_dataset])[0, 1] for i in range(n_pbs)]
 
         # Compute averages
         mean_per_gene = ad.var.loc[in_dataset, "pearson"].mean()

@@ -208,7 +208,9 @@ class DecimaResult:
         gene_meta["gene_mask_end"] = gene_meta["gene_mask_end"] + padding
         return gene_meta
 
-    def prepare_one_hot(self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0, genome: str = 'hg38') -> torch.Tensor:
+    def prepare_one_hot(
+        self, gene: str, variants: Optional[List[Dict]] = None, padding: int = 0, genome: str = "hg38"
+    ) -> torch.Tensor:
         """Prepare one-hot encoding for a gene.
 
         Args:

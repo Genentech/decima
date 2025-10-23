@@ -40,7 +40,7 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
     elif model == "ensemble":
         return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
 
-    elif isinstance(model, List): 
+    elif isinstance(model, List):
         return EnsembleLightningModel([load_decima_model(path, device) for path in model])
 
     elif model in {0, 1, 2, 3}:
@@ -49,7 +49,7 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
     # Load directly from a path
     elif isinstance(model, str):
         if Path(model).exists():
-            if model.endswith('ckpt'):
+            if model.endswith("ckpt"):
                 return LightningModel.load_from_checkpoint(model, map_location=device)
             else:
                 return LightningModel.load_safetensor(model, device=device)
@@ -63,7 +63,7 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
         )
 
     # If left with a model name, load from environment/wandb
-        
+
     if model_name.upper() in os.environ:
         if Path(os.environ[model_name.upper()]).exists():
             return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)

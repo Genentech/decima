@@ -72,7 +72,7 @@ def cli_predict_genes(
         model = model[0]
         if model in ["0", "1", "2", "3"]:
             model = int(model)
-    
+
     # Format the device
     if isinstance(device, str) and device.isdigit():
         device = int(device)
