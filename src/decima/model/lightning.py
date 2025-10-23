@@ -371,6 +371,7 @@ class LightningModel(pl.LightningModule):
 
     def on_save_checkpoint(self, checkpoint: dict) -> None:
         checkpoint["hyper_parameters"]["data_params"] = self.data_params
+        checkpoint["hyper_parameters"]["model_params"]["init_borzoi"] = False
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0) -> Union[dict, Tensor]:
         """
