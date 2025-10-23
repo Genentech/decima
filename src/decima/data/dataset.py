@@ -212,7 +212,7 @@ class GeneDataset(Dataset):
     def __getitem__(self, idx):
         seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
 
-        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift, genome=genome)
+        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift, genome=self.genome)
         inputs = torch.vstack([seq, mask])
         inputs = self.augmenter(seq=inputs, idx=augment_idx)
 

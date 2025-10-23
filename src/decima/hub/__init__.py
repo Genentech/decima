@@ -37,16 +37,16 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
     if isinstance(model, LightningModel):
         return model
 
-    # For standard model replicates or ensemble of replicates, get their model names
-
     elif model == "ensemble":
         return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
+
+    elif isinstance(model, List): 
+        return EnsembleLightningModel([load_decima_model(path, device) for path in model])
 
     elif model in {0, 1, 2, 3}:
         model_name = f"rep{model}"
 
-    # Load directly from a path or a list of paths
-    
+    # Load directly from a path
     elif isinstance(model, str):
         if Path(model).exists():
             if model.endswith('ckpt'):
@@ -55,9 +55,6 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
                 return LightningModel.load_safetensor(model, device=device)
         else:
             model_name = model
-
-    elif isinstance(model, List): 
-        return EnsembleLightningModel([load_decima_model(path, device) for path in model])
 
     else:
         raise ValueError(

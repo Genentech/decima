@@ -41,6 +41,7 @@ def predict_gene_expression(
     device = get_compute_device(device)
     logger.info(f"Using device: {device} and genome: {genome} for prediction.")
 
+    logger.info("Making predictions")
     model = load_decima_model(model, device=device)
 
     ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift, genome=genome)
@@ -48,6 +49,7 @@ def predict_gene_expression(
         ds, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
     )
 
+    logger.info("Creating anndata")
     X = None
     if ds.result.anndata.X is not None:
         X = ds.result.anndata.X.copy()
@@ -61,34 +63,55 @@ def predict_gene_expression(
     )
 
     if save_replicates:
-        for model, pred in zip(model.models, preds["ensemble_preds"]):
-            ad.layers[f"preds_{model.name}"] = pred.T
-
-    if ad.X is not None:
-        ad.var["pearson"] = [np.corrcoef(ad.X[:, i], ad.layers["preds"][:, i])[0, 1] for i in range(ad.shape[1])]
-        ad.var["size_factor_pearson"] = [
-            np.corrcoef(ad.X[:, i], ad.obs["size_factor"])[0, 1] for i in range(ad.shape[1])
-        ]
-        print(
-            f"Mean Pearson Correlation per gene: True: {round(ad.var.pearson.mean(), 2)}. "
-            f"Size Factor: {round(ad.var.size_factor_pearson.mean(), 2)}."
-        )
-
-        for dataset in ad.var.dataset.unique():
-            key = f"{dataset}_pearson"
-            ad.obs[key] = [
-                np.corrcoef(
-                    ad[i, ad.var.dataset == dataset].X,
-                    ad[i, ad.var.dataset == dataset].layers["preds"],
-                )[0, 1]
-                for i in range(ad.shape[0])
-            ]
-            print(f"Mean Pearson Correlation per pseudobulk over {dataset} genes: {round(ad.obs[key].mean(), 2)}")
-    else:
-        del ad.var["pearson"]
-        del ad.var["size_factor_pearson"]
-
-        for dataset in ad.var.dataset.unique():
-            del ad.obs[f"{dataset}_pearson"]
-
+        for i, (model, pred) in enumerate(zip(model.models, preds["ensemble_preds"])):
+            key = f"preds_{i}" if model.name == "" else f"preds_{model.name}"
+            ad.layers[key] = pred.T
+            
+    logger.info("Evaluating performance")
+    evaluate_gene_expression_predictions(ad)
     return ad
+
+
+def evaluate_gene_expression_predictions(ad):
+    assert ad.X is not None, "ad.X is required for evaluation."
+    assert ad.layers["preds"] is not None, "ad.layers['preds'] is required for evaluation."
+
+    n_pbs = ad.shape[0]
+    n_genes = ad.shape[1]
+    truth = ad.X
+    preds = ad.layers["preds"]
+
+    # Compute Pearson correlation per gene
+    ad.var["pearson"] = [
+        np.corrcoef(truth[:, i], preds[:, i])[0, 1] for i in range(n_genes)
+    ]
+
+    if "size_factor" not in ad.obs.columns:
+        ad.obs['size_factor'] = ad.X.sum(1)
+
+    ad.var["size_factor_pearson"] = [
+        np.corrcoef(truth[:, i], ad.obs["size_factor"])[0, 1] for i in range(n_genes)
+    ]
+
+    # compute correlations per pseudobulk
+    for dataset in ad.var.dataset.unique():
+
+        in_dataset = ad.var.dataset == dataset
+
+        key = f"{dataset}_pearson"
+        ad.obs[key] = [
+            np.corrcoef(truth[i, in_dataset], preds[i, in_dataset])[0, 1]
+            for i in range(ad.shape[0])
+        ]
+
+        # Compute averages
+        mean_per_gene = ad.var.loc[in_dataset, "pearson"].mean()
+        mean_per_gene_sf = ad.var.loc[in_dataset, "size_factor_pearson"].mean()
+        mean_per_pb = ad.obs[key].mean()
+
+        # Report results
+        print(f"Performance on genes in the {dataset} dataset.")
+        print(f"Mean Pearson Correlation per gene: Mean: {mean_per_gene:.2f}.")
+        print(f"Mean Pearson Correlation per gene using size factor (baseline): {mean_per_gene_sf:.2f}.")
+        print(f"Mean Pearson Correlation per pseudobulk: {mean_per_pb: .2f}")
+        print("")
