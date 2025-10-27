@@ -84,19 +84,30 @@ class HDF5Dataset(Dataset):
         self.gene_index = index_genes(self.h5_file, key=self.key)
         self.n_seqs = len(self.gene_index)
 
-        # Setup
-        self.dataset = h5py.File(self.h5_file, "r")
+        # Setup - Open file and cache data needed for worker processes
+        self.dataset = None
+        self._is_closed = False
+        self._open_file()
         self.extract_tasks(ad)
         self.predict = False
         self.n_alleles = 1
+
+    def _open_file(self):
+        """Open the HDF5 file. This will be called in each worker process."""
+        if self.dataset is None or self._is_closed:
+            self.dataset = h5py.File(self.h5_file, "r")
+            self._is_closed = False
 
     def __len__(self):
         return self.n_seqs * self.n_augmented
 
     def close(self):
-        self.dataset.close()
+        if self.dataset is not None and not self._is_closed:
+            self.dataset.close()
+            self._is_closed = True
 
     def extract_tasks(self, ad=None):
+        self._open_file()
         tasks = np.array(self.dataset["tasks"]).astype(str)
         if ad is not None:
             assert np.all(tasks == ad.obs_names)
@@ -105,6 +116,7 @@ class HDF5Dataset(Dataset):
             self.tasks = pd.DataFrame(index=tasks)
 
     def extract_seq(self, idx):
+        self._open_file()
         seq = self.dataset["sequences"][idx]
         seq = indices_to_one_hot(seq)  # 4, L
         mask = self.dataset["masks"][[idx]]  # 1, L
@@ -113,6 +125,7 @@ class HDF5Dataset(Dataset):
         return torch.Tensor(seq)
 
     def extract_label(self, idx):
+        self._open_file()
         return torch.Tensor(self.dataset["labels"][idx])
 
     def __getitem__(self, idx):

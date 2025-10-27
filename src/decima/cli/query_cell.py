@@ -23,7 +23,10 @@ from decima.core.result import DecimaResult
 
 @click.command()
 @click.argument("query", default="")
-def cli_query_cell(query=""):
+@click.option(
+    "--metadata-anndata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file."
+)
+def cli_query_cell(query="", metadata_anndata=None):
     """
     Query a cell using query string
 
@@ -39,7 +42,7 @@ def cli_query_cell(query=""):
         ...
 
     """
-    result = DecimaResult.load()
+    result = DecimaResult.load(metadata_anndata)
     df = result.cell_metadata
 
     if query != "":

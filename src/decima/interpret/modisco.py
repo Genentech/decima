@@ -79,7 +79,7 @@ def predict_save_modisco_attributions(
     ...     tasks="cell_type == 'classical monocyte'",
     ... )
     """
-    predict_save_attributions(
+    return predict_save_attributions(
         output_prefix=output_prefix,
         tasks=tasks,
         off_tasks=off_tasks,
@@ -533,37 +533,26 @@ def modisco(
         seqlet_motif_trim_threshold: Seqlet motif trim threshold.
     """
     output_prefix = Path(output_prefix)
+    output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
-    if model == "ensemble":
-        attrs_output_prefix = str(output_prefix) + "_{model}"
-        models = [0, 1, 2, 3]
-        attributions = [
-            Path(attrs_output_prefix.format(model=model)).with_suffix(".attributions.h5") for model in models
-        ]
-    else:
-        attrs_output_prefix = output_prefix
-        models = [model]
-        attributions = [output_prefix.with_suffix(".attributions.h5").as_posix()]
-
-    for model in models:
-        predict_save_modisco_attributions(
-            output_prefix=str(attrs_output_prefix).format(model=model),
-            tasks=tasks,
-            off_tasks=off_tasks,
-            model=model,
-            metadata_anndata=metadata_anndata,
-            genes=genes,
-            top_n_markers=top_n_markers,
-            method=method,
-            batch_size=batch_size,
-            correct_grad_bigwig=correct_grad,
-            device=device,
-            num_workers=num_workers,
-            genome=genome,
-        )
+    attributions_paths = predict_save_modisco_attributions(
+        output_prefix=output_prefix,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        model=model,
+        metadata_anndata=metadata_anndata,
+        genes=genes,
+        top_n_markers=top_n_markers,
+        method=method,
+        batch_size=batch_size,
+        correct_grad_bigwig=correct_grad,
+        device=device,
+        num_workers=num_workers,
+        genome=genome,
+    )
     modisco_patterns(
         output_prefix=output_prefix,
-        attributions=attributions,
+        attributions=attributions_paths,
         tasks=tasks,
         off_tasks=off_tasks,
         tss_distance=tss_distance,

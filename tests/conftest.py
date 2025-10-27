@@ -7,7 +7,7 @@ import pytest
 
 from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.hub import login_wandb
-from decima.hub.download import download_hg38
+from decima.hub.download import cache_hg38
 
 
 fasta_file = "tests/data/seqs.fasta"
@@ -39,7 +39,7 @@ def pytest_collection_modifyitems(config, items):
 
 
 login_wandb()
-download_hg38()
+cache_hg38()
 
 
 device = "cpu"

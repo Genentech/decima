@@ -41,7 +41,10 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
         return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
 
     elif isinstance(model, List):
-        return EnsembleLightningModel([load_decima_model(path, device) for path in model])
+        if len(model) == 1:
+            return load_decima_model(model[0], device)
+        else:
+            return EnsembleLightningModel([load_decima_model(path, device) for path in model])
 
     elif model in {0, 1, 2, 3}:
         model_name = f"rep{model}"
@@ -63,7 +66,6 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
         )
 
     # If left with a model name, load from environment/wandb
-
     if model_name.upper() in os.environ:
         if Path(os.environ[model_name.upper()]).exists():
             return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)

@@ -115,7 +115,7 @@ def predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     output_pq: Optional[str] = None,
     tasks: Optional[Union[str, List[str]]] = None,
-    model: Union[int, str] = "ensemble",
+    model: Union[int, str, List[str]] = "ensemble",
     metadata_anndata: Optional[str] = None,
     chunksize: int = 10_000,
     batch_size: int = 1,

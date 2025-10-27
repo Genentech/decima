@@ -17,6 +17,7 @@ Examples:
 """
 
 import click
+from decima.cli.callback import parse_genes, parse_model, parse_attributions
 from decima.interpret.attributions import (
     plot_attributions,
     predict_save_attributions,
@@ -47,6 +48,7 @@ from decima.interpret.attributions import (
     type=str,
     required=False,
     default=0,
+    callback=parse_model,
     help="Model to use for attribution analysis either replicate number or path to the model.",
     show_default=True,
 )
@@ -87,6 +89,7 @@ from decima.interpret.attributions import (
     type=str,
     required=False,
     help="Comma-separated list of gene symbols or IDs to analyze.",
+    callback=parse_genes,
     show_default=True,
 )
 @click.option(
@@ -149,16 +152,6 @@ def cli_attributions_predict(
 
     └── {output_prefix}.attributions.bigwig  # Genome browser track of attribution as bigwig file obtained with averaging the attribution scores across the genes for genomics coordinates.
     """
-
-    if model in ["0", "1", "2", "3"]:  # replicate index
-        model = int(model)
-
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
-
-    if genes is not None:
-        genes = genes.split(",")
-
     predict_save_attributions(
         output_prefix=output_prefix,
         tasks=tasks,
@@ -181,7 +174,14 @@ def cli_attributions_predict(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files")
-@click.option("-g", "--genes", type=str, required=False, help="Comma-separated list of gene symbols or IDs to analyze.")
+@click.option(
+    "-g",
+    "--genes",
+    type=str,
+    required=False,
+    callback=parse_genes,
+    help="Comma-separated list of gene symbols or IDs to analyze.",
+)
 @click.option("--seqs", type=str, required=False, help="Path to a file containing sequences to analyze")
 @click.option(
     "--tasks",
@@ -197,6 +197,7 @@ def cli_attributions_predict(
     type=str,
     required=False,
     default="ensemble",
+    callback=parse_model,
     help="Model to use for attribution analysis either replicate number or path to the model.",
     show_default=True,
 )
@@ -288,12 +289,6 @@ def cli_attributions(
 
         >>> decima attributions -o output_prefix --seqs tests/data/seqs.fasta --tasks "cell_type == 'classical monocyte'" --device 0
     """
-    if model in ["0", "1", "2", "3"]:  # replicate index
-        model = int(model)
-
-    if isinstance(genes, str):
-        genes = genes.split(",")
-
     predict_attributions_seqlet_calling(
         output_prefix=output_prefix,
         genes=genes,
@@ -321,7 +316,9 @@ def cli_attributions(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files")
-@click.option("--attributions", type=str, required=True, help="Path to the attribution files")
+@click.option(
+    "--attributions", type=str, callback=parse_attributions, required=True, help="Path to the attribution files"
+)
 @click.option(
     "--tasks",
     type=str,
@@ -333,7 +330,13 @@ def cli_attributions(
 )
 @click.option("--tss-distance", type=int, required=False, default=None, help="TSS distance for attribution analysis.")
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
-@click.option("--genes", type=str, required=False, help="Comma-separated list of gene symbols or IDs to analyze.")
+@click.option(
+    "--genes",
+    type=str,
+    required=False,
+    callback=parse_genes,
+    help="Comma-separated list of gene symbols or IDs to analyze.",
+)
 @click.option(
     "--top-n-markers",
     type=int,
@@ -393,12 +396,6 @@ def cli_attributions_recursive_seqlet_calling(
 
         >>> decima attributions-recursive-seqlet-calling --attributions attributions_0.h5,attributions_1.h5 -o output_prefix  --genes SPI1
     """
-    if isinstance(attributions, str):
-        attributions = attributions.split(",")
-
-    if genes is not None:
-        genes = genes.split(",")
-
     recursive_seqlet_calling(
         output_prefix=output_prefix,
         attributions=attributions,
@@ -422,7 +419,14 @@ def cli_attributions_recursive_seqlet_calling(
 
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files")
-@click.option("-g", "--genes", type=str, required=False, help="Comma-separated list of gene symbols or IDs to analyze.")
+@click.option(
+    "-g",
+    "--genes",
+    type=str,
+    required=False,
+    callback=parse_genes,
+    help="Comma-separated list of gene symbols or IDs to analyze.",
+)
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
 @click.option("--tss-distance", type=int, required=False, default=None, help="TSS distance for attribution analysis.")
 @click.option("--seqlogo-window", type=int, default=50, help="Window size for sequence logo plots")
@@ -449,8 +453,6 @@ def cli_attributions_plot(
 
             >>> decima attributions-plot -o output_prefix -g SPI1
     """
-    genes = genes.split(",")
-
     plot_attributions(
         output_prefix=output_prefix,
         genes=genes,

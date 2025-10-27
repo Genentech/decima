@@ -7,10 +7,12 @@ import pyBigWig
 import numpy as np
 import pandas as pd
 from grelu.sequence.format import strings_to_one_hot
+
+from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.hub.download import download_decima_weights, download_decima_metadata
 from captum.attr import Saliency, InputXGradient, IntegratedGradients
 from decima.core.attribution import Attribution
 from decima import predict_attributions_seqlet_calling
-from decima.constants import DECIMA_CONTEXT_SIZE
 from decima.interpret.attributer import DecimaAttributer, get_attribution_method
 from decima.interpret.attributions import predict_save_attributions, recursive_seqlet_calling, plot_attributions
 
@@ -207,6 +209,33 @@ def test_predict_save_attributions_single_gene(tmp_path):
     plot_dir = Path(str(output_prefix) + "_plots")
     assert (plot_dir / "SPI1.peaks.png").exists()
     assert ((plot_dir / "SPI1_seqlogos").is_dir())
+
+
+@pytest.mark.long_running
+def test_predict_save_attributions_single_gene_list_models(tmp_path):
+    # download models
+    download_decima_weights(0, str(tmp_path))
+    download_decima_weights(1, str(tmp_path))
+    download_decima_metadata(str(tmp_path))
+
+    output_prefix = tmp_path / "SPI1"
+    predict_attributions_seqlet_calling(
+        output_prefix=output_prefix,
+        genes=["SPI1"],
+        metadata_anndata=str(tmp_path / "metadata.h5ad"),
+        tasks="cell_type == 'classical monocyte'",
+        model=[
+            str(tmp_path / "rep0.safetensors"),
+            str(tmp_path / "rep1.safetensors"),
+        ],
+        device=device
+    )
+    assert (output_prefix.with_suffix(".seqlets.bed")).exists()
+    assert Path(str(output_prefix) + "_0.attributions.h5").exists()
+    assert Path(str(output_prefix) + "_1.attributions.h5").exists()
+    assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+    assert Path(str(output_prefix) + "_0.warnings.qc.log").exists()
+    assert Path(str(output_prefix) + "_1.warnings.qc.log").exists()
 
 
 @pytest.mark.long_running

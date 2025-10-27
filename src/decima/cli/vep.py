@@ -22,6 +22,7 @@ Examples:
 
 import click
 from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.cli.callback import parse_model, validate_save_replicates
 from decima.utils.dataframe import ensemble_predictions
 from decima.vep import predict_variant_effect
 
@@ -46,7 +47,8 @@ from decima.vep import predict_variant_effect
     "--model",
     type=str,
     default="ensemble",
-    help="Model to use for variant effect prediction either replicate number or path to the model.",
+    callback=parse_model,
+    help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to safetensor files to perform variant effect prediction. Default: `ensemble`.",
 )
 @click.option(
     "--metadata",
@@ -88,7 +90,8 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--save-replicates",
     is_flag=True,
-    help="Save the replicates in the output parquet file. Default: False.",
+    callback=validate_save_replicates,
+    help="Save the replicates in the output parquet file. Default: False. Only supported for ensemble models.",
 )
 @click.option(
     "--disable-reference-cache",
@@ -145,17 +148,11 @@ def cli_predict_variant_effect(
     """
     reference_cache = not disable_reference_cache
 
-    if model in ["0", "1", "2", "3"]:  # replicate index
-        model = int(model)
-
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
-
     if include_cols:
         include_cols = include_cols.split(",")
 
-    if save_replicates and (model != "ensemble"):
-        raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
+    # if save_replicates and (model != "ensemble"):
+    #     raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
 
     predict_variant_effect(
         variants,

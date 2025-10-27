@@ -47,15 +47,15 @@ class LightningModel(pl.LightningModule):
     Wrapper for predictive sequence models
 
     Args:
+        name: Name of the model which be used in the generated results; thus, ensure unique name for each model and replicate.
         model_params: Dictionary of parameters specifying model architecture
         train_params: Dictionary specifying training parameters
         data_params: Dictionary specifying parameters of the training data.
             This is empty by default and will be filled at the time of
             training.
-        name: Name of the model.
     """
 
-    def __init__(self, model_params: dict, train_params: dict = {}, data_params: dict = {}, name: str = "") -> None:
+    def __init__(self, name: str, model_params: dict, train_params: dict = {}, data_params: dict = {}) -> None:
         super().__init__()
 
         self.name = name
@@ -525,8 +525,9 @@ class LightningModel(pl.LightningModule):
 
 
 class EnsembleLightningModel(LightningModel):
-    def __init__(self, models: List[LightningModel]):
+    def __init__(self, models: List[LightningModel], name="ensemble"):
         super().__init__(
+            name=name,
             model_params=models[0].model_params,
             train_params=models[0].train_params,
             data_params=models[0].data_params,
@@ -636,7 +637,7 @@ class GeneMaskLightningModel(LightningModel):
         model_params: dict,
         train_params: dict = {},
         data_params: dict = {},
-        name: str = "",
+        name: str = "fix-gene-mask",
     ):
         super().__init__(
             model_params=model_params,

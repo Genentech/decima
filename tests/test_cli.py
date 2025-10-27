@@ -16,9 +16,30 @@ def test_cli_main():
 
 
 @pytest.mark.long_running
-def test_cli_download():
+def test_cli_cache():
     runner = CliRunner()
-    result = runner.invoke(main, ["download"])
+    result = runner.invoke(main, ["cache"])
+    assert result.exit_code == 0
+
+
+@pytest.mark.long_running
+def test_cli_download(tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(main, ["download", "--download-dir", str(tmp_path)])
+    assert result.exit_code == 0
+
+
+@pytest.mark.long_running
+def test_cli_download_weights(tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(main, ["download-weights", "--download-dir", str(tmp_path)])
+    assert result.exit_code == 0
+
+
+@pytest.mark.long_running
+def test_cli_download_metadata(tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(main, ["download-metadata", "--download-dir", str(tmp_path)])
     assert result.exit_code == 0
 
 

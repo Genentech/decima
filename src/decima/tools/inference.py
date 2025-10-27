@@ -63,9 +63,8 @@ def predict_gene_expression(
     )
 
     if save_replicates:
-        for i, (model, pred) in enumerate(zip(model.models, preds["ensemble_preds"])):
-            key = f"preds_{i}" if model.name == "" else f"preds_{model.name}"
-            ad.layers[key] = pred.T
+        for model_name, pred in zip(model.model_names, preds["ensemble_preds"]):
+            ad.layers[model.name] = pred.T
 
     logger.info("Evaluating performance")
     evaluate_gene_expression_predictions(ad)
