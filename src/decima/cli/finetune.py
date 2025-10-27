@@ -86,7 +86,6 @@ def cli_finetune(
         device = int(device)
 
     train_params = {
-        "name": name,
         "batch_size": batch_size,
         "num_workers": num_workers,
         "devices": device,
@@ -111,7 +110,7 @@ def cli_finetune(
     logger.info(f"model_params: {model_params}")
 
     logger.info("Initializing model")
-    model = LightningModel(model_params=model_params, train_params=train_params)
+    model = LightningModel(name=name, model_params=model_params, train_params=train_params)
 
     if train_logger == "wandb":
         logger.info("Connecting to wandb.")

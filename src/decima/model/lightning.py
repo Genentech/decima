@@ -3,7 +3,6 @@ The LightningModel class.
 """
 
 import json
-from datetime import datetime
 from typing import Callable, List, Optional, Tuple, Union
 
 import numpy as np
@@ -210,16 +209,14 @@ class LightningModel(pl.LightningModule):
         """
         Parses the name of the logger supplied in train_params.
         """
-        if "name" not in self.train_params:
-            self.train_params["name"] = datetime.now().strftime("%Y_%d_%m_%H_%M")
         if self.train_params["logger"] == "wandb":
             logger = WandbLogger(
-                name=self.train_params["name"],
+                name=self.name,
                 log_model=True,
                 save_dir=self.train_params["save_dir"],
             )
         elif self.train_params["logger"] == "csv":
-            logger = CSVLogger(name=self.train_params["name"], save_dir=self.train_params["save_dir"])
+            logger = CSVLogger(name=self.name, save_dir=self.train_params["save_dir"])
         else:
             raise NotImplementedError
         return logger
