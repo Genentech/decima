@@ -379,7 +379,18 @@ class Attribution:
             pthresh: P-value threshold for motif matches
 
         Returns:
-            pd.DataFrame: Motif scan results
+            pd.DataFrame: Motif scan results with columns:
+                - "motif": Motif name
+                - "peak": Peak name
+                - "start": Start position of the peak
+                - "end": End position of the peak
+                - "strand": Strand of the peak
+                - "score": Fimoe score of the motif
+                - "p-value": Fimo p-value of the motif
+                - "matched_seq": Matched sequence
+                - "site_attr_score": Site attribution score
+                - "motif_attr_score": Motif attribution score
+                - "from_tss": Distance from the TSS to the peak
         """
         mid = (self.peaks["start"] + self.peaks["end"]) // 2
 
@@ -393,7 +404,7 @@ class Attribution:
             pthresh=pthresh,
             rc=True,
             attrs=peak_attrs,
-        ).rename(columns={"sequence": "peak"})
+        ).rename(columns={"sequence": "peak", "fimo_p-value": "p-value", "fimo_score": "score"})
 
         df = df.merge(
             self.peaks[["peak", "from_tss", "start"]].assign(mid=mid).reset_index(drop=True),
