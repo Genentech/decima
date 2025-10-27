@@ -16,7 +16,7 @@ Weights of the trained Decima models (4 replicates) are now available at https:/
 Please cite https://www.biorxiv.org/content/10.1101/2024.10.09.617507v3. Also see https://github.com/Genentech/decima-applications for all the code used to train and apply models in this preprint.
 
 ## Requirements
-Decima has been tested on Ubuntu and MacOS using Python 3.9-3.12.
+Decima has been tested on Ubuntu 24.04.3 and MacOS 15.6.1 using Python 3.9-3.12.
 
 ## Installation
 
