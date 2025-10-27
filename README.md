@@ -33,6 +33,9 @@ pip install git+https://github.com/genentech/decima.git@main
 ```
 Typical installation time including all dependencies is under 10 minutes.
 
+## Tutorials
+See the [tutorials](docs/tutorials) for instructions, including how to train your own Decima model with an example dataset.
+
 <!-- biocsetup-notes -->
 
 ## Note
