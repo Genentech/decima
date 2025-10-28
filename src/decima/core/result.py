@@ -215,6 +215,9 @@ class DecimaResult:
 
         Args:
             gene: Gene name
+            variants: Optional list of variant dictionaries to inject into the sequence
+            padding: Amount of padding to add on both sides of the sequence
+            genome: Genome name or path to the genome fasta file. Default: "hg38"
 
         Returns:
             torch.Tensor: One-hot encoding of the gene
@@ -227,7 +230,7 @@ class DecimaResult:
             gene_start, gene_end = gene_meta.gene_mask_start, gene_meta.gene_mask_end
         else:
             # Todo: fix for case where genome is not hg38
-            seq, (gene_start, gene_end) = prepare_seq_alt_allele(gene_meta, variants)
+            seq, (gene_start, gene_end) = prepare_seq_alt_allele(gene_meta, variants, genome=genome)
 
         mask = np.zeros(shape=(1, DECIMA_CONTEXT_SIZE + padding * 2))
         mask[0, gene_start:gene_end] += 1
@@ -235,12 +238,13 @@ class DecimaResult:
 
         return strings_to_one_hot(seq), mask
 
-    def gene_sequence(self, gene: str, stranded: bool = True) -> str:
+    def gene_sequence(self, gene: str, stranded: bool = True, genome: str = "hg38") -> str:
         """Get sequence for a gene.
 
         Args:
             gene: Gene name
             stranded: Whether to return stranded sequence
+            genome: Genome name or path to the genome fasta file. Default: "hg38"
 
         Returns:
             str: Sequence for the gene
@@ -253,7 +257,7 @@ class DecimaResult:
         gene_meta = self.gene_metadata.loc[gene]
         if not stranded:
             gene_meta = {"chrom": gene_meta.chrom, "start": gene_meta.start, "end": gene_meta.end}
-        return intervals_to_strings(gene_meta, genome="hg38")
+        return intervals_to_strings(gene_meta, genome=genome)
 
     def attributions(
         self,
@@ -266,6 +270,7 @@ class DecimaResult:
         min_seqlet_len: int = 4,
         max_seqlet_len: int = 25,
         additional_flanks: int = 0,
+        genome: str = "hg38",
     ):
         """Get attributions for a specific gene.
 
@@ -275,15 +280,18 @@ class DecimaResult:
             off_tasks: List of cells to use as off task
             transform: Attribution transform method
             method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
-            n_peaks: Number of peaks to find
-            min_dist: Minimum distance between peaks
+            threshold: Threshold for attribution analysis
+            min_seqlet_len: Minimum length for seqlet calling
+            max_seqlet_len: Maximum length for seqlet calling
+            additional_flanks: Additional flanks for seqlet calling
+            genome: Genome to use for attribution analysis default is "hg38". Can be genome name or path to custom genome fasta file.
 
         Returns:
             Attribution: Container with inputs, predictions, attribution scores and TSS position
         """
         tasks, off_tasks = self.query_tasks(tasks, off_tasks)
 
-        one_hot_seq, gene_mask = self.prepare_one_hot(gene)
+        one_hot_seq, gene_mask = self.prepare_one_hot(gene, genome=genome)
         inputs = torch.vstack([one_hot_seq, gene_mask])
 
         attrs = (

@@ -64,7 +64,27 @@ def cli_finetune(
     num_workers,
     seed,
 ):
-    """Finetune the Decima model."""
+    """Finetune the Decima model.
+
+    Args:
+        name: Name of the run for logging and checkpointing
+        model: Model path or replication number (0-3)
+        device: Device to use for training. Default: "0"
+        matrix_file: Path to the matrix file containing training data
+        h5_file: Path to the H5 file containing sequences
+        outdir: Output directory path to save model checkpoints
+        learning_rate: Learning rate for training. Default: 0.001
+        loss_total_weight: Total weight parameter for the loss function
+        gradient_accumulation: Number of gradient accumulation steps
+        batch_size: Batch size for training. Default: 1
+        max_seq_shift: Maximum sequence shift for data augmentation. Default: 5000
+        gradient_clipping: Gradient clipping value. Default: 0.0 (disabled)
+        save_top_k: Number of best checkpoints to save. Default: 1
+        epochs: Number of training epochs. Default: 1
+        logger: Logger type to use. Default: "wandb"
+        num_workers: Number of data loading workers. Default: 16
+        seed: Random seed for reproducibility. Default: 0
+    """
     train_logger = logger
     logger = logging.getLogger("decima")
     logger.info(f"Data paths: matrix_file={matrix_file}, h5_file={h5_file}")
@@ -96,7 +116,6 @@ def cli_finetune(
         "total_weight": loss_total_weight,
         "accumulate_grad_batches": gradient_accumulation,
         "loss": "poisson_multinomial",
-        # "pairs": ad.uns["disease_pairs"].values,
         "clip": gradient_clipping,
         "save_top_k": save_top_k,
         "pin_memory": True,

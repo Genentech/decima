@@ -12,14 +12,11 @@ It includes subcommands for:
 - Extracting the seqlets from the modisco results. `modisco-seqlet-bed`
 
 Examples:
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --tasks "cell_type == 'classical monocyte'" --genes SPI1,CD68
 
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --tasks "cell_type == 'B cell'" --device 0 --genome hg38
 
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --genes SPI1 --method saliency --batch-size 2
 """
 
 import click

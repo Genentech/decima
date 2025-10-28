@@ -151,9 +151,6 @@ def cli_predict_variant_effect(
     if include_cols:
         include_cols = include_cols.split(",")
 
-    # if save_replicates and (model != "ensemble"):
-    #     raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
-
     predict_variant_effect(
         variants,
         output_pq=output_pq,

@@ -7,7 +7,6 @@ result = DecimaResult.load()
 
 df = list()
 
-# for i in ['CD68', 'SPI1', 'CD14']:
 for i in ['CD68', 'SPI1']:
     seq, _ = result.prepare_one_hot(i)
     seq = one_hot_to_strings(seq)

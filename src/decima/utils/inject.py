@@ -17,9 +17,10 @@ class SeqBuilder:
         end: end position
         anchor: anchor position
         track: track positions shifts due to indels.
+        genome: Genome name or path to the genome fasta file. Defaults to "hg38".
     """
 
-    def __init__(self, chrom: str, start: int, end: int, anchor: int, track: List[int] = None):
+    def __init__(self, chrom: str, start: int, end: int, anchor: int, track: List[int] = None, genome: str = "hg38"):
         self.chrom = chrom
         self.start = start
         self.end = end
@@ -28,6 +29,7 @@ class SeqBuilder:
         self.start_shift = 0  # how much interval is shifted to the left upstream
         self.end_shift = 0  # how much interval is shifted to the right downstream
         self.shifts = {pos: 0 for pos in track or list()}
+        self.genome = genome
 
     @staticmethod
     def _split_variant(variant, pos):
@@ -139,7 +141,7 @@ class SeqBuilder:
         start = self.start + self.start_shift
         end = self.end + self.end_shift
 
-        seq = intervals_to_strings({"chrom": self.chrom, "start": start, "end": end}, genome="hg38")
+        seq = intervals_to_strings({"chrom": self.chrom, "start": start, "end": end}, genome=self.genome)
         start += 1  # 0 based to 1 based start
 
         variants = sorted(self.variants, key=lambda x: x["pos"])
@@ -170,7 +172,7 @@ class SeqBuilder:
         return "".join(self._construct())
 
 
-def prepare_seq_alt_allele(gene: GeneMetadata, variants: List[Dict]):
+def prepare_seq_alt_allele(gene: GeneMetadata, variants: List[Dict], genome: str = "hg38"):
     """
     Prepare the sequence and alt allele for a gene.
 
@@ -200,7 +202,12 @@ def prepare_seq_alt_allele(gene: GeneMetadata, variants: List[Dict]):
     anchor = gene.gene_end if gene.strand == "-" else gene.gene_start
 
     builder = SeqBuilder(
-        chrom=gene.chrom, start=gene.start, end=gene.end, anchor=anchor, track=[gene.gene_start, gene.gene_end]
+        chrom=gene.chrom,
+        start=gene.start,
+        end=gene.end,
+        anchor=anchor,
+        track=[gene.gene_start, gene.gene_end],
+        genome=genome,
     )
     for variant in variants:
         builder.inject(variant)

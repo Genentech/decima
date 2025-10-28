@@ -434,6 +434,7 @@ class SeqDataset(Dataset):
             max_seq_shift=max_seq_shift,
             seed=seed,
             augment_mode=augment_mode,
+            genome=genome,
         )
 
     @classmethod
@@ -610,10 +611,12 @@ class VariantDataset(Dataset):
         max_distance=float("inf"),
         model_name=None,
         reference_cache=True,
+        genome="hg38",
     ):
         super().__init__()
 
         self.reference_cache = reference_cache
+        self.genome = genome
         self.result = DecimaResult.load(metadata_anndata)
 
         self.variants = self._overlap_genes(
@@ -864,7 +867,7 @@ class VariantDataset(Dataset):
         return self.n_seqs * self.n_augmented * self.n_alleles
 
     def validate_allele_seq(self, gene, variant):
-        seq = self.result.gene_sequence(gene)
+        seq = self.result.gene_sequence(gene, genome=self.genome)
         pos = variant.rel_pos
         ref_match = seq[pos : pos + len(variant.ref)] == variant.ref_tx
         alt_match = seq[pos : pos + len(variant.alt)] == variant.alt_tx
@@ -898,6 +901,7 @@ class VariantDataset(Dataset):
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.ref, "alt": variant.alt}],
                 padding=self.max_seq_shift,
+                genome=self.genome,
             )
             allele = seq[:, rel_pos : rel_pos + len(variant.alt)]
             allele_tx = variant.alt_tx
@@ -912,6 +916,7 @@ class VariantDataset(Dataset):
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],
                 padding=self.max_seq_shift,
+                genome=self.genome,
             )
             allele = seq[:, rel_pos : rel_pos + len(variant.ref)]
             allele_tx = variant.ref_tx

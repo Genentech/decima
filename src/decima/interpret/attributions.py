@@ -119,7 +119,6 @@ def predict_save_attributions(
         ...     genome="hg38",
         ... )
     """
-    # str(attrs_output_prefix).format(model=idx)
     if (model == "ensemble") or isinstance(model, (list, tuple)):
         if model == "ensemble":
             models = [0, 1, 2, 3]
@@ -182,7 +181,7 @@ def predict_save_attributions(
                 raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
         else:
             dataset = GeneDataset(
-                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result
+                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result, genome=genome
             )
 
         genes_batch = list(chunked(dataset.genes, batch_size))

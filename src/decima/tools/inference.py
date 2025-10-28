@@ -25,11 +25,12 @@ def predict_gene_expression(
         model (str, optional): Model to use for prediction. Defaults to 'ensemble'.
         metadata_anndata (str, optional): Path to the metadata anndata file. Defaults to None.
         device (str, optional): Device to use for prediction. Defaults to None.
-        batch_size (int, optional): Batch size for prediction. Defaults to 8.
+        batch_size (int, optional): Batch size for prediction. Defaults to 1.
         num_workers (int, optional): Number of workers for prediction. Defaults to 4.
         max_seq_shift (int, optional): Maximum sequence shift for prediction. Defaults to 0.
-        genome (str, optional): Genome build for prediction. Defaults to 'hg38'.
+        genome (str, optional): Genome name or path to the genome fasta file. Defaults to 'hg38'.
         save_replicates (bool, optional): Save the replicates for prediction. Defaults to False.
+        float_precision (str, optional): Floating-point precision. Defaults to "32".
 
     Raises:
         ValueError: If the model is not 'ensemble' and save_replicates is True.
@@ -63,8 +64,8 @@ def predict_gene_expression(
     )
 
     if save_replicates:
-        for model_name, pred in zip(model.model_names, preds["ensemble_preds"]):
-            ad.layers[model.name] = pred.T
+        for model, pred in zip(model.models, preds["ensemble_preds"]):
+            ad.layers[f"preds_{model.name}"] = pred.T
 
     logger.info("Evaluating performance")
     evaluate_gene_expression_predictions(ad)

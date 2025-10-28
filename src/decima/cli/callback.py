@@ -34,7 +34,7 @@ def validate_save_replicates(ctx, param, value):
     if value:
         if ctx.params["model"] == "ensemble":
             return value
-        elif isinstance(ctx.params["model"], str) and (len(ctx.params["model"].split(",")) > 1):
+        elif isinstance(ctx.params["model"], list) and (len(ctx.params["model"]) > 1):
             return value
         else:
             raise ValueError(
