@@ -434,7 +434,6 @@ class SeqDataset(Dataset):
             max_seq_shift=max_seq_shift,
             seed=seed,
             augment_mode=augment_mode,
-            genome=genome,
         )
 
     @classmethod
