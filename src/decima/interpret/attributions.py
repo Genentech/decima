@@ -127,8 +127,6 @@ def predict_save_attributions(
         return [
             predict_save_attributions(
                 output_prefix=(str(output_prefix) + "_{model}").format(model=idx),
-                genes=genes,
-                seqs=seqs,
                 tasks=tasks,
                 off_tasks=off_tasks,
                 model=model,
@@ -136,6 +134,11 @@ def predict_save_attributions(
                 method=method,
                 transform=transform,
                 batch_size=batch_size,
+                genes=genes,
+                seqs=seqs,
+                top_n_markers=top_n_markers,
+                bigwig=bigwig,
+                correct_grad_bigwig=correct_grad_bigwig,
                 num_workers=num_workers,
                 device=device,
                 genome=genome,
