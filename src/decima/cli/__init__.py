@@ -2,7 +2,7 @@ import logging
 import click
 
 from decima.cli.predict_genes import cli_predict_genes
-from decima.cli.download import cli_download
+from decima.cli.download import cli_cache, cli_download_weights, cli_download_metadata, cli_download
 from decima.cli.attributions import (
     cli_attributions,
     cli_attributions_plot,
@@ -40,6 +40,9 @@ def main():
 
 
 main.add_command(cli_predict_genes, name="predict-genes")
+main.add_command(cli_cache, name="cache")
+main.add_command(cli_download_weights, name="download-weights")
+main.add_command(cli_download_metadata, name="download-metadata")
 main.add_command(cli_download, name="download")
 main.add_command(cli_query_cell, name="query-cell")
 main.add_command(cli_attributions, name="attributions")

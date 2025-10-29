@@ -5,6 +5,16 @@ import torch
 
 
 def _get_on_off_tasks(result: "DecimaResult", tasks: Optional[List[str]] = None, off_tasks: Optional[List[str]] = None):
+    """Get on and off tasks for attribution analysis.
+
+    Args:
+        result: DecimaResult object containing cell metadata
+        tasks: List of task names or query string to filter tasks. If None, all tasks will be used.
+        off_tasks: List of off task names or query string to filter off tasks.
+
+    Returns:
+        tuple: (tasks, off_tasks) as lists of task names
+    """
     if tasks is None:
         tasks = result.cell_metadata.index.tolist()
     elif isinstance(tasks, str):
@@ -22,6 +32,18 @@ def _get_genes(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
 ):
+    """Get list of genes for analysis.
+
+    Args:
+        result: DecimaResult object containing gene metadata
+        genes: List of gene names. If None, genes will be determined from other parameters.
+        top_n_markers: Number of top marker genes to select. If None, uses genes parameter.
+        tasks: List of task names for finding marker genes.
+        off_tasks: List of off task names for finding marker genes.
+
+    Returns:
+        List[str]: List of gene names to analyze
+    """
     if (top_n_markers is not None) and (genes is None):
         all_genes = (
             result.marker_zscores(tasks=tasks, off_tasks=off_tasks)
@@ -56,4 +78,8 @@ def get_compute_device(device: Optional[str] = None) -> torch.device:
     """
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    elif isinstance(device, str) and device.isdigit():
+        device = int(device)
+
     return torch.device(device)

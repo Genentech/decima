@@ -1,5 +1,5 @@
 import os
-from typing import Union, Optional
+from typing import Union, Optional, List
 import warnings
 import wandb
 from pathlib import Path
@@ -17,7 +17,7 @@ def login_wandb():
         wandb.login(host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST), relogin=True, anonymous="must", timeout=0)
 
 
-def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
+def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[str] = None):
     """Load a pre-trained Decima model from wandb or local path.
 
     Args:
@@ -25,6 +25,7 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
             - int: Replicate number (0-3)
             - str: Model name on wandb
             - str: Path to local model checkpoint
+            - List: list of local model checkpoints
         device: Device to load the model on. If None, automatically selects the best available device.
 
     Returns:
@@ -35,27 +36,36 @@ def load_decima_model(model: Union[str, int] = 0, device: Optional[str] = None):
     """
     if isinstance(model, LightningModel):
         return model
+
     elif model == "ensemble":
-        return EnsembleLightningModel(
-            [
-                load_decima_model(0, device),
-                load_decima_model(1, device),
-                load_decima_model(2, device),
-                load_decima_model(3, device),
-            ]
-        )
-    elif isinstance(model, str):
-        if Path(model).exists():
-            return LightningModel.load_safetensor(model, device=device)
+        return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
+
+    elif isinstance(model, List):
+        if len(model) == 1:
+            return load_decima_model(model[0], device)
         else:
-            model_name = model
+            return EnsembleLightningModel([load_decima_model(path, device) for path in model])
+
     elif model in {0, 1, 2, 3}:
         model_name = f"rep{model}"
+
+    # Load directly from a path
+    elif isinstance(model, str):
+        if Path(model).exists():
+            if model.endswith("ckpt"):
+                return LightningModel.load_from_checkpoint(model, map_location=device)
+            else:
+                return LightningModel.load_safetensor(model, device=device)
+        else:
+            model_name = model
+
     else:
         raise ValueError(
-            f"Invalid model: {model} it need to be a string of model_name on wandb "
-            "or an integer of replicate number {0, 1, 2, 3}, or a path to a local model"
+            f"Invalid model: {model} it needs to be either a string of model_names on wandb, "
+            "an integer of replicate number {0, 1, 2, 3}, a path to a local model or a list of paths."
         )
+
+    # If left with a model name, load from environment/wandb
     if model_name.upper() in os.environ:
         if Path(os.environ[model_name.upper()]).exists():
             return LightningModel.load_safetensor(os.environ[model_name.upper()], device=device)

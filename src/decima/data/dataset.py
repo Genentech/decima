@@ -84,19 +84,30 @@ class HDF5Dataset(Dataset):
         self.gene_index = index_genes(self.h5_file, key=self.key)
         self.n_seqs = len(self.gene_index)
 
-        # Setup
-        self.dataset = h5py.File(self.h5_file, "r")
+        # Setup - Open file and cache data needed for worker processes
+        self.dataset = None
+        self._is_closed = False
+        self._open_file()
         self.extract_tasks(ad)
         self.predict = False
         self.n_alleles = 1
+
+    def _open_file(self):
+        """Open the HDF5 file. This will be called in each worker process."""
+        if self.dataset is None or self._is_closed:
+            self.dataset = h5py.File(self.h5_file, "r")
+            self._is_closed = False
 
     def __len__(self):
         return self.n_seqs * self.n_augmented
 
     def close(self):
-        self.dataset.close()
+        if self.dataset is not None and not self._is_closed:
+            self.dataset.close()
+            self._is_closed = True
 
     def extract_tasks(self, ad=None):
+        self._open_file()
         tasks = np.array(self.dataset["tasks"]).astype(str)
         if ad is not None:
             assert np.all(tasks == ad.obs_names)
@@ -105,6 +116,7 @@ class HDF5Dataset(Dataset):
             self.tasks = pd.DataFrame(index=tasks)
 
     def extract_seq(self, idx):
+        self._open_file()
         seq = self.dataset["sequences"][idx]
         seq = indices_to_one_hot(seq)  # 4, L
         mask = self.dataset["masks"][[idx]]  # 1, L
@@ -113,6 +125,7 @@ class HDF5Dataset(Dataset):
         return torch.Tensor(seq)
 
     def extract_label(self, idx):
+        self._open_file()
         return torch.Tensor(self.dataset["labels"][idx])
 
     def __getitem__(self, idx):
@@ -144,6 +157,7 @@ class GeneDataset(Dataset):
         max_seq_shift: Maximum sequence shift.
         seed: Seed for the random number generator.
         augment_mode: Augmentation mode.
+        genome: Name of the genome
 
     Returns:
         Dataset: Dataset for gene expression prediction.
@@ -176,9 +190,11 @@ class GeneDataset(Dataset):
         max_seq_shift=0,
         seed=0,
         augment_mode="random",
+        genome="hg38",
     ):
         super().__init__()
 
+        self.genome = genome
         self.result = DecimaResult.load(metadata_anndata)
         self.genes = genes or list(self.result.genes)
         self.gene_mask_starts = self.result.gene_metadata.loc[self.genes, "gene_mask_start"].values
@@ -209,7 +225,7 @@ class GeneDataset(Dataset):
     def __getitem__(self, idx):
         seq_idx, augment_idx = _split_overall_idx(idx, (self.n_seqs, self.n_augmented))
 
-        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift)
+        seq, mask = self.result.prepare_one_hot(self.genes[seq_idx], padding=self.max_seq_shift, genome=self.genome)
         inputs = torch.vstack([seq, mask])
         inputs = self.augmenter(seq=inputs, idx=augment_idx)
 
@@ -594,10 +610,12 @@ class VariantDataset(Dataset):
         max_distance=float("inf"),
         model_name=None,
         reference_cache=True,
+        genome="hg38",
     ):
         super().__init__()
 
         self.reference_cache = reference_cache
+        self.genome = genome
         self.result = DecimaResult.load(metadata_anndata)
 
         self.variants = self._overlap_genes(
@@ -848,7 +866,7 @@ class VariantDataset(Dataset):
         return self.n_seqs * self.n_augmented * self.n_alleles
 
     def validate_allele_seq(self, gene, variant):
-        seq = self.result.gene_sequence(gene)
+        seq = self.result.gene_sequence(gene, genome=self.genome)
         pos = variant.rel_pos
         ref_match = seq[pos : pos + len(variant.ref)] == variant.ref_tx
         alt_match = seq[pos : pos + len(variant.alt)] == variant.alt_tx
@@ -882,6 +900,7 @@ class VariantDataset(Dataset):
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.ref, "alt": variant.alt}],
                 padding=self.max_seq_shift,
+                genome=self.genome,
             )
             allele = seq[:, rel_pos : rel_pos + len(variant.alt)]
             allele_tx = variant.alt_tx
@@ -896,6 +915,7 @@ class VariantDataset(Dataset):
                 variant.gene,
                 variants=[{"chrom": variant.chrom, "pos": variant.pos, "ref": variant.alt, "alt": variant.ref}],
                 padding=self.max_seq_shift,
+                genome=self.genome,
             )
             allele = seq[:, rel_pos : rel_pos + len(variant.ref)]
             allele_tx = variant.ref_tx

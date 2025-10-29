@@ -12,18 +12,16 @@ It includes subcommands for:
 - Extracting the seqlets from the modisco results. `modisco-seqlet-bed`
 
 Examples:
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --tasks "cell_type == 'classical monocyte'" --genes SPI1,CD68
 
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --tasks "cell_type == 'B cell'" --device 0 --genome hg38
 
-    >>> decima modisco -o output_prefix -t tasks -o off_tasks -m model -m metadata -m method -m transform -m batch_size -m genes -m top_n_markers -m disable_bigwig -m disable_correct_grad_bigwig -m device -m genome -m num_workers
-    ...
+    >>> decima modisco -o output_prefix --genes SPI1 --method saliency --batch-size 2
 """
 
 import click
 from typing import List, Optional, Union
+from decima.cli.callback import parse_model, parse_genes, parse_attributions
 from decima.interpret.modisco import (
     predict_save_modisco_attributions,
     modisco_patterns,
@@ -47,7 +45,7 @@ from decima.interpret.modisco import (
     default=None,
     help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
-@click.option("--model", type=str, default="0", help="Model to use for the prediction.")
+@click.option("--model", type=str, default=0, help="Model to use for the prediction.", callback=parse_model)
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
 @click.option(
     "--method",
@@ -64,7 +62,13 @@ from decima.interpret.modisco import (
     help="Transform to use for attribution analysis.",
 )
 @click.option("--batch-size", type=int, default=1, show_default=True, help="Batch size for the prediction.")
-@click.option("--genes", type=str, default=None, help="Genes to predict. If not provided, all genes will be predicted.")
+@click.option(
+    "--genes",
+    type=str,
+    default=None,
+    callback=parse_genes,
+    help="Genes to predict. If not provided, all genes will be predicted.",
+)
 @click.option(
     "--top-n-markers",
     type=int,
@@ -97,15 +101,6 @@ def cli_modisco_attributions(
     num_workers: int = 4,
     genome: str = "hg38",
 ):
-    if model in ["0", "1", "2", "3"]:  # replicate index
-        model = int(model)
-
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
-
-    if genes is not None:
-        genes = genes.split(",")
-
     predict_save_modisco_attributions(
         output_prefix=output_prefix,
         tasks=tasks,
@@ -131,7 +126,10 @@ def cli_modisco_attributions(
     "--attributions",
     type=str,
     required=True,
-    help="Path to the attributions HDF5 file. If multiple files are provided, they will be averaged.",
+    callback=parse_attributions,
+    help="Comma-separated list of paths to the attributions HDF5 files."
+    " If multiple files are provided, they will be averaged."
+    " All files must be h5 files generated with `decima modisco-attributions` command.",
 )
 @click.option(
     "--tasks",
@@ -147,7 +145,13 @@ def cli_modisco_attributions(
 )
 @click.option("--tss-distance", type=int, default=10_000, show_default=True, help="TSS distance for the prediction.")
 @click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
-@click.option("--genes", type=str, default=None, help="Genes to predict. If not provided, all genes will be predicted.")
+@click.option(
+    "--genes",
+    type=str,
+    default=None,
+    callback=parse_genes,
+    help="Genes to predict. If not provided, all genes will be predicted.",
+)
 @click.option(
     "--top-n-markers",
     type=int,
@@ -209,12 +213,6 @@ def cli_modisco_patterns(
     stranded: bool = False,
     pattern_type: str = "both",
 ):
-    if isinstance(attributions, str):
-        attributions = attributions.split(",")
-
-    if genes is not None:
-        genes = genes.split(",")
-
     modisco_patterns(
         output_prefix=output_prefix,
         attributions=attributions,
@@ -312,7 +310,14 @@ def cli_modisco_seqlet_bed(
     help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
 @click.option("--tss-distance", type=int, default=10_000, show_default=True, help="TSS distance for the prediction.")
-@click.option("--model", type=str, default="ensemble", show_default=True, help="Model to use for the prediction.")
+@click.option(
+    "--model",
+    type=str,
+    default="ensemble",
+    show_default=True,
+    help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to safetensor files. Default: `ensemble`.",
+    callback=parse_model,
+)
 @click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
 @click.option(
     "--method",
@@ -327,6 +332,7 @@ def cli_modisco_seqlet_bed(
     type=str,
     show_default=True,
     default=None,
+    callback=parse_genes,
     help="Genes to predict. If not provided, all genes will be predicted.",
 )
 @click.option(
@@ -431,15 +437,6 @@ def cli_modisco(
     # seqlet thresholds
     seqlet_motif_trim_threshold: float = 0.2,
 ):
-    if model in ["0", "1", "2", "3"]:
-        model = int(model)
-
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
-
-    if genes is not None:
-        genes = genes.split(",")
-
     modisco(
         output_prefix=output_prefix,
         tasks=tasks,

@@ -41,14 +41,18 @@ def _predict_variant_effect(
         tasks (str, optional): Tasks to predict. Defaults to None.
         model (int, optional): Model to use. Defaults to 0.
         metadata_anndata (str, optional): Path to anndata file. Defaults to None.
-        batch_size (int, optional): Batch size. Defaults to 8.
+        batch_size (int, optional): Batch size. Defaults to 1.
         num_workers (int, optional): Number of workers. Defaults to 16.
-        device (str, optional): Device to use. Defaults to "cpu".
+        device (str, optional): Device to use. Defaults to None.
         include_cols (list, optional): Columns to include in the output. Defaults to None.
         gene_col (str, optional): Column name for gene names. Defaults to None.
         distance_type (str, optional): Type of distance. Defaults to "tss".
         min_distance (float, optional): Minimum distance from the end of the gene. Defaults to 0 (inclusive).
         max_distance (float, optional): Maximum distance from the TSS. Defaults to inf (exclusive).
+        genome (str, optional): Genome name or path to the genome fasta file. Defaults to "hg38".
+        save_replicates (bool, optional): Save the replicates in the output. Defaults to False.
+        reference_cache (bool, optional): Whether to use reference cache. Defaults to True.
+        float_precision (str, optional): Floating-point precision. Defaults to "32".
 
     Returns:
         pd.DataFrame: DataFrame with variant effect predictions
@@ -70,6 +74,7 @@ def _predict_variant_effect(
             max_distance=max_distance,
             model_name=model.name,
             reference_cache=reference_cache,
+            genome=genome,
         )
     except ValueError as e:
         if str(e).startswith("NoOverlapError"):
@@ -115,7 +120,7 @@ def predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     output_pq: Optional[str] = None,
     tasks: Optional[Union[str, List[str]]] = None,
-    model: Union[int, str] = "ensemble",
+    model: Union[int, str, List[str]] = "ensemble",
     metadata_anndata: Optional[str] = None,
     chunksize: int = 10_000,
     batch_size: int = 1,
@@ -134,21 +139,24 @@ def predict_variant_effect(
     """Predict variant effect and save to parquet
 
     Args:
-        df_variant (pd.DataFrame): DataFrame with variant information
-        output_path (str): Path to save the parquet file
+        df_variant (pd.DataFrame or str): DataFrame with variant information or path to variant file
+        output_pq (str, optional): Path to save the parquet file. Defaults to None.
         tasks (str, optional): Tasks to predict. Defaults to None.
-        model (int, optional): Model to use. Defaults to 0.
+        model (int, optional): Model to use. Defaults to "ensemble".
         metadata_anndata (str, optional): Path to anndata file. Defaults to None.
         chunksize (int, optional): Number of variants to predict in each chunk. Defaults to 10_000.
-        batch_size (int, optional): Batch size. Defaults to 8.
+        batch_size (int, optional): Batch size. Defaults to 1.
         num_workers (int, optional): Number of workers. Defaults to 16.
-        device (str, optional): Device to use. Defaults to "cpu".
+        device (str, optional): Device to use. Defaults to None.
         include_cols (list, optional): Columns to include in the output. Defaults to None.
         gene_col (str, optional): Column name for gene names. Defaults to None.
         distance_type (str, optional): Type of distance. Defaults to "tss".
         min_distance (float, optional): Minimum distance from the end of the gene. Defaults to 0 (inclusive).
         max_distance (float, optional): Maximum distance from the TSS. Defaults to inf (exclusive).
-        genome (str, optional): Genome build. Defaults to "hg38".
+        genome (str, optional): Genome name or path to the genome fasta file. Defaults to "hg38".
+        save_replicates (bool, optional): Save the replicates in the output. Defaults to False.
+        reference_cache (bool, optional): Whether to use reference cache. Defaults to True.
+        float_precision (str, optional): Floating-point precision. Defaults to "32".
     """
     logger = logging.getLogger("decima")
     device = get_compute_device(device)

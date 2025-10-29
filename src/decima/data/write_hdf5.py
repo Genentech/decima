@@ -5,6 +5,14 @@ from grelu.sequence.utils import get_unique_length
 
 
 def write_hdf5(file, ad, pad=0, genome="hg38"):
+    """Write AnnData object to HDF5 file.
+
+    Args:
+        file: Path to the HDF5 file to write
+        ad: AnnData object containing the data
+        pad: Amount of padding to add. Defaults to 0
+        genome: Genome name or path to the genome fasta file. Defaults to "hg38"
+    """
     # Calculate seq_len
     seq_len = get_unique_length(ad.var)
 

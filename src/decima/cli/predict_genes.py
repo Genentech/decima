@@ -8,6 +8,7 @@ This module contains the CLI for predicting the gene expression of a given gene 
 
 import click
 from pathlib import Path
+from decima.cli.callback import parse_model, parse_genes, validate_save_replicates
 from decima.tools.inference import predict_gene_expression
 
 
@@ -17,14 +18,16 @@ from decima.tools.inference import predict_gene_expression
     "--genes",
     type=str,
     default=None,
-    help="List of genes to predict. Default: None (all genes). If provided, only these genes will be predicted.",
+    callback=parse_genes,
+    help="Comma-separated list of genes to predict. Default: None (all genes). If provided, only these genes will be predicted.",
 )
 @click.option(
     "-m",
     "--model",
     type=str,
     default="ensemble",
-    help="Path to the model checkpoint: `0`, `1`, `2`, `3`, `ensemble` or `path/to/model.ckpt`.",
+    callback=parse_model,
+    help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to checkpoint files",
 )
 @click.option(
     "--metadata",
@@ -45,7 +48,8 @@ from decima.tools.inference import predict_gene_expression
 @click.option(
     "--save-replicates",
     is_flag=True,
-    help="Save the replicates in the output parquet file. Default: False.",
+    callback=validate_save_replicates,
+    help="Save the replicates in the output h5ad file. Default: False. Only supported for ensemble models.",
 )
 @click.option(
     "--float-precision",
@@ -66,18 +70,6 @@ def cli_predict_genes(
     save_replicates,
     float_precision,
 ):
-    if model in ["0", "1", "2", "3"]:
-        model = int(model)
-
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
-
-    if genes is not None:
-        genes = genes.split(",")
-
-    if save_replicates and (model != "ensemble"):
-        raise ValueError("`--save-replicates` is only supported for ensemble model (`--model ensemble`).")
-
     ad = predict_gene_expression(
         genes=genes,
         model=model,

@@ -67,8 +67,7 @@ def predict_save_attributions(
     device: Optional[str] = None,
     genome: str = "hg38",
 ):
-    """
-    Generate and save attribution analysis results for a gene.
+    """Generate and save attribution analysis results for a gene.
 
     Args:
         output_prefix: Prefix for the output files where attribution results will be saved.
@@ -87,6 +86,9 @@ def predict_save_attributions(
         num_workers: Number of workers for attribution analysis default is 4. Increasing number of workers will speed up the process.
         device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
         genome: Genome to use for attribution analysis default is "hg38". Can be genome name or path to custom genome fasta file.
+
+    Returns:
+        Path to the attribution file.
 
     Examples:
         >>> predict_save_attributions(
@@ -117,6 +119,33 @@ def predict_save_attributions(
         ...     genome="hg38",
         ... )
     """
+    if (model == "ensemble") or isinstance(model, (list, tuple)):
+        if model == "ensemble":
+            models = [0, 1, 2, 3]
+        else:
+            models = model
+        return [
+            predict_save_attributions(
+                output_prefix=(str(output_prefix) + "_{model}").format(model=idx),
+                tasks=tasks,
+                off_tasks=off_tasks,
+                model=model,
+                metadata_anndata=metadata_anndata,
+                method=method,
+                transform=transform,
+                batch_size=batch_size,
+                genes=genes,
+                seqs=seqs,
+                top_n_markers=top_n_markers,
+                bigwig=bigwig,
+                correct_grad_bigwig=correct_grad_bigwig,
+                num_workers=num_workers,
+                device=device,
+                genome=genome,
+            )
+            for idx, model in enumerate(models)
+        ]
+
     output_prefix = Path(output_prefix)
     output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
@@ -155,7 +184,7 @@ def predict_save_attributions(
                 raise ValueError(f"Invalid type for seqs: {type(seqs)}. Must be a path to fasta file or pd.DataFrame.")
         else:
             dataset = GeneDataset(
-                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result
+                genes=_get_genes(result, genes, top_n_markers, tasks, off_tasks), metadata_anndata=result, genome=genome
             )
 
         genes_batch = list(chunked(dataset.genes, batch_size))
@@ -170,8 +199,9 @@ def predict_save_attributions(
             num_workers=num_workers,
         )
 
+        output_path = Path(output_prefix).with_suffix(".attributions.h5")
         with AttributionWriter(
-            path=Path(output_prefix).with_suffix(".attributions.h5"),
+            path=output_path,
             genes=dataset.genes,
             model_name=attributer.model.name,
             metadata_anndata=result,
@@ -199,6 +229,8 @@ def predict_save_attributions(
                     f.write(f">{i}\n{seq}\n")
             Faidx(fasta_path, build_index=True)
 
+        return output_path
+
 
 def recursive_seqlet_calling(
     output_prefix: str,
@@ -219,8 +251,7 @@ def recursive_seqlet_calling(
     custom_genome: bool = False,
     meme_motif_db: str = "hocomoco_v13",
 ):
-    """
-    Recursive seqlet calling for attribution analysis.
+    """Recursive seqlet calling for attribution analysis.
 
     Args:
         output_prefix: Prefix for the output files where seqlet calling results will be saved.
@@ -365,34 +396,22 @@ def predict_attributions_seqlet_calling(
     output_prefix = Path(output_prefix)
     output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
-    if model == "ensemble":
-        attrs_output_prefix = str(output_prefix) + "_{model}"
-        models = [0, 1, 2, 3]
-        attributions = [
-            Path(attrs_output_prefix.format(model=model)).with_suffix(".attributions.h5") for model in models
-        ]
-    else:
-        attrs_output_prefix = output_prefix
-        models = [model]
-        attributions = output_prefix.with_suffix(".attributions.h5").as_posix()
-
-    for model in models:
-        predict_save_attributions(
-            output_prefix=str(attrs_output_prefix).format(model=model),
-            genes=genes,
-            seqs=seqs,
-            tasks=tasks,
-            off_tasks=off_tasks,
-            model=model,
-            metadata_anndata=metadata_anndata,
-            method=method,
-            transform=transform,
-            num_workers=num_workers,
-            batch_size=batch_size,
-            top_n_markers=top_n_markers,
-            device=device,
-            genome=genome,
-        )
+    attributions_paths = predict_save_attributions(
+        output_prefix=output_prefix,
+        genes=genes,
+        seqs=seqs,
+        tasks=tasks,
+        off_tasks=off_tasks,
+        model=model,
+        metadata_anndata=metadata_anndata,
+        method=method,
+        transform=transform,
+        num_workers=num_workers,
+        batch_size=batch_size,
+        top_n_markers=top_n_markers,
+        device=device,
+        genome=genome,
+    )
 
     custom_genome = False
     if seqs is not None:
@@ -401,7 +420,7 @@ def predict_attributions_seqlet_calling(
 
     recursive_seqlet_calling(
         output_prefix=output_prefix,
-        attributions=attributions,
+        attributions=attributions_paths,
         metadata_anndata=metadata_anndata,
         genes=genes,
         tasks=tasks,

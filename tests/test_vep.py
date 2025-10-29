@@ -6,6 +6,7 @@ import pyarrow.parquet as pq
 from scipy.stats import pearsonr
 
 from decima.core.result import DecimaResult
+from decima.hub import load_decima_model
 from decima.data.dataset import VariantDataset
 from decima.model.metrics import WarningType
 from decima.vep import _predict_variant_effect, predict_variant_effect
@@ -328,11 +329,41 @@ def test_predict_variant_effect_vcf_ensemble_replicates(tmp_path):
     assert output_file.exists()
 
     df_saved = pd.read_parquet(output_file)
-    assert df_saved.shape == (12, 44294)
+    assert df_saved.shape == (12, 14 + 8856 * 5)
 
     cells = list(df_saved.columns[14:8870])
     average_preds = np.mean([
         df_saved[[f"{cell}_v1_rep{i}" for cell in cells]].values
         for i in range(4)
+    ], axis=0)
+    np.testing.assert_allclose(df_saved[cells].values, average_preds, rtol=1e-5)
+
+
+@pytest.mark.long_running
+def test_predict_variant_effect_vcf_ensemble_replicates_model_list(tmp_path):
+    output_file = tmp_path / "test_predictions.parquet"
+
+    models = [
+        load_decima_model(0, device),
+        load_decima_model(1, device)
+    ]
+
+    predict_variant_effect(
+        "tests/data/test.vcf",
+        output_pq=str(output_file),
+        model=models,
+        device=device,
+        max_distance=20000,
+        save_replicates=True,
+    )
+    assert output_file.exists()
+
+    df_saved = pd.read_parquet(output_file)
+    assert df_saved.shape == (12, 14 + 8856 * 3)
+
+    cells = list(df_saved.columns[14:8870])
+    average_preds = np.mean([
+        df_saved[[f"{cell}_v1_rep{i}" for cell in cells]].values
+        for i in range(2)
     ], axis=0)
     np.testing.assert_allclose(df_saved[cells].values, average_preds, rtol=1e-5)
