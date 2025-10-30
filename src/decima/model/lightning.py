@@ -19,6 +19,7 @@ from torch.utils.data.dataloader import default_collate
 from torchmetrics import MetricCollection
 import safetensors
 
+from decima.utils import get_compute_device
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
 from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
@@ -400,7 +401,7 @@ class LightningModel(pl.LightningModule):
     def predict_on_dataset(
         self,
         dataset: Callable,
-        devices: Optional[int] = None,
+        device: Optional[int] = None,
         num_workers: int = 1,
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
@@ -413,7 +414,7 @@ class LightningModel(pl.LightningModule):
         Args:
             dataset: Dataset object that yields one-hot encoded sequences
 
-            devices: Number of devices to use,
+            device: Device to use,
                 e.g. machine has 4 gpu's but only want to use 2 for predictions
 
             num_workers: Number of workers for data loader
@@ -425,16 +426,7 @@ class LightningModel(pl.LightningModule):
         """
         torch.set_float32_matmul_precision("medium")
 
-        accelerator = "auto"
-        if devices is None:
-            devices = "auto"  # use all devices
-            accelerator = "gpu" if torch.cuda.is_available() else "auto"
-
-        if accelerator == "auto":
-            trainer = pl.Trainer(accelerator=accelerator, logger=False, precision=float_precision)
-        else:
-            trainer = pl.Trainer(accelerator=accelerator, devices=devices, logger=False, precision=float_precision)
-
+        trainer = pl.Trainer(devices=[get_compute_device(device)], logger=False, precision=float_precision)
         # Make dataloader
         dataloader = self.make_predict_loader(
             dataset,
@@ -549,7 +541,7 @@ class EnsembleLightningModel(LightningModel):
     def predict_on_dataset(
         self,
         dataset: Callable,
-        devices: Optional[int] = None,
+        device: Optional[int] = None,
         num_workers: int = 1,
         batch_size: int = 6,
         augment_aggfunc: Union[str, Callable] = "mean",
@@ -558,7 +550,7 @@ class EnsembleLightningModel(LightningModel):
     ):
         preds = super().predict_on_dataset(
             dataset=dataset,
-            devices=devices,
+            device=device,
             num_workers=num_workers,
             batch_size=batch_size,
             augment_aggfunc=augment_aggfunc,
