@@ -45,7 +45,7 @@ def predict_gene_expression(
 
     ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift)
     preds = model.predict_on_dataset(
-        ds, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
+        ds, device=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
     )
 
     X = None
