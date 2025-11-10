@@ -1,13 +1,14 @@
 import click
 from pathlib import Path
+from decima.constants import AVAILABLE_ENSEMBLES
 
 
 def parse_model(ctx, param, value):
     if value is None:
         return None
     elif isinstance(value, str):
-        if value == "ensemble":
-            return "ensemble"
+        if value in AVAILABLE_ENSEMBLES:
+            return value
         elif value in ["0", "1", "2", "3"]:
             return int(value)
 
@@ -32,7 +33,7 @@ def parse_genes(ctx, param, value):
 
 def validate_save_replicates(ctx, param, value):
     if value:
-        if ctx.params["model"] == "ensemble":
+        if ctx.params["model"] in AVAILABLE_ENSEMBLES:
             return value
         elif isinstance(ctx.params["model"], list) and (len(ctx.params["model"]) > 1):
             return value

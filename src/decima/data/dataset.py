@@ -22,7 +22,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.format import strings_to_one_hot
 from grelu.sequence.utils import reverse_complement
 
-from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES
+from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES, AVAILABLE_ENSEMBLES
 from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
 from decima.utils.io import read_fasta_gene_mask
@@ -647,8 +647,8 @@ class VariantDataset(Dataset):
 
         if (model_name is None) or (not reference_cache):
             self.model_names = list()  # no reference caching
-        elif model_name == "ensemble":
-            self.model_names = ENSEMBLE_MODELS_NAMES
+        elif model_name in AVAILABLE_ENSEMBLES:
+            self.model_names = ENSEMBLE_MODELS_NAMES[model_name]
         else:
             self.model_names = [model_name]
 

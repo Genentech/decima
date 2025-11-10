@@ -19,6 +19,7 @@ from torch.utils.data.dataloader import default_collate
 from torchmetrics import MetricCollection
 import safetensors
 
+from decima.constants import DEFAULT_ENSEMBLE
 from .decima_model import DecimaModel
 from .loss import TaskWisePoissonMultinomialLoss
 from .metrics import DiseaseLfcMSE, WarningCounter, GenePearsonCorrCoef
@@ -523,7 +524,7 @@ class LightningModel(pl.LightningModule):
 
 
 class EnsembleLightningModel(LightningModel):
-    def __init__(self, models: List[LightningModel], name="ensemble"):
+    def __init__(self, models: List[LightningModel], name=DEFAULT_ENSEMBLE):
         super().__init__(
             name=name,
             model_params=models[0].model_params,
@@ -532,7 +533,7 @@ class EnsembleLightningModel(LightningModel):
         )
         self.models = nn.ModuleList(models)
         self.reset_transform()
-        self.name = "ensemble"
+        self.name = DEFAULT_ENSEMBLE
 
     def forward(self, x: Tensor) -> Tensor:
         return torch.concat([model(x) for model in self.models], dim=0)

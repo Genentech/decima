@@ -7,7 +7,7 @@ from typing import Optional, Union, List
 import pandas as pd
 from grelu.transforms.prediction_transforms import Aggregate
 
-from decima.constants import SUPPORTED_GENOMES
+from decima.constants import SUPPORTED_GENOMES, DEFAULT_ENSEMBLE
 from decima.model.metrics import WarningType
 from decima.utils import get_compute_device
 from decima.utils.dataframe import chunk_df, ChunkDataFrameWriter
@@ -19,7 +19,7 @@ from decima.hub import load_decima_model
 def _predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     tasks: Optional[Union[str, List[str]]] = None,
-    model: Union[int, str] = "ensemble",
+    model: Union[int, str] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     batch_size: int = 1,
     num_workers: int = 16,
@@ -120,7 +120,7 @@ def predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     output_pq: Optional[str] = None,
     tasks: Optional[Union[str, List[str]]] = None,
-    model: Union[int, str, List[str]] = "ensemble",
+    model: Union[int, str, List[str]] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     chunksize: int = 10_000,
     batch_size: int = 1,
@@ -142,7 +142,7 @@ def predict_variant_effect(
         df_variant (pd.DataFrame or str): DataFrame with variant information or path to variant file
         output_pq (str, optional): Path to save the parquet file. Defaults to None.
         tasks (str, optional): Tasks to predict. Defaults to None.
-        model (int, optional): Model to use. Defaults to "ensemble".
+        model (int, optional): Model to use. Defaults to DEFAULT_ENSEMBLE.
         metadata_anndata (str, optional): Path to anndata file. Defaults to None.
         chunksize (int, optional): Number of variants to predict in each chunk. Defaults to 10_000.
         batch_size (int, optional): Batch size. Defaults to 1.

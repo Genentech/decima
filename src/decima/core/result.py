@@ -7,7 +7,7 @@ from scipy import stats
 
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, AVAILABLE_ENSEMBLES
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.tools.evaluate import marker_zscores
@@ -172,7 +172,7 @@ class DecimaResult:
         Returns:
             pd.DataFrame: Predicted expression matrix (cells x genes)
         """
-        model_name = "preds" if (model_name is None) or (model_name == "ensemble") else model_name
+        model_name = "preds" if (model_name is None) or (model_name in AVAILABLE_ENSEMBLES) else model_name
         if genes is None:
             return pd.DataFrame(self.anndata.layers[model_name], index=self.cells, columns=self.genes)
         else:

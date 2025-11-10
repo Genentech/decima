@@ -10,6 +10,7 @@ It includes subcommands for:
 """
 
 import click
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.cli.callback import parse_model
 from decima.hub.download import (
     cache_decima_data,
@@ -27,7 +28,7 @@ def cli_cache():
 
 @click.command()
 @click.option(
-    "--model", type=str, default="ensemble", help="Model to download. Default: ensemble.", callback=parse_model
+    "--model", type=str, default=DEFAULT_ENSEMBLE, help="Model to download. Default: ensemble.", callback=parse_model
 )
 @click.option(
     "--download-dir",

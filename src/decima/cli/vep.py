@@ -21,7 +21,7 @@ Examples:
 """
 
 import click
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE
 from decima.cli.callback import parse_model, validate_save_replicates
 from decima.utils.dataframe import ensemble_predictions
 from decima.vep import predict_variant_effect
@@ -46,7 +46,7 @@ from decima.vep import predict_variant_effect
 @click.option(
     "--model",
     type=str,
-    default="ensemble",
+    default=DEFAULT_ENSEMBLE,
     callback=parse_model,
     help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to safetensor files to perform variant effect prediction. Default: `ensemble`.",
 )

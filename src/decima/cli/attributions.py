@@ -17,6 +17,7 @@ Examples:
 """
 
 import click
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.cli.callback import parse_genes, parse_model, parse_attributions
 from decima.interpret.attributions import (
     plot_attributions,
@@ -196,7 +197,7 @@ def cli_attributions_predict(
     "--model",
     type=str,
     required=False,
-    default="ensemble",
+    default=DEFAULT_ENSEMBLE,
     callback=parse_model,
     help="Model to use for attribution analysis either replicate number or path to the model.",
     show_default=True,

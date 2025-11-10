@@ -1,6 +1,7 @@
 import anndata
 import logging
 import numpy as np
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.data.dataset import GeneDataset
 from decima.hub import load_decima_model
 from decima.utils import get_compute_device
@@ -8,7 +9,7 @@ from decima.utils import get_compute_device
 
 def predict_gene_expression(
     genes=None,
-    model="ensemble",
+    model=DEFAULT_ENSEMBLE,
     metadata_anndata=None,
     device=None,
     batch_size=1,

@@ -3,6 +3,8 @@ import numpy as np
 import torch
 from grelu.sequence.format import BASE_TO_INDEX_HASH, indices_to_one_hot
 
+from decima.constants import DECIMA_CONTEXT_SIZE
+
 
 def count_genes(h5_file, key=None):
     with h5py.File(h5_file, "r") as f:
@@ -42,7 +44,7 @@ def _extract_center(x, seq_len, shift=0):
     return x[..., start : start + seq_len]
 
 
-def extract_gene_data(h5_file, gene, seq_len=524288, merge=True):
+def extract_gene_data(h5_file, gene, seq_len=DECIMA_CONTEXT_SIZE, merge=True):
     gene_idx = get_gene_idx(h5_file, key=None, gene=gene)
 
     with h5py.File(h5_file, "r") as f:

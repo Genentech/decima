@@ -6,6 +6,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import anndata
 from grelu.resources import get_artifact, DEFAULT_WANDB_HOST
+from decima.constants import DEFAULT_ENSEMBLE, AVAILABLE_ENSEMBLES
 from decima.model.lightning import LightningModel, EnsembleLightningModel
 
 
@@ -37,7 +38,7 @@ def load_decima_model(model: Union[str, int, List[str]] = 0, device: Optional[st
     if isinstance(model, LightningModel):
         return model
 
-    elif model == "ensemble":
+    elif model in AVAILABLE_ENSEMBLES:
         return EnsembleLightningModel([load_decima_model(i, device) for i in range(4)])
 
     elif isinstance(model, List):

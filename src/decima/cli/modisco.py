@@ -21,6 +21,7 @@ Examples:
 
 import click
 from typing import List, Optional, Union
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.cli.callback import parse_model, parse_genes, parse_attributions
 from decima.interpret.modisco import (
     predict_save_modisco_attributions,
@@ -313,7 +314,7 @@ def cli_modisco_seqlet_bed(
 @click.option(
     "--model",
     type=str,
-    default="ensemble",
+    default=DEFAULT_ENSEMBLE,
     show_default=True,
     help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to safetensor files. Default: `ensemble`.",
     callback=parse_model,
@@ -406,7 +407,7 @@ def cli_modisco(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     tss_distance: int = 10_000,
-    model: Optional[Union[str, int]] = "ensemble",
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata: Optional[str] = None,
     method: str = "saliency",
     batch_size: int = 1,

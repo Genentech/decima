@@ -40,6 +40,7 @@ from more_itertools import chunked
 from torch.utils.data import DataLoader
 from pyfaidx import Faidx
 
+from decima.constants import DEFAULT_ENSEMBLE, AVAILABLE_ENSEMBLES
 from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
 from decima.data.dataset import GeneDataset, SeqDataset
@@ -119,8 +120,8 @@ def predict_save_attributions(
         ...     genome="hg38",
         ... )
     """
-    if (model == "ensemble") or isinstance(model, (list, tuple)):
-        if model == "ensemble":
+    if (model in AVAILABLE_ENSEMBLES) or isinstance(model, (list, tuple)):
+        if model in AVAILABLE_ENSEMBLES:
             models = [0, 1, 2, 3]
         else:
             models = model
@@ -338,7 +339,7 @@ def predict_attributions_seqlet_calling(
     seqs: Optional[Union[pd.DataFrame, np.ndarray, torch.Tensor]] = None,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = "ensemble",
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     transform: str = "specificity",

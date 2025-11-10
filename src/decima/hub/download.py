@@ -3,6 +3,7 @@ from typing import Union
 import logging
 import genomepy
 from grelu.resources import get_artifact
+from decima.constants import DEFAULT_ENSEMBLE, AVAILABLE_ENSEMBLES, ENSEMBLE_MODELS_NAMES
 from decima.hub import login_wandb, load_decima_model, load_decima_metadata
 
 
@@ -36,7 +37,7 @@ def cache_decima_data():
     cache_decima_metadata()
 
 
-def download_decima_weights(model_name: Union[str, int], download_dir: str):
+def download_decima_weights(model_name: Union[str, int], download_dir: str, ensemble: str = DEFAULT_ENSEMBLE):
     """Download pre-trained Decima model weights from wandb.
 
     Args:
@@ -46,11 +47,11 @@ def download_decima_weights(model_name: Union[str, int], download_dir: str):
     Returns:
         Path to the downloaded model weights.
     """
-    if "ensemble" == model_name:
+    if DEFAULT_ENSEMBLE in AVAILABLE_ENSEMBLES:
         return [download_decima_weights(model, download_dir) for model in range(4)]
 
     if model_name in {0, 1, 2, 3}:
-        model_name = f"rep{model_name}"
+        model_name = ENSEMBLE_MODELS_NAMES[ensemble][model_name]
 
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
@@ -92,6 +93,6 @@ def download_decima(download_dir: str):
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima model weights and metadata to {download_dir}:")
 
-    download_decima_weights("ensemble", download_dir)
+    download_decima_weights(DEFAULT_ENSEMBLE, download_dir)
     download_decima_metadata(download_dir)
     return download_dir
