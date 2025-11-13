@@ -18,24 +18,18 @@ Examples:
 """
 
 import click
-from decima.constants import DEFAULT_ENSEMBLE
-from decima.cli.callback import parse_model
 from decima.core.result import DecimaResult
 
 
 @click.command()
 @click.argument("query", default="")
 @click.option(
-    "--metadata-anndata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file."
+    "--metadata-anndata",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to the metadata anndata file or name of the model.",
 )
-@click.option(
-    "--model",
-    type=str,
-    default=DEFAULT_ENSEMBLE,
-    help=f"Model to use. Default: {DEFAULT_ENSEMBLE}.",
-    callback=parse_model,
-)
-def cli_query_cell(query="", metadata_anndata=None, model=DEFAULT_ENSEMBLE):
+def cli_query_cell(query="", metadata_anndata=None):
     """
     Query a cell using query string
 
@@ -51,7 +45,7 @@ def cli_query_cell(query="", metadata_anndata=None, model=DEFAULT_ENSEMBLE):
         ...
 
     """
-    result = DecimaResult.load(metadata_anndata, model)
+    result = DecimaResult.load(metadata_anndata)
     df = result.cell_metadata
 
     if query != "":

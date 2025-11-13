@@ -4,6 +4,9 @@ from decima.constants import MODEL_METADATA, ENSEMBLE_MODELS
 
 
 def parse_model(ctx, param, value):
+    if isinstance(value, int):
+        value = str(value)
+
     if value is None:
         return None
     elif isinstance(value, str):

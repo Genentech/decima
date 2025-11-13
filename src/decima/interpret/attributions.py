@@ -156,7 +156,7 @@ def predict_save_attributions(
     logger.info(f"Using device: {device}")
 
     logger.info(f"Loading model {model} and metadata to compute attributions...")
-    result = DecimaResult.load(metadata_anndata, model)
+    result = DecimaResult.load(metadata_anndata)
 
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
 

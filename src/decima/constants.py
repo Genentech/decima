@@ -19,10 +19,10 @@ SUPPORTED_GENOMES = {"hg38"}
 # - model_path [optional] to the local model path
 # - metadata_path [optional] to the local metadata path
 MODEL_METADATA = {
-    "v1_rep0": {"name": "rep0", "num_cells": 8856, "metadata": "metadata"},
-    "v1_rep1": {"name": "rep1", "num_cells": 8856, "metadata": "metadata"},
-    "v1_rep2": {"name": "rep2", "num_cells": 8856, "metadata": "metadata"},
-    "v1_rep3": {"name": "rep3", "num_cells": 8856, "metadata": "metadata"},
+    "v1_rep0": {"name": "rep0", "num_tasks": 8856, "metadata": "metadata"},
+    "v1_rep1": {"name": "rep1", "num_tasks": 8856, "metadata": "metadata"},
+    "v1_rep2": {"name": "rep2", "num_tasks": 8856, "metadata": "metadata"},
+    "v1_rep3": {"name": "rep3", "num_tasks": 8856, "metadata": "metadata"},
     "ensemble": ["v1_rep0", "v1_rep1", "v1_rep2", "v1_rep3"],
 }
 MODEL_METADATA["rep0"] = MODEL_METADATA["v1_rep0"]
@@ -33,6 +33,10 @@ MODEL_METADATA[0] = MODEL_METADATA["v1_rep0"]
 MODEL_METADATA[1] = MODEL_METADATA["v1_rep1"]
 MODEL_METADATA[2] = MODEL_METADATA["v1_rep2"]
 MODEL_METADATA[3] = MODEL_METADATA["v1_rep3"]
+MODEL_METADATA["0"] = MODEL_METADATA["v1_rep0"]
+MODEL_METADATA["1"] = MODEL_METADATA["v1_rep1"]
+MODEL_METADATA["2"] = MODEL_METADATA["v1_rep2"]
+MODEL_METADATA["3"] = MODEL_METADATA["v1_rep3"]
 
 # default version
 DEFAULT_ENSEMBLE = "ensemble"

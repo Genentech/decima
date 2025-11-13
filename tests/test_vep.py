@@ -96,7 +96,7 @@ def test_VariantDataset(df_variant):
     assert dataset[0]['seq'].shape == (5, DECIMA_CONTEXT_SIZE)
 
     metadata = MODEL_METADATA[MODEL_METADATA[DEFAULT_ENSEMBLE][0]]
-    assert dataset[0]['pred_expr']['v1_rep0'].shape == (metadata['num_cells'],)
+    assert dataset[0]['pred_expr']['v1_rep0'].shape == (metadata['num_tasks'],)
     assert not dataset[0]['pred_expr']['v1_rep0'].isnan().any()
     assert dataset[1]['pred_expr']['v1_rep0'].isnan().all()
     assert not dataset[2]['pred_expr']['v1_rep0'].isnan().any()
@@ -148,19 +148,19 @@ def test_VariantDataset_dataloader(df_variant):
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_tasks'])
 
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, DECIMA_CONTEXT_SIZE)
     assert len(batch["warning"]) > 0
     assert WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME in batch["warning"]
-    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_cells'])
-    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_tasks'])
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_tasks'])
 
 @pytest.mark.long_running
 def test_VariantDataset_dataloader_vcf():
@@ -174,26 +174,26 @@ def test_VariantDataset_dataloader_vcf():
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_tasks'])
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_tasks'])
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert len(batch["warning"]) > 0
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_tasks'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_tasks'])
 
 
 @pytest.mark.long_running
