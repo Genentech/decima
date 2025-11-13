@@ -524,7 +524,7 @@ class LightningModel(pl.LightningModule):
 
 
 class EnsembleLightningModel(LightningModel):
-    def __init__(self, models: List[LightningModel], name=DEFAULT_ENSEMBLE):
+    def __init__(self, models: List[LightningModel], name: str = DEFAULT_ENSEMBLE):
         super().__init__(
             name=name,
             model_params=models[0].model_params,

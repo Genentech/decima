@@ -22,7 +22,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.format import strings_to_one_hot
 from grelu.sequence.utils import reverse_complement
 
-from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS_NAMES, AVAILABLE_ENSEMBLES
+from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS, MODEL_METADATA, DEFAULT_ENSEMBLE
 from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
 from decima.utils.io import read_fasta_gene_mask
@@ -186,7 +186,7 @@ class GeneDataset(Dataset):
     def __init__(
         self,
         genes=None,
-        metadata_anndata=None,
+        metadata_anndata=DEFAULT_ENSEMBLE,
         max_seq_shift=0,
         seed=0,
         augment_mode="random",
@@ -599,7 +599,7 @@ class VariantDataset(Dataset):
     def __init__(
         self,
         variants,
-        metadata_anndata=None,
+        metadata_anndata=DEFAULT_ENSEMBLE,
         max_seq_shift=0,
         seed=0,
         include_cols=None,
@@ -647,8 +647,8 @@ class VariantDataset(Dataset):
 
         if (model_name is None) or (not reference_cache):
             self.model_names = list()  # no reference caching
-        elif model_name in AVAILABLE_ENSEMBLES:
-            self.model_names = ENSEMBLE_MODELS_NAMES[model_name]
+        elif model_name in ENSEMBLE_MODELS:
+            self.model_names = MODEL_METADATA[model_name]
         else:
             self.model_names = [model_name]
 

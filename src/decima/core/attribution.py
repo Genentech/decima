@@ -20,7 +20,7 @@ from grelu.interpret.motifs import scan_sequences
 from grelu.sequence.format import convert_input_type, strings_to_one_hot
 from grelu.visualize import plot_attributions
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE, MODEL_METADATA
 from decima.core.result import DecimaResult
 from decima.interpret.attributer import DecimaAttributer
 from decima.utils.sequence import one_hot_to_seq
@@ -188,7 +188,7 @@ class Attribution:
         inputs: Union[str, torch.Tensor, np.ndarray],
         tasks: Optional[list] = None,
         off_tasks: Optional[list] = None,
-        model: Optional[Union[str, int]] = 0,
+        model: Optional[Union[str, int]] = MODEL_METADATA[DEFAULT_ENSEMBLE][0],
         transform: str = "specificity",
         method: str = "inputxgradient",
         device: Optional[str] = "cpu",
@@ -763,7 +763,7 @@ class AttributionResult:
         )
 
     def _get_metadata(
-        self, genes: List[str], metadata_anndata: Optional[DecimaResult] = None, custom_genome: bool = False
+        self, genes: List[str], metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE, custom_genome: bool = False
     ):
         if custom_genome:
             chroms = genes
@@ -791,7 +791,7 @@ class AttributionResult:
     def load_attribution(
         self,
         gene: str,
-        metadata_anndata: Optional[DecimaResult] = None,
+        metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,
@@ -871,7 +871,7 @@ class AttributionResult:
     def recursive_seqlet_calling(
         self,
         genes: Optional[List[str]] = None,
-        metadata_anndata: Optional[DecimaResult] = None,
+        metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,

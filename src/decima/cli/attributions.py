@@ -48,7 +48,7 @@ from decima.interpret.attributions import (
     "--model",
     type=str,
     required=False,
-    default=0,
+    default=DEFAULT_ENSEMBLE,
     callback=parse_model,
     help="Model to use for attribution analysis either replicate number or path to the model.",
     show_default=True,

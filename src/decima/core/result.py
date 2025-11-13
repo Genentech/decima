@@ -7,7 +7,7 @@ from scipy import stats
 
 from grelu.sequence.format import intervals_to_strings, strings_to_one_hot
 
-from decima.constants import DECIMA_CONTEXT_SIZE, AVAILABLE_ENSEMBLES
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE, MODEL_METADATA
 from decima.hub import load_decima_metadata, load_decima_model
 from decima.core.metadata import GeneMetadata, CellMetadata
 from decima.tools.evaluate import marker_zscores
@@ -59,11 +59,12 @@ class DecimaResult:
         self._model = None
 
     @classmethod
-    def load(cls, anndata_path: Optional[Union[str, anndata.AnnData]] = None):
+    def load(cls, anndata_name_or_path: Optional[Union[str, anndata.AnnData]] = None):
         """Load a DecimaResult object from an anndata file or a path to an anndata file.
 
         Args:
-            anndata_path: Path to anndata file or anndata object
+            anndata_name_or_path: Name of the model or path to anndata file or anndata object
+            model: Model name or path to model checkpoint. If not provided, the default model will be loaded.
 
         Returns:
             DecimaResult object
@@ -74,16 +75,16 @@ class DecimaResult:
             ...     "path/to/anndata.h5ad"
             ... )  # Load custom anndata object from file
         """
-        if anndata_path is None:
-            return cls(load_decima_metadata())
-        elif isinstance(anndata_path, str):
-            return cls(anndata.read_h5ad(anndata_path))
-        elif isinstance(anndata_path, anndata.AnnData):
-            return cls(anndata_path)
-        elif isinstance(anndata_path, DecimaResult):
-            return anndata_path
+        if (anndata_name_or_path is None) or (anndata_name_or_path in MODEL_METADATA):
+            return cls(load_decima_metadata(name_or_path=anndata_name_or_path))
+        elif isinstance(anndata_name_or_path, str):
+            return cls(anndata.read_h5ad(anndata_name_or_path))
+        elif isinstance(anndata_name_or_path, anndata.AnnData):
+            return cls(anndata_name_or_path)
+        elif isinstance(anndata_name_or_path, DecimaResult):
+            return anndata_name_or_path
         else:
-            raise ValueError(f"Invalid anndata path: {anndata_path}")
+            raise ValueError(f"Invalid anndata path: {anndata_name_or_path}")
 
     @property
     def model(self):
@@ -92,7 +93,7 @@ class DecimaResult:
             self.load_model()
         return self._model
 
-    def load_model(self, model: Optional[Union[str, int]] = 0, device: str = "cpu"):
+    def load_model(self, model: Optional[Union[str, int]] = MODEL_METADATA[DEFAULT_ENSEMBLE][0], device: str = "cpu"):
         """Load the trained model from a checkpoint path.
 
         Args:
@@ -172,7 +173,7 @@ class DecimaResult:
         Returns:
             pd.DataFrame: Predicted expression matrix (cells x genes)
         """
-        model_name = "preds" if (model_name is None) or (model_name in AVAILABLE_ENSEMBLES) else model_name
+        model_name = "preds" if (model_name is None) or (model_name in MODEL_METADATA) else model_name
         if genes is None:
             return pd.DataFrame(self.anndata.layers[model_name], index=self.cells, columns=self.genes)
         else:

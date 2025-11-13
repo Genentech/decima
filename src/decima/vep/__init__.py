@@ -19,7 +19,7 @@ from decima.hub import load_decima_model
 def _predict_variant_effect(
     df_variant: Union[pd.DataFrame, str],
     tasks: Optional[Union[str, List[str]]] = None,
-    model: Union[int, str] = DEFAULT_ENSEMBLE,
+    model: Union[str, int] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     batch_size: int = 1,
     num_workers: int = 16,

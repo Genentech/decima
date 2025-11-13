@@ -26,7 +26,7 @@ from tqdm import tqdm
 from grelu.resources import get_meme_file_path
 from grelu.interpret.motifs import trim_pwm
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE
 from decima.core.result import DecimaResult
 from decima.utils import _get_on_off_tasks, _get_genes
 from decima.utils.motifs import motif_start_end
@@ -38,8 +38,8 @@ def predict_save_modisco_attributions(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[int] = 0,
-    metadata_anndata: Optional[str] = None,
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     method: str = "saliency",
     transform: str = "specificity",
     batch_size: int = 1,
@@ -104,7 +104,7 @@ def modisco_patterns(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     tss_distance: int = 10_000,
-    metadata_anndata: Optional[str] = None,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,
@@ -156,7 +156,7 @@ def modisco_patterns(
         tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
         off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
         tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.
-        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used from the attribution files.
+        metadata_anndata: Name of the model or path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used.
         genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
         top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
         correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.
@@ -206,7 +206,7 @@ def modisco_patterns(
         ... )
     """
     logger = logging.getLogger("decima")
-    logger.info("Loading metadata")
+    logger.info(f"Loading metadata for model {metadata_anndata}...")
     result = DecimaResult.load(metadata_anndata)
 
     if isinstance(attributions, (str, Path)):
@@ -328,7 +328,7 @@ def modisco_reports(
 def modisco_seqlet_bed(
     output_prefix: str,
     modisco_h5: str,
-    metadata_anndata: str = None,
+    metadata_anndata: str = DEFAULT_ENSEMBLE,
     trim_threshold: float = 0.2,
 ):
     """Extract seqlet locations from MoDISco results and save as BED format file.
@@ -420,9 +420,9 @@ def modisco(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = 0,
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     tss_distance: int = 1000,
-    metadata_anndata: Optional[str] = None,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,

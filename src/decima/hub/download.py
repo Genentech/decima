@@ -3,7 +3,7 @@ from typing import Union
 import logging
 import genomepy
 from grelu.resources import get_artifact
-from decima.constants import DEFAULT_ENSEMBLE, AVAILABLE_ENSEMBLES, ENSEMBLE_MODELS_NAMES
+from decima.constants import DEFAULT_ENSEMBLE, ENSEMBLE_MODELS, MODEL_METADATA
 from decima.hub import login_wandb, load_decima_model, load_decima_metadata
 
 
@@ -37,7 +37,7 @@ def cache_decima_data():
     cache_decima_metadata()
 
 
-def download_decima_weights(model_name: Union[str, int], download_dir: str, ensemble: str = DEFAULT_ENSEMBLE):
+def download_decima_weights(model: Union[str, int] = DEFAULT_ENSEMBLE, download_dir: str = "."):
     """Download pre-trained Decima model weights from wandb.
 
     Args:
@@ -47,40 +47,44 @@ def download_decima_weights(model_name: Union[str, int], download_dir: str, ense
     Returns:
         Path to the downloaded model weights.
     """
-    if DEFAULT_ENSEMBLE in AVAILABLE_ENSEMBLES:
-        return [download_decima_weights(model, download_dir) for model in range(4)]
+    if model in ENSEMBLE_MODELS:
+        return [download_decima_weights(model, download_dir) for model in MODEL_METADATA[model]]
 
-    if model_name in {0, 1, 2, 3}:
-        model_name = ENSEMBLE_MODELS_NAMES[ensemble][model_name]
-
+    model_name = MODEL_METADATA[model]["name"]
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Downloading Decima model weights for {model_name} to {download_dir / f'{model_name}.safetensors'}")
+    logger.info(f"Downloading Decima model weights for {model} to {download_dir / f'{model_name}.safetensors'}")
 
     art = get_artifact(model_name, project="decima")
     art.download(str(download_dir))
     return download_dir / f"{model_name}.safetensors"
 
 
-def download_decima_metadata(download_dir: str):
+def download_decima_metadata(metadata: str = DEFAULT_ENSEMBLE, download_dir: str = "."):
     """Download pre-trained Decima model data from wandb.
 
     Args:
         download_dir: Directory to download the metadata.
+        metadata: Name of the model to download metadata for using wandb.
 
     Returns:
         Path to the downloaded metadata.
     """
-    art = get_artifact("metadata", project="decima")
+    metadata = metadata or DEFAULT_ENSEMBLE
+    if metadata in ENSEMBLE_MODELS:
+        metadata = MODEL_METADATA[metadata][0]
+
+    metadata_name = MODEL_METADATA[metadata]["metadata"]
+    art = get_artifact(metadata_name, project="decima")
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Downloading Decima metadata to {download_dir / 'metadata.h5ad'}.")
+    logger.info(f"Downloading Decima metadata to {download_dir / f'{metadata_name}.h5ad'}.")
 
     art.download(str(download_dir))
-    return download_dir / "metadata.h5ad"
+    return download_dir / f"{metadata_name}.h5ad"
 
 
-def download_decima(download_dir: str):
+def download_decima(model: str = DEFAULT_ENSEMBLE, download_dir: str = "."):
     """Download all required data for Decima.
 
     Args:
@@ -93,6 +97,6 @@ def download_decima(download_dir: str):
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima model weights and metadata to {download_dir}:")
 
-    download_decima_weights(DEFAULT_ENSEMBLE, download_dir)
-    download_decima_metadata(download_dir)
+    download_decima_weights(model, download_dir)
+    download_decima_metadata(model, download_dir)
     return download_dir

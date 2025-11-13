@@ -89,7 +89,7 @@ def cli_modisco_attributions(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = 0,
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",

@@ -40,7 +40,7 @@ from more_itertools import chunked
 from torch.utils.data import DataLoader
 from pyfaidx import Faidx
 
-from decima.constants import DEFAULT_ENSEMBLE, AVAILABLE_ENSEMBLES
+from decima.constants import DEFAULT_ENSEMBLE, MODEL_METADATA, ENSEMBLE_MODELS
 from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
 from decima.data.dataset import GeneDataset, SeqDataset
@@ -54,8 +54,8 @@ def predict_save_attributions(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[int] = 0,
-    metadata_anndata: Optional[str] = None,
+    model: Optional[int] = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     method: str = "inputxgradient",
     transform: str = "specificity",
     batch_size: int = 1,
@@ -120,9 +120,9 @@ def predict_save_attributions(
         ...     genome="hg38",
         ... )
     """
-    if (model in AVAILABLE_ENSEMBLES) or isinstance(model, (list, tuple)):
-        if model in AVAILABLE_ENSEMBLES:
-            models = [0, 1, 2, 3]
+    if (model in ENSEMBLE_MODELS) or isinstance(model, (list, tuple)):
+        if model in ENSEMBLE_MODELS:
+            models = MODEL_METADATA[model]
         else:
             models = model
         return [
@@ -155,8 +155,8 @@ def predict_save_attributions(
     device = get_compute_device(device)
     logger.info(f"Using device: {device}")
 
-    logger.info("Loading model and metadata to compute attributions...")
-    result = DecimaResult.load(metadata_anndata)
+    logger.info(f"Loading model {model} and metadata to compute attributions...")
+    result = DecimaResult.load(metadata_anndata, model)
 
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
 
@@ -239,7 +239,7 @@ def recursive_seqlet_calling(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     tss_distance: Optional[int] = None,
-    metadata_anndata: Optional[str] = None,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     num_workers: int = 4,
@@ -340,7 +340,7 @@ def predict_attributions_seqlet_calling(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
-    metadata_anndata: Optional[str] = None,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     method: str = "inputxgradient",
     transform: str = "specificity",
     num_workers: int = 2,
@@ -441,7 +441,7 @@ def predict_attributions_seqlet_calling(
 def plot_attributions(
     output_prefix: str,
     genes: Optional[Union[str, List[str]]] = None,
-    metadata_anndata: Optional[str] = None,
+    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
     tss_distance: Optional[int] = None,
     seqlogo_window: int = 50,
     agg_func: Optional[str] = "mean",

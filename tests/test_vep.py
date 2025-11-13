@@ -5,7 +5,7 @@ import pandas as pd
 import pyarrow.parquet as pq
 from scipy.stats import pearsonr
 
-from decima.constants import DEFAULT_ENSEMBLE, DECIMA_CONTEXT_SIZE, NUM_CELLS
+from decima.constants import DEFAULT_ENSEMBLE, DECIMA_CONTEXT_SIZE, MODEL_METADATA
 from decima.core.result import DecimaResult
 from decima.hub import load_decima_model
 from decima.data.dataset import VariantDataset
@@ -95,7 +95,8 @@ def test_VariantDataset(df_variant):
     assert len(dataset) == 82 * 2
     assert dataset[0]['seq'].shape == (5, DECIMA_CONTEXT_SIZE)
 
-    assert dataset[0]['pred_expr']['v1_rep0'].shape == (NUM_CELLS,)
+    metadata = MODEL_METADATA[MODEL_METADATA[DEFAULT_ENSEMBLE][0]]
+    assert dataset[0]['pred_expr']['v1_rep0'].shape == (metadata['num_cells'],)
     assert not dataset[0]['pred_expr']['v1_rep0'].isnan().any()
     assert dataset[1]['pred_expr']['v1_rep0'].isnan().all()
     assert not dataset[2]['pred_expr']['v1_rep0'].isnan().any()
@@ -143,22 +144,23 @@ def test_VariantDataset_dataloader(df_variant):
     dl = torch.utils.data.DataLoader(dataset, batch_size=64, num_workers=0, collate_fn=dataset.collate_fn)
     batches = iter(dl)
 
+    metadata = MODEL_METADATA[MODEL_METADATA[DEFAULT_ENSEMBLE][0]]
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]["v1_rep0"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep1"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep2"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep3"].shape == (64, NUM_CELLS)
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_cells'])
 
     batch = next(batches)
     assert batch["seq"].shape == (64, 5, DECIMA_CONTEXT_SIZE)
     assert len(batch["warning"]) > 0
     assert WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME in batch["warning"]
-    assert batch["pred_expr"]["v1_rep0"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep1"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep2"].shape == (64, NUM_CELLS)
-    assert batch["pred_expr"]["v1_rep3"].shape == (64, NUM_CELLS)
+    assert batch["pred_expr"]["v1_rep0"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep1"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep2"].shape == (64, metadata['num_cells'])
+    assert batch["pred_expr"]["v1_rep3"].shape == (64, metadata['num_cells'])
 
 @pytest.mark.long_running
 def test_VariantDataset_dataloader_vcf():
@@ -168,29 +170,30 @@ def test_VariantDataset_dataloader_vcf():
     dl = torch.utils.data.DataLoader(dataset, batch_size=8, num_workers=0, collate_fn=dataset.collate_fn)
     batches = iter(dl)
 
+    metadata = MODEL_METADATA[MODEL_METADATA[DEFAULT_ENSEMBLE][0]]
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, NUM_CELLS)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert batch["warning"] == []
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, NUM_CELLS)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
 
     batch = next(batches)
     assert batch["seq"].shape == (8, 5, DECIMA_CONTEXT_SIZE)
     assert len(batch["warning"]) > 0
-    assert batch["pred_expr"]['v1_rep0'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep1'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep2'].shape == (8, NUM_CELLS)
-    assert batch["pred_expr"]['v1_rep3'].shape == (8, NUM_CELLS)
+    assert batch["pred_expr"]['v1_rep0'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep1'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep2'].shape == (8, metadata['num_cells'])
+    assert batch["pred_expr"]['v1_rep3'].shape == (8, metadata['num_cells'])
 
 
 @pytest.mark.long_running
