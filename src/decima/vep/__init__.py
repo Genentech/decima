@@ -94,7 +94,7 @@ def _predict_variant_effect(
 
     logging.getLogger("decima").info(f"Performing predictions on {dataset}")
     results = model.predict_on_dataset(
-        dataset, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
+        dataset, device=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
     )
 
     df = dataset.variants.reset_index(drop=True)
