@@ -75,6 +75,9 @@ class DecimaResult:
             ...     "path/to/anndata.h5ad"
             ... )  # Load custom anndata object from file
         """
+        if isinstance(anndata_name_or_path, list):
+            anndata_name_or_path = anndata_name_or_path[0]
+
         if (anndata_name_or_path is None) or (anndata_name_or_path in MODEL_METADATA):
             return cls(load_decima_metadata(name_or_path=anndata_name_or_path))
         elif isinstance(anndata_name_or_path, str):

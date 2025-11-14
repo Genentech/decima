@@ -8,7 +8,7 @@ This module contains the datasets for Decima, including:
 - VariantDataset: Dataset for variant effect prediction.
 """
 
-from typing import List
+from typing import List, Optional
 import warnings
 import torch
 import h5py
@@ -22,7 +22,7 @@ from grelu.data.augment import Augmenter, _split_overall_idx
 from grelu.sequence.format import strings_to_one_hot
 from grelu.sequence.utils import reverse_complement
 
-from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS, MODEL_METADATA, DEFAULT_ENSEMBLE
+from decima.constants import DECIMA_CONTEXT_SIZE, ENSEMBLE_MODELS, MODEL_METADATA
 from decima.data.read_hdf5 import _extract_center, index_genes
 from decima.core.result import DecimaResult
 from decima.utils.io import read_fasta_gene_mask
@@ -186,11 +186,11 @@ class GeneDataset(Dataset):
     def __init__(
         self,
         genes=None,
-        metadata_anndata=DEFAULT_ENSEMBLE,
-        max_seq_shift=0,
-        seed=0,
-        augment_mode="random",
-        genome="hg38",
+        metadata_anndata: Optional[str] = None,
+        max_seq_shift: int = 0,
+        seed: int = 0,
+        augment_mode: str = "random",
+        genome: str = "hg38",
     ):
         super().__init__()
 
@@ -599,24 +599,24 @@ class VariantDataset(Dataset):
     def __init__(
         self,
         variants,
-        metadata_anndata=DEFAULT_ENSEMBLE,
-        max_seq_shift=0,
-        seed=0,
+        metadata_anndata: Optional[str] = None,
+        max_seq_shift: int = 0,
+        seed: int = 0,
         include_cols=None,
-        gene_col=None,
-        min_from_end=0,
-        distance_type="tss",
-        min_distance=0,
-        max_distance=float("inf"),
-        model_name=None,
-        reference_cache=True,
-        genome="hg38",
+        gene_col: Optional[str] = None,
+        min_from_end: int = 0,
+        distance_type: str = "tss",
+        min_distance: int = 0,
+        max_distance: float = float("inf"),
+        model_name: Optional[str] = None,
+        reference_cache: bool = True,
+        genome: str = "hg38",
     ):
         super().__init__()
 
         self.reference_cache = reference_cache
         self.genome = genome
-        self.result = DecimaResult.load(metadata_anndata)
+        self.result = DecimaResult.load(metadata_anndata or model_name)
 
         self.variants = self._overlap_genes(
             variants,

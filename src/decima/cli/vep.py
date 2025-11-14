@@ -22,7 +22,7 @@ Examples:
 
 import click
 from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE
-from decima.cli.callback import parse_model, validate_save_replicates
+from decima.cli.callback import parse_model, validate_save_replicates, parse_metadata
 from decima.utils.dataframe import ensemble_predictions
 from decima.vep import predict_variant_effect
 
@@ -52,9 +52,9 @@ from decima.vep import predict_variant_effect
 )
 @click.option(
     "--metadata",
-    type=click.Path(exists=True),
     default=None,
-    help="Path to the metadata anndata file. Default: None.",
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used. Default: {DEFAULT_ENSEMBLE}.",
 )
 @click.option(
     "--device", type=str, default=None, help="Device to use. Default: None which automatically selects the best device."

@@ -1,5 +1,6 @@
-import anndata
 import logging
+from typing import Optional
+import anndata
 import numpy as np
 from decima.constants import DEFAULT_ENSEMBLE
 from decima.data.dataset import GeneDataset
@@ -10,14 +11,14 @@ from decima.utils import get_compute_device
 def predict_gene_expression(
     genes=None,
     model=DEFAULT_ENSEMBLE,
-    metadata_anndata=None,
-    device=None,
-    batch_size=1,
-    num_workers=4,
+    metadata_anndata: Optional[str] = None,
+    device: Optional[str] = None,
+    batch_size: int = 1,
+    num_workers: int = 4,
     max_seq_shift=0,
-    genome="hg38",
-    save_replicates=False,
-    float_precision="32",
+    genome: str = "hg38",
+    save_replicates: bool = False,
+    float_precision: str = "32",
 ):
     """Predict gene expression for a list of genes
 
@@ -43,10 +44,13 @@ def predict_gene_expression(
     device = get_compute_device(device)
     logger.info(f"Using device: {device} and genome: {genome} for prediction.")
 
-    logger.info("Making predictions")
+    logger.info(f"Loading model {model}...")
     model = load_decima_model(model, device=device)
 
-    ds = GeneDataset(genes=genes, metadata_anndata=metadata_anndata, max_seq_shift=max_seq_shift, genome=genome)
+    logger.info("Making predictions")
+    ds = GeneDataset(
+        genes=genes, metadata_anndata=metadata_anndata or model.name, max_seq_shift=max_seq_shift, genome=genome
+    )
     preds = model.predict_on_dataset(
         ds, devices=device, batch_size=batch_size, num_workers=num_workers, float_precision=float_precision
     )
@@ -69,7 +73,10 @@ def predict_gene_expression(
             ad.layers[f"preds_{model.name}"] = pred.T
 
     logger.info("Evaluating performance")
-    evaluate_gene_expression_predictions(ad)
+    if ad.X is not None:
+        evaluate_gene_expression_predictions(ad)
+    else:
+        logger.warning("No ground truth expression matrix found in the metadata. Skipping evaluation.")
     return ad
 
 

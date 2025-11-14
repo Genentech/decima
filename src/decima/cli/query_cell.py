@@ -18,16 +18,18 @@ Examples:
 """
 
 import click
+from decima.constants import DEFAULT_ENSEMBLE
+from decima.cli.callback import parse_metadata
 from decima.core.result import DecimaResult
 
 
 @click.command()
 @click.argument("query", default="")
 @click.option(
-    "--metadata-anndata",
-    type=click.Path(exists=True),
+    "--metadata",
     default=None,
-    help="Path to the metadata anndata file or name of the model.",
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. Default: {DEFAULT_ENSEMBLE}.",
 )
 def cli_query_cell(query="", metadata_anndata=None):
     """

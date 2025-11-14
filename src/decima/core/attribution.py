@@ -192,7 +192,7 @@ class Attribution:
         transform: str = "specificity",
         method: str = "inputxgradient",
         device: Optional[str] = "cpu",
-        result: Optional[DecimaResult] = None,
+        result: Optional[str] = None,
         gene: Optional[str] = "",
         chrom: Optional[str] = None,
         start: Optional[int] = None,
@@ -218,6 +218,7 @@ class Attribution:
             transform: Transformation to apply to attributions
             method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
             device: Device to use for attribution analysis
+            result: Result object or path to result object or name of the model to load the result for.
             gene: Gene name
             chrom: Chromosome name
             start: Start position
@@ -259,9 +260,7 @@ class Attribution:
         else:
             raise ValueError("`inputs` must be a string, torch.Tensor, or np.ndarray")
 
-        if result is None:
-            result = DecimaResult.load()
-
+        result = DecimaResult.load(result or model)
         tasks, off_tasks = result.query_tasks(tasks, off_tasks)
 
         attrs = (
@@ -762,9 +761,7 @@ class AttributionResult:
             pattern_type=pattern_type,
         )
 
-    def _get_metadata(
-        self, genes: List[str], metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE, custom_genome: bool = False
-    ):
+    def _get_metadata(self, genes: List[str], metadata_anndata: Optional[str] = None, custom_genome: bool = False):
         if custom_genome:
             chroms = genes
             starts = [0] * len(genes)
@@ -773,7 +770,10 @@ class AttributionResult:
             else:
                 ends = [DECIMA_CONTEXT_SIZE] * len(genes)
         else:
-            result = DecimaResult.load(metadata_anndata)
+            model_name = self.model_name
+            if isinstance(model_name, list):
+                model_name = model_name[0]
+            result = DecimaResult.load(metadata_anndata or model_name)
             chroms = result.gene_metadata.loc[genes].chrom
             if self.tss_distance is not None:
                 tss_pos = np.where(
@@ -791,7 +791,7 @@ class AttributionResult:
     def load_attribution(
         self,
         gene: str,
-        metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE,
+        metadata_anndata: Optional[str] = None,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,
@@ -871,7 +871,7 @@ class AttributionResult:
     def recursive_seqlet_calling(
         self,
         genes: Optional[List[str]] = None,
-        metadata_anndata: Optional[DecimaResult] = DEFAULT_ENSEMBLE,
+        metadata_anndata: Optional[str] = None,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,

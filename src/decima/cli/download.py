@@ -48,7 +48,6 @@ def cli_download_weights(model, download_dir):
 @click.command()
 @click.option(
     "--metadata",
-    type=str,
     default=DEFAULT_ENSEMBLE,
     help=f"Model to download metadata for using wandb. Default: {DEFAULT_ENSEMBLE}.",
     callback=parse_model,
@@ -66,7 +65,7 @@ def cli_download_metadata(metadata=DEFAULT_ENSEMBLE, download_dir=None):
 
 @click.command()
 @click.option(
-    "--model",
+    "--model-name",
     type=str,
     default=DEFAULT_ENSEMBLE,
     help=f"Model to download. Default: {DEFAULT_ENSEMBLE}.",
@@ -75,6 +74,6 @@ def cli_download_metadata(metadata=DEFAULT_ENSEMBLE, download_dir=None):
 @click.option(
     "--download-dir", type=click.Path(), default=".", help="Directory to download the data. Default: current directory."
 )
-def cli_download(model=DEFAULT_ENSEMBLE, download_dir="."):
+def cli_download(model_name=DEFAULT_ENSEMBLE, download_dir="."):
     """Download model weights and metadata for Decima."""
-    download_decima(model, str(download_dir))
+    download_decima(model_name, str(download_dir))

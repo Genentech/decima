@@ -10,8 +10,9 @@ from conftest import device
 
 @pytest.fixture
 def lightning_model():
-    metadata = MODEL_METADATA[MODEL_METADATA[DEFAULT_ENSEMBLE][0]]
-    model = LightningModel(model_params={'n_tasks': metadata['num_tasks'], 'init_borzoi': False}, name=metadata['name']).to(device)
+    model_name = "v1_rep0"
+    metadata = MODEL_METADATA[model_name]
+    model = LightningModel(model_params={'n_tasks': metadata['num_tasks'], 'init_borzoi': False}, name=model_name).to(device)
     return model
 
 

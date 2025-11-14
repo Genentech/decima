@@ -18,7 +18,7 @@ Examples:
 
 import click
 from decima.constants import DEFAULT_ENSEMBLE
-from decima.cli.callback import parse_genes, parse_model, parse_attributions
+from decima.cli.callback import parse_genes, parse_model, parse_attributions, parse_metadata
 from decima.interpret.attributions import (
     plot_attributions,
     predict_save_attributions,
@@ -55,9 +55,9 @@ from decima.interpret.attributions import (
 )
 @click.option(
     "--metadata",
-    type=click.Path(exists=True),
     default=None,
-    help="Path to the metadata anndata file. If not provided, the default metadata will be downloaded from wandb.",
+    callback=parse_metadata,
+    help="Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used.",
     show_default=True,
 )
 @click.option(
@@ -204,9 +204,9 @@ def cli_attributions_predict(
 )
 @click.option(
     "--metadata",
-    type=click.Path(exists=True),
+    callback=parse_metadata,
     default=None,
-    help="Path to the metadata anndata file. Default: None.",
+    help="Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used.",
 )
 @click.option(
     "--method", type=str, required=False, default="inputxgradient", help="Method to use for attribution analysis."
@@ -330,7 +330,12 @@ def cli_attributions(
     "--off-tasks", type=str, required=False, help="Optional query string to filter cell types to contrast against."
 )
 @click.option("--tss-distance", type=int, required=False, default=None, help="TSS distance for attribution analysis.")
-@click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--metadata",
+    callback=parse_metadata,
+    default=None,
+    help="Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used.",
+)
 @click.option(
     "--genes",
     type=str,
@@ -428,7 +433,12 @@ def cli_attributions_recursive_seqlet_calling(
     callback=parse_genes,
     help="Comma-separated list of gene symbols or IDs to analyze.",
 )
-@click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--metadata",
+    callback=parse_metadata,
+    default=None,
+    help="Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used.",
+)
 @click.option("--tss-distance", type=int, required=False, default=None, help="TSS distance for attribution analysis.")
 @click.option("--seqlogo-window", type=int, default=50, help="Window size for sequence logo plots")
 @click.option("--custom-genome", is_flag=True, help="Use custom genome")

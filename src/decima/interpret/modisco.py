@@ -39,7 +39,7 @@ def predict_save_modisco_attributions(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
-    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",
     batch_size: int = 1,
@@ -104,7 +104,7 @@ def modisco_patterns(
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
     tss_distance: int = 10_000,
-    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = None,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,
@@ -156,7 +156,7 @@ def modisco_patterns(
         tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
         off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
         tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.
-        metadata_anndata: Name of the model or path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used.
+        metadata_anndata: Name of the model or path to metadata anndata file or DecimaResult object. If not provided, the compatible metadata of the saved attribution files will be used.
         genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
         top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
         correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.
@@ -206,21 +206,25 @@ def modisco_patterns(
         ... )
     """
     logger = logging.getLogger("decima")
-    logger.info(f"Loading metadata for model {metadata_anndata}...")
-    result = DecimaResult.load(metadata_anndata)
 
     if isinstance(attributions, (str, Path)):
         attributions_files = [Path(attributions).as_posix()]
     else:
         attributions_files = attributions
 
-    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
-    all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-
-    with AttributionResult(attributions_files, tss_distance, correct_grad, num_workers=1, agg_func="mean") as ar:
-        sequences, attributions = ar.load(all_genes)
+    with AttributionResult(
+        attributions_files, tss_distance, correct_grad, num_workers=num_workers, agg_func="mean"
+    ) as ar:
         genome = ar.genome
         model_names = ar.model_name
+
+        metadata_anndata = metadata_anndata or model_names[0]
+        logger.info(f"Loading metadata for model {metadata_anndata}...")
+        result = DecimaResult.load(metadata_anndata)
+
+        tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
+        all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
+        sequences, attributions = ar.load(all_genes)
 
     pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
@@ -328,7 +332,7 @@ def modisco_reports(
 def modisco_seqlet_bed(
     output_prefix: str,
     modisco_h5: str,
-    metadata_anndata: str = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = None,
     trim_threshold: float = 0.2,
 ):
     """Extract seqlet locations from MoDISco results and save as BED format file.
@@ -351,11 +355,13 @@ def modisco_seqlet_bed(
         ...     trim_threshold=0.15,
         ... )
     """
-    result = DecimaResult.load(metadata_anndata)
 
     df = list()
 
     with h5py.File(modisco_h5, "r") as f:
+        model_name = f.attrs["model_names"].split(",")[0]
+        result = DecimaResult.load(metadata_anndata or model_name)
+
         tss_distance = f.attrs["tss_distance"]
         genes = [gene.decode("utf-8") for gene in f["genes"][:]]
         genes_idx = dict(enumerate(genes))
@@ -422,7 +428,7 @@ def modisco(
     off_tasks: Optional[List[str]] = None,
     model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     tss_distance: int = 1000,
-    metadata_anndata: Optional[str] = DEFAULT_ENSEMBLE,
+    metadata_anndata: Optional[str] = None,
     genes: Optional[List[str]] = None,
     top_n_markers: Optional[int] = None,
     correct_grad: bool = True,

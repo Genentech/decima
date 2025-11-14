@@ -22,7 +22,7 @@ Examples:
 import click
 from typing import List, Optional, Union
 from decima.constants import DEFAULT_ENSEMBLE
-from decima.cli.callback import parse_model, parse_genes, parse_attributions
+from decima.cli.callback import parse_model, parse_genes, parse_attributions, parse_metadata
 from decima.interpret.modisco import (
     predict_save_modisco_attributions,
     modisco_patterns,
@@ -46,8 +46,20 @@ from decima.interpret.modisco import (
     default=None,
     help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
-@click.option("--model", type=str, default=0, help="Model to use for the prediction.", callback=parse_model)
-@click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--model",
+    type=str,
+    default=DEFAULT_ENSEMBLE,
+    help=f"Model to use for the prediction. Default: {DEFAULT_ENSEMBLE}.",
+    callback=parse_model,
+    show_default=True,
+)
+@click.option(
+    "--metadata",
+    default=None,
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used. Default: {DEFAULT_ENSEMBLE}.",
+)
 @click.option(
     "--method",
     type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
@@ -145,7 +157,12 @@ def cli_modisco_attributions(
     help="Set of tasks will be subtracted from the attributions to calculate attribution on `specificity` transform. If not provided, all tasks will be computed.",
 )
 @click.option("--tss-distance", type=int, default=10_000, show_default=True, help="TSS distance for the prediction.")
-@click.option("--metadata", type=click.Path(exists=True), default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--metadata",
+    default=None,
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. Default: {DEFAULT_ENSEMBLE}.",
+)
 @click.option(
     "--genes",
     type=str,
@@ -280,7 +297,12 @@ def cli_modisco_reports(
 @click.command()
 @click.option("-o", "--output-prefix", type=str, required=True, help="Prefix path to the output files.")
 @click.option("--modisco-h5", type=click.Path(exists=True), required=True, help="Path to the modisco HDF5 file.")
-@click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--metadata",
+    default=None,
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. Default: {DEFAULT_ENSEMBLE}.",
+)
 @click.option("--trim-threshold", type=float, default=0.2, show_default=True, help="Trim threshold.")
 def cli_modisco_seqlet_bed(
     output_prefix: str,
@@ -319,7 +341,12 @@ def cli_modisco_seqlet_bed(
     help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to safetensor files. Default: `ensemble`.",
     callback=parse_model,
 )
-@click.option("--metadata", type=str, default=None, help="Path to the metadata anndata file.")
+@click.option(
+    "--metadata",
+    default=None,
+    callback=parse_metadata,
+    help=f"Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used. Default: {DEFAULT_ENSEMBLE}.",
+)
 @click.option(
     "--method",
     type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
