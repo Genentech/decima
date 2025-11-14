@@ -226,7 +226,7 @@ class DecimaResult:
         Returns:
             torch.Tensor: One-hot encoding of the gene
         """
-        assert gene in self.genes, f"{gene} is not in the anndata object"
+        assert gene in self.genes, f"{gene} is not in the anndata object. See avaliable genes with `result.genes`."
         gene_meta = self._pad_gene_metadata(self.gene_metadata.loc[gene], padding)
 
         if variants is None:
@@ -253,11 +253,7 @@ class DecimaResult:
         Returns:
             str: Sequence for the gene
         """
-        try:
-            assert gene in self.genes, f"{gene} is not in the anndata object"
-        except AssertionError:
-            print(gene)
-            print(self.genes)
+        assert gene in self.genes, f"{gene} is not in the anndata object. See avaliable genes with `result.genes`."
         gene_meta = self.gene_metadata.loc[gene]
         if not stranded:
             gene_meta = {"chrom": gene_meta.chrom, "start": gene_meta.start, "end": gene_meta.end}
