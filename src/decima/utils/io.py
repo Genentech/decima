@@ -183,7 +183,7 @@ class AttributionWriter:
         path: Output HDF5 file path.
         genes: Gene names to write.
         model_name: Model identifier for metadata.
-        metadata_anndata: Gene metadata source. None uses default Decima data.
+        metadata_anndata: Gene metadata source or path to the metadata anndata file. If not provided, the compatible metadata for the model will be used.
         genome: Reference genome version.
         bigwig: Create BigWig file for genome browser.
         correct_grad_bigwig: Correct gradient bigwig for bias.
@@ -221,7 +221,7 @@ class AttributionWriter:
         self.bigwig = bigwig
         self.model_name = model_name
         self.idx = {g: i for i, g in enumerate(self.genes)}
-        self.result = DecimaResult.load(metadata_anndata)
+        self.result = DecimaResult.load(metadata_anndata or model_name)
         self.correct_grad_bigwig = correct_grad_bigwig
         self.custom_genes = custom_genes
 

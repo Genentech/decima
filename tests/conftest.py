@@ -86,7 +86,7 @@ def attribution_h5_file(tmp_path, attribution_data):
         f.create_dataset('attribution', data=attribution_data['attributions'])
         f.create_dataset('gene_mask_start', data=attribution_data['gene_mask_start'])
         f.create_dataset('gene_mask_end', data=attribution_data['gene_mask_end'])
-        f.attrs['model_name'] = 'test_model'
+        f.attrs['model_name'] = 'v1_rep0'
         f.attrs['genome'] = 'hg38'
 
     return h5_path

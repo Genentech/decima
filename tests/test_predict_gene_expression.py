@@ -1,4 +1,5 @@
 import pytest
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.tools.inference import predict_gene_expression
 
 from conftest import device
@@ -19,7 +20,7 @@ def test_predict_gene_expression():
 
     ad = predict_gene_expression(
         genes=["SPI1", "GATA1"],
-        model="ensemble", device=device,
+        model=DEFAULT_ENSEMBLE, device=device,
         save_replicates=True,
     )
 

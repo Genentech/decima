@@ -1,5 +1,5 @@
 import sys
-from decima.constants import NUM_CELLS, DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE, MODEL_METADATA
 from decima.core.result import DecimaResult
 from decima.interpret.attributions import predict_attributions_seqlet_calling
 from decima.vep import predict_variant_effect
@@ -25,6 +25,7 @@ __all__ = [
     "DecimaResult",
     "predict_variant_effect",
     "predict_attributions_seqlet_calling",
-    "NUM_CELLS",
     "DECIMA_CONTEXT_SIZE",
+    "DEFAULT_ENSEMBLE",
+    "MODEL_METADATA",
 ]

@@ -14,7 +14,7 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
     with AttributionResult(str(attribution_h5_file), tss_distance=10_000, num_workers=1) as ar:
         assert len(ar.genes) == 10
         assert ar.genes == attribution_data['genes']
-        assert ar.model_name == 'test_model'
+        assert ar.model_name == 'v1_rep0'
         assert ar.genome == 'hg38'
 
         assert ar.genes == attribution_data['genes']
@@ -73,7 +73,7 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
     with AttributionResult([str(attribution_h5_file), str(attribution_h5_file)], tss_distance=10_000) as ar:
         assert len(ar.genes) == 10
         assert ar.genes == attribution_data['genes']
-        assert ar.model_name == ['test_model', 'test_model']
+        assert ar.model_name == ['v1_rep0', 'v1_rep0']
         assert ar.genome == 'hg38'
 
     with AttributionResult(str(attribution_h5_file), tss_distance=1_000_000) as ar:

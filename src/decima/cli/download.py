@@ -10,6 +10,7 @@ It includes subcommands for:
 """
 
 import click
+from decima.constants import DEFAULT_ENSEMBLE
 from decima.cli.callback import parse_model
 from decima.hub.download import (
     cache_decima_data,
@@ -27,7 +28,11 @@ def cli_cache():
 
 @click.command()
 @click.option(
-    "--model", type=str, default="ensemble", help="Model to download. Default: ensemble.", callback=parse_model
+    "--model",
+    type=str,
+    default=DEFAULT_ENSEMBLE,
+    help=f"Model to download. Default: {DEFAULT_ENSEMBLE}.",
+    callback=parse_model,
 )
 @click.option(
     "--download-dir",
@@ -42,20 +47,33 @@ def cli_download_weights(model, download_dir):
 
 @click.command()
 @click.option(
+    "--metadata",
+    default=DEFAULT_ENSEMBLE,
+    help=f"Model to download metadata for using wandb. Default: {DEFAULT_ENSEMBLE}.",
+    callback=parse_model,
+)
+@click.option(
     "--download-dir",
     type=click.Path(),
     default=".",
     help="Directory to download the metadata. Default: current directory.",
 )
-def cli_download_metadata(download_dir):
-    """Download pre-trained Decima metadata."""
-    download_decima_metadata(str(download_dir))
+def cli_download_metadata(metadata=DEFAULT_ENSEMBLE, download_dir=None):
+    """Download pre-trained Decima metadata for a given model."""
+    download_decima_metadata(metadata, str(download_dir))
 
 
 @click.command()
 @click.option(
+    "--model-name",
+    type=str,
+    default=DEFAULT_ENSEMBLE,
+    help=f"Model to download. Default: {DEFAULT_ENSEMBLE}.",
+    callback=parse_model,
+)
+@click.option(
     "--download-dir", type=click.Path(), default=".", help="Directory to download the data. Default: current directory."
 )
-def cli_download(download_dir):
+def cli_download(model_name=DEFAULT_ENSEMBLE, download_dir="."):
     """Download model weights and metadata for Decima."""
-    download_decima(str(download_dir))
+    download_decima(model_name, str(download_dir))
