@@ -19,7 +19,7 @@ def cache_hg38():
 def cache_decima_weights():
     """Download pre-trained Decima model weights from wandb."""
     logger.info("Downloading Decima model weights...")
-    for rep in range(4):
+    for rep in MODEL_METADATA[DEFAULT_ENSEMBLE]:
         load_decima_model(rep)
 
 
