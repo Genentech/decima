@@ -42,7 +42,8 @@ def load_decima_model(model: Union[str, int, List[str]] = DEFAULT_ENSEMBLE, devi
 
     elif model in ENSEMBLE_MODELS:
         return EnsembleLightningModel(
-            [load_decima_model(model_name, device) for model_name in MODEL_METADATA[model]], name=model
+            [load_decima_model(model_name, device) for model_name in MODEL_METADATA[model]],
+            name=model,
         )
 
     elif isinstance(model, List):
@@ -67,7 +68,11 @@ def load_decima_model(model: Union[str, int, List[str]] = DEFAULT_ENSEMBLE, devi
             f"{list(MODEL_METADATA.keys())}), path to a local model, or a list of paths."
         )
     # load model from wandb
-    art = get_artifact(model_name, project="decima")
+    art = get_artifact(
+        model_name,
+        project="decima",
+        host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST),
+    )
     with TemporaryDirectory() as d:
         art.download(d)
         return LightningModel.load_safetensor(Path(d) / f"{model_name}.safetensors", device=device)
@@ -104,7 +109,11 @@ def load_decima_metadata(name_or_path: Optional[str] = None):
                 f"Trying to download `metadata` from wandb."
             )
 
-    art = get_artifact(metadata["metadata"], project="decima")
+    art = get_artifact(
+        metadata["metadata"],
+        project="decima",
+        host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST),
+    )
     with TemporaryDirectory() as d:
         art.download(d)
         return anndata.read_h5ad(Path(d) / f"{metadata['metadata']}.h5ad")
