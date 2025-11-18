@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 from typing import Union
 import logging
 import genomepy
-from grelu.resources import get_artifact
+from grelu.resources import get_artifact, DEFAULT_WANDB_HOST
 from decima.constants import DEFAULT_ENSEMBLE, ENSEMBLE_MODELS, MODEL_METADATA
 from decima.hub import login_wandb, load_decima_model, load_decima_metadata
 
@@ -55,7 +56,7 @@ def download_decima_weights(model: Union[str, int] = DEFAULT_ENSEMBLE, download_
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima model weights for {model} to {download_dir / f'{model_name}.safetensors'}")
 
-    art = get_artifact(model_name, project="decima")
+    art = get_artifact(model_name, project="decima", host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST))
     art.download(str(download_dir))
     return download_dir / f"{model_name}.safetensors"
 
@@ -75,7 +76,7 @@ def download_decima_metadata(metadata: str = DEFAULT_ENSEMBLE, download_dir: str
         metadata = MODEL_METADATA[metadata][0]
 
     metadata_name = MODEL_METADATA[metadata]["metadata"]
-    art = get_artifact(metadata_name, project="decima")
+    art = get_artifact(metadata_name, project="decima", host=os.environ.get("WANDB_HOST", DEFAULT_WANDB_HOST))
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima metadata to {download_dir / f'{metadata_name}.h5ad'}.")

@@ -31,7 +31,7 @@ from decima.core.result import DecimaResult
     callback=parse_metadata,
     help=f"Path to the metadata anndata file or name of the model. Default: {DEFAULT_ENSEMBLE}.",
 )
-def cli_query_cell(query="", metadata_anndata=None):
+def cli_query_cell(query="", metadata=None):
     """
     Query a cell using query string
 
@@ -47,7 +47,7 @@ def cli_query_cell(query="", metadata_anndata=None):
         ...
 
     """
-    result = DecimaResult.load(metadata_anndata)
+    result = DecimaResult.load(metadata)
     df = result.cell_metadata
 
     if query != "":

@@ -101,9 +101,6 @@ class CellMetadata:
     disease: str
     study: str
     dataset: str
-    region: Optional[str]
-    subregion: Optional[str]
-    celltype_coarse: Optional[str]
     n_cells: int
     total_counts: float
     n_genes: int
@@ -111,6 +108,12 @@ class CellMetadata:
     train_pearson: float
     val_pearson: float
     test_pearson: float
+    region: Optional[str] = field(default=None)
+    subregion: Optional[str] = field(default=None)
+    celltype_coarse: Optional[str] = field(default=None)
+    co_term: Optional[str] = field(default=None)
+    co_name: Optional[str] = field(default=None)
+    frac_nan: Optional[float] = field(default=None)
 
     @classmethod
     def from_series(cls, name: str, series: pd.Series) -> "CellMetadata":

@@ -202,7 +202,8 @@ def test_predict_variant_effect(df_variant):
     query = "cell_type == 'CD8-positive, alpha-beta T cell'"
     cells = DecimaResult.load().query_cells(query)
 
-    df, warnings, num_variants = _predict_variant_effect(df_variant, model=0, tasks=query, device=device, max_distance=5000)
+    model = load_decima_model(0, device)
+    df, warnings, num_variants = _predict_variant_effect(df_variant, model=model, tasks=query, device=device, max_distance=5000)
     assert num_variants == 4
 
     assert df.shape == (4, 273)

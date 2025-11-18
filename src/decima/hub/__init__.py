@@ -55,8 +55,8 @@ def load_decima_model(model: Union[str, int, List[str]] = DEFAULT_ENSEMBLE, devi
     # Load directly from a path
     if model in MODEL_METADATA:
         model_name = MODEL_METADATA[model]["name"]
-        if "path" in MODEL_METADATA[model]:  # if model path exist in metadata load it from the path
-            return load_decima_model(MODEL_METADATA[model]["path"], device)
+        if "model_path" in MODEL_METADATA[model]:  # if model path exist in metadata load it from the path
+            return load_decima_model(MODEL_METADATA[model]["model_path"], device)
     elif isinstance(model, str) and Path(model).exists():
         if model.endswith("ckpt"):
             return LightningModel.load_from_checkpoint(model, map_location=device)

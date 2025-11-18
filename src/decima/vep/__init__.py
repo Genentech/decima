@@ -61,8 +61,6 @@ def _predict_variant_effect(
         raise ValueError(f"Genome {genome} not supported. Currently only hg38 is supported.")
     include_cols = include_cols or list()
 
-    model = load_decima_model(model=model, device=device)
-
     try:
         dataset = VariantDataset(
             df_variant,
