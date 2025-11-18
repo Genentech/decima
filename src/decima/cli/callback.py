@@ -63,6 +63,8 @@ def parse_metadata(ctx, param, value):
     elif isinstance(value, str):
         if value in MODEL_METADATA:
             return value
+        elif Path(value).exists():
+            return value
         else:
             raise click.ClickException(
                 f"Invalid name for the metadata dataset: {value}. Check if the name is correct or the metadata file exists."
