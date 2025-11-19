@@ -21,7 +21,7 @@ from typing import List, Optional, Tuple, Union
 import h5py
 import numpy as np
 import pandas as pd
-import modiscolite
+import fastermodiscolite
 from tqdm import tqdm
 from grelu.resources import get_meme_file_path
 from grelu.interpret.motifs import trim_pwm
@@ -226,7 +226,7 @@ def modisco_patterns(
         all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
         sequences, attributions = ar.load(all_genes)
 
-    pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
+    pos_patterns, neg_patterns = fastermodiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
         one_hot=sequences.transpose(0, 2, 1),
         sliding_window_size=sliding_window_size,
@@ -262,7 +262,7 @@ def modisco_patterns(
         verbose=True,
     )
     h5_path = Path(output_prefix).with_suffix(".modisco.h5").as_posix()
-    modiscolite.io.save_hdf5(
+    fastermodiscolite.io.save_hdf5(
         h5_path,
         pos_patterns,
         neg_patterns,
@@ -314,7 +314,7 @@ def modisco_reports(
     """
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
-    modiscolite.report.report_motifs(
+    fastermodiscolite.report.report_motifs(
         modisco_h5,
         output_dir.as_posix(),
         img_path_suffix,
@@ -435,6 +435,7 @@ def modisco(
     num_workers: int = 4,
     genome: str = "hg38",
     method: str = "saliency",
+    transform: Optional[str] = "specificity",
     batch_size: int = 2,
     device: Optional[str] = None,
     # tfmodisco parameters
@@ -498,6 +499,7 @@ def modisco(
         num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
         genome: Genome reference to use default is "hg38". Can be genome name or path to custom genome fasta file.
         method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
         batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.
         device: Device to use for computation (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
         sliding_window_size: Sliding window size.
@@ -550,6 +552,7 @@ def modisco(
         genes=genes,
         top_n_markers=top_n_markers,
         method=method,
+        transform=transform,
         batch_size=batch_size,
         correct_grad_bigwig=correct_grad,
         device=device,

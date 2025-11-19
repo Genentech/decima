@@ -72,7 +72,7 @@ from decima.interpret.modisco import (
     type=click.Choice(["specificity", "aggregate"]),
     default="specificity",
     show_default=True,
-    help="Transform to use for attribution analysis.",
+    help="Transform to use for attribution analysis. Available options: 'specificity', 'aggregate'. Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.",
 )
 @click.option("--batch-size", type=int, default=1, show_default=True, help="Batch size for the prediction.")
 @click.option(
@@ -354,6 +354,13 @@ def cli_modisco_seqlet_bed(
     show_default=True,
     help="Method to use for attribution analysis.",
 )
+@click.option(
+    "--transform",
+    type=click.Choice(["specificity", "aggregate"]),
+    default="specificity",
+    show_default=True,
+    help="Transform to use for attribution analysis. Available options: 'specificity', 'aggregate'. Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.",
+)
 @click.option("--batch-size", type=int, default=1, show_default=True, help="Batch size for the prediction.")
 @click.option(
     "--genes",
@@ -437,6 +444,7 @@ def cli_modisco(
     model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata: Optional[str] = None,
     method: str = "saliency",
+    transform: str = "specificity",
     batch_size: int = 1,
     genes: Optional[str] = None,
     top_n_markers: Optional[int] = None,
@@ -473,6 +481,7 @@ def cli_modisco(
         model=model,
         metadata_anndata=metadata,
         method=method,
+        transform=transform,
         batch_size=batch_size,
         genes=genes,
         top_n_markers=top_n_markers,
