@@ -270,7 +270,39 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
 </pre></div>
 </div>
 </div>
@@ -283,7 +315,39 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
 </pre></div>
 </div>
 </div>
@@ -313,13 +377,41 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;example/output_classical_monoctypes.attributions.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;example/output_classical_monoctypes.attributions.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;genes&quot;</span><span class="p">][:])</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;h5py&#39;
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/h5py/_hl/files.py:566,</span> in <span class="ni">File.__init__</span><span class="nt">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, track_times, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">557</span>     <span class="n">fapl</span> <span class="o">=</span> <span class="n">make_fapl</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">libver</span><span class="p">,</span> <span class="n">rdcc_nslots</span><span class="p">,</span> <span class="n">rdcc_nbytes</span><span class="p">,</span> <span class="n">rdcc_w0</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">558</span>                      <span class="n">locking</span><span class="p">,</span> <span class="n">page_buf_size</span><span class="p">,</span> <span class="n">min_meta_keep</span><span class="p">,</span> <span class="n">min_raw_keep</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">559</span>                      <span class="n">alignment_threshold</span><span class="o">=</span><span class="n">alignment_threshold</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">560</span>                      <span class="n">alignment_interval</span><span class="o">=</span><span class="n">alignment_interval</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">561</span>                      <span class="n">meta_block_size</span><span class="o">=</span><span class="n">meta_block_size</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">562</span>                      <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">563</span>     <span class="n">fcpl</span> <span class="o">=</span> <span class="n">make_fcpl</span><span class="p">(</span><span class="n">track_order</span><span class="o">=</span><span class="n">track_order</span><span class="p">,</span> <span class="n">track_times</span><span class="o">=</span><span class="n">track_times</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">564</span>                      <span class="n">fs_strategy</span><span class="o">=</span><span class="n">fs_strategy</span><span class="p">,</span> <span class="n">fs_persist</span><span class="o">=</span><span class="n">fs_persist</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">565</span>                      <span class="n">fs_threshold</span><span class="o">=</span><span class="n">fs_threshold</span><span class="p">,</span> <span class="n">fs_page_size</span><span class="o">=</span><span class="n">fs_page_size</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">566</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">make_fid</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">userblock_size</span><span class="p">,</span> <span class="n">fapl</span><span class="p">,</span> <span class="n">fcpl</span><span class="p">,</span> <span class="n">swmr</span><span class="o">=</span><span class="n">swmr</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">568</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">libver</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">569</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_libver</span> <span class="o">=</span> <span class="n">libver</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/h5py/_hl/files.py:241,</span> in <span class="ni">make_fid</span><span class="nt">(name, mode, userblock_size, fapl, fcpl, swmr)</span>
+<span class="g g-Whitespace">    </span><span class="mi">239</span>     <span class="k">if</span> <span class="n">swmr</span> <span class="ow">and</span> <span class="n">swmr_support</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">240</span>         <span class="n">flags</span> <span class="o">|=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_SWMR_READ</span>
+<span class="ne">--&gt; </span><span class="mi">241</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">242</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;r+&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">243</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_RDWR</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+
+<span class="nn">File h5py/_objects.pyx:54,</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+
+<span class="nn">File h5py/_objects.pyx:55,</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+
+<span class="nn">File h5py/h5f.pyx:104,</span> in <span class="ni">h5py.h5f.open</span><span class="nt">()</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] Unable to synchronously open file (unable to open file: name = &#39;example/output_classical_monoctypes.attributions.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)
 </pre></div>
 </div>
 </div>

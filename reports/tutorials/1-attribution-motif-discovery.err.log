@@ -7,7 +7,7 @@ Traceback (most recent call last):
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
@@ -28,11 +28,39 @@ with h5py.File("example/output_classical_monoctypes.attributions.h5", "r") as f:
 
 
 [31m---------------------------------------------------------------------------[39m
-[31mModuleNotFoundError[39m                       Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[4][39m[32m, line 1[39m
-[32m----> [39m[32m1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mh5py[39;00m
-[32m      3[39m [38;5;28;01mwith[39;00m h5py.File([33m"[39m[33mexample/output_classical_monoctypes.attributions.h5[39m[33m"[39m, [33m"[39m[33mr[39m[33m"[39m) [38;5;28;01mas[39;00m f:
+[31mFileNotFoundError[39m                         Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[4][39m[32m, line 3[39m
+[32m      1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mh5py[39;00m
+[32m----> [39m[32m3[39m [38;5;28;01mwith[39;00m [43mh5py[49m[43m.[49m[43mFile[49m[43m([49m[33;43m"[39;49m[33;43mexample/output_classical_monoctypes.attributions.h5[39;49m[33;43m"[39;49m[43m,[49m[43m [49m[33;43m"[39;49m[33;43mr[39;49m[33;43m"[39;49m[43m)[49m [38;5;28;01mas[39;00m f:
 [32m      4[39m     [38;5;28mprint[39m(f[[33m"[39m[33mgenes[39m[33m"[39m][:])
+[32m      5[39m     [38;5;28mprint[39m(f[[33m"[39m[33msequence[39m[33m"[39m][:].shape)
 
-[31mModuleNotFoundError[39m: No module named 'h5py'
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/h5py/_hl/files.py:566[39m, in [36mFile.__init__[39m[34m(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, track_times, **kwds)[39m
+[32m    557[39m     fapl = make_fapl(driver, libver, rdcc_nslots, rdcc_nbytes, rdcc_w0,
+[32m    558[39m                      locking, page_buf_size, min_meta_keep, min_raw_keep,
+[32m    559[39m                      alignment_threshold=alignment_threshold,
+[32m    560[39m                      alignment_interval=alignment_interval,
+[32m    561[39m                      meta_block_size=meta_block_size,
+[32m    562[39m                      **kwds)
+[32m    563[39m     fcpl = make_fcpl(track_order=track_order, track_times=track_times,
+[32m    564[39m                      fs_strategy=fs_strategy, fs_persist=fs_persist,
+[32m    565[39m                      fs_threshold=fs_threshold, fs_page_size=fs_page_size)
+[32m--> [39m[32m566[39m     fid = [43mmake_fid[49m[43m([49m[43mname[49m[43m,[49m[43m [49m[43mmode[49m[43m,[49m[43m [49m[43muserblock_size[49m[43m,[49m[43m [49m[43mfapl[49m[43m,[49m[43m [49m[43mfcpl[49m[43m,[49m[43m [49m[43mswmr[49m[43m=[49m[43mswmr[49m[43m)[49m
+[32m    568[39m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(libver, [38;5;28mtuple[39m):
+[32m    569[39m     [38;5;28mself[39m._libver = libver
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/h5py/_hl/files.py:241[39m, in [36mmake_fid[39m[34m(name, mode, userblock_size, fapl, fcpl, swmr)[39m
+[32m    239[39m     [38;5;28;01mif[39;00m swmr [38;5;129;01mand[39;00m swmr_support:
+[32m    240[39m         flags |= h5f.ACC_SWMR_READ
+[32m--> [39m[32m241[39m     fid = [43mh5f[49m[43m.[49m[43mopen[49m[43m([49m[43mname[49m[43m,[49m[43m [49m[43mflags[49m[43m,[49m[43m [49m[43mfapl[49m[43m=[49m[43mfapl[49m[43m)[49m
+[32m    242[39m [38;5;28;01melif[39;00m mode == [33m'[39m[33mr+[39m[33m'[39m:
+[32m    243[39m     fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+
+[36mFile [39m[32mh5py/_objects.pyx:54[39m, in [36mh5py._objects.with_phil.wrapper[39m[34m()[39m
+
+[36mFile [39m[32mh5py/_objects.pyx:55[39m, in [36mh5py._objects.with_phil.wrapper[39m[34m()[39m
+
+[36mFile [39m[32mh5py/h5f.pyx:104[39m, in [36mh5py.h5f.open[39m[34m()[39m
+
+[31mFileNotFoundError[39m: [Errno 2] Unable to synchronously open file (unable to open file: name = 'example/output_classical_monoctypes.attributions.h5', errno = 2, error message = 'No such file or directory', flags = 0, o_flags = 0)
 

@@ -7,7 +7,7 @@ Traceback (most recent call last):
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
@@ -18,19 +18,69 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import os
-import pandas as pd
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+pd.read_parquet("vep_vcf_results.parquet")
 ------------------
 
 
 [31m---------------------------------------------------------------------------[39m
-[31mModuleNotFoundError[39m                       Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[1][39m[32m, line 2[39m
-[32m      1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mos[39;00m
-[32m----> [39m[32m2[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mpd[39;00m
-[32m      4[39m os.environ[[33m"[39m[33mCUDA_VISIBLE_DEVICES[39m[33m"[39m] = [33m"[39m[33m0[39m[33m"[39m
+[31mFileNotFoundError[39m                         Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[5][39m[32m, line 1[39m
+[32m----> [39m[32m1[39m [43mpd[49m[43m.[49m[43mread_parquet[49m[43m([49m[33;43m"[39;49m[33;43mvep_vcf_results.parquet[39;49m[33;43m"[39;49m[43m)[49m
 
-[31mModuleNotFoundError[39m: No module named 'pandas'
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:669[39m, in [36mread_parquet[39m[34m(path, engine, columns, storage_options, use_nullable_dtypes, dtype_backend, filesystem, filters, **kwargs)[39m
+[32m    666[39m     use_nullable_dtypes = [38;5;28;01mFalse[39;00m
+[32m    667[39m check_dtype_backend(dtype_backend)
+[32m--> [39m[32m669[39m [38;5;28;01mreturn[39;00m [43mimpl[49m[43m.[49m[43mread[49m[43m([49m
+[32m    670[39m [43m    [49m[43mpath[49m[43m,[49m
+[32m    671[39m [43m    [49m[43mcolumns[49m[43m=[49m[43mcolumns[49m[43m,[49m
+[32m    672[39m [43m    [49m[43mfilters[49m[43m=[49m[43mfilters[49m[43m,[49m
+[32m    673[39m [43m    [49m[43mstorage_options[49m[43m=[49m[43mstorage_options[49m[43m,[49m
+[32m    674[39m [43m    [49m[43muse_nullable_dtypes[49m[43m=[49m[43muse_nullable_dtypes[49m[43m,[49m
+[32m    675[39m [43m    [49m[43mdtype_backend[49m[43m=[49m[43mdtype_backend[49m[43m,[49m
+[32m    676[39m [43m    [49m[43mfilesystem[49m[43m=[49m[43mfilesystem[49m[43m,[49m
+[32m    677[39m [43m    [49m[43m*[49m[43m*[49m[43mkwargs[49m[43m,[49m
+[32m    678[39m [43m[49m[43m)[49m
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:258[39m, in [36mPyArrowImpl.read[39m[34m(self, path, columns, filters, use_nullable_dtypes, dtype_backend, storage_options, filesystem, **kwargs)[39m
+[32m    256[39m [38;5;28;01mif[39;00m manager == [33m"[39m[33marray[39m[33m"[39m:
+[32m    257[39m     to_pandas_kwargs[[33m"[39m[33msplit_blocks[39m[33m"[39m] = [38;5;28;01mTrue[39;00m
+[32m--> [39m[32m258[39m path_or_handle, handles, filesystem = [43m_get_path_or_handle[49m[43m([49m
+[32m    259[39m [43m    [49m[43mpath[49m[43m,[49m
+[32m    260[39m [43m    [49m[43mfilesystem[49m[43m,[49m
+[32m    261[39m [43m    [49m[43mstorage_options[49m[43m=[49m[43mstorage_options[49m[43m,[49m
+[32m    262[39m [43m    [49m[43mmode[49m[43m=[49m[33;43m"[39;49m[33;43mrb[39;49m[33;43m"[39;49m[43m,[49m
+[32m    263[39m [43m[49m[43m)[49m
+[32m    264[39m [38;5;28;01mtry[39;00m:
+[32m    265[39m     pa_table = [38;5;28mself[39m.api.parquet.read_table(
+[32m    266[39m         path_or_handle,
+[32m    267[39m         columns=columns,
+[32m   (...)[39m[32m    270[39m         **kwargs,
+[32m    271[39m     )
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:141[39m, in [36m_get_path_or_handle[39m[34m(path, fs, storage_options, mode, is_dir)[39m
+[32m    131[39m handles = [38;5;28;01mNone[39;00m
+[32m    132[39m [38;5;28;01mif[39;00m (
+[32m    133[39m     [38;5;129;01mnot[39;00m fs
+[32m    134[39m     [38;5;129;01mand[39;00m [38;5;129;01mnot[39;00m is_dir
+[32m   (...)[39m[32m    139[39m     [38;5;66;03m# fsspec resources can also point to directories[39;00m
+[32m    140[39m     [38;5;66;03m# this branch is used for example when reading from non-fsspec URLs[39;00m
+[32m--> [39m[32m141[39m     handles = [43mget_handle[49m[43m([49m
+[32m    142[39m [43m        [49m[43mpath_or_handle[49m[43m,[49m[43m [49m[43mmode[49m[43m,[49m[43m [49m[43mis_text[49m[43m=[49m[38;5;28;43;01mFalse[39;49;00m[43m,[49m[43m [49m[43mstorage_options[49m[43m=[49m[43mstorage_options[49m
+[32m    143[39m [43m    [49m[43m)[49m
+[32m    144[39m     fs = [38;5;28;01mNone[39;00m
+[32m    145[39m     path_or_handle = handles.handle
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/common.py:882[39m, in [36mget_handle[39m[34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[39m
+[32m    873[39m         handle = [38;5;28mopen[39m(
+[32m    874[39m             handle,
+[32m    875[39m             ioargs.mode,
+[32m   (...)[39m[32m    878[39m             newline=[33m"[39m[33m"[39m,
+[32m    879[39m         )
+[32m    880[39m     [38;5;28;01melse[39;00m:
+[32m    881[39m         [38;5;66;03m# Binary mode[39;00m
+[32m--> [39m[32m882[39m         handle = [38;5;28;43mopen[39;49m[43m([49m[43mhandle[49m[43m,[49m[43m [49m[43mioargs[49m[43m.[49m[43mmode[49m[43m)[49m
+[32m    883[39m     handles.append(handle)
+[32m    885[39m [38;5;66;03m# Convert BytesIO or file objects passed with an encoding[39;00m
+
+[31mFileNotFoundError[39m: [Errno 2] No such file or directory: 'vep_vcf_results.parquet'
 

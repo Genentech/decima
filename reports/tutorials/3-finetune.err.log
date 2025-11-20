@@ -7,7 +7,7 @@ Traceback (most recent call last):
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
   File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
@@ -35,5 +35,135 @@ import os
 [32m      3[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mscanpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01msc[39;00m
 [32m      4[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mpd[39;00m
 
-[31mModuleNotFoundError[39m: No module named 'anndata'
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py:10[39m
+[32m      7[39m [38;5;28;01mif[39;00m TYPE_CHECKING:
+[32m      8[39m     [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Any
+[32m---> [39m[32m10[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m_core[39;00m[34;01m.[39;00m[34;01manndata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m AnnData
+[32m     11[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m_core[39;00m[34;01m.[39;00m[34;01mextensions[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m register_anndata_namespace
+[32m     12[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m_core[39;00m[34;01m.[39;00m[34;01mmerge[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m concat
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py:27[39m
+[32m     23[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mscipy[39;00m[34;01m.[39;00m[34;01msparse[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m issparse
+[32m     25[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01manndata[39;00m[34;01m.[39;00m[34;01m_warnings[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ImplicitModificationWarning
+[32m---> [39m[32m27[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m utils
+[32m     28[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[34;01m_settings[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m settings
+[32m     29[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[34;01mcompat[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CSArray, DaskArray, ZarrArray, _move_adj_mtx, old_positionals
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py:15[39m
+[32m     11[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mscipy[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m sparse
+[32m     13[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01manndata[39;00m
+[32m---> [39m[32m15[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m_core[39;00m[34;01m.[39;00m[34;01msparse_dataset[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m BaseCompressedSparseDataset
+[32m     16[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01mcompat[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CSArray, CupyArray, CupySparseMatrix, DaskArray
+[32m     17[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01mlogging[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m get_logger
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py:32[39m
+[32m     29[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mscipy[39;00m[34;01m.[39;00m[34;01msparse[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m _sparsetools
+[32m     31[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m abc
+[32m---> [39m[32m32[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[34;01m_settings[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m settings
+[32m     33[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01m.[39;00m[34;01mcompat[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m (
+[32m     34[39m     CSArray,
+[32m     35[39m     CSMatrix,
+[32m   (...)[39m[32m     40[39m     is_zarr_v2,
+[32m     41[39m )
+[32m     42[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01mindex[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m _fix_slice_bounds, _subset, unpack_index
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py:16[39m
+[32m     13[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtypes[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m GenericAlias
+[32m     14[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m TYPE_CHECKING, Generic, NamedTuple, TypeVar, cast
+[32m---> [39m[32m16[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01m.[39;00m[34;01mcompat[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m is_zarr_v2, old_positionals
+[32m     18[39m [38;5;28;01mif[39;00m TYPE_CHECKING:
+[32m     19[39m     [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mcollections[39;00m[34;01m.[39;00m[34;01mabc[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Callable, Sequence
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py:18[39m
+[32m     16[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mnumpy[39;00m[34;01m.[39;00m[34;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m NDArray
+[32m     17[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mpackaging[39;00m[34;01m.[39;00m[34;01mversion[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Version
+[32m---> [39m[32m18[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Array [38;5;28;01mas[39;00m ZarrArray  [38;5;66;03m# noqa: F401[39;00m
+[32m     19[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Group [38;5;28;01mas[39;00m ZarrGroup
+[32m     21[39m [38;5;28;01mif[39;00m TYPE_CHECKING:
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py:6[39m
+[32m      3[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Literal
+[32m      5[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01m_version[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m version [38;5;28;01mas[39;00m __version__
+[32m----> [39m[32m6[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mapi[39;00m[34;01m.[39;00m[34;01msynchronous[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m (
+[32m      7[39m     array,
+[32m      8[39m     consolidate_metadata,
+[32m      9[39m     copy,
+[32m     10[39m     copy_all,
+[32m     11[39m     copy_store,
+[32m     12[39m     create,
+[32m     13[39m     create_array,
+[32m     14[39m     create_group,
+[32m     15[39m     create_hierarchy,
+[32m     16[39m     empty,
+[32m     17[39m     empty_like,
+[32m     18[39m     from_array,
+[32m     19[39m     full,
+[32m     20[39m     full_like,
+[32m     21[39m     group,
+[32m     22[39m     load,
+[32m     23[39m     ones,
+[32m     24[39m     ones_like,
+[32m     25[39m     [38;5;28mopen[39m,
+[32m     26[39m     open_array,
+[32m     27[39m     open_consolidated,
+[32m     28[39m     open_group,
+[32m     29[39m     open_like,
+[32m     30[39m     save,
+[32m     31[39m     save_array,
+[32m     32[39m     save_group,
+[32m     33[39m     tree,
+[32m     34[39m     zeros,
+[32m     35[39m     zeros_like,
+[32m     36[39m )
+[32m     37[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01marray[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Array, AsyncArray
+[32m     38[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01mconfig[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m config
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py:7[39m
+[32m      3[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m TYPE_CHECKING, Any, Literal
+[32m      5[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping_extensions[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m deprecated
+[32m----> [39m[32m7[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mapi[39;00m[34;01m.[39;00m[34;01masynchronous[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01masync_api[39;00m
+[32m      8[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01marray[39;00m
+[32m      9[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01marray[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m DEFAULT_FILL_VALUE, Array, AsyncArray, CompressorLike
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py:13[39m
+[32m     10[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtyping_extensions[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m deprecated
+[32m     12[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mabc[39;00m[34;01m.[39;00m[34;01mstore[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Store
+[32m---> [39m[32m13[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01marray[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m (
+[32m     14[39m     DEFAULT_FILL_VALUE,
+[32m     15[39m     Array,
+[32m     16[39m     AsyncArray,
+[32m     17[39m     CompressorLike,
+[32m     18[39m     create_array,
+[32m     19[39m     from_array,
+[32m     20[39m     get_array_metadata,
+[32m     21[39m )
+[32m     22[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01marray_spec[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ArrayConfigLike, parse_array_config
+[32m     23[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01mbuffer[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m NDArrayLike
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py:28[39m
+[32m     26[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mabc[39;00m[34;01m.[39;00m[34;01mcodec[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ArrayArrayCodec, ArrayBytesCodec, BytesBytesCodec, Codec
+[32m     27[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mabc[39;00m[34;01m.[39;00m[34;01mnumcodec[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Numcodec, _is_numcodec
+[32m---> [39m[32m28[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01m_v2[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m V2Codec
+[32m     29[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mbytes[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m BytesCodec
+[32m     30[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mvlen_utf8[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m VLenBytesCodec, VLenUTF8Codec
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py:5[39m
+[32m      3[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mblosc[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m BloscCname, BloscCodec, BloscShuffle
+[32m      4[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mbytes[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m BytesCodec, Endian
+[32m----> [39m[32m5[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mcrc32c_[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Crc32cCodec
+[32m      6[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mgzip[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m GzipCodec
+[32m      7[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcodecs[39;00m[34;01m.[39;00m[34;01mnumcodecs[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m (
+[32m      8[39m     BZ2,
+[32m      9[39m     CRC32,
+[32m   (...)[39m[32m     28[39m     Zstd,
+[32m     29[39m )
+
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py:8[39m
+[32m      6[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mnumpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mnp[39;00m
+[32m      7[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mtyping_extensions[39;00m
+[32m----> [39m[32m8[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mcrc32c[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m crc32c
+[32m     10[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mabc[39;00m[34;01m.[39;00m[34;01mcodec[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m BytesBytesCodec
+[32m     11[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mzarr[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01mcommon[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m JSON, parse_named_configuration
+
+[31mModuleNotFoundError[39m: No module named 'crc32c'
 

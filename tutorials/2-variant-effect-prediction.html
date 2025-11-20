@@ -269,18 +269,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <section id="cli-api">
 <h2>CLI API<a class="headerlink" href="#cli-api" title="Link to this heading">¶</a></h2>
@@ -292,55 +280,39 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: decima vep [OPTIONS]
-
-  Predict variant effect and save to parquet
-
-  Examples:
-
-      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot;
-
-      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --tasks
-      &quot;cell_type == &#39;classical monocyte&#39;&quot; # only predict for classical
-      monocytes
-
-      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --device 0
-      # use device gpu device 0
-
-      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --include-
-      cols &quot;gene_name,gene_id&quot; # include gene_name and gene_id columns in the
-      output
-
-      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --gene-col
-      &quot;gene_name&quot; # use gene_name column as gene names if these option passed
-      genes and variants mapped based on these column not based on the genomic
-      locus based on the annotaiton.
-
-Options:
-  -v, --variants PATH       Path to the variant file .vcf file
-  -o, --output_pq PATH      Path to the output parquet file.
-  --tasks TEXT              Tasks to predict. If not provided, all tasks will
-                            be predicted.
-  --chunksize INTEGER       Number of variants to process in each chunk.
-                            Loading variants in chunks is more memory
-                            efficient.This chuck of variants will be process
-                            and saved to output parquet file before contineus
-                            to next chunk. Default: 10_000.
-  --model INTEGER           Model to use for variant effect prediction either
-                            replicate number or path to the model.
-  --device TEXT             Device to use. Default: None which automatically
-                            selects the best device.
-  --batch-size INTEGER      Batch size for the model. Default: 1.
-  --num-workers INTEGER     Number of workers for the loader. Default: 1.
-  --max-distance FLOAT      Maximum distance from the TSS. Default: 524288.
-  --max-distance-type TEXT  Type of maximum distance. Default: tss.
-  --include-cols TEXT       Columns to include in the output in the original
-                            tsv file to include in the output parquet file.
-                            Default: None.
-  --gene-col TEXT           Column name for gene names. Default: None.
-  --genome TEXT             Genome build. Default: hg38.
-  --help                    Show this message and exit.
-
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
 </pre></div>
 </div>
 </div>
@@ -369,6 +341,45 @@ Options:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -377,8 +388,7 @@ Options:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unknown: 0 / 48 
-allele_mismatch_with_reference_genome: 26 / 48 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cat: vep_vcf_results.parquet.warnings.log: No such file or directory
 </pre></div>
 </div>
 </div>
@@ -390,1204 +400,70 @@ allele_mismatch_with_reference_genome: 26 / 48
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;vep_vcf_results.parquet&quot;</span><span class="p">)</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:669,</span> in <span class="ni">read_parquet</span><span class="nt">(path, engine, columns, storage_options, use_nullable_dtypes, dtype_backend, filesystem, filters, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span>     <span class="n">use_nullable_dtypes</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">667</span> <span class="n">check_dtype_backend</span><span class="p">(</span><span class="n">dtype_backend</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">669</span> <span class="k">return</span> <span class="n">impl</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span>     <span class="n">path</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">671</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span>     <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">673</span>     <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">674</span>     <span class="n">use_nullable_dtypes</span><span class="o">=</span><span class="n">use_nullable_dtypes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">675</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">676</span>     <span class="n">filesystem</span><span class="o">=</span><span class="n">filesystem</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">677</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">678</span> <span class="p">)</span>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>chrom</th>
-      <th>pos</th>
-      <th>ref</th>
-      <th>alt</th>
-      <th>gene</th>
-      <th>start</th>
-      <th>end</th>
-      <th>strand</th>
-      <th>gene_mask_start</th>
-      <th>gene_mask_end</th>
-      <th>...</th>
-      <th>agg_9528</th>
-      <th>agg_9529</th>
-      <th>agg_9530</th>
-      <th>agg_9531</th>
-      <th>agg_9532</th>
-      <th>agg_9533</th>
-      <th>agg_9535</th>
-      <th>agg_9536</th>
-      <th>agg_9537</th>
-      <th>agg_9538</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>FAM41C</td>
-      <td>516455</td>
-      <td>1040743</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>172672</td>
-      <td>...</td>
-      <td>-0.000053</td>
-      <td>-0.000153</td>
-      <td>-0.000089</td>
-      <td>-0.000016</td>
-      <td>-0.000013</td>
-      <td>-0.000040</td>
-      <td>-0.000070</td>
-      <td>7.629395e-05</td>
-      <td>-0.000026</td>
-      <td>-0.000069</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>NOC2L</td>
-      <td>598861</td>
-      <td>1123149</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>178946</td>
-      <td>...</td>
-      <td>-0.000586</td>
-      <td>-0.000891</td>
-      <td>-0.000565</td>
-      <td>-0.000311</td>
-      <td>-0.000461</td>
-      <td>-0.000252</td>
-      <td>-0.000376</td>
-      <td>-6.060898e-04</td>
-      <td>-0.000454</td>
-      <td>-0.000725</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>PERM1</td>
-      <td>621645</td>
-      <td>1145933</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>170729</td>
-      <td>...</td>
-      <td>-0.000565</td>
-      <td>-0.000787</td>
-      <td>-0.000515</td>
-      <td>-0.000279</td>
-      <td>-0.000354</td>
-      <td>-0.000202</td>
-      <td>-0.000342</td>
-      <td>-5.399883e-04</td>
-      <td>-0.000423</td>
-      <td>-0.000597</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>HES4</td>
-      <td>639724</td>
-      <td>1164012</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>165050</td>
-      <td>...</td>
-      <td>-0.001453</td>
-      <td>-0.001775</td>
-      <td>-0.001403</td>
-      <td>-0.000820</td>
-      <td>-0.000896</td>
-      <td>-0.000575</td>
-      <td>-0.001113</td>
-      <td>-1.119316e-03</td>
-      <td>-0.001036</td>
-      <td>-0.001202</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>FAM87B</td>
-      <td>653531</td>
-      <td>1177819</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>166306</td>
-      <td>...</td>
-      <td>0.000045</td>
-      <td>0.000105</td>
-      <td>0.000060</td>
-      <td>-0.000030</td>
-      <td>-0.000049</td>
-      <td>0.000029</td>
-      <td>0.000135</td>
-      <td>1.490116e-07</td>
-      <td>0.000057</td>
-      <td>0.000001</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>RNF223</td>
-      <td>713858</td>
-      <td>1238146</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>167179</td>
-      <td>...</td>
-      <td>-0.000561</td>
-      <td>-0.000826</td>
-      <td>-0.000536</td>
-      <td>-0.000299</td>
-      <td>-0.000324</td>
-      <td>-0.000196</td>
-      <td>-0.000374</td>
-      <td>-3.589988e-04</td>
-      <td>-0.000342</td>
-      <td>-0.000426</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>C1orf159</td>
-      <td>755913</td>
-      <td>1280201</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>198383</td>
-      <td>...</td>
-      <td>-0.000399</td>
-      <td>-0.000585</td>
-      <td>-0.000374</td>
-      <td>-0.000208</td>
-      <td>-0.000212</td>
-      <td>-0.000126</td>
-      <td>-0.000265</td>
-      <td>-2.926290e-04</td>
-      <td>-0.000266</td>
-      <td>-0.000376</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>SAMD11</td>
-      <td>760088</td>
-      <td>1284376</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>184493</td>
-      <td>...</td>
-      <td>0.001317</td>
-      <td>0.001001</td>
-      <td>0.000884</td>
-      <td>0.001013</td>
-      <td>0.000691</td>
-      <td>0.001310</td>
-      <td>0.001097</td>
-      <td>5.598068e-04</td>
-      <td>0.000501</td>
-      <td>0.000827</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>KLHL17</td>
-      <td>796744</td>
-      <td>1321032</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>168975</td>
-      <td>...</td>
-      <td>-0.000244</td>
-      <td>-0.000214</td>
-      <td>-0.000310</td>
-      <td>-0.000153</td>
-      <td>-0.000324</td>
-      <td>-0.000168</td>
-      <td>-0.000147</td>
-      <td>-4.823208e-04</td>
-      <td>-0.000211</td>
-      <td>-0.000401</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>PLEKHN1</td>
-      <td>802642</td>
-      <td>1326930</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>173223</td>
-      <td>...</td>
-      <td>0.000012</td>
-      <td>-0.000113</td>
-      <td>0.000002</td>
-      <td>-0.000028</td>
-      <td>-0.000248</td>
-      <td>-0.000283</td>
-      <td>-0.000314</td>
-      <td>-1.890063e-04</td>
-      <td>-0.000022</td>
-      <td>-0.000029</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>TTLL10-AS1</td>
-      <td>819107</td>
-      <td>1343395</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>170339</td>
-      <td>...</td>
-      <td>-0.000286</td>
-      <td>-0.000486</td>
-      <td>-0.000312</td>
-      <td>-0.000150</td>
-      <td>-0.000256</td>
-      <td>-0.000124</td>
-      <td>-0.000179</td>
-      <td>-3.057718e-04</td>
-      <td>-0.000183</td>
-      <td>-0.000252</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>ISG15</td>
-      <td>837298</td>
-      <td>1361586</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>177242</td>
-      <td>...</td>
-      <td>0.007558</td>
-      <td>0.004934</td>
-      <td>0.007966</td>
-      <td>0.007595</td>
-      <td>-0.001943</td>
-      <td>0.001598</td>
-      <td>0.007838</td>
-      <td>2.528191e-03</td>
-      <td>0.007137</td>
-      <td>0.009534</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>TNFRSF18</td>
-      <td>846144</td>
-      <td>1370432</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>166924</td>
-      <td>...</td>
-      <td>-0.000190</td>
-      <td>-0.000248</td>
-      <td>-0.000215</td>
-      <td>-0.000113</td>
-      <td>-0.000070</td>
-      <td>-0.000076</td>
-      <td>-0.000159</td>
-      <td>-5.897880e-05</td>
-      <td>-0.000117</td>
-      <td>-0.000182</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>TNFRSF4</td>
-      <td>853705</td>
-      <td>1377993</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>166653</td>
-      <td>...</td>
-      <td>-0.000217</td>
-      <td>-0.000332</td>
-      <td>-0.000225</td>
-      <td>-0.000132</td>
-      <td>-0.000127</td>
-      <td>-0.000102</td>
-      <td>-0.000146</td>
-      <td>-2.127588e-04</td>
-      <td>-0.000168</td>
-      <td>-0.000276</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>AGRN</td>
-      <td>856280</td>
-      <td>1380568</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>199838</td>
-      <td>...</td>
-      <td>-0.000643</td>
-      <td>-0.000886</td>
-      <td>-0.000513</td>
-      <td>-0.001688</td>
-      <td>-0.000346</td>
-      <td>-0.000528</td>
-      <td>-0.000894</td>
-      <td>-4.293919e-04</td>
-      <td>-0.001309</td>
-      <td>-0.000301</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>SDF4</td>
-      <td>871619</td>
-      <td>1395907</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>178999</td>
-      <td>...</td>
-      <td>-0.000031</td>
-      <td>-0.000034</td>
-      <td>-0.000048</td>
-      <td>-0.000017</td>
-      <td>0.000019</td>
-      <td>-0.000002</td>
-      <td>-0.000036</td>
-      <td>-1.719594e-05</td>
-      <td>-0.000026</td>
-      <td>-0.000037</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>C1QTNF12</td>
-      <td>886274</td>
-      <td>1410562</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>168116</td>
-      <td>...</td>
-      <td>-0.000396</td>
-      <td>-0.000607</td>
-      <td>-0.000421</td>
-      <td>-0.000306</td>
-      <td>-0.000294</td>
-      <td>-0.000207</td>
-      <td>-0.000237</td>
-      <td>-3.867447e-04</td>
-      <td>-0.000289</td>
-      <td>-0.000498</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>UBE2J2</td>
-      <td>913437</td>
-      <td>1437725</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>183816</td>
-      <td>...</td>
-      <td>-0.000809</td>
-      <td>-0.001129</td>
-      <td>-0.000884</td>
-      <td>-0.000664</td>
-      <td>-0.000741</td>
-      <td>-0.000528</td>
-      <td>-0.000512</td>
-      <td>-7.908940e-04</td>
-      <td>-0.000607</td>
-      <td>-0.000990</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>ACAP3</td>
-      <td>949161</td>
-      <td>1473449</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>181059</td>
-      <td>...</td>
-      <td>-0.000826</td>
-      <td>-0.001292</td>
-      <td>-0.000932</td>
-      <td>-0.000710</td>
-      <td>-0.000789</td>
-      <td>-0.000506</td>
-      <td>-0.000457</td>
-      <td>-9.316206e-04</td>
-      <td>-0.000666</td>
-      <td>-0.001122</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>INTS11</td>
-      <td>964243</td>
-      <td>1488531</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>176946</td>
-      <td>...</td>
-      <td>-0.000033</td>
-      <td>-0.000067</td>
-      <td>-0.000013</td>
-      <td>-0.000010</td>
-      <td>0.000030</td>
-      <td>0.000017</td>
-      <td>-0.000020</td>
-      <td>1.147389e-04</td>
-      <td>-0.000005</td>
-      <td>-0.000017</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>DVL1</td>
-      <td>988970</td>
-      <td>1513258</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>177982</td>
-      <td>...</td>
-      <td>-0.000297</td>
-      <td>-0.000456</td>
-      <td>-0.000343</td>
-      <td>-0.000253</td>
-      <td>-0.000310</td>
-      <td>-0.000204</td>
-      <td>-0.000172</td>
-      <td>-3.470182e-04</td>
-      <td>-0.000220</td>
-      <td>-0.000371</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>chr1</td>
-      <td>1002308</td>
-      <td>T</td>
-      <td>C</td>
-      <td>MXRA8</td>
-      <td>1001329</td>
-      <td>1525617</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>172928</td>
-      <td>...</td>
-      <td>-0.000118</td>
-      <td>-0.000153</td>
-      <td>-0.000130</td>
-      <td>-0.000090</td>
-      <td>-0.000128</td>
-      <td>-0.000076</td>
-      <td>-0.000053</td>
-      <td>-2.347827e-04</td>
-      <td>-0.000090</td>
-      <td>-0.000214</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GNAT2</td>
-      <td>109259481</td>
-      <td>109783769</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>180515</td>
-      <td>...</td>
-      <td>0.000099</td>
-      <td>0.000077</td>
-      <td>0.000057</td>
-      <td>0.000040</td>
-      <td>0.000018</td>
-      <td>0.000047</td>
-      <td>0.000075</td>
-      <td>2.750456e-04</td>
-      <td>0.000065</td>
-      <td>0.000258</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GNAT2</td>
-      <td>109259481</td>
-      <td>109783769</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>180515</td>
-      <td>...</td>
-      <td>0.003284</td>
-      <td>0.005105</td>
-      <td>0.002662</td>
-      <td>0.001423</td>
-      <td>0.001525</td>
-      <td>0.001257</td>
-      <td>0.001919</td>
-      <td>5.420089e-03</td>
-      <td>0.002166</td>
-      <td>0.005263</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>SYPL2</td>
-      <td>109302706</td>
-      <td>109826994</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>179428</td>
-      <td>...</td>
-      <td>0.002200</td>
-      <td>0.001744</td>
-      <td>0.001206</td>
-      <td>0.001263</td>
-      <td>0.001008</td>
-      <td>-0.000117</td>
-      <td>0.001218</td>
-      <td>2.799034e-04</td>
-      <td>0.001503</td>
-      <td>0.001372</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>SYPL2</td>
-      <td>109302706</td>
-      <td>109826994</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>179428</td>
-      <td>...</td>
-      <td>-0.004052</td>
-      <td>-0.003465</td>
-      <td>-0.003092</td>
-      <td>-0.003744</td>
-      <td>-0.003384</td>
-      <td>-0.003265</td>
-      <td>-0.003253</td>
-      <td>1.600981e-03</td>
-      <td>-0.001915</td>
-      <td>-0.002728</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>ATXN7L2</td>
-      <td>109319639</td>
-      <td>109843927</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>173165</td>
-      <td>...</td>
-      <td>0.000001</td>
-      <td>0.000010</td>
-      <td>0.000091</td>
-      <td>-0.000079</td>
-      <td>-0.000044</td>
-      <td>-0.000061</td>
-      <td>-0.000042</td>
-      <td>-4.082918e-05</td>
-      <td>-0.000022</td>
-      <td>-0.000060</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>ATXN7L2</td>
-      <td>109319639</td>
-      <td>109843927</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>173165</td>
-      <td>...</td>
-      <td>0.000536</td>
-      <td>-0.000179</td>
-      <td>0.001585</td>
-      <td>0.001431</td>
-      <td>0.003103</td>
-      <td>0.001631</td>
-      <td>0.000257</td>
-      <td>2.081454e-03</td>
-      <td>0.000913</td>
-      <td>0.001677</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>CYB561D1</td>
-      <td>109330212</td>
-      <td>109854500</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>172720</td>
-      <td>...</td>
-      <td>0.000584</td>
-      <td>0.000577</td>
-      <td>0.000674</td>
-      <td>0.000536</td>
-      <td>0.000167</td>
-      <td>0.000397</td>
-      <td>0.000507</td>
-      <td>1.705885e-04</td>
-      <td>0.000503</td>
-      <td>0.000481</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>CYB561D1</td>
-      <td>109330212</td>
-      <td>109854500</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>172720</td>
-      <td>...</td>
-      <td>0.003762</td>
-      <td>0.002849</td>
-      <td>0.001487</td>
-      <td>0.002733</td>
-      <td>-0.000099</td>
-      <td>0.000631</td>
-      <td>0.001469</td>
-      <td>4.820824e-04</td>
-      <td>0.002098</td>
-      <td>-0.000244</td>
-    </tr>
-    <tr>
-      <th>30</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GPR61</td>
-      <td>109376032</td>
-      <td>109900320</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>172374</td>
-      <td>...</td>
-      <td>0.000155</td>
-      <td>0.000251</td>
-      <td>0.000114</td>
-      <td>0.000134</td>
-      <td>-0.000137</td>
-      <td>-0.000068</td>
-      <td>0.000125</td>
-      <td>4.252791e-05</td>
-      <td>0.000117</td>
-      <td>0.000137</td>
-    </tr>
-    <tr>
-      <th>31</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GPR61</td>
-      <td>109376032</td>
-      <td>109900320</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>172374</td>
-      <td>...</td>
-      <td>0.000258</td>
-      <td>0.000810</td>
-      <td>0.000308</td>
-      <td>0.000489</td>
-      <td>0.000618</td>
-      <td>0.000236</td>
-      <td>0.000523</td>
-      <td>6.991625e-04</td>
-      <td>0.000155</td>
-      <td>0.000536</td>
-    </tr>
-    <tr>
-      <th>32</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GSTM3</td>
-      <td>109380590</td>
-      <td>109904878</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>170946</td>
-      <td>...</td>
-      <td>-0.000651</td>
-      <td>-0.000626</td>
-      <td>-0.000446</td>
-      <td>-0.000290</td>
-      <td>-0.000174</td>
-      <td>-0.000026</td>
-      <td>-0.000154</td>
-      <td>-3.945976e-04</td>
-      <td>-0.000396</td>
-      <td>-0.000499</td>
-    </tr>
-    <tr>
-      <th>33</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GSTM3</td>
-      <td>109380590</td>
-      <td>109904878</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>170946</td>
-      <td>...</td>
-      <td>0.014822</td>
-      <td>0.029157</td>
-      <td>0.015316</td>
-      <td>0.007980</td>
-      <td>0.015211</td>
-      <td>0.007929</td>
-      <td>0.010251</td>
-      <td>2.181430e-02</td>
-      <td>0.009214</td>
-      <td>0.024373</td>
-    </tr>
-    <tr>
-      <th>34</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GNAI3</td>
-      <td>109384775</td>
-      <td>109909063</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>233549</td>
-      <td>...</td>
-      <td>0.002052</td>
-      <td>0.002637</td>
-      <td>0.003581</td>
-      <td>0.001084</td>
-      <td>-0.001867</td>
-      <td>-0.003804</td>
-      <td>0.003472</td>
-      <td>-1.005411e-03</td>
-      <td>0.003400</td>
-      <td>0.001397</td>
-    </tr>
-    <tr>
-      <th>35</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GNAI3</td>
-      <td>109384775</td>
-      <td>109909063</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>233549</td>
-      <td>...</td>
-      <td>-0.002514</td>
-      <td>-0.002176</td>
-      <td>0.001273</td>
-      <td>0.007376</td>
-      <td>0.011271</td>
-      <td>0.019305</td>
-      <td>-0.002886</td>
-      <td>2.035785e-02</td>
-      <td>-0.001660</td>
-      <td>0.006990</td>
-    </tr>
-    <tr>
-      <th>36</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>AMPD2</td>
-      <td>109452264</td>
-      <td>109976552</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>179789</td>
-      <td>...</td>
-      <td>0.000870</td>
-      <td>0.001771</td>
-      <td>0.002003</td>
-      <td>0.000641</td>
-      <td>-0.002239</td>
-      <td>-0.000491</td>
-      <td>0.001610</td>
-      <td>-6.132126e-04</td>
-      <td>0.002603</td>
-      <td>0.000714</td>
-    </tr>
-    <tr>
-      <th>37</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>AMPD2</td>
-      <td>109452264</td>
-      <td>109976552</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>179789</td>
-      <td>...</td>
-      <td>0.015270</td>
-      <td>0.004848</td>
-      <td>0.011452</td>
-      <td>0.028524</td>
-      <td>0.009958</td>
-      <td>0.013799</td>
-      <td>0.007597</td>
-      <td>2.641273e-02</td>
-      <td>0.009691</td>
-      <td>0.026180</td>
-    </tr>
-    <tr>
-      <th>38</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GSTM4</td>
-      <td>109492259</td>
-      <td>110016547</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>182577</td>
-      <td>...</td>
-      <td>-0.000336</td>
-      <td>0.001399</td>
-      <td>0.000511</td>
-      <td>0.000450</td>
-      <td>-0.000501</td>
-      <td>-0.000243</td>
-      <td>-0.001328</td>
-      <td>4.479885e-04</td>
-      <td>0.000544</td>
-      <td>0.002848</td>
-    </tr>
-    <tr>
-      <th>39</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GSTM4</td>
-      <td>109492259</td>
-      <td>110016547</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>182577</td>
-      <td>...</td>
-      <td>-0.032543</td>
-      <td>-0.033684</td>
-      <td>-0.029430</td>
-      <td>-0.050647</td>
-      <td>-0.030112</td>
-      <td>-0.021851</td>
-      <td>-0.012187</td>
-      <td>-2.968431e-02</td>
-      <td>-0.037312</td>
-      <td>-0.067244</td>
-    </tr>
-    <tr>
-      <th>40</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GSTM2</td>
-      <td>109504182</td>
-      <td>110028470</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>205369</td>
-      <td>...</td>
-      <td>-0.001145</td>
-      <td>-0.001371</td>
-      <td>0.000107</td>
-      <td>-0.000453</td>
-      <td>-0.001597</td>
-      <td>-0.000798</td>
-      <td>-0.001882</td>
-      <td>1.063347e-04</td>
-      <td>0.000106</td>
-      <td>0.000086</td>
-    </tr>
-    <tr>
-      <th>41</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GSTM2</td>
-      <td>109504182</td>
-      <td>110028470</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>205369</td>
-      <td>...</td>
-      <td>0.006410</td>
-      <td>0.010421</td>
-      <td>0.008430</td>
-      <td>0.010849</td>
-      <td>-0.004994</td>
-      <td>0.003090</td>
-      <td>-0.004843</td>
-      <td>-9.270430e-03</td>
-      <td>0.008755</td>
-      <td>0.011827</td>
-    </tr>
-    <tr>
-      <th>42</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GSTM1</td>
-      <td>109523974</td>
-      <td>110048262</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>185065</td>
-      <td>...</td>
-      <td>0.000849</td>
-      <td>0.001993</td>
-      <td>0.001033</td>
-      <td>-0.000050</td>
-      <td>-0.000534</td>
-      <td>0.000095</td>
-      <td>0.000409</td>
-      <td>-3.244877e-04</td>
-      <td>0.000842</td>
-      <td>0.000388</td>
-    </tr>
-    <tr>
-      <th>43</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GSTM1</td>
-      <td>109523974</td>
-      <td>110048262</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>185065</td>
-      <td>...</td>
-      <td>0.009973</td>
-      <td>0.012482</td>
-      <td>0.003073</td>
-      <td>0.019083</td>
-      <td>0.010606</td>
-      <td>0.000387</td>
-      <td>0.003512</td>
-      <td>7.757962e-03</td>
-      <td>0.011860</td>
-      <td>0.019928</td>
-    </tr>
-    <tr>
-      <th>44</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>GSTM5</td>
-      <td>109547940</td>
-      <td>110072228</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>227488</td>
-      <td>...</td>
-      <td>0.002434</td>
-      <td>0.001946</td>
-      <td>0.001824</td>
-      <td>0.000374</td>
-      <td>-0.000416</td>
-      <td>-0.000871</td>
-      <td>0.003142</td>
-      <td>-1.690984e-03</td>
-      <td>0.001557</td>
-      <td>0.002596</td>
-    </tr>
-    <tr>
-      <th>45</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>GSTM5</td>
-      <td>109547940</td>
-      <td>110072228</td>
-      <td>+</td>
-      <td>163840</td>
-      <td>227488</td>
-      <td>...</td>
-      <td>-0.005434</td>
-      <td>0.003420</td>
-      <td>-0.019319</td>
-      <td>-0.000747</td>
-      <td>0.041849</td>
-      <td>0.022034</td>
-      <td>-0.024061</td>
-      <td>4.308212e-02</td>
-      <td>0.005673</td>
-      <td>-0.007195</td>
-    </tr>
-    <tr>
-      <th>46</th>
-      <td>chr1</td>
-      <td>109727471</td>
-      <td>A</td>
-      <td>C</td>
-      <td>ALX3</td>
-      <td>109710224</td>
-      <td>110234512</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>174642</td>
-      <td>...</td>
-      <td>0.000210</td>
-      <td>0.000521</td>
-      <td>0.000256</td>
-      <td>0.000118</td>
-      <td>0.000335</td>
-      <td>0.000174</td>
-      <td>0.000136</td>
-      <td>8.502305e-04</td>
-      <td>0.000165</td>
-      <td>0.000544</td>
-    </tr>
-    <tr>
-      <th>47</th>
-      <td>chr1</td>
-      <td>109728807</td>
-      <td>TTT</td>
-      <td>G</td>
-      <td>ALX3</td>
-      <td>109710224</td>
-      <td>110234512</td>
-      <td>-</td>
-      <td>163840</td>
-      <td>174642</td>
-      <td>...</td>
-      <td>-0.000382</td>
-      <td>-0.000466</td>
-      <td>-0.000408</td>
-      <td>-0.000091</td>
-      <td>-0.000512</td>
-      <td>-0.000240</td>
-      <td>-0.000283</td>
-      <td>-1.361221e-04</td>
-      <td>-0.000274</td>
-      <td>-0.000745</td>
-    </tr>
-  </tbody>
-</table>
-<p>48 rows × 8870 columns</p>
-</div></div></div>
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:258,</span> in <span class="ni">PyArrowImpl.read</span><span class="nt">(self, path, columns, filters, use_nullable_dtypes, dtype_backend, storage_options, filesystem, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">256</span> <span class="k">if</span> <span class="n">manager</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="n">to_pandas_kwargs</span><span class="p">[</span><span class="s2">&quot;split_blocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="ne">--&gt; </span><span class="mi">258</span> <span class="n">path_or_handle</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="n">filesystem</span> <span class="o">=</span> <span class="n">_get_path_or_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="n">path</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="n">filesystem</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">pa_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">parquet</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span>         <span class="n">path_or_handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">270</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="p">)</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:141,</span> in <span class="ni">_get_path_or_handle</span><span class="nt">(path, fs, storage_options, mode, is_dir)</span>
+<span class="g g-Whitespace">    </span><span class="mi">131</span> <span class="n">handles</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="k">if</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span>     <span class="ow">not</span> <span class="n">fs</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_dir</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">139</span>     <span class="c1"># fsspec resources can also point to directories</span>
+<span class="g g-Whitespace">    </span><span class="mi">140</span>     <span class="c1"># this branch is used for example when reading from non-fsspec URLs</span>
+<span class="ne">--&gt; </span><span class="mi">141</span>     <span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">142</span>         <span class="n">path_or_handle</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">is_text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span>
+<span class="g g-Whitespace">    </span><span class="mi">143</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">144</span>     <span class="n">fs</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">145</span>     <span class="n">path_or_handle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/common.py:882,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="ne">--&gt; </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">883</span>     <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">885</span> <span class="c1"># Convert BytesIO or file objects passed with an encoding</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;vep_vcf_results.parquet&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <p>Alternatively, you can pass tsv file with following format where first 4 columns are <code class="docutils literal notranslate"><span class="pre">chrom</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">alt</span></code>.</p>
 <div class="cell docutils container">

@@ -270,7 +270,39 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
 </pre></div>
 </div>
 </div>
@@ -294,7 +326,39 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/decima/decima/.tox/docs/bin/decima&quot;, line 3, in &lt;module&gt;
+    from decima.cli import main
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/__init__.py&quot;, line 3, in &lt;module&gt;
+    from decima.core.result import DecimaResult
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/decima/core/result.py&quot;, line 2, in &lt;module&gt;
+    import anndata
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/__init__.py&quot;, line 10, in &lt;module&gt;
+    from ._core.anndata import AnnData
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/anndata.py&quot;, line 27, in &lt;module&gt;
+    from .. import utils
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/utils.py&quot;, line 15, in &lt;module&gt;
+    from ._core.sparse_dataset import BaseCompressedSparseDataset
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_core/sparse_dataset.py&quot;, line 32, in &lt;module&gt;
+    from .._settings import settings
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/_settings.py&quot;, line 16, in &lt;module&gt;
+    from .compat import is_zarr_v2, old_positionals
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/anndata/compat/__init__.py&quot;, line 18, in &lt;module&gt;
+    from zarr import Array as ZarrArray  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/__init__.py&quot;, line 6, in &lt;module&gt;
+    from zarr.api.synchronous import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/synchronous.py&quot;, line 7, in &lt;module&gt;
+    import zarr.api.asynchronous as async_api
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/api/asynchronous.py&quot;, line 13, in &lt;module&gt;
+    from zarr.core.array import (
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/core/array.py&quot;, line 28, in &lt;module&gt;
+    from zarr.codecs._v2 import V2Codec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/__init__.py&quot;, line 5, in &lt;module&gt;
+    from zarr.codecs.crc32c_ import Crc32cCodec
+  File &quot;/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/zarr/codecs/crc32c_.py&quot;, line 8, in &lt;module&gt;
+    from crc32c import crc32c
+ModuleNotFoundError: No module named &#39;crc32c&#39;
 </pre></div>
 </div>
 </div>
