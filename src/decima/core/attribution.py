@@ -20,7 +20,7 @@ from grelu.interpret.motifs import scan_sequences
 from grelu.sequence.format import convert_input_type, strings_to_one_hot
 from grelu.visualize import plot_attributions
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE, MODEL_METADATA
 from decima.core.result import DecimaResult
 from decima.interpret.attributer import DecimaAttributer
 from decima.utils.sequence import one_hot_to_seq
@@ -188,11 +188,11 @@ class Attribution:
         inputs: Union[str, torch.Tensor, np.ndarray],
         tasks: Optional[list] = None,
         off_tasks: Optional[list] = None,
-        model: Optional[Union[str, int]] = 0,
+        model: Optional[Union[str, int]] = MODEL_METADATA[DEFAULT_ENSEMBLE][0],
         transform: str = "specificity",
         method: str = "inputxgradient",
         device: Optional[str] = "cpu",
-        result: Optional[DecimaResult] = None,
+        result: Optional[str] = None,
         gene: Optional[str] = "",
         chrom: Optional[str] = None,
         start: Optional[int] = None,
@@ -218,6 +218,7 @@ class Attribution:
             transform: Transformation to apply to attributions
             method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
             device: Device to use for attribution analysis
+            result: Result object or path to result object or name of the model to load the result for.
             gene: Gene name
             chrom: Chromosome name
             start: Start position
@@ -259,9 +260,7 @@ class Attribution:
         else:
             raise ValueError("`inputs` must be a string, torch.Tensor, or np.ndarray")
 
-        if result is None:
-            result = DecimaResult.load()
-
+        result = DecimaResult.load(result or model)
         tasks, off_tasks = result.query_tasks(tasks, off_tasks)
 
         attrs = (
@@ -762,9 +761,7 @@ class AttributionResult:
             pattern_type=pattern_type,
         )
 
-    def _get_metadata(
-        self, genes: List[str], metadata_anndata: Optional[DecimaResult] = None, custom_genome: bool = False
-    ):
+    def _get_metadata(self, genes: List[str], metadata_anndata: Optional[str] = None, custom_genome: bool = False):
         if custom_genome:
             chroms = genes
             starts = [0] * len(genes)
@@ -773,7 +770,10 @@ class AttributionResult:
             else:
                 ends = [DECIMA_CONTEXT_SIZE] * len(genes)
         else:
-            result = DecimaResult.load(metadata_anndata)
+            model_name = self.model_name
+            if isinstance(model_name, list):
+                model_name = model_name[0]
+            result = DecimaResult.load(metadata_anndata or model_name)
             chroms = result.gene_metadata.loc[genes].chrom
             if self.tss_distance is not None:
                 tss_pos = np.where(
@@ -791,7 +791,7 @@ class AttributionResult:
     def load_attribution(
         self,
         gene: str,
-        metadata_anndata: Optional[DecimaResult] = None,
+        metadata_anndata: Optional[str] = None,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,
@@ -871,7 +871,7 @@ class AttributionResult:
     def recursive_seqlet_calling(
         self,
         genes: Optional[List[str]] = None,
-        metadata_anndata: Optional[DecimaResult] = None,
+        metadata_anndata: Optional[str] = None,
         custom_genome: bool = False,
         threshold: float = 5e-4,
         min_seqlet_len: int = 4,

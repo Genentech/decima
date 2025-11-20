@@ -8,7 +8,8 @@ This module contains the CLI for predicting the gene expression of a given gene 
 
 import click
 from pathlib import Path
-from decima.cli.callback import parse_model, parse_genes, validate_save_replicates
+from decima.constants import DEFAULT_ENSEMBLE
+from decima.cli.callback import parse_model, parse_genes, validate_save_replicates, parse_metadata
 from decima.tools.inference import predict_gene_expression
 
 
@@ -25,15 +26,16 @@ from decima.tools.inference import predict_gene_expression
     "-m",
     "--model",
     type=str,
-    default="ensemble",
+    default=DEFAULT_ENSEMBLE,
+    show_default=True,
     callback=parse_model,
-    help="`0`, `1`, `2`, `3`, `ensemble` or a path or a comma-separated list of paths to checkpoint files",
+    help=f"`0`, `1`, `2`, `3`, `{DEFAULT_ENSEMBLE}` or a path or a comma-separated list of paths to checkpoint files",
 )
 @click.option(
     "--metadata",
-    type=click.Path(exists=True),
     default=None,
-    help="Path to the metadata anndata file. Default: None.",
+    callback=parse_metadata,
+    help="Path to the metadata anndata file or name of the model. If not provided, the compabilite metadata for the model will be used. Default: {DEFAULT_ENSEMBLE}.",
 )
 @click.option(
     "--device",

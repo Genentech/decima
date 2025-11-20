@@ -68,7 +68,7 @@ def cli_finetune(
 
     Args:
         name: Name of the run for logging and checkpointing
-        model: Model path or replication number (0-3)
+        model: Borzoi model path or replication number (0-3)
         device: Device to use for training. Default: "0"
         matrix_file: Path to the matrix file containing training data
         h5_file: Path to the H5 file containing sequences

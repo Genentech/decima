@@ -186,3 +186,4 @@ wandb/
 docs/api
 docs/tutorials/example
 docs/wandb
+run_tutorial.s*

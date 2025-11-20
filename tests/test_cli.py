@@ -6,7 +6,7 @@ from click.testing import CliRunner
 from decima.cli import main
 
 from conftest import device
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE
 
 
 def test_cli_main():
@@ -254,7 +254,7 @@ def test_cli_vep_all_tasks_ensemble_custom_genome(tmp_path):
         "vep",
         "-v", "tests/data/variants.tsv",
         "-o", str(output_file),
-        "--model", "ensemble",
+        "--model", DEFAULT_ENSEMBLE,
         "--device", device,
         "--max-distance", "20000",
         "--chunksize", "5",
@@ -277,7 +277,7 @@ def test_cli_vep_all_tasks_ensemble(tmp_path):
         "vep",
         "-v", "tests/data/variants.tsv",
         "-o", str(output_file),
-        "--model", "ensemble",
+        "--model", DEFAULT_ENSEMBLE,
         "--device", device,
         "--max-distance", "20000",
         "--chunksize", "5",

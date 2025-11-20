@@ -214,9 +214,9 @@ def test_predict_save_attributions_single_gene(tmp_path):
 @pytest.mark.long_running
 def test_predict_save_attributions_single_gene_list_models(tmp_path):
     # download models
-    download_decima_weights(0, str(tmp_path))
-    download_decima_weights(1, str(tmp_path))
-    download_decima_metadata(str(tmp_path))
+    download_decima_weights("v1_rep0", str(tmp_path))
+    download_decima_weights("v1_rep1", str(tmp_path))
+    download_decima_metadata("v1_rep0", str(tmp_path))
 
     output_prefix = tmp_path / "SPI1"
     predict_attributions_seqlet_calling(

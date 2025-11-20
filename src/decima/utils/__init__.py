@@ -77,9 +77,12 @@ def get_compute_device(device: Optional[str] = None) -> torch.device:
         torch.device: The selected device for computation
     """
     if device is None:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-
+        return 0 if torch.cuda.is_available() else "cpu"
+    elif device == "cuda":
+        return 0
+    elif isinstance(device, int) or (device == "cpu"):
+        return device
     elif isinstance(device, str) and device.isdigit():
-        device = int(device)
-
-    return torch.device(device)
+        return int(device)
+    else:
+        raise ValueError(f"Invalid device: {device}")

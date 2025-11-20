@@ -40,9 +40,11 @@ from more_itertools import chunked
 from torch.utils.data import DataLoader
 from pyfaidx import Faidx
 
+from decima.constants import DEFAULT_ENSEMBLE, MODEL_METADATA, ENSEMBLE_MODELS
 from decima.core.attribution import AttributionResult
 from decima.core.result import DecimaResult
 from decima.data.dataset import GeneDataset, SeqDataset
+from decima.hub import load_decima_model
 from decima.interpret.attributer import DecimaAttributer
 from decima.utils import get_compute_device, _get_on_off_tasks, _get_genes
 from decima.utils.io import AttributionWriter
@@ -53,7 +55,7 @@ def predict_save_attributions(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[int] = 0,
+    model: Optional[int] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     transform: str = "specificity",
@@ -119,9 +121,9 @@ def predict_save_attributions(
         ...     genome="hg38",
         ... )
     """
-    if (model == "ensemble") or isinstance(model, (list, tuple)):
-        if model == "ensemble":
-            models = [0, 1, 2, 3]
+    if (model in ENSEMBLE_MODELS) or isinstance(model, (list, tuple)):
+        if model in ENSEMBLE_MODELS:
+            models = MODEL_METADATA[model]
         else:
             models = model
         return [
@@ -154,16 +156,16 @@ def predict_save_attributions(
     device = get_compute_device(device)
     logger.info(f"Using device: {device}")
 
-    logger.info("Loading model and metadata to compute attributions...")
-    result = DecimaResult.load(metadata_anndata)
+    logger.info(f"Loading model {model} and metadata to compute attributions...")
+    model = load_decima_model(model, device=device)
+    result = DecimaResult.load(metadata_anndata or model.name)
 
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
+    attributer = DecimaAttributer(model, tasks, off_tasks, method, transform)
 
-    with QCLogger(str(output_prefix) + ".warnings.qc.log", metadata_anndata=metadata_anndata) as qc:
+    with QCLogger(str(output_prefix) + ".warnings.qc.log", metadata_anndata=result) as qc:
         if result.ground_truth is not None:
             qc.log_correlation(tasks, off_tasks, plot=True)
-
-        attributer = DecimaAttributer.load_decima_attributer(model, tasks, off_tasks, method, transform, device=device)
 
         if (genes is not None) and (seqs is not None):
             raise ValueError("Only one of `genes` or `seqs` arguments must be provided not both.")
@@ -295,8 +297,6 @@ def recursive_seqlet_calling(
     logger = logging.getLogger("decima")
     logger.info("Loading model and metadata to compute attributions...")
 
-    result = DecimaResult.load(metadata_anndata)
-
     if isinstance(attributions, (str, Path)):
         attributions_files = [Path(attributions).as_posix()]
     else:
@@ -305,6 +305,8 @@ def recursive_seqlet_calling(
     with AttributionResult(
         attributions_files, tss_distance, correct_grad=False, num_workers=num_workers, agg_func=agg_func
     ) as ar:
+        result = DecimaResult.load(metadata_anndata or ar.model_name)
+
         if top_n_markers is not None:
             tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
             all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
@@ -338,7 +340,7 @@ def predict_attributions_seqlet_calling(
     seqs: Optional[Union[pd.DataFrame, np.ndarray, torch.Tensor]] = None,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = "ensemble",
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     method: str = "inputxgradient",
     transform: str = "specificity",

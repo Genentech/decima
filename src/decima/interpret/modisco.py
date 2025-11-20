@@ -21,12 +21,12 @@ from typing import List, Optional, Tuple, Union
 import h5py
 import numpy as np
 import pandas as pd
-import modiscolite
+import fastermodiscolite
 from tqdm import tqdm
 from grelu.resources import get_meme_file_path
 from grelu.interpret.motifs import trim_pwm
 
-from decima.constants import DECIMA_CONTEXT_SIZE
+from decima.constants import DECIMA_CONTEXT_SIZE, DEFAULT_ENSEMBLE
 from decima.core.result import DecimaResult
 from decima.utils import _get_on_off_tasks, _get_genes
 from decima.utils.motifs import motif_start_end
@@ -38,7 +38,7 @@ def predict_save_modisco_attributions(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[int] = 0,
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     metadata_anndata: Optional[str] = None,
     method: str = "saliency",
     transform: str = "specificity",
@@ -156,7 +156,7 @@ def modisco_patterns(
         tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
         off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
         tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.
-        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be used from the attribution files.
+        metadata_anndata: Name of the model or path to metadata anndata file or DecimaResult object. If not provided, the compatible metadata of the saved attribution files will be used.
         genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
         top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.
         correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.
@@ -206,23 +206,27 @@ def modisco_patterns(
         ... )
     """
     logger = logging.getLogger("decima")
-    logger.info("Loading metadata")
-    result = DecimaResult.load(metadata_anndata)
 
     if isinstance(attributions, (str, Path)):
         attributions_files = [Path(attributions).as_posix()]
     else:
         attributions_files = attributions
 
-    tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
-    all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
-
-    with AttributionResult(attributions_files, tss_distance, correct_grad, num_workers=1, agg_func="mean") as ar:
-        sequences, attributions = ar.load(all_genes)
+    with AttributionResult(
+        attributions_files, tss_distance, correct_grad, num_workers=num_workers, agg_func="mean"
+    ) as ar:
         genome = ar.genome
         model_names = ar.model_name
 
-    pos_patterns, neg_patterns = modiscolite.tfmodisco.TFMoDISco(
+        metadata_anndata = metadata_anndata or model_names[0]
+        logger.info(f"Loading metadata for model {metadata_anndata}...")
+        result = DecimaResult.load(metadata_anndata)
+
+        tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
+        all_genes = _get_genes(result, genes, top_n_markers, tasks, off_tasks)
+        sequences, attributions = ar.load(all_genes)
+
+    pos_patterns, neg_patterns = fastermodiscolite.tfmodisco.TFMoDISco(
         hypothetical_contribs=attributions.transpose(0, 2, 1),
         one_hot=sequences.transpose(0, 2, 1),
         sliding_window_size=sliding_window_size,
@@ -258,7 +262,7 @@ def modisco_patterns(
         verbose=True,
     )
     h5_path = Path(output_prefix).with_suffix(".modisco.h5").as_posix()
-    modiscolite.io.save_hdf5(
+    fastermodiscolite.io.save_hdf5(
         h5_path,
         pos_patterns,
         neg_patterns,
@@ -310,7 +314,7 @@ def modisco_reports(
     """
     output_dir = Path(f"{output_prefix}_report")
     output_dir.mkdir(parents=True, exist_ok=True)
-    modiscolite.report.report_motifs(
+    fastermodiscolite.report.report_motifs(
         modisco_h5,
         output_dir.as_posix(),
         img_path_suffix,
@@ -328,7 +332,7 @@ def modisco_reports(
 def modisco_seqlet_bed(
     output_prefix: str,
     modisco_h5: str,
-    metadata_anndata: str = None,
+    metadata_anndata: Optional[str] = None,
     trim_threshold: float = 0.2,
 ):
     """Extract seqlet locations from MoDISco results and save as BED format file.
@@ -351,11 +355,13 @@ def modisco_seqlet_bed(
         ...     trim_threshold=0.15,
         ... )
     """
-    result = DecimaResult.load(metadata_anndata)
 
     df = list()
 
     with h5py.File(modisco_h5, "r") as f:
+        model_name = f.attrs["model_names"].split(",")[0]
+        result = DecimaResult.load(metadata_anndata or model_name)
+
         tss_distance = f.attrs["tss_distance"]
         genes = [gene.decode("utf-8") for gene in f["genes"][:]]
         genes_idx = dict(enumerate(genes))
@@ -420,7 +426,7 @@ def modisco(
     output_prefix: str,
     tasks: Optional[List[str]] = None,
     off_tasks: Optional[List[str]] = None,
-    model: Optional[Union[str, int]] = 0,
+    model: Optional[Union[str, int]] = DEFAULT_ENSEMBLE,
     tss_distance: int = 1000,
     metadata_anndata: Optional[str] = None,
     genes: Optional[List[str]] = None,
@@ -429,6 +435,7 @@ def modisco(
     num_workers: int = 4,
     genome: str = "hg38",
     method: str = "saliency",
+    transform: Optional[str] = "specificity",
     batch_size: int = 2,
     device: Optional[str] = None,
     # tfmodisco parameters
@@ -492,6 +499,7 @@ def modisco(
         num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
         genome: Genome reference to use default is "hg38". Can be genome name or path to custom genome fasta file.
         method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
         batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.
         device: Device to use for computation (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
         sliding_window_size: Sliding window size.
@@ -544,6 +552,7 @@ def modisco(
         genes=genes,
         top_n_markers=top_n_markers,
         method=method,
+        transform=transform,
         batch_size=batch_size,
         correct_grad_bigwig=correct_grad,
         device=device,
