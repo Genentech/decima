@@ -308,7 +308,7 @@ print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 
 # Enable execution of code chunks in markdown
 extensions.remove('myst_parser')
-extensions.append('myst_nb')
+# extensions.append('myst_nb')
 
 # Less verbose api documentation
 extensions.append('sphinx_autodoc_typehints')
