@@ -11,7 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: pytorch
     permissions:
       id-token: write
       repository-projects: write
