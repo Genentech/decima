@@ -307,7 +307,7 @@ print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 # -- Biocsetup configuration -------------------------------------------------
 
 # Enable execution of code chunks in markdown
-extensions.remove('myst_parser')
+# extensions.remove('myst_parser')
 # extensions.append('myst_nb')
 
 # Less verbose api documentation
