@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime
     permissions:
       id-token: write
       repository-projects: write
