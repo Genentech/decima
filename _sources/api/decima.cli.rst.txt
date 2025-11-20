@@ -12,6 +12,14 @@ decima.cli.attributions module
    :show-inheritance:
    :undoc-members:
 
+decima.cli.callback module
+--------------------------
+
+.. automodule:: decima.cli.callback
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 decima.cli.download module
 --------------------------
 
@@ -24,6 +32,14 @@ decima.cli.finetune module
 --------------------------
 
 .. automodule:: decima.cli.finetune
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.cli.modisco module
+-------------------------
+
+.. automodule:: decima.cli.modisco
    :members:
    :show-inheritance:
    :undoc-members:

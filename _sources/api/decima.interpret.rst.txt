@@ -4,6 +4,14 @@ decima.interpret package
 Submodules
 ----------
 
+decima.interpret.attributer module
+----------------------------------
+
+.. automodule:: decima.interpret.attributer
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 decima.interpret.attributions module
 ------------------------------------
 
@@ -12,18 +20,10 @@ decima.interpret.attributions module
    :show-inheritance:
    :undoc-members:
 
-decima.interpret.ism module
----------------------------
+decima.interpret.modisco module
+-------------------------------
 
-.. automodule:: decima.interpret.ism
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-decima.interpret.save\_attributions module
-------------------------------------------
-
-.. automodule:: decima.interpret.save_attributions
+.. automodule:: decima.interpret.modisco
    :members:
    :show-inheritance:
    :undoc-members:

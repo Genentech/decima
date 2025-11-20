@@ -4,6 +4,14 @@ decima.core package
 Submodules
 ----------
 
+decima.core.attribution module
+------------------------------
+
+.. automodule:: decima.core.attribution
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 decima.core.metadata module
 ---------------------------
 

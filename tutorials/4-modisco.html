@@ -1,0 +1,1799 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Predicting Gene Expression with Decima" href="5-gene-expression-prediction.html"><link rel="prev" title="Fine-tuning Borzoi to create a Decima model" href="3-finetune.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>Detecting and Clustering Seqlets with Modisco - decima unknown documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">decima unknown documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">Module Reference</a><input aria-label="Toggle navigation of Module Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/decima.html">decima package</a><input aria-label="Toggle navigation of decima package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.core.html">decima.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.data.html">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-finetune.html">Tutorial: Finetuning</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorial: Modisco</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/tutorials/4-modisco.ipynb.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="detecting-and-clustering-seqlets-with-modisco">
+<h1>Detecting and Clustering Seqlets with Modisco<a class="headerlink" href="#detecting-and-clustering-seqlets-with-modisco" title="Link to this heading">¶</a></h1>
+<p>In this tutorial, we will explore how to use Modisco within the Decima framework to detect and cluster seqlets—short, high-scoring regions of DNA that are important for model predictions. Modisco (Motif Discovery from Importance Scores) is a powerful tool designed to analyze attribution scores from deep learning models. It identifies recurring patterns, or “motifs,” by first locating seqlets—short subsequences with high attribution—and then clustering these seqlets based on similarity. This process helps uncover biologically meaningful sequence motifs that drive the model’s predictions, providing insights into regulatory elements and sequence features learned by the model. We will walk through the steps of running Modisco on attribution data, from detecting seqlets to clustering them into motifs, and interpreting the results.</p>
+<section id="cli-api">
+<h2>CLI API<a class="headerlink" href="#cli-api" title="Link to this heading">¶</a></h2>
+<p>In this tutorial, we’ll walk through a practical example of using Decima’s CLI API to analyze neuronal cells and uncover how they differ from non-neuronal cells based on the major regulators. Let’s first list avaliable cell types:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>query-cell<span class="w"> </span><span class="s2">&quot;cell_type.str.contains(&#39;neuron&#39;) and organ == &#39;CNS&#39; and disease == &#39;healthy&#39;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+</pre></div>
+</div>
+</div>
+</div>
+<p>The main arguments for the <code class="docutils literal notranslate"><span class="pre">decima</span> <span class="pre">modisco</span></code> CLI command allow you to customize motif discovery for your specific biological question. The <code class="docutils literal notranslate"><span class="pre">--top-n-markers</span></code> argument restricts the analysis to the top N marker genes, focusing on the most distinguishing genes for the selected cell types if not provided all genes are used. The <code class="docutils literal notranslate"><span class="pre">--max-seqlets</span></code> parameter sets an upper limit on the number of seqlets (short, high-scoring regions) extracted per metacluster, which can help manage memory usage and computation time. The <code class="docutils literal notranslate"><span class="pre">--tss-distance</span></code> option defines the window size (in base pairs) around the transcription start site to consider for motif discovery.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--tasks</span></code> argument lets you specify cell types or conditions of interest using a query string, such as <code class="docutils literal notranslate"><span class="pre">&quot;cell_type.str.contains('neuron')</span> <span class="pre">and</span> <span class="pre">organ</span> <span class="pre">==</span> <span class="pre">'CNS'</span> <span class="pre">and</span> <span class="pre">disease</span> <span class="pre">==</span> <span class="pre">'healthy'&quot;</span></code> to select healthy CNS neurons. The <code class="docutils literal notranslate"><span class="pre">--transform</span></code> argument determines how attributions are aggregated or contrasted. For example, <code class="docutils literal notranslate"><span class="pre">&quot;specificity&quot;</span></code> compares the selected tasks (e.g., neurons) against the background (e.g., all other cells), highlighting features specific to the chosen group. Alternatively, <code class="docutils literal notranslate"><span class="pre">&quot;aggregate&quot;</span></code> simply sums attributions across the selected tasks.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> and <code class="docutils literal notranslate"><span class="pre">--num-workers</span></code> options control parallelization and resource usage during computation. The <code class="docutils literal notranslate"><span class="pre">--model</span></code> argument selects which model replicate or checkpoint to use, and the <code class="docutils literal notranslate"><span class="pre">-o</span></code> or <code class="docutils literal notranslate"><span class="pre">--output-prefix</span></code> sets the path prefix for output files and reports.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco<span class="w">  </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">top</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">markers</span> <span class="mi">50</span> \
+    <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">seqlets</span> <span class="mi">5000</span> \
+    <span class="o">--</span><span class="n">tss</span><span class="o">-</span><span class="n">distance</span> <span class="mi">5000</span>  \
+    <span class="o">--</span><span class="n">tasks</span> <span class="s2">&quot;cell_type.str.contains(&#39;neuron&#39;) and organ == &#39;CNS&#39; and disease == &#39;healthy&#39;&quot;</span> \
+    <span class="o">--</span><span class="n">transform</span> <span class="s2">&quot;specificity&quot;</span> \
+    <span class="o">--</span><span class="n">batch</span><span class="o">-</span><span class="n">size</span> <span class="mi">1</span> \
+    <span class="o">--</span><span class="n">model</span> <span class="n">v1_rep0</span> \
+    <span class="o">--</span><span class="n">num</span><span class="o">-</span><span class="n">workers</span> <span class="mi">8</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_neurons</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/bin/sh: 1: decima: not found
+</pre></div>
+</div>
+</div>
+</div>
+<p>The analysis creates the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons.h5</span></code>: HDF5 file containing the discovered motifs and seqlets generated by modisco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons_patterns.h5</span></code>: HDF5 file with processed motif patterns generated by TF-Modisco see TF-modisco API.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons_report/</span></code>: Directory containing HTML and image reports of discovered motifs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons_seqlets.bed</span></code>: BED file with genomic locations of seqlets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons_*.attributions.h5</span></code>: HDF5 file containing the raw attribution scores for each input sequence and gene for each replicate. This file is used as input for motif discovery and can be inspected to understand which regions of the genome are most important for model predictions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example/modisco_neurons_*.attributions.bigwig</span></code>: Average attribution scores for each base across all input sequences, stored in BigWig format for visualization in genome browsers.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>ls<span class="w"> </span>example/modisco_neurons*
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ls: cannot access &#39;example/modisco_neurons*&#39;: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following file generates an HTML report with motif visualizations and detailed statistics for each discovered pattern.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Image</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;example/modisco_neurons_report/motifs.html&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Image</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">HTML</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;example/modisco_neurons_report/motifs.html&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/IPython/core/display.py:448,</span> in <span class="ni">HTML.__init__</span><span class="nt">(self, data, url, filename, metadata)</span>
+<span class="g g-Whitespace">    </span><span class="mi">446</span> <span class="k">if</span> <span class="n">warn</span><span class="p">():</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Consider using IPython.display.IFrame instead&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">448</span> <span class="nb">super</span><span class="p">(</span><span class="n">HTML</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/IPython/core/display.py:343,</span> in <span class="ni">DisplayObject.__init__</span><span class="nt">(self, data, url, filename, metadata)</span>
+<span class="g g-Whitespace">    </span><span class="mi">340</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">341</span>     <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="ne">--&gt; </span><span class="mi">343</span> <span class="bp">self</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">344</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_data</span><span class="p">()</span>
+
+<span class="nn">File ~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/IPython/core/display.py:369,</span> in <span class="ni">DisplayObject.reload</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">367</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">368</span>     <span class="n">encoding</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_flags</span> <span class="k">else</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">369</span>     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_flags</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">370</span>         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">371</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">372</span>     <span class="c1"># Deferred import</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;example/modisco_neurons_report/motifs.html&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;example/modisco_neurons_report/MYT1.H13CORE.0.SG.A.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1b0bae2e0c95e3141d15d43a2a684aca2f39e8c506cf826225d27e7891039e6d.png" src="../_images/1b0bae2e0c95e3141d15d43a2a684aca2f39e8c506cf826225d27e7891039e6d.png" />
+</div>
+</div>
+<section id="cli-subcommands">
+<h3>CLI Subcommands<a class="headerlink" href="#cli-subcommands" title="Link to this heading">¶</a></h3>
+<p>The Modisco API provides several subcommands to perform motif discovery and analysis in a stepwise manner.
+Here is a detailed explanation of each step:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">modisco-attributions</span></code>: This subcommand computes attribution scores for each input sequence and gene. You can parallelize this step by running it on multiple GPUs. This is the only step that requires GPUs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modisco-patterns</span></code>: After computing attributions, this subcommand discovers motifs (patterns) by clustering
+the attribution scores using TF-Modisco. See the documentation of Modisco for the details of the output format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modisco-report</span></code>: This subcommand run tomtom to find motif matches for patterns motif images from the discovered patterns.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modisco-seqlet-bed</span></code>: This subcommand extracts the genomic locations of seqlets (short, high-scoring
+regions) from the modisco results and writes them to a BED file. This allows for downstream analysis
+or visualization in genome browsers.</p></li>
+</ol>
+<p>By running these subcommands in sequence, you can go from raw model predictions to interpretable motif
+discovery, visualization, and downstream analysis.</p>
+<p>Let’s generate attributions for first replicate:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco-attributions<span class="w"> </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">top</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">markers</span> <span class="mi">50</span> \
+    <span class="o">--</span><span class="n">tasks</span> <span class="s2">&quot;cell_type.str.contains(&#39;neuron&#39;) and organ == &#39;CNS&#39; and disease == &#39;healthy&#39;&quot;</span> \
+    <span class="o">--</span><span class="n">batch</span><span class="o">-</span><span class="n">size</span> <span class="mi">1</span> \
+    <span class="o">--</span><span class="n">model</span> <span class="n">v1_rep0</span> \
+    <span class="o">--</span><span class="n">num</span><span class="o">-</span><span class="n">workers</span> <span class="mi">8</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons_0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
+decima - INFO - Loading model and metadata to compute attributions...
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.9 (1684.6MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1859.3MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:0.6 (1204.6MB/s)
+/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+100%|████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 360.24it/s]
+Computing attributions...:   8%|█▎               | 4/50 [00:04&lt;00:47,  1.02s/it]decima - WARNING - Gene XRCC5 has low correlation with the model. Pearson: 0.4621304058925145. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  10%|█▋               | 5/50 [00:05&lt;00:43,  1.03it/s]decima - WARNING - Gene FNIP1 has low correlation with the model. Pearson: 0.044592478397006044. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  40%|██████▍         | 20/50 [00:18&lt;00:26,  1.14it/s]decima - WARNING - Gene LRRFIP1 has low correlation with the model. Pearson: 0.4621130932978845. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  70%|███████████▏    | 35/50 [00:31&lt;00:13,  1.14it/s]decima - WARNING - Gene CHD4 has low correlation with the model. Pearson: 0.27165706153002717. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...: 100%|████████████████| 50/50 [00:44&lt;00:00,  1.11it/s]
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>end second replicate:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco-attributions<span class="w"> </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">top</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">markers</span> <span class="mi">50</span> \
+    <span class="o">--</span><span class="n">tasks</span> <span class="s2">&quot;cell_type.str.contains(&#39;neuron&#39;) and organ == &#39;CNS&#39; and disease == &#39;healthy&#39;&quot;</span> \
+    <span class="o">--</span><span class="n">batch</span><span class="o">-</span><span class="n">size</span> <span class="mi">1</span> \
+    <span class="o">--</span><span class="n">model</span> <span class="n">v1_rep1</span> \
+    <span class="o">--</span><span class="n">num</span><span class="o">-</span><span class="n">workers</span> <span class="mi">8</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons_1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
+decima - INFO - Loading model and metadata to compute attributions...
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1831.2MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1823.6MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (417.2MB/s)
+/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+100%|████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 323.39it/s]
+Computing attributions...:   8%|█▎               | 4/50 [00:04&lt;00:46,  1.02s/it]decima - WARNING - Gene XRCC5 has low correlation with the model. Pearson: 0.4621304058925145. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  10%|█▋               | 5/50 [00:05&lt;00:43,  1.03it/s]decima - WARNING - Gene FNIP1 has low correlation with the model. Pearson: 0.044592478397006044. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  40%|██████▍         | 20/50 [00:18&lt;00:26,  1.14it/s]decima - WARNING - Gene LRRFIP1 has low correlation with the model. Pearson: 0.4621130932978845. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...:  70%|███████████▏    | 35/50 [00:31&lt;00:13,  1.14it/s]decima - WARNING - Gene CHD4 has low correlation with the model. Pearson: 0.27165706153002717. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+Computing attributions...: 100%|████████████████| 50/50 [00:45&lt;00:00,  1.11it/s]
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>ls<span class="w"> </span>example/modisco_subcommands/modisco_neurons*
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>example/modisco_subcommands/modisco_neurons_0.attributions.bigwig
+example/modisco_subcommands/modisco_neurons_0.attributions.h5
+example/modisco_subcommands/modisco_neurons_0.warnings.qc.log
+example/modisco_subcommands/modisco_neurons_1.attributions.bigwig
+example/modisco_subcommands/modisco_neurons_1.attributions.h5
+example/modisco_subcommands/modisco_neurons_1.warnings.qc.log
+example/modisco_subcommands/modisco_neurons.attributions.bigwig
+example/modisco_subcommands/modisco_neurons.attributions.h5
+example/modisco_subcommands/modisco_neurons.warnings.qc.log
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we will use the generated attributions as input for the pattern discovery step with MoDISco.
+The <code class="docutils literal notranslate"><span class="pre">--attributions</span></code> argument expects a comma-separated list of attribution files (one per replicate or model),
+which we produced in the previous step. These files contain the importance scores for each base in the input sequences,
+and are required for MoDISco to identify recurring patterns (motifs).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco-patterns<span class="w"> </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">attributions</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons_0</span><span class="o">.</span><span class="n">attributions</span><span class="o">.</span><span class="n">h5</span><span class="p">,</span><span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons_1</span><span class="o">.</span><span class="n">attributions</span><span class="o">.</span><span class="n">h5</span> \
+    <span class="o">--</span><span class="n">top</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">markers</span> <span class="mi">50</span> \
+    <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">seqlets</span> <span class="mi">5000</span> \
+    <span class="o">--</span><span class="n">tss</span><span class="o">-</span><span class="n">distance</span> <span class="mi">5000</span>  \
+    <span class="o">--</span><span class="n">tasks</span> <span class="s2">&quot;cell_type.str.contains(&#39;neuron&#39;) and organ == &#39;CNS&#39; and disease == &#39;healthy&#39;&quot;</span> \
+    <span class="o">--</span><span class="n">num</span><span class="o">-</span><span class="n">workers</span> <span class="mi">8</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Loading metadata
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1833.5MB/s)
+100%|████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 359.72it/s]
+Loading attributions and sequences...: 100%|████| 50/50 [00:05&lt;00:00,  9.94it/s]
+2025-10-06 11:09:35,941 - modisco-lite - INFO - Running TFMoDISco version 2.4.0
+2025-10-06 11:09:35,943 - modisco-lite - INFO - Extracting seqlets for 50 tasks:
+2025-10-06 11:09:35,944 - modisco-lite - INFO - - Smoothing and splitting tracks
+2025-10-06 11:09:35,980 - modisco-lite - INFO - - Computing null values with Laplacian null model
+2025-10-06 11:09:36,039 - modisco-lite - INFO - - Computing isotonic thresholds
+2025-10-06 11:09:36,060 - modisco-lite - INFO - - Refining thresholds
+2025-10-06 11:09:36,361 - modisco-lite - INFO - - Extracting seqlets
+2025-10-06 11:09:36,409 - modisco-lite - INFO - - Extracting 1381 positive seqlets
+2025-10-06 11:09:36,416 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 1381 seqlets
+100%|██████████████████████████████████████| 1381/1381 [00:05&lt;00:00, 232.84it/s]
+2025-10-06 11:09:50,133 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 1381 seqlets and 1381 neighbors
+100%|██████████████████████████████████████| 1381/1381 [00:02&lt;00:00, 561.49it/s]
+100%|██████████████████████████████████████| 1381/1381 [00:02&lt;00:00, 558.80it/s]
+2025-10-06 11:09:55,173 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 11:09:55,911 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 11:09:58,670 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    9.0s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    9.0s remaining:  1.1min
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    9.1s remaining:   39.6s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    9.5s remaining:   28.4s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    9.6s remaining:   21.1s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    9.7s remaining:   16.2s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    9.9s remaining:   12.7s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:   10.1s remaining:   10.1s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:   11.7s remaining:    9.1s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:   12.0s remaining:    7.2s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:   12.2s remaining:    5.5s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:   12.3s remaining:    4.1s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:   12.5s remaining:    2.9s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:   12.6s remaining:    1.8s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:   12.8s finished
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.1909180465007868
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.19091861254544126
+2025-10-06 11:10:11,573 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.1909180465007868
+2025-10-06 11:10:11,576 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+Generating patterns from clusters:: 100%|█████████| 3/3 [00:02&lt;00:00,  1.25it/s]
+2025-10-06 11:10:13,977 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 1243 seqlets
+100%|█████████████████████████████████████| 1243/1243 [00:00&lt;00:00, 1412.11it/s]
+2025-10-06 11:10:15,217 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 1243 seqlets and 1243 neighbors
+100%|██████████████████████████████████████| 1243/1243 [00:06&lt;00:00, 195.27it/s]
+100%|██████████████████████████████████████| 1243/1243 [00:06&lt;00:00, 192.70it/s]
+2025-10-06 11:10:28,149 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 11:10:30,807 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    2.3s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    2.4s remaining:   16.7s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    2.4s remaining:   10.4s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    2.6s remaining:    7.7s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    2.7s remaining:    6.0s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    3.1s remaining:    5.2s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    3.2s remaining:    4.1s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    3.9s remaining:    3.9s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    4.9s remaining:    3.8s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    5.5s remaining:    3.3s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    5.8s remaining:    2.6s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    5.9s remaining:    2.0s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    6.0s remaining:    1.4s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    6.2s remaining:    0.9s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    6.6s finished
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.16244580961606636
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.16244580961606636
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.1624362681795782
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.16244401853104182
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.16244476881502096
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.16244490347064755
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.16244476881502096
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.16244580961606636
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.16244774126381895
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.16244774126381895
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.16244401853104182
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.16244580961606636
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.16244476881502096
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.1624362681795782
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.1624362681795782
+2025-10-06 11:10:37,493 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.16244580961606636
+2025-10-06 11:10:37,496 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+Generating patterns from clusters:: 100%|█████████| 3/3 [00:01&lt;00:00,  1.53it/s]
+2025-10-06 11:10:39,464 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|████| 3/3 [00:16&lt;00:00,  5.63s/it]
+2025-10-06 11:11:04,245 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|███████████████████| 21/21 [00:00&lt;00:00, 13219.33it/s]
+Computing subpatterns:: 100%|███████████████████| 18/18 [00:01&lt;00:00, 16.44it/s]
+2025-10-06 11:11:05,342 - modisco-lite - INFO - - Extracting 2245 negative seqlets
+2025-10-06 11:11:05,356 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 2245 seqlets
+100%|██████████████████████████████████████| 2245/2245 [00:03&lt;00:00, 723.88it/s]
+2025-10-06 11:11:09,810 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 2245 seqlets and 2245 neighbors
+100%|██████████████████████████████████████| 2245/2245 [00:04&lt;00:00, 550.75it/s]
+100%|██████████████████████████████████████| 2245/2245 [00:04&lt;00:00, 557.49it/s]
+2025-10-06 11:11:18,089 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 11:11:19,309 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 11:11:23,973 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:   11.8s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:   12.2s remaining:  1.4min
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:   12.4s remaining:   53.9s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:   13.9s remaining:   41.7s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:   14.3s remaining:   31.5s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:   14.4s remaining:   24.0s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:   14.5s remaining:   18.7s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:   15.8s remaining:   15.8s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:   18.9s remaining:   14.7s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:   19.4s remaining:   11.7s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:   19.5s remaining:    8.9s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:   20.8s remaining:    6.9s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:   20.9s remaining:    4.8s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:   21.1s remaining:    3.0s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:   23.2s finished
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.24321691671687068
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.24319041549731021
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.24321691671687068
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.24319289414836717
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.24319766197141385
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.24272769482516707
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.24319516585924073
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.24319454173648977
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.2432134283873644
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.2432143002042254
+2025-10-06 11:11:47,320 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.24319766197141385
+2025-10-06 11:11:47,321 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.24321691671687068
+2025-10-06 11:11:47,321 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.24321691671687068
+2025-10-06 11:11:47,321 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.24321691671687068
+2025-10-06 11:11:47,321 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.24319516585924073
+2025-10-06 11:11:47,321 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.24319454173648977
+2025-10-06 11:11:47,322 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+Generating patterns from clusters:: 100%|█████████| 4/4 [00:04&lt;00:00,  1.23s/it]
+2025-10-06 11:11:52,242 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 1908 seqlets
+100%|██████████████████████████████████████| 1908/1908 [00:02&lt;00:00, 939.08it/s]
+2025-10-06 11:11:54,770 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 1908 seqlets and 1908 neighbors
+100%|██████████████████████████████████████| 1908/1908 [00:09&lt;00:00, 196.68it/s]
+100%|██████████████████████████████████████| 1908/1908 [00:09&lt;00:00, 195.64it/s]
+2025-10-06 11:12:14,398 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 11:12:18,764 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    4.6s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    4.8s remaining:   33.8s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    5.0s remaining:   21.5s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    5.1s remaining:   15.4s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    6.6s remaining:   14.5s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    6.9s remaining:   11.4s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    7.5s remaining:    9.7s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    8.8s remaining:    8.8s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:   11.0s remaining:    8.5s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:   11.0s remaining:    6.6s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:   11.8s remaining:    5.4s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:   12.9s remaining:    4.3s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:   13.0s remaining:    3.0s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:   13.4s remaining:    1.9s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:   14.8s finished
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.1964854074309556
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.19708009479161454
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.1970347002260257
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.1970719073220813
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.19706807930037878
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.19710320331929443
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.19649090179343903
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.19708787969518912
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.19649196976106514
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.19649196976106514
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.19589979138080835
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.19649090179343903
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.19709496100658516
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.19709080388309483
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.19707540188328013
+2025-10-06 11:12:33,631 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.19706748023467258
+2025-10-06 11:12:33,633 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+Generating patterns from clusters:: 100%|█████████| 4/4 [00:06&lt;00:00,  1.60s/it]
+2025-10-06 11:12:40,024 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|████| 4/4 [00:20&lt;00:00,  5.10s/it]
+2025-10-06 11:13:20,175 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|███████████████████| 26/26 [00:00&lt;00:00, 16883.71it/s]
+Computing subpatterns:: 100%|███████████████████| 19/19 [00:02&lt;00:00,  6.96it/s]
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>This step generates modisco.h5 file with discovered motifs and processed patterns.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>ls<span class="w"> </span>example/modisco_subcommands/modisco_neurons*
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco-seqlet-bed<span class="w"> </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">modisco</span><span class="o">-</span><span class="n">h5</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons</span><span class="o">.</span><span class="n">modisco</span><span class="o">.</span><span class="n">h5</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1792.1MB/s)
+Processing pos_patterns patterns...: 100%|█████| 18/18 [00:00&lt;00:00, 586.01it/s]
+Processing neg_patterns patterns...: 100%|█████| 19/19 [00:00&lt;00:00, 591.46it/s]
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Extracting seqlets used in motif detection:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.seqlets.bed</span></code> file contains the genomic coordinates of all seqlets (short, high-scoring subsequences)
+that were used by MoDISco to identify motifs. Each line in the BED file follows
+the standard BED format:</p>
+<p>chrom    start    end    name    score    strand</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chrom</span></code>: Chromosome name (e.g., “chr1”)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start</span></code>: 0-based start position of the seqlet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">end</span></code>: End position (not included)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Identifier for the seqlet (often includes pattern/cluster info)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score</span></code>: Score assigned to the seqlet (e.g., importance or cluster assignment)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strand</span></code>: “+” or “-” indicating the DNA strand</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core</span> <span class="pre">motif</span> <span class="pre">start</span></code>: The starting position of the core motif within the seqlet, relative to the seqlet’s start coordinate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core</span> <span class="pre">motif</span> <span class="pre">end</span></code>: The ending position of the core motif within the seqlet, relative to the seqlet’s start coordinate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code>: An optional field indicating the color used to visualize the seqlet or motif in genome browsers.</p></li>
+</ul>
+<p>This file can be loaded in genome browsers or used for downstream analyses to visualize or further process the discovered seqlets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>head<span class="w"> </span>example/modisco_subcommands/modisco_neurons.seqlets.bed
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>chr1	51514321	51514371	neg_patterns.pattern_3.seqlet_113.EPS15	-0.10036751271172761	-	51514339	51514355	65,105,225
+chr1	51514389	51514439	pos_patterns.pattern_1.seqlet_48.EPS15	-0.021704078276343353	-	51514415	51514428	65,105,225
+chr1	51514856	51514906	pos_patterns.pattern_4.seqlet_50.EPS15	0.20430506747379695	-	51514858	51514906	65,105,225
+chr1	51515007	51515057	pos_patterns.pattern_4.seqlet_36.EPS15	0.11181213204145024	-	51515018	51515066	65,105,225
+chr1	51515026	51515076	pos_patterns.pattern_2.seqlet_2.EPS15	-0.39258043596782954	+	51515021	51515067	65,105,225
+chr1	51515047	51515097	neg_patterns.pattern_3.seqlet_7.EPS15	-0.5587078251555795	+	51515064	51515080	65,105,225
+chr1	51515082	51515132	pos_patterns.pattern_2.seqlet_44.EPS15	0.19132944994089485	-	51515082	51515128	65,105,225
+chr1	51515174	51515224	pos_patterns.pattern_4.seqlet_70.EPS15	0.12646874649226447	+	51515175	51515223	65,105,225
+chr1	51517345	51517395	pos_patterns.pattern_12.seqlet_38.EPS15	0.08596134528943367	+	51517351	51517387	65,105,225
+chr1	51517444	51517494	pos_patterns.pattern_15.seqlet_25.EPS15	0.10319471855837037	+	51517448	51517494	65,105,225
+</pre></div>
+</div>
+</div>
+</div>
+<p>Tomtom is a computational tool from the MEME Suite that compares discovered motifs (such as those output by MoDISco)
+to a database of known motifs, identifying statistically significant matches. This helps annotate de novo motifs
+by suggesting potential transcription factors or motif families they correspond to.</p>
+<p>In the MoDISco workflow, Tomtom is typically run on the discovered motif position weight matrices (PWMs) to
+find similar motifs in reference databases (e.g., JASPAR, HOCOMOCO). The output includes a ranked list of
+matches for each motif, along with similarity scores and p-values, which can be used to interpret the biological
+relevance of the discovered patterns.</p>
+<p>Tomtom can be run via the command line or through integrated pipelines, and its results are often included in
+MoDISco reports for downstream analysis and visualization.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>modisco-reports<span class="w"> </span><span class="err">\</span>
+    <span class="o">--</span><span class="n">modisco</span><span class="o">-</span><span class="n">h5</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons</span><span class="o">.</span><span class="n">modisco</span><span class="o">.</span><span class="n">h5</span> \
+    <span class="o">-</span><span class="n">o</span> <span class="n">example</span><span class="o">/</span><span class="n">modisco_subcommands</span><span class="o">/</span><span class="n">modisco_neurons</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating modisco logos for pos_patterns: 100%|██| 18/18 [00:25&lt;00:00,  1.40s/it]
+Creating modisco logos for neg_patterns: 100%|██| 19/19 [00:37&lt;00:00,  1.98s/it]
+Generating patterns dataframe: 100%|█████████████| 2/2 [00:00&lt;00:00, 231.81it/s]
+Reading patterns for pos_patterns: 100%|██████| 18/18 [00:00&lt;00:00, 3287.79it/s]
+Reading patterns for neg_patterns: 100%|██████| 19/19 [00:00&lt;00:00, 3329.93it/s]
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   1 tasks      | elapsed:    7.0s
+[Parallel(n_jobs=4)]: Done   2 tasks      | elapsed:    7.2s
+[Parallel(n_jobs=4)]: Done   3 tasks      | elapsed:   12.4s
+[Parallel(n_jobs=4)]: Done   4 tasks      | elapsed:   13.3s
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:   16.0s
+[Parallel(n_jobs=4)]: Done   6 tasks      | elapsed:   16.8s
+[Parallel(n_jobs=4)]: Done   7 tasks      | elapsed:  1.2min
+[Parallel(n_jobs=4)]: Done   8 tasks      | elapsed:  1.2min
+[Parallel(n_jobs=4)]: Done   9 tasks      | elapsed:  1.3min
+[Parallel(n_jobs=4)]: Done  10 tasks      | elapsed:  1.3min
+[Parallel(n_jobs=4)]: Done  11 tasks      | elapsed:  1.4min
+[Parallel(n_jobs=4)]: Done  12 tasks      | elapsed:  1.7min
+[Parallel(n_jobs=4)]: Done  13 tasks      | elapsed:  1.7min
+[Parallel(n_jobs=4)]: Done  14 tasks      | elapsed:  1.7min
+[Parallel(n_jobs=4)]: Done  15 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=4)]: Done  16 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=4)]: Done  17 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=4)]: Done  18 tasks      | elapsed:  1.9min
+[Parallel(n_jobs=4)]: Done  19 tasks      | elapsed:  1.9min
+[Parallel(n_jobs=4)]: Done  20 tasks      | elapsed:  1.9min
+[Parallel(n_jobs=4)]: Done  21 tasks      | elapsed:  2.4min
+[Parallel(n_jobs=4)]: Done  22 tasks      | elapsed:  2.6min
+[Parallel(n_jobs=4)]: Done  23 tasks      | elapsed:  2.9min
+[Parallel(n_jobs=4)]: Done  24 tasks      | elapsed:  2.9min
+[Parallel(n_jobs=4)]: Done  25 tasks      | elapsed:  3.0min
+[Parallel(n_jobs=4)]: Done  26 tasks      | elapsed:  3.0min
+[Parallel(n_jobs=4)]: Done  27 tasks      | elapsed:  3.2min
+[Parallel(n_jobs=4)]: Done  28 tasks      | elapsed:  3.6min
+[Parallel(n_jobs=4)]: Done  29 tasks      | elapsed:  3.6min
+[Parallel(n_jobs=4)]: Done  30 tasks      | elapsed:  3.7min
+[Parallel(n_jobs=4)]: Done  31 out of  37 | elapsed:  3.7min remaining:   43.2s
+[Parallel(n_jobs=4)]: Done  32 out of  37 | elapsed:  3.9min remaining:   36.8s
+[Parallel(n_jobs=4)]: Done  33 out of  37 | elapsed:  4.0min remaining:   29.2s
+[Parallel(n_jobs=4)]: Done  34 out of  37 | elapsed:  4.0min remaining:   21.3s
+[Parallel(n_jobs=4)]: Done  35 out of  37 | elapsed:  4.1min remaining:   14.1s
+[Parallel(n_jobs=4)]: Done  37 out of  37 | elapsed:  4.3min finished
+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="python-user-api">
+<h2>Python User API<a class="headerlink" href="#python-user-api" title="Link to this heading">¶</a></h2>
+<p>MoDISco can also be run programmatically from Python using the Decima API.
+The Python API provides more flexibility and allows you to integrate MoDISco directly into your analysis pipelines.</p>
+<p>Notably, both the CLI and Python API support the <code class="docutils literal notranslate"><span class="pre">--off-task</span></code> (or <code class="docutils literal notranslate"><span class="pre">off_tasks</span></code> in Python) argument, which enables you to specify a contrasting set of tasks or conditions.
+This allows you to perform contrastive motif discovery, identifying patterns that are specific to your target condition (e.g., a particular cell type or tissue)
+by comparing against a background or “off” condition. This is useful for highlighting motifs that are enriched or specific to your biological question of interest.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.modisco</span><span class="w"> </span><span class="kn">import</span> <span class="n">modisco</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="s2">&quot;rep0&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># or 0, 1, 2, 3, &quot;ensemble&quot;</span>
+
+<span class="n">modisco</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python/modisco_fibroblast&quot;</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ == &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ != &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_seqlets_per_metacluster</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">tss_distance</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.8 (399.4MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1814.6MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1851.5MB/s)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8aa63e2b882d468c9a0ef8d7b851b248", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 15/15 [00:16&lt;00:00,  1.13s/it]
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1871.4MB/s)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f8130c94af3a4508b4a3323467862947", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 15/15 [00:00&lt;00:00, 21.31it/s]
+2025-10-06 18:11:34,796 - modisco-lite - INFO - Running TFMoDISco version 2.4.0
+2025-10-06 18:11:34,797 - modisco-lite - INFO - Extracting seqlets for 15 tasks:
+2025-10-06 18:11:34,798 - modisco-lite - INFO - - Smoothing and splitting tracks
+2025-10-06 18:11:34,808 - modisco-lite - INFO - - Computing null values with Laplacian null model
+2025-10-06 18:11:34,854 - modisco-lite - INFO - - Computing isotonic thresholds
+2025-10-06 18:11:34,863 - modisco-lite - INFO - - Refining thresholds
+2025-10-06 18:11:34,943 - modisco-lite - INFO - - Extracting seqlets
+2025-10-06 18:11:34,953 - modisco-lite - INFO - - Extracting 384 positive seqlets
+2025-10-06 18:11:34,956 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 384 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "37cb7d6446064c82b9405af4d00df6fa", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:11:47,047 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 384 seqlets and 384 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dad57a94f54a4334a6380abe48abfbd7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "015a8689e88f46e98fe818ab4015d735", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:11:49,025 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:11:49,205 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:11:49,648 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    6.7s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    6.9s remaining:   48.0s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    6.9s remaining:   29.9s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    7.0s remaining:   21.0s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    7.1s remaining:   15.6s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    7.1s remaining:   11.8s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    7.1s remaining:    9.1s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    7.1s remaining:    7.1s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    7.2s remaining:    5.6s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    7.3s remaining:    4.4s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    7.4s remaining:    3.3s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    7.5s remaining:    2.5s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    7.5s remaining:    1.7s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    7.5s remaining:    1.1s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:11:57,387 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.02360483048930951
+2025-10-06 18:11:57,388 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.02361723253834695
+2025-10-06 18:11:57,388 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.02361364332247759
+2025-10-06 18:11:57,388 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.02360315002202235
+2025-10-06 18:11:57,388 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.023621841682633215
+2025-10-06 18:11:57,389 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.023621841682633215
+2025-10-06 18:11:57,389 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.023613449615038574
+2025-10-06 18:11:57,389 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.02361364332247759
+2025-10-06 18:11:57,389 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.023615291366812573
+2025-10-06 18:11:57,390 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.02360315002202235
+2025-10-06 18:11:57,390 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.02360315002202235
+2025-10-06 18:11:57,390 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.023614627921386563
+2025-10-06 18:11:57,390 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.02360315002202235
+2025-10-06 18:11:57,390 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.02360970287066969
+2025-10-06 18:11:57,391 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.0236142640559574
+2025-10-06 18:11:57,391 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.023606972537531266
+2025-10-06 18:11:57,391 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    7.7s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 6/6 [00:01&lt;00:00,  3.25it/s]
+2025-10-06 18:11:59,240 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 332 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "714129c674814573bd61d460a09e567a", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:11:59,420 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 332 seqlets and 332 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "58fec8c99b984b2eadf1cf717116b54b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3b6c2f6ae07a4f97aa842edfc9c13bf0", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:01,732 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:12:02,149 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    0.4s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    0.4s remaining:    2.8s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    0.4s remaining:    1.8s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    0.4s remaining:    1.3s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    0.5s remaining:    1.1s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    0.5s remaining:    0.9s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    0.6s remaining:    0.7s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    0.7s remaining:    0.7s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    0.7s remaining:    0.6s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    0.8s remaining:    0.5s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    0.8s remaining:    0.4s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    0.9s remaining:    0.3s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    0.9s remaining:    0.2s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    1.0s remaining:    0.1s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:03,644 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.026548278897844335
+2025-10-06 18:12:03,644 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.026548278897844335
+2025-10-06 18:12:03,645 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.026520905736640198
+2025-10-06 18:12:03,645 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.026539255688272402
+2025-10-06 18:12:03,645 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.026535249101320407
+2025-10-06 18:12:03,645 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.026528099158945256
+2025-10-06 18:12:03,646 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.026511587839415075
+2025-10-06 18:12:03,646 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.026401092795887534
+2025-10-06 18:12:03,646 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.02656779223573837
+2025-10-06 18:12:03,646 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.02652991091394142
+2025-10-06 18:12:03,647 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.02652052727856517
+2025-10-06 18:12:03,647 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.026391695973984147
+2025-10-06 18:12:03,647 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.026535249101320407
+2025-10-06 18:12:03,647 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.026525402801011476
+2025-10-06 18:12:03,647 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.026535249101320407
+2025-10-06 18:12:03,648 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.026539255688272402
+2025-10-06 18:12:03,648 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    1.5s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 6/6 [00:01&lt;00:00,  3.04it/s]
+2025-10-06 18:12:05,624 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|██████████| 6/6 [00:10&lt;00:00,  1.81s/it]
+2025-10-06 18:12:17,634 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|██████████| 14/14 [00:00&lt;00:00, 16302.13it/s]
+Computing subpatterns:: 100%|██████████| 9/9 [00:00&lt;00:00, 51.30it/s]
+2025-10-06 18:12:17,813 - modisco-lite - INFO - - Extracting 340 negative seqlets
+2025-10-06 18:12:17,816 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 340 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9ee3085d0e3c4e06989f099104cb5346", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:18,024 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 340 seqlets and 340 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b558b7056f4d47f7afcf77faaeef439d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ab7a6576e6c34bfc84a58ec0acc4c4e3", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:19,624 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:12:19,776 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:12:20,101 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    7.3s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    7.3s remaining:   51.4s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    7.4s remaining:   32.0s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    7.4s remaining:   22.2s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    7.4s remaining:   16.3s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    7.4s remaining:   12.4s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    7.5s remaining:    9.6s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    7.5s remaining:    7.5s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    7.7s remaining:    6.0s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    7.7s remaining:    4.6s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    7.7s remaining:    3.5s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    7.8s remaining:    2.6s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    7.8s remaining:    1.8s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    7.8s remaining:    1.1s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:28,067 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.023850872058533996
+2025-10-06 18:12:28,067 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.023768839260606318
+2025-10-06 18:12:28,067 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.02385681078512026
+2025-10-06 18:12:28,068 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.02387438972443567
+2025-10-06 18:12:28,068 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.023876162687244136
+2025-10-06 18:12:28,068 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02386819542812389
+2025-10-06 18:12:28,068 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.023585021130662808
+2025-10-06 18:12:28,069 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.023854051195930443
+2025-10-06 18:12:28,069 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.023659598169893423
+2025-10-06 18:12:28,069 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.02378579897047768
+2025-10-06 18:12:28,069 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.023863969323479898
+2025-10-06 18:12:28,069 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.023795712308034282
+2025-10-06 18:12:28,070 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.02387438972443567
+2025-10-06 18:12:28,070 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.023852623184908793
+2025-10-06 18:12:28,070 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.02387438972443567
+2025-10-06 18:12:28,070 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.02377755429507505
+2025-10-06 18:12:28,071 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    8.0s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 5/5 [00:00&lt;00:00, 11.39it/s]
+2025-10-06 18:12:28,512 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 283 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "80f124ca5742441887e5af95a6bbbb94", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:28,665 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 283 seqlets and 283 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5f7ce980c4294e479925cb865e83e05c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1185c2c90bf74f2783cc975d00595094", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:30,404 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:12:30,720 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    0.3s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    0.3s remaining:    1.9s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    0.3s remaining:    1.2s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    0.3s remaining:    0.9s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    0.3s remaining:    0.7s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    0.3s remaining:    0.6s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    0.4s remaining:    0.5s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    0.4s remaining:    0.4s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    0.5s remaining:    0.4s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    0.5s remaining:    0.3s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    0.6s remaining:    0.3s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    0.6s remaining:    0.2s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    0.6s remaining:    0.1s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    0.6s remaining:    0.1s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:12:31,664 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.026586659803832666
+2025-10-06 18:12:31,664 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.026586659803832666
+2025-10-06 18:12:31,665 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.02660104643456792
+2025-10-06 18:12:31,665 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.026634521581033865
+2025-10-06 18:12:31,665 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.026616418993762592
+2025-10-06 18:12:31,665 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.026392340322682274
+2025-10-06 18:12:31,666 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.026586659803832666
+2025-10-06 18:12:31,666 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.026603553780386605
+2025-10-06 18:12:31,667 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.02660251974475603
+2025-10-06 18:12:31,667 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.026586659803832666
+2025-10-06 18:12:31,667 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.02658644850697434
+2025-10-06 18:12:31,667 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.02666550122295357
+2025-10-06 18:12:31,667 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.026517335933254525
+2025-10-06 18:12:31,668 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.026629959060868624
+2025-10-06 18:12:31,668 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.026586659803832666
+2025-10-06 18:12:31,668 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.026634521581033865
+2025-10-06 18:12:31,668 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    0.9s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 5/5 [00:00&lt;00:00,  7.64it/s]
+2025-10-06 18:12:32,325 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|██████████| 5/5 [00:07&lt;00:00,  1.56s/it]
+2025-10-06 18:12:41,110 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|██████████| 13/13 [00:00&lt;00:00, 25952.38it/s]
+Computing subpatterns:: 100%|██████████| 5/5 [00:00&lt;00:00, 42.82it/s]
+Creating modisco logos for pos_patterns: 100%|██████████| 9/9 [00:15&lt;00:00,  1.67s/it]
+Creating modisco logos for neg_patterns: 100%|██████████| 5/5 [00:10&lt;00:00,  2.13s/it]
+Generating patterns dataframe: 100%|██████████| 2/2 [00:00&lt;00:00, 514.35it/s]
+Reading patterns for pos_patterns: 100%|██████████| 9/9 [00:00&lt;00:00, 2967.90it/s]
+Reading patterns for neg_patterns: 100%|██████████| 5/5 [00:00&lt;00:00, 3024.01it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    8.2s
+[Parallel(n_jobs=8)]: Done   2 out of  14 | elapsed:   13.3s remaining:  1.3min
+[Parallel(n_jobs=8)]: Done   3 out of  14 | elapsed:   14.1s remaining:   51.5s
+[Parallel(n_jobs=8)]: Done   4 out of  14 | elapsed:   14.4s remaining:   35.9s
+[Parallel(n_jobs=8)]: Done   5 out of  14 | elapsed:   15.6s remaining:   28.0s
+[Parallel(n_jobs=8)]: Done   6 out of  14 | elapsed:   42.0s remaining:   56.0s
+[Parallel(n_jobs=8)]: Done   7 out of  14 | elapsed:   52.6s remaining:   52.6s
+[Parallel(n_jobs=8)]: Done   8 out of  14 | elapsed:  1.1min remaining:   50.0s
+[Parallel(n_jobs=8)]: Done   9 out of  14 | elapsed:  1.4min remaining:   45.6s
+[Parallel(n_jobs=8)]: Done  10 out of  14 | elapsed:  1.4min remaining:   33.1s
+[Parallel(n_jobs=8)]: Done  11 out of  14 | elapsed:  1.4min remaining:   22.6s
+[Parallel(n_jobs=8)]: Done  12 out of  14 | elapsed:  1.4min remaining:   13.9s
+[Parallel(n_jobs=8)]: Done  14 out of  14 | elapsed:  1.5min finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1849.3MB/s)
+Processing pos_patterns patterns...: 100%|██████████| 9/9 [00:00&lt;00:00, 594.76it/s]
+Processing neg_patterns patterns...: 100%|██████████| 5/5 [00:00&lt;00:00, 621.42it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The function above consists of the following functions:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.modisco</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">predict_save_modisco_attributions</span><span class="p">,</span>
+    <span class="n">modisco_patterns</span><span class="p">,</span>
+    <span class="n">modisco_reports</span><span class="p">,</span>
+    <span class="n">modisco_seqlet_bed</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">predict_save_modisco_attributions</span></code> computes and saves attributions for the specified tasks and model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predict_save_modisco_attributions</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_0&quot;</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ == &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ != &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.6 (1894.8MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.8 (1742.1MB/s)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5e93a492fffc456f94bd315b24e56949", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 15/15 [00:13&lt;00:00,  1.10it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lets run it for the second replicate:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predict_save_modisco_attributions</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_1&quot;</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ == &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ != &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1835.3MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.8 (1744.2MB/s)
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:0.5 (1415.1MB/s)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "247b6a546d8248a89fde1430940a62e6", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 15/15 [00:13&lt;00:00,  1.10it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">AttributionResult</span></code> allows you to load and work with attribution results saved in HDF5 format.
+It provides convenient access to gene names, sequences, and attributions for downstream analysis.
+<code class="docutils literal notranslate"><span class="pre">agg_func</span></code> specifies how to aggregate attributions across multiple replicates or samples (e.g., ‘mean’, ‘sum’ or None) If None, attributions are not aggregated but retuned as new dimension.
+<code class="docutils literal notranslate"><span class="pre">num_workers</span></code> sets the number of parallel worker processes to use for loading and processing data, which can speed up computation.
+<code class="docutils literal notranslate"><span class="pre">correct_grad</span></code> determines whether to apply gradient correction to the attributions, which can improve interpretability in some cases.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.attributions</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributionResult</span>
+
+<span class="k">with</span> <span class="n">AttributionResult</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_0.attributions.h5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_1.attributions.h5&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">correct_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">agg_func</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
+    <span class="n">genes</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">genes</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Genes: &quot;</span><span class="p">,</span> <span class="n">genes</span><span class="p">)</span>
+
+    <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">genes</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Seqs: &quot;</span><span class="p">,</span> <span class="n">seqs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Attrs: &quot;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Genes:  [&#39;ANKRD1&#39;, &#39;CASQ2&#39;, &#39;TBX20&#39;, &#39;MYOZ2&#39;, &#39;HSPB3&#39;, &#39;PLN&#39;, &#39;NPPA&#39;, &#39;SMCO1&#39;, &#39;POPDC2&#39;, &#39;TNNI3&#39;, &#39;MYL7&#39;, &#39;ASB11&#39;, &#39;RBM24&#39;, &#39;NPPB&#39;, &#39;MIR133A1HG&#39;]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 5/5 [00:00&lt;00:00,  7.59it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Seqs:  [[[1. 1. 1. ... 1. 0. 0.]
+  [0. 0. 0. ... 0. 1. 1.]
+  [0. 0. 0. ... 0. 0. 0.]
+  [0. 0. 0. ... 0. 0. 0.]]
+
+ [[1. 0. 0. ... 1. 0. 0.]
+  [0. 1. 1. ... 0. 0. 1.]
+  [0. 0. 0. ... 0. 1. 0.]
+  [0. 0. 0. ... 0. 0. 0.]]
+
+ [[1. 0. 0. ... 0. 1. 0.]
+  [0. 0. 1. ... 0. 0. 0.]
+  [0. 1. 0. ... 1. 0. 1.]
+  [0. 0. 0. ... 0. 0. 0.]]
+
+ [[0. 0. 0. ... 0. 0. 1.]
+  [0. 1. 0. ... 1. 0. 0.]
+  [0. 0. 0. ... 0. 0. 0.]
+  [1. 0. 1. ... 0. 1. 0.]]
+
+ [[0. 0. 0. ... 1. 0. 0.]
+  [0. 0. 1. ... 0. 0. 0.]
+  [0. 1. 0. ... 0. 0. 1.]
+  [1. 0. 0. ... 0. 1. 0.]]]
+Attrs:  [[[ 3.76145852e-06  3.03478555e-06  7.44035424e-06 ... -6.63653460e-04
+    4.05797458e-04  3.16523459e-04]
+  [ 7.55026849e-06  1.63838381e-05 -2.46401214e-06 ...  1.20408889e-03
+   -5.13944813e-04 -1.87091660e-04]
+  [-3.95166535e-06  2.12123268e-07 -1.75476748e-05 ... -3.38858253e-04
+   -3.90247933e-05  1.54834273e-04]
+  [ 1.02410469e-05  7.77581295e-06  4.79289201e-06 ...  2.04334607e-04
+    4.03160076e-04  2.12350627e-04]]
+
+ [[-6.97570385e-07 -8.62505237e-06 -1.01505470e-05 ...  3.63982608e-04
+   -1.68484687e-04 -1.93401925e-05]
+  [ 2.71305908e-07  6.53875031e-06  2.02391934e-05 ... -1.00724553e-04
+   -4.64807979e-04  3.70103153e-05]
+  [-5.30066410e-06  8.39225697e-06  1.32523191e-05 ... -5.41917134e-04
+    1.13812412e-04  1.41916771e-04]
+  [-8.00210637e-06 -1.03028333e-05 -1.16753581e-05 ...  1.12934016e-04
+    1.06018910e-04 -3.66433733e-05]]
+
+ [[ 6.05896548e-06 -2.37663748e-06  3.92000197e-06 ...  1.28393280e-04
+   -4.03863789e-05  3.67814645e-05]
+  [-8.24177278e-07 -5.30091552e-06  1.56831456e-05 ...  1.82856207e-04
+   -8.50484323e-05  1.96156452e-06]
+  [-1.29727255e-06 -5.29163117e-07 -1.32918512e-05 ... -2.37111172e-04
+    5.91923515e-05  5.48859017e-05]
+  [-3.15958550e-06 -8.84019664e-06  2.15492656e-06 ...  4.88488713e-05
+    1.35330674e-04 -8.76247659e-05]]
+
+ [[-1.36014714e-05 -5.10507289e-06  8.32582373e-07 ...  3.51886756e-05
+    1.81178373e-05 -4.24103380e-05]
+  [ 2.71168137e-05  2.33376031e-05  8.80534026e-06 ... -5.07025675e-05
+    5.13899267e-05 -1.40666293e-05]
+  [-2.49464001e-05 -6.53428560e-06 -3.16726541e-05 ...  2.62546517e-05
+   -5.01153640e-05 -3.02389981e-06]
+  [ 1.54220847e-05 -9.85898259e-06  6.44845568e-06 ...  6.47796769e-05
+   -1.97882077e-05  1.18930311e-05]]
+
+ [[-5.95685299e-06 -5.18014940e-06  6.04994420e-06 ... -2.10653108e-05
+    2.29634907e-05 -9.31743455e-06]
+  [ 5.62206424e-06  2.47596017e-06  6.78692459e-06 ...  1.00820489e-05
+    1.86815123e-06  4.94928190e-06]
+  [-1.69323505e-05  1.77675711e-05  3.42523000e-05 ...  1.01751598e-05
+    3.79442545e-05  6.58590238e-06]
+  [ 7.81596327e-07 -1.10149963e-05 -8.36851143e-06 ...  2.38808170e-05
+   -4.04723414e-05  2.38439338e-05]]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">modisco_patterns</span></code> runs modisco and cluster seqlets into patterns:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modisco_patterns</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast&quot;</span><span class="p">,</span>
+    <span class="n">attributions</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_0.attributions.h5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast_1.attributions.h5&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ == &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;fibroblast&#39; and organ != &#39;heart&#39;&quot;</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">max_seqlets_per_metacluster</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">tss_distance</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.8 (1769.2MB/s)
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8cba5c8ca6dc4d48bf502c2421c986bd", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 15/15 [00:01&lt;00:00, 10.76it/s]
+2025-10-06 18:16:03,703 - modisco-lite - INFO - Running TFMoDISco version 2.4.0
+2025-10-06 18:16:03,703 - modisco-lite - INFO - Running TFMoDISco version 2.4.0
+2025-10-06 18:16:03,704 - modisco-lite - INFO - Extracting seqlets for 15 tasks:
+2025-10-06 18:16:03,704 - modisco-lite - INFO - Extracting seqlets for 15 tasks:
+2025-10-06 18:16:03,705 - modisco-lite - INFO - - Smoothing and splitting tracks
+2025-10-06 18:16:03,705 - modisco-lite - INFO - - Smoothing and splitting tracks
+2025-10-06 18:16:03,716 - modisco-lite - INFO - - Computing null values with Laplacian null model
+2025-10-06 18:16:03,716 - modisco-lite - INFO - - Computing null values with Laplacian null model
+2025-10-06 18:16:03,762 - modisco-lite - INFO - - Computing isotonic thresholds
+2025-10-06 18:16:03,762 - modisco-lite - INFO - - Computing isotonic thresholds
+2025-10-06 18:16:03,771 - modisco-lite - INFO - - Refining thresholds
+2025-10-06 18:16:03,771 - modisco-lite - INFO - - Refining thresholds
+2025-10-06 18:16:03,851 - modisco-lite - INFO - - Extracting seqlets
+2025-10-06 18:16:03,851 - modisco-lite - INFO - - Extracting seqlets
+2025-10-06 18:16:03,863 - modisco-lite - INFO - - Extracting 454 positive seqlets
+2025-10-06 18:16:03,863 - modisco-lite - INFO - - Extracting 454 positive seqlets
+2025-10-06 18:16:03,866 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 454 seqlets
+2025-10-06 18:16:03,866 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 454 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dcd3b8ebdf454718b6bdbb3f794b5fe7", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:04,194 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 454 seqlets and 454 neighbors
+2025-10-06 18:16:04,194 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 454 seqlets and 454 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c4a371939c0c45be90f1bc849637dc5c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3fedc310d36e41ae8ad95bd14d41cf26", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:06,868 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:16:06,868 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:16:07,102 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:16:07,102 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:16:07,782 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+2025-10-06 18:16:07,782 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:   12.2s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:   12.2s remaining:  1.4min
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:   12.2s remaining:   52.8s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:   12.3s remaining:   36.8s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:   12.3s remaining:   27.2s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:   12.4s remaining:   20.7s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:   12.4s remaining:   16.0s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:   12.5s remaining:   12.5s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:   12.8s remaining:   10.0s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:   13.0s remaining:    7.8s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:   13.1s remaining:    6.0s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:   13.2s remaining:    4.4s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:   13.2s remaining:    3.1s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:   13.4s remaining:    1.9s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:   13.5s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:21,397 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.02092204286706559
+2025-10-06 18:16:21,397 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.02092204286706559
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.020929666377409343
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.020929666377409343
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.020363825585150153
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.020363825585150153
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.020905953578916604
+2025-10-06 18:16:21,398 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.020905953578916604
+2025-10-06 18:16:21,399 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.020790482063174655
+2025-10-06 18:16:21,399 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.020790482063174655
+2025-10-06 18:16:21,399 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02092843901868041
+2025-10-06 18:16:21,399 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02092843901868041
+2025-10-06 18:16:21,400 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.020802270889506792
+2025-10-06 18:16:21,400 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.020802270889506792
+2025-10-06 18:16:21,400 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.020795473460761105
+2025-10-06 18:16:21,400 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.020795473460761105
+2025-10-06 18:16:21,401 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.02079413413859788
+2025-10-06 18:16:21,401 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.02079413413859788
+2025-10-06 18:16:21,401 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.020929666377409343
+2025-10-06 18:16:21,401 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.020929666377409343
+2025-10-06 18:16:21,402 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.020811249046675816
+2025-10-06 18:16:21,402 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.020811249046675816
+2025-10-06 18:16:21,402 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.020873329768449297
+2025-10-06 18:16:21,402 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.020873329768449297
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.020928540590008378
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.020928540590008378
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.020797440246157855
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.020797440246157855
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.02092204286706559
+2025-10-06 18:16:21,403 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.02092204286706559
+2025-10-06 18:16:21,404 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.020923814801806766
+2025-10-06 18:16:21,404 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.020923814801806766
+2025-10-06 18:16:21,404 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+2025-10-06 18:16:21,404 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+Generating patterns from clusters:: 100%|██████████| 5/5 [00:02&lt;00:00,  2.34it/s]
+2025-10-06 18:16:23,545 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 407 seqlets
+2025-10-06 18:16:23,545 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 407 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0f1d86d10d1e48bb9ce27b29f10eeeb9", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:23,788 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 407 seqlets and 407 neighbors
+2025-10-06 18:16:23,788 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 407 seqlets and 407 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0ebc915da7884d8f99e3d6fb067e4896", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8955f0ef77ee47b0ba5af658db3c65e8", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:27,265 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:16:27,265 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:16:27,911 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+2025-10-06 18:16:27,911 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    0.5s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    0.6s remaining:    3.9s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    0.6s remaining:    2.8s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    0.7s remaining:    2.1s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    0.7s remaining:    1.5s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    0.7s remaining:    1.2s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    0.8s remaining:    1.0s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    1.0s remaining:    1.0s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    1.2s remaining:    0.9s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    1.2s remaining:    0.7s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    1.4s remaining:    0.6s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    1.6s remaining:    0.5s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    1.7s remaining:    0.4s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    1.8s remaining:    0.3s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:29,979 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.025002069983353303
+2025-10-06 18:16:29,979 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.025002069983353303
+2025-10-06 18:16:29,980 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.02508670994886661
+2025-10-06 18:16:29,980 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.02508670994886661
+2025-10-06 18:16:29,981 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.024970708770517408
+2025-10-06 18:16:29,981 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.024970708770517408
+2025-10-06 18:16:29,981 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.02513240247110472
+2025-10-06 18:16:29,981 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.02513240247110472
+2025-10-06 18:16:29,982 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.02514310327023221
+2025-10-06 18:16:29,982 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.02514310327023221
+2025-10-06 18:16:29,982 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02499615731307966
+2025-10-06 18:16:29,982 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02499615731307966
+2025-10-06 18:16:29,983 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.025149450184890565
+2025-10-06 18:16:29,983 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.025149450184890565
+2025-10-06 18:16:29,983 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.02508670994886661
+2025-10-06 18:16:29,983 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.02508670994886661
+2025-10-06 18:16:29,984 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.024964847410963064
+2025-10-06 18:16:29,984 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.024964847410963064
+2025-10-06 18:16:29,985 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.025146262320554554
+2025-10-06 18:16:29,985 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.025146262320554554
+2025-10-06 18:16:29,985 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.024962589681733253
+2025-10-06 18:16:29,985 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.024962589681733253
+2025-10-06 18:16:29,986 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.02508628049478435
+2025-10-06 18:16:29,986 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.02508628049478435
+2025-10-06 18:16:29,986 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.02513924665524891
+2025-10-06 18:16:29,986 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.02513924665524891
+2025-10-06 18:16:29,987 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.025084922401764815
+2025-10-06 18:16:29,987 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.025084922401764815
+2025-10-06 18:16:29,987 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.025131177812629434
+2025-10-06 18:16:29,987 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.025131177812629434
+2025-10-06 18:16:29,988 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.02499565203161923
+2025-10-06 18:16:29,988 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.02499565203161923
+2025-10-06 18:16:29,988 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+2025-10-06 18:16:29,988 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    2.0s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 6/6 [00:02&lt;00:00,  2.59it/s]
+2025-10-06 18:16:32,307 - modisco-lite - INFO - Detecting spurious merging of patterns
+2025-10-06 18:16:32,307 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|██████████| 5/5 [00:07&lt;00:00,  1.59s/it]
+2025-10-06 18:16:41,865 - modisco-lite - INFO - Filtering and merging patterns
+2025-10-06 18:16:41,865 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|██████████| 11/11 [00:00&lt;00:00, 13007.43it/s]
+Computing subpatterns:: 100%|██████████| 9/9 [00:00&lt;00:00, 38.31it/s]
+2025-10-06 18:16:42,104 - modisco-lite - INFO - - Extracting 329 negative seqlets
+2025-10-06 18:16:42,104 - modisco-lite - INFO - - Extracting 329 negative seqlets
+2025-10-06 18:16:42,107 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 329 seqlets
+2025-10-06 18:16:42,107 - modisco-lite - INFO - - Round 0: Generating coarse resolution affinity matrix for 329 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8985cc5d207a4055bf042d80eaa613d0", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:42,352 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 329 seqlets and 329 neighbors
+2025-10-06 18:16:42,352 - modisco-lite - INFO - - Round 0: Generating fine resolution affinity matrix for 329 seqlets and 329 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b161f4e6fabb4e52a2c7224c53f6ee91", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b0ceb430551f41718a3745b90b1dfbd1", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:43,824 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:16:43,824 - modisco-lite - INFO - - Round 0: Filtering seqlets by correlation
+2025-10-06 18:16:43,971 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:16:43,971 - modisco-lite - INFO - - Round 0: Density adaptation
+2025-10-06 18:16:44,298 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+2025-10-06 18:16:44,298 - modisco-lite - INFO - - Round 0: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    7.2s
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    7.4s remaining:   51.5s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    7.4s remaining:   32.2s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    7.5s remaining:   22.6s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    7.6s remaining:   16.7s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    7.6s remaining:   12.6s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    7.6s remaining:    9.8s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    7.6s remaining:    7.6s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    7.7s remaining:    6.0s
+[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    7.9s remaining:    4.7s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    7.9s remaining:    3.6s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    8.0s remaining:    2.7s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    8.0s remaining:    1.8s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    8.0s remaining:    1.1s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:52,494 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.026763578635124848
+2025-10-06 18:16:52,494 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.026763578635124848
+2025-10-06 18:16:52,495 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.0265094500699511
+2025-10-06 18:16:52,495 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.0265094500699511
+2025-10-06 18:16:52,496 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.02654428903412237
+2025-10-06 18:16:52,496 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.02654428903412237
+2025-10-06 18:16:52,496 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.026721538949614872
+2025-10-06 18:16:52,496 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.026721538949614872
+2025-10-06 18:16:52,497 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.026735509288973492
+2025-10-06 18:16:52,497 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.026735509288973492
+2025-10-06 18:16:52,497 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02667227717530735
+2025-10-06 18:16:52,497 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.02667227717530735
+2025-10-06 18:16:52,498 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.02657103680991128
+2025-10-06 18:16:52,498 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.02657103680991128
+2025-10-06 18:16:52,498 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.026660907084892486
+2025-10-06 18:16:52,498 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.026660907084892486
+2025-10-06 18:16:52,499 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.026594784402216663
+2025-10-06 18:16:52,499 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.026594784402216663
+2025-10-06 18:16:52,499 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.0265498166549464
+2025-10-06 18:16:52,499 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.0265498166549464
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.026736134589607066
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.026736134589607066
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.026543460372326553
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.026543460372326553
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.026605394300180895
+2025-10-06 18:16:52,500 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.026605394300180895
+2025-10-06 18:16:52,501 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.02666441289851534
+2025-10-06 18:16:52,501 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.02666441289851534
+2025-10-06 18:16:52,501 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.026607382962757012
+2025-10-06 18:16:52,501 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.026607382962757012
+2025-10-06 18:16:52,502 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.026671836351827943
+2025-10-06 18:16:52,502 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.026671836351827943
+2025-10-06 18:16:52,502 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+2025-10-06 18:16:52,502 - modisco-lite - INFO - - Round 0: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    8.2s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 6/6 [00:01&lt;00:00,  4.27it/s]
+2025-10-06 18:16:53,909 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 232 seqlets
+2025-10-06 18:16:53,909 - modisco-lite - INFO - - Round 1: Generating coarse resolution affinity matrix for 232 seqlets
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "46af569105d6453c8326381f66292057", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:54,025 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 232 seqlets and 232 neighbors
+2025-10-06 18:16:54,025 - modisco-lite - INFO - - Round 1: Generating fine resolution affinity matrix for 232 seqlets and 232 neighbors
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d41cbdd7c77b4d5a9e6245f483a4d541", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6943545224ca448487be97135b84be36", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:55,143 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:16:55,143 - modisco-lite - INFO - - Round 1: Density adaptation
+2025-10-06 18:16:55,363 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+2025-10-06 18:16:55,363 - modisco-lite - INFO - - Round 1: Clustering with Leiden algorithm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    0.2s
+[Parallel(n_jobs=8)]: Batch computation too fast (0.19564294815063477s.) Setting batch_size=2.
+[Parallel(n_jobs=8)]: Done   2 out of  16 | elapsed:    0.2s remaining:    1.4s
+[Parallel(n_jobs=8)]: Done   3 out of  16 | elapsed:    0.2s remaining:    0.9s
+[Parallel(n_jobs=8)]: Done   4 out of  16 | elapsed:    0.2s remaining:    0.6s
+[Parallel(n_jobs=8)]: Done   5 out of  16 | elapsed:    0.2s remaining:    0.5s
+[Parallel(n_jobs=8)]: Done   6 out of  16 | elapsed:    0.2s remaining:    0.4s
+[Parallel(n_jobs=8)]: Done   7 out of  16 | elapsed:    0.2s remaining:    0.3s
+[Parallel(n_jobs=8)]: Done   8 out of  16 | elapsed:    0.3s remaining:    0.3s
+[Parallel(n_jobs=8)]: Done   9 out of  16 | elapsed:    0.4s remaining:    0.3s
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-06 18:16:55,864 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.036596707967135385
+2025-10-06 18:16:55,864 - modisco-lite - INFO - Leiden clustering quality for seed 0: 0.036596707967135385
+2025-10-06 18:16:55,865 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.036607288086638164
+2025-10-06 18:16:55,865 - modisco-lite - INFO - Leiden clustering quality for seed 1: 0.036607288086638164
+2025-10-06 18:16:55,866 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.03657606307660279
+2025-10-06 18:16:55,866 - modisco-lite - INFO - Leiden clustering quality for seed 2: 0.03657606307660279
+2025-10-06 18:16:55,866 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.03660305121676245
+2025-10-06 18:16:55,866 - modisco-lite - INFO - Leiden clustering quality for seed 3: 0.03660305121676245
+2025-10-06 18:16:55,867 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.036607288086638164
+2025-10-06 18:16:55,867 - modisco-lite - INFO - Leiden clustering quality for seed 4: 0.036607288086638164
+2025-10-06 18:16:55,867 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.03657606307660279
+2025-10-06 18:16:55,867 - modisco-lite - INFO - Leiden clustering quality for seed 5: 0.03657606307660279
+2025-10-06 18:16:55,868 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.036607288086638164
+2025-10-06 18:16:55,868 - modisco-lite - INFO - Leiden clustering quality for seed 6: 0.036607288086638164
+2025-10-06 18:16:55,868 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.03656872531629366
+2025-10-06 18:16:55,868 - modisco-lite - INFO - Leiden clustering quality for seed 7: 0.03656872531629366
+2025-10-06 18:16:55,870 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.03659722894571927
+2025-10-06 18:16:55,870 - modisco-lite - INFO - Leiden clustering quality for seed 8: 0.03659722894571927
+2025-10-06 18:16:55,870 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.03660305121676245
+2025-10-06 18:16:55,870 - modisco-lite - INFO - Leiden clustering quality for seed 9: 0.03660305121676245
+2025-10-06 18:16:55,871 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.036566275851921744
+2025-10-06 18:16:55,871 - modisco-lite - INFO - Leiden clustering quality for seed 10: 0.036566275851921744
+2025-10-06 18:16:55,872 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.03657606307660279
+2025-10-06 18:16:55,872 - modisco-lite - INFO - Leiden clustering quality for seed 11: 0.03657606307660279
+2025-10-06 18:16:55,872 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.036607288086638164
+2025-10-06 18:16:55,872 - modisco-lite - INFO - Leiden clustering quality for seed 12: 0.036607288086638164
+2025-10-06 18:16:55,873 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.036566275851921744
+2025-10-06 18:16:55,873 - modisco-lite - INFO - Leiden clustering quality for seed 13: 0.036566275851921744
+2025-10-06 18:16:55,873 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.036607288086638164
+2025-10-06 18:16:55,873 - modisco-lite - INFO - Leiden clustering quality for seed 14: 0.036607288086638164
+2025-10-06 18:16:55,874 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.036579117967440684
+2025-10-06 18:16:55,874 - modisco-lite - INFO - Leiden clustering quality for seed 15: 0.036579117967440684
+2025-10-06 18:16:55,874 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+2025-10-06 18:16:55,874 - modisco-lite - INFO - - Round 1: Generating patterns from clusters
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Done  10 out of  16 | elapsed:    0.4s remaining:    0.2s
+[Parallel(n_jobs=8)]: Done  11 out of  16 | elapsed:    0.4s remaining:    0.2s
+[Parallel(n_jobs=8)]: Done  12 out of  16 | elapsed:    0.4s remaining:    0.1s
+[Parallel(n_jobs=8)]: Done  13 out of  16 | elapsed:    0.5s remaining:    0.1s
+[Parallel(n_jobs=8)]: Done  14 out of  16 | elapsed:    0.5s remaining:    0.1s
+[Parallel(n_jobs=8)]: Done  16 out of  16 | elapsed:    0.5s finished
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating patterns from clusters:: 100%|██████████| 6/6 [00:00&lt;00:00,  6.97it/s]
+2025-10-06 18:16:56,737 - modisco-lite - INFO - Detecting spurious merging of patterns
+2025-10-06 18:16:56,737 - modisco-lite - INFO - Detecting spurious merging of patterns
+Detecting spurious merging of patterns:: 100%|██████████| 5/5 [00:07&lt;00:00,  1.51s/it]
+2025-10-06 18:17:05,761 - modisco-lite - INFO - Filtering and merging patterns
+2025-10-06 18:17:05,761 - modisco-lite - INFO - Filtering and merging patterns
+Filtering patterns:: 100%|██████████| 10/10 [00:00&lt;00:00, 17534.72it/s]
+Computing subpatterns:: 100%|██████████| 6/6 [00:00&lt;00:00, 51.68it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">modisco_reports</span></code> runs tomtom and annotated patterns with now motifs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modisco_reports</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast&quot;</span><span class="p">,</span>
+    <span class="n">modisco_h5</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast.modisco.h5&quot;</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating modisco logos for pos_patterns: 100%|██████████| 9/9 [00:16&lt;00:00,  1.86s/it]
+Creating modisco logos for neg_patterns: 100%|██████████| 6/6 [00:15&lt;00:00,  2.62s/it]
+Generating patterns dataframe: 100%|██████████| 2/2 [00:00&lt;00:00, 457.69it/s]
+Reading patterns for pos_patterns: 100%|██████████| 9/9 [00:00&lt;00:00, 2909.79it/s]
+Reading patterns for neg_patterns: 100%|██████████| 6/6 [00:00&lt;00:00, 2932.74it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=8)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done   1 tasks      | elapsed:    8.0s
+[Parallel(n_jobs=8)]: Done   2 out of  15 | elapsed:   15.0s remaining:  1.6min
+[Parallel(n_jobs=8)]: Done   3 out of  15 | elapsed:   15.7s remaining:  1.0min
+[Parallel(n_jobs=8)]: Done   4 out of  15 | elapsed:  1.0min remaining:  2.8min
+[Parallel(n_jobs=8)]: Done   5 out of  15 | elapsed:  1.2min remaining:  2.4min
+[Parallel(n_jobs=8)]: Done   6 out of  15 | elapsed:  1.2min remaining:  1.9min
+[Parallel(n_jobs=8)]: Done   7 out of  15 | elapsed:  1.3min remaining:  1.5min
+[Parallel(n_jobs=8)]: Done   8 out of  15 | elapsed:  1.4min remaining:  1.2min
+[Parallel(n_jobs=8)]: Done   9 out of  15 | elapsed:  1.4min remaining:   55.7s
+[Parallel(n_jobs=8)]: Done  10 out of  15 | elapsed:  1.4min remaining:   42.0s
+[Parallel(n_jobs=8)]: Done  11 out of  15 | elapsed:  1.5min remaining:   33.4s
+[Parallel(n_jobs=8)]: Done  12 out of  15 | elapsed:  1.9min remaining:   28.5s
+[Parallel(n_jobs=8)]: Done  13 out of  15 | elapsed:  2.0min remaining:   18.1s
+[Parallel(n_jobs=8)]: Done  15 out of  15 | elapsed:  2.4min finished
+</pre></div>
+</div>
+</div>
+</div>
+<p>Seqlet bed extract seqlets from modisco output:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modisco_seqlet_bed</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast&quot;</span><span class="p">,</span>
+    <span class="n">modisco_h5</span><span class="o">=</span><span class="s2">&quot;example/modisco_python_subcommands/modisco_fibroblast.modisco.h5&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
+<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 0:0:1.7 (1840.6MB/s)
+Processing pos_patterns patterns...: 100%|██████████| 9/9 [00:00&lt;00:00, 559.61it/s]
+Processing neg_patterns patterns...: 100%|██████████| 6/6 [00:00&lt;00:00, 599.99it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="5-gene-expression-prediction.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Predicting Gene Expression with Decima</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="3-finetune.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Fine-tuning Borzoi to create a Decima model</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Detecting and Clustering Seqlets with Modisco</a><ul>
+<li><a class="reference internal" href="#cli-api">CLI API</a><ul>
+<li><a class="reference internal" href="#cli-subcommands">CLI Subcommands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-user-api">Python User API</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

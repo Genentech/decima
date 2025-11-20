@@ -28,14 +28,6 @@ decima.data.read\_hdf5 module
    :show-inheritance:
    :undoc-members:
 
-decima.data.read\_vcf module
-----------------------------
-
-.. automodule:: decima.data.read_vcf
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 decima.data.write\_hdf5 module
 ------------------------------
 

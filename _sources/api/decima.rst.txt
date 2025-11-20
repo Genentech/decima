@@ -10,7 +10,6 @@ Subpackages
    decima.cli
    decima.core
    decima.data
-   decima.dataloaders
    decima.hub
    decima.interpret
    decima.model

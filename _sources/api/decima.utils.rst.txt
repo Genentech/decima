@@ -28,6 +28,30 @@ decima.utils.io module
    :show-inheritance:
    :undoc-members:
 
+decima.utils.motifs module
+--------------------------
+
+.. automodule:: decima.utils.motifs
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.utils.qc module
+----------------------
+
+.. automodule:: decima.utils.qc
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.utils.sequence module
+----------------------------
+
+.. automodule:: decima.utils.sequence
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 decima.utils.variant module
 ---------------------------
 
