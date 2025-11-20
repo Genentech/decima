@@ -1,20 +1,20 @@
 Traceback (most recent call last):
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 1319, in execute
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/nbclient/client.py", line 1319, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+  File "/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+  File "/home/runner/work/decima/decima/.tox/docs/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
@@ -27,7 +27,7 @@ pd.read_parquet("vep_vcf_results.parquet")
 [36mCell[39m[36m [39m[32mIn[5][39m[32m, line 1[39m
 [32m----> [39m[32m1[39m [43mpd[49m[43m.[49m[43mread_parquet[49m[43m([49m[33;43m"[39;49m[33;43mvep_vcf_results.parquet[39;49m[33;43m"[39;49m[43m)[49m
 
-[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:669[39m, in [36mread_parquet[39m[34m(path, engine, columns, storage_options, use_nullable_dtypes, dtype_backend, filesystem, filters, **kwargs)[39m
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.11/site-packages/pandas/io/parquet.py:669[39m, in [36mread_parquet[39m[34m(path, engine, columns, storage_options, use_nullable_dtypes, dtype_backend, filesystem, filters, **kwargs)[39m
 [32m    666[39m     use_nullable_dtypes = [38;5;28;01mFalse[39;00m
 [32m    667[39m check_dtype_backend(dtype_backend)
 [32m--> [39m[32m669[39m [38;5;28;01mreturn[39;00m [43mimpl[49m[43m.[49m[43mread[49m[43m([49m
@@ -41,7 +41,7 @@ pd.read_parquet("vep_vcf_results.parquet")
 [32m    677[39m [43m    [49m[43m*[49m[43m*[49m[43mkwargs[49m[43m,[49m
 [32m    678[39m [43m[49m[43m)[49m
 
-[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:258[39m, in [36mPyArrowImpl.read[39m[34m(self, path, columns, filters, use_nullable_dtypes, dtype_backend, storage_options, filesystem, **kwargs)[39m
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.11/site-packages/pandas/io/parquet.py:258[39m, in [36mPyArrowImpl.read[39m[34m(self, path, columns, filters, use_nullable_dtypes, dtype_backend, storage_options, filesystem, **kwargs)[39m
 [32m    256[39m [38;5;28;01mif[39;00m manager == [33m"[39m[33marray[39m[33m"[39m:
 [32m    257[39m     to_pandas_kwargs[[33m"[39m[33msplit_blocks[39m[33m"[39m] = [38;5;28;01mTrue[39;00m
 [32m--> [39m[32m258[39m path_or_handle, handles, filesystem = [43m_get_path_or_handle[49m[43m([49m
@@ -57,7 +57,7 @@ pd.read_parquet("vep_vcf_results.parquet")
 [32m   (...)[39m[32m    270[39m         **kwargs,
 [32m    271[39m     )
 
-[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/parquet.py:141[39m, in [36m_get_path_or_handle[39m[34m(path, fs, storage_options, mode, is_dir)[39m
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.11/site-packages/pandas/io/parquet.py:141[39m, in [36m_get_path_or_handle[39m[34m(path, fs, storage_options, mode, is_dir)[39m
 [32m    131[39m handles = [38;5;28;01mNone[39;00m
 [32m    132[39m [38;5;28;01mif[39;00m (
 [32m    133[39m     [38;5;129;01mnot[39;00m fs
@@ -70,7 +70,7 @@ pd.read_parquet("vep_vcf_results.parquet")
 [32m    144[39m     fs = [38;5;28;01mNone[39;00m
 [32m    145[39m     path_or_handle = handles.handle
 
-[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.12/site-packages/pandas/io/common.py:882[39m, in [36mget_handle[39m[34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[39m
+[36mFile [39m[32m~/work/decima/decima/.tox/docs/lib/python3.11/site-packages/pandas/io/common.py:882[39m, in [36mget_handle[39m[34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[39m
 [32m    873[39m         handle = [38;5;28mopen[39m(
 [32m    874[39m             handle,
 [32m    875[39m             ioargs.mode,
