@@ -18,17 +18,17 @@ jobs:
       pages: write
 
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
+      # - name: Set up Python 3.12
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: 3.12
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install tox
 
       # - name: Test with tox
       #   run: |
@@ -42,26 +42,27 @@ jobs:
       # - name: Publish to PyPI
       #   uses: pypa/gh-action-pypi-publish@release/v1
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     id-token: write
-  #     repository-projects: write
-  #     contents: write
-  #     pages: write
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      repository-projects: write
+      contents: write
+      pages: write
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Set up Python 3.12
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: 3.12
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
 
-  #     - name: Install dependencies
-  #       run: |
-  #         python -m pip install --upgrade pip
-  #         pip install tox
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install tox
 
       - name: Build docs
         run: |
