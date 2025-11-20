@@ -1,8 +1,12 @@
 name: Publish to PyPI
 
 on:
-  push:
-    tags: "*"
+  pull_request:
+    branches:
+      - main
+
+# push:
+#   tags: "*"
 
 jobs:
   build:
@@ -34,9 +38,9 @@ jobs:
         run: |
           python -m tox -e clean,build
 
-      # This uses the trusted publisher workflow so no token is required.
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      # # This uses the trusted publisher workflow so no token is required.
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Build docs
         run: |
