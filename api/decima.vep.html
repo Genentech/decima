@@ -3,12 +3,13 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="&lt;no title&gt;" href="../tutorials/1-attribution-motif-discovery.html"><link rel="prev" title="decima.utils package" href="decima.utils.html">
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Attribution and Motifs Detection with Decima" href="../tutorials/1-attribution-motif-discovery.html"><link rel="prev" title="decima.utils package" href="decima.utils.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.vep package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
+        <title>decima.vep package - decima 0.0.post1.dev1+ga9d6eec85 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -161,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+ga9d6eec85 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+ga9d6eec85 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -209,6 +210,11 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,28 +268,28 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df_variant</strong> (<em>pd.DataFrame</em><em> or </em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – DataFrame with variant information or path to variant file</p></li>
-<li><p><strong>output_pq</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to save the parquet file. Defaults to None.</p></li>
-<li><p><strong>tasks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Tasks to predict. Defaults to None.</p></li>
-<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Model to use. Defaults to DEFAULT_ENSEMBLE.</p></li>
-<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to anndata file. Defaults to None.</p></li>
-<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of variants to predict in each chunk. Defaults to 10_000.</p></li>
-<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Batch size. Defaults to 1.</p></li>
-<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of workers. Defaults to 16.</p></li>
-<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Device to use. Defaults to None.</p></li>
-<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – Columns to include in the output. Defaults to None.</p></li>
-<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for gene names. Defaults to None.</p></li>
-<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Type of distance. Defaults to “tss”.</p></li>
-<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum distance from the end of the gene. Defaults to 0 (inclusive).</p></li>
-<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum distance from the TSS. Defaults to inf (exclusive).</p></li>
-<li><p><strong>genome</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Genome name or path to the genome fasta file. Defaults to “hg38”.</p></li>
-<li><p><strong>save_replicates</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Save the replicates in the output. Defaults to False.</p></li>
-<li><p><strong>reference_cache</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to use reference cache. Defaults to True.</p></li>
-<li><p><strong>float_precision</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Floating-point precision. Defaults to “32”.</p></li>
+<li><p><strong>df_variant</strong> (<em>pd.DataFrame</em><em> or </em><em>str</em>) – DataFrame with variant information or path to variant file</p></li>
+<li><p><strong>output_pq</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save the parquet file. Defaults to None.</p></li>
+<li><p><strong>tasks</strong> (<em>str</em><em>, </em><em>optional</em>) – Tasks to predict. Defaults to None.</p></li>
+<li><p><strong>model</strong> (<em>int</em><em>, </em><em>optional</em>) – Model to use. Defaults to DEFAULT_ENSEMBLE.</p></li>
+<li><p><strong>metadata_anndata</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to anndata file. Defaults to None.</p></li>
+<li><p><strong>chunksize</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of variants to predict in each chunk. Defaults to 10_000.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Batch size. Defaults to 1.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of workers. Defaults to 16.</p></li>
+<li><p><strong>device</strong> (<em>str</em><em>, </em><em>optional</em>) – Device to use. Defaults to None.</p></li>
+<li><p><strong>include_cols</strong> (<em>list</em><em>, </em><em>optional</em>) – Columns to include in the output. Defaults to None.</p></li>
+<li><p><strong>gene_col</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name for gene names. Defaults to None.</p></li>
+<li><p><strong>distance_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of distance. Defaults to “tss”.</p></li>
+<li><p><strong>min_distance</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum distance from the end of the gene. Defaults to 0 (inclusive).</p></li>
+<li><p><strong>max_distance</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum distance from the TSS. Defaults to inf (exclusive).</p></li>
+<li><p><strong>genome</strong> (<em>str</em><em>, </em><em>optional</em>) – Genome name or path to the genome fasta file. Defaults to “hg38”.</p></li>
+<li><p><strong>save_replicates</strong> (<em>bool</em><em>, </em><em>optional</em>) – Save the replicates in the output. Defaults to False.</p></li>
+<li><p><strong>reference_cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use reference cache. Defaults to True.</p></li>
+<li><p><strong>float_precision</strong> (<em>str</em><em>, </em><em>optional</em>) – Floating-point precision. Defaults to “32”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -301,7 +307,7 @@
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">&lt;no title&gt;</div>
+                <div class="title">Attribution and Motifs Detection with Decima</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -362,7 +368,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
+</div><script src="../_static/documentation_options.js?v=68a6d85b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
