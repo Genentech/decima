@@ -1,0 +1,1294 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>decima.core.attribution - decima 0.0.post1.dev1+g6e9347243 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/modules.html">Module Reference</a><input aria-label="Toggle navigation of Module Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/decima.html">decima package</a><input aria-label="Toggle navigation of decima package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.core.html">decima.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.data.html">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for decima.core.attribution</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Attribution analysis from decima model.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyBigWig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyfaidx</span><span class="w"> </span><span class="kn">import</span> <span class="n">Faidx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tangermeme.seqlet</span><span class="w"> </span><span class="kn">import</span> <span class="n">recursive_seqlets</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.interpret.motifs</span><span class="w"> </span><span class="kn">import</span> <span class="n">scan_sequences</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.sequence.format</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_input_type</span><span class="p">,</span> <span class="n">strings_to_one_hot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_attributions</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">,</span> <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span> <span class="n">MODEL_METADATA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.attributer</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaAttributer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils.sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">one_hot_to_seq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.plot.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_peaks</span>
+
+
+<div class="viewcode-block" id="Attribution">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Attribution</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Attribution analysis results for a gene.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gene: Gene symbol or ID to analyze</span>
+<span class="sd">        inputs: One-hot encoded sequence</span>
+<span class="sd">        attrs: Attribution scores</span>
+<span class="sd">        gene: Gene name</span>
+<span class="sd">        chrom: Chromosome name</span>
+<span class="sd">        start: Start position</span>
+<span class="sd">        end: End position</span>
+<span class="sd">        strand: Strand</span>
+<span class="sd">        threshold: Threshold for peak finding</span>
+<span class="sd">        min_seqlet_len: Minimum sequence length for peak finding</span>
+<span class="sd">        max_seqlet_len: Maximum sequence length for peak finding</span>
+<span class="sd">        additional_flanks: Additional flanks to add to the gene</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Attribution: Attribution analysis results for the gene and tasks</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; attribution = Attribution(</span>
+<span class="sd">            gene=&quot;A1BG&quot;,</span>
+<span class="sd">            inputs=inputs,</span>
+<span class="sd">            attrs=attrs,</span>
+<span class="sd">            chrom=&quot;chr1&quot;,</span>
+<span class="sd">            start=100,</span>
+<span class="sd">            end=200,</span>
+<span class="sd">            strand=&quot;+&quot;,</span>
+<span class="sd">            threshold=5e-4,</span>
+<span class="sd">            min_seqlet_len=4,</span>
+<span class="sd">            max_seqlet_len=25,</span>
+<span class="sd">            additional_flanks=0,</span>
+<span class="sd">        )</span>
+<span class="sd">        &gt;&gt;&gt; attribution.plot_peaks()</span>
+<span class="sd">        &gt;&gt;&gt; attribution.scan_motifs()</span>
+<span class="sd">        &gt;&gt;&gt; attribution.save_bigwig(</span>
+<span class="sd">        ...     &quot;attributions.bigwig&quot;</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; attribution.peaks_to_bed()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Attribution.__init__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">attrs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">chrom</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">strand</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Attribution.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inputs: One-hot encoded sequence</span>
+<span class="sd">            attrs: Attribution scores</span>
+<span class="sd">            gene: Gene name</span>
+<span class="sd">            chrom: Chromosome name</span>
+<span class="sd">            start: Start position</span>
+<span class="sd">            end: End position</span>
+<span class="sd">            strand: Strand</span>
+<span class="sd">            threshold: Threshold for peak finding</span>
+<span class="sd">            min_seqlet_len: Minimum sequence length for peak finding</span>
+<span class="sd">            max_seqlet_len: Maximum sequence length for peak finding</span>
+<span class="sd">            additional_flanks: Additional flanks to add to the gene</span>
+<span class="sd">            pattern_type: Pattern type to use for peak finding default is &quot;both&quot;, alternatively &quot;pos&quot; or &quot;neg&quot; which will only consider positive or negative peaks respectively.</span>
+<span class="sd">              &quot;both&quot; means both positive and negative patterns are considered.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span>
+        <span class="p">),</span> <span class="s2">&quot;`inputs` must be 5-dimensional with shape (5, seq_len) where the last dimension is a binary mask.&quot;</span>
+        <span class="k">assert</span> <span class="n">attrs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;`attrs` must be 4-dimensional&quot;</span>
+        <span class="k">assert</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">attrs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;`inputs` and `attrs` must have the same length&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene</span> <span class="o">=</span> <span class="n">gene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chrom</span> <span class="o">=</span> <span class="n">chrom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_strand</span> <span class="o">=</span> <span class="n">strand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_peaks</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;`end` - `start` must be equal to the length of `inputs`&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Recursive seqlet calling parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_seqlet_len</span> <span class="o">=</span> <span class="n">min_seqlet_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_seqlet_len</span> <span class="o">=</span> <span class="n">max_seqlet_len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">additional_flanks</span> <span class="o">=</span> <span class="n">additional_flanks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_type</span> <span class="o">=</span> <span class="n">pattern_type</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chrom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the chromosome name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;custom&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrom</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the start position.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the end position.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">strand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the strand.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strand</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;+&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strand</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gene_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the gene start position.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_end</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gene_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the gene end position.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_end</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_peaks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_peaks</span><span class="p">(</span>
+                <span class="n">threshold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span>
+                <span class="n">min_seqlet_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+                <span class="n">max_seqlet_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+                <span class="n">additional_flanks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">additional_flanks</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peaks</span>
+
+<div class="viewcode-block" id="Attribution.from_seq">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.from_seq">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_seq</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">off_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">DEFAULT_ENSEMBLE</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;specificity&quot;</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;inputxgradient&quot;</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">chrom</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">strand</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">gene_mask_start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">gene_mask_end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Attribution from sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inputs: Sequence to analyze either string of sequence,</span>
+<span class="sd">                torch.Tensor or np.ndarray with shape (4, 524288)</span>
+<span class="sd">                or (5, 524288) where the last dimension is a binary mask.</span>
+<span class="sd">                If 4-dimensional, gene_mask_start and gene_mask_end must be provided.</span>
+<span class="sd">            tasks: List of cell types to analyze attributions for</span>
+<span class="sd">            off_tasks: List of cell types to contrast against</span>
+<span class="sd">            model: Model to use for attribution analysis</span>
+<span class="sd">            transform: Transformation to apply to attributions</span>
+<span class="sd">            method: Method to use for attribution analysis available options: &quot;saliency&quot;, &quot;inputxgradient&quot;, &quot;integratedgradients&quot;.</span>
+<span class="sd">            device: Device to use for attribution analysis</span>
+<span class="sd">            result: Result object or path to result object or name of the model to load the result for.</span>
+<span class="sd">            gene: Gene name</span>
+<span class="sd">            chrom: Chromosome name</span>
+<span class="sd">            start: Start position</span>
+<span class="sd">            end: End position</span>
+<span class="sd">            strand: Strand</span>
+<span class="sd">            gene_start: Gene start position</span>
+<span class="sd">            gene_end: Gene end position</span>
+<span class="sd">            threshold: Threshold for peak finding</span>
+<span class="sd">            min_seqlet_len: Minimum sequence length for peak finding</span>
+<span class="sd">            max_seqlet_len: Maximum sequence length for peak finding</span>
+<span class="sd">            additional_flanks: Additional flanks to add to the gene</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gene_mask_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gene_mask_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">)</span>
+                <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">gene_mask_start</span><span class="p">:</span><span class="n">gene_mask_end</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">inputs</span><span class="p">,</span> <span class="n">mask</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">gene_mask_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">gene_mask_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Gene mask will be ignored as sequence is 5-dimensional.&quot;</span><span class="p">)</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Sequence must be 4-dimensional with shape (4, seq_len) &quot;</span>
+                    <span class="s2">&quot;and gene start and end must be provided, or 5-dimensional &quot;</span>
+                    <span class="s2">&quot;with shape (5, seq_len) where the last dimension is a binary mask.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="n">strings_to_one_hot</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">gene_mask_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="n">gene_mask_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">),</span> <span class="s2">&quot;Gene start and end must be provided when seq is a string.&quot;</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">)</span>
+            <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">gene_mask_start</span><span class="p">:</span><span class="n">gene_mask_end</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">inputs</span><span class="p">,</span> <span class="n">mask</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`inputs` must be a string, torch.Tensor, or np.ndarray&quot;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">result</span> <span class="ow">or</span> <span class="n">model</span><span class="p">)</span>
+        <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">query_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span><span class="p">)</span>
+
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">DecimaAttributer</span><span class="o">.</span><span class="n">load_decima_attributer</span><span class="p">(</span>
+                <span class="n">model_name</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span>
+                <span class="n">off_tasks</span><span class="o">=</span><span class="n">off_tasks</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
+            <span class="n">gene</span><span class="o">=</span><span class="n">gene</span><span class="p">,</span>
+            <span class="n">chrom</span><span class="o">=</span><span class="n">chrom</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+            <span class="n">strand</span><span class="o">=</span><span class="n">strand</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+            <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+            <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Attribution.find_peaks">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.find_peaks">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_peaks</span><span class="p">(</span>
+        <span class="n">attrs</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">5e-4</span><span class="p">,</span> <span class="n">min_seqlet_len</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_seqlet_len</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">additional_flanks</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pattern_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find peaks in attribution scores.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            attrs: Attribution scores</span>
+<span class="sd">            threshold: Threshold for peak finding</span>
+<span class="sd">            min_seqlet_len: Minimum sequence length for peak finding</span>
+<span class="sd">            max_seqlet_len: Maximum sequence length for peak finding</span>
+<span class="sd">            additional_flanks: Additional flanks to add to the gene</span>
+<span class="sd">            pattern_type: Pattern type to use for peak finding default is &quot;both&quot;, alternatively &quot;pos&quot; or &quot;neg&quot; which will only consider positive or negative peaks respectively.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            df: DataFrame of peaks with columns of:</span>
+<span class="sd">                - &quot;peak&quot;: Peak name in format &quot;pattern_type.gene@from_tss&quot;</span>
+<span class="sd">                - &quot;start&quot;: Start position of the peak</span>
+<span class="sd">                - &quot;end&quot;: End position of the peak</span>
+<span class="sd">                - &quot;attribution&quot;: Attribution score of the peak</span>
+<span class="sd">                - &quot;p-value&quot;: P-value of the peak</span>
+<span class="sd">                - &quot;from_tss&quot;: Distance from the TSS to the peak</span>
+<span class="sd">                - &quot;pattern_type&quot;: Pattern type of the peak</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pattern_type</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">Attribution</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">min_seqlet_len</span><span class="p">,</span> <span class="n">max_seqlet_len</span><span class="p">,</span> <span class="n">additional_flanks</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+                    <span class="n">Attribution</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">min_seqlet_len</span><span class="p">,</span> <span class="n">max_seqlet_len</span><span class="p">,</span> <span class="n">additional_flanks</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">pattern_type</span> <span class="o">==</span> <span class="s2">&quot;pos&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">pattern_type</span> <span class="o">==</span> <span class="s2">&quot;neg&quot;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="o">-</span><span class="n">attrs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid pattern type: </span><span class="si">{</span><span class="n">pattern_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">recursive_seqlets</span><span class="p">(</span>
+                <span class="n">attrs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+                <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+                <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+                <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;attribution &gt; 0&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">pattern_type</span> <span class="o">==</span> <span class="s2">&quot;neg&quot;</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;attribution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;attribution&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_peaks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">5e-4</span><span class="p">,</span> <span class="n">min_seqlet_len</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_seqlet_len</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">additional_flanks</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pattern_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span>
+    <span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">min_seqlet_len</span><span class="p">,</span> <span class="n">max_seqlet_len</span><span class="p">,</span> <span class="n">additional_flanks</span><span class="p">,</span> <span class="n">pattern_type</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;example_idx&quot;</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;from_tss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;peak&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pattern_type&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene</span> <span class="o">+</span> <span class="s2">&quot;@&quot;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;from_tss&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;attribution&quot;</span><span class="p">,</span> <span class="s2">&quot;p-value&quot;</span><span class="p">,</span> <span class="s2">&quot;from_tss&quot;</span><span class="p">]]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_zero_pad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">prefix_pad</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">start</span><span class="p">)</span>
+        <span class="n">suffix_pad</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">array</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">prefix_pad</span><span class="p">,</span> <span class="n">suffix_pad</span><span class="p">)),</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zero_pad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zero_pad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Attribution.scan_motifs">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.scan_motifs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scan_motifs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">motifs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hocomoco_v13&quot;</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="n">pthresh</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scan for motifs in peak regions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            motifs: Motif database to use</span>
+<span class="sd">            window: Window size around peaks</span>
+<span class="sd">            pthresh: P-value threshold for motif matches</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Motif scan results with columns:</span>
+<span class="sd">                - &quot;motif&quot;: Motif name</span>
+<span class="sd">                - &quot;peak&quot;: Peak name</span>
+<span class="sd">                - &quot;start&quot;: Start position of the peak</span>
+<span class="sd">                - &quot;end&quot;: End position of the peak</span>
+<span class="sd">                - &quot;strand&quot;: Strand of the peak</span>
+<span class="sd">                - &quot;score&quot;: Fimoe score of the motif</span>
+<span class="sd">                - &quot;p-value&quot;: Fimo p-value of the motif</span>
+<span class="sd">                - &quot;matched_seq&quot;: Matched sequence</span>
+<span class="sd">                - &quot;site_attr_score&quot;: Site attribution score</span>
+<span class="sd">                - &quot;motif_attr_score&quot;: Motif attribution score</span>
+<span class="sd">                - &quot;from_tss&quot;: Distance from the TSS to the peak</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
+
+        <span class="n">peak_attrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_attrs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">window</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mid</span><span class="p">])</span>
+        <span class="n">peak_seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">one_hot_to_seq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_inputs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">window</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mid</span><span class="p">]</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">scan_sequences</span><span class="p">(</span>
+            <span class="n">seqs</span><span class="o">=</span><span class="n">peak_seqs</span><span class="p">,</span>
+            <span class="n">seq_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;peak&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="n">motifs</span><span class="o">=</span><span class="n">motifs</span><span class="p">,</span>
+            <span class="n">pthresh</span><span class="o">=</span><span class="n">pthresh</span><span class="p">,</span>
+            <span class="n">rc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="n">peak_attrs</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s2">&quot;peak&quot;</span><span class="p">,</span> <span class="s2">&quot;fimo_p-value&quot;</span><span class="p">:</span> <span class="s2">&quot;p-value&quot;</span><span class="p">,</span> <span class="s2">&quot;fimo_score&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">})</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">[[</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> <span class="s2">&quot;from_tss&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">mid</span><span class="o">=</span><span class="n">mid</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">on</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span>
+            <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;_peak&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mid&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mid&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;from_tss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start_peak&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;seq_idx&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mid&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;p-value&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Attribution.plot_peaks">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.plot_peaks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overlapping_min_dist</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot attribution scores and highlight peaks.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            overlapping_min_dist: Minimum distance between peaks to consider them overlapping</span>
+<span class="sd">            figsize: Figure size in inches (width, height)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            plotnine.ggplot: The plotted figure showing attribution scores with highlighted peaks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">plot_peaks</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">,</span>
+            <span class="n">overlapping_min_dist</span><span class="o">=</span><span class="n">overlapping_min_dist</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Attribution.plot_seqlogo">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.plot_seqlogo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_seqlogo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relative_loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot attribution scores around a relative location.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            relative_loc: Position relative to TSS to center plot on</span>
+<span class="sd">            window: Number of bases to show on each side of center</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            matplotlib.pyplot.Figure: Attribution plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_mask_start</span> <span class="o">+</span> <span class="n">relative_loc</span>
+        <span class="k">return</span> <span class="n">plot_attributions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">[:,</span> <span class="n">loc</span> <span class="o">-</span> <span class="n">window</span> <span class="p">:</span> <span class="n">loc</span> <span class="o">+</span> <span class="n">window</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Attribution.__repr__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Attribution(gene=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gene</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Attribution(gene=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gene</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Attribution.save_bigwig">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.save_bigwig">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_bigwig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bigwig_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save attribution scores as a bigwig file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bigwig_path: Path to save bigwig file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">bw</span> <span class="o">=</span> <span class="n">pyBigWig</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">bigwig_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chrom</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">genomepy</span>
+
+            <span class="n">sizes</span> <span class="o">=</span> <span class="n">genomepy</span><span class="o">.</span><span class="n">Genome</span><span class="p">(</span><span class="s2">&quot;hg38&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sizes</span>
+            <span class="n">bw</span><span class="o">.</span><span class="n">addHeader</span><span class="p">([(</span><span class="n">chrom</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">chrom</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sizes</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene</span> <span class="ow">or</span> <span class="s2">&quot;custom&quot;</span>
+            <span class="n">bw</span><span class="o">.</span><span class="n">addHeader</span><span class="p">([(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)])</span>
+
+        <span class="n">bw</span><span class="o">.</span><span class="n">addEntries</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bw</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Attribution.fasta_str">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.fasta_str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fasta_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get attribution scores as a fasta string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;strings&quot;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene</span> <span class="ow">or</span> <span class="s2">&quot;custom&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&gt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="Attribution.save_fasta">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.save_fasta">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_fasta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save attribution scores as a fasta file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fasta_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fasta_str</span><span class="p">())</span>
+        <span class="n">Faidx</span><span class="p">(</span><span class="n">fasta_path</span><span class="p">,</span> <span class="n">build_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Attribution.peaks_to_bed">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.peaks_to_bed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">peaks_to_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert peaks to bed format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Peaks in bed format where columns are:</span>
+<span class="sd">                - chrom: Chromosome name</span>
+<span class="sd">                - start: Start position in genome</span>
+<span class="sd">                - end: End position in genome</span>
+<span class="sd">                - name: Peak name in format &quot;gene@from_tss&quot;</span>
+<span class="sd">                - score: Score (-log10(p-value)) clipped to 0-100 based on the seqlet calling</span>
+<span class="sd">                - strand: Strand == &#39;.&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;peak&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">})</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chrom</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+        <span class="c1"># np.maximum because of https://github.com/jmschrei/tangermeme/issues/40</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;p-value&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-50</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;strand&quot;</span><span class="p">,</span> <span class="s2">&quot;attribution&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Attribution.save_peaks">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.Attribution.save_peaks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bed_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save peaks to bed file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bed_path: Path to save bed file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks_to_bed</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">bed_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AttributionResult">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AttributionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Attribution result from decima model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        attribution_h5: Path to attribution h5 file or list of paths to attribution h5 files generated by `decima attributions-predict` or `decima attributions` commands.</span>
+<span class="sd">        tss_distance: Distance from the TSS to include in the attribution analysis.</span>
+<span class="sd">        correct_grad: Whether to correct the gradient for the attribution analysis.</span>
+<span class="sd">        num_workers: Number of workers to use for the attribution analysis.</span>
+<span class="sd">        agg_func: Function to aggregate the attribution scores.</span>
+
+
+<span class="sd">    Examples:</span>
+<span class="sd">        with AttributionResult(attribution_h5=[&quot;example/attribution.h5&quot;, &quot;example/attribution2.h5&quot;]) as ar:</span>
+<span class="sd">            seqs, attrs = ar.load(genes=[&quot;SPI1&quot;])</span>
+<span class="sd">            attribution = ar.load_attribution(gene=&quot;SPI1&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AttributionResult.__init__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">attribution_h5</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">tss_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">correct_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">agg_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span> <span class="o">=</span> <span class="n">attribution_h5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span> <span class="o">=</span> <span class="n">tss_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correct_grad</span> <span class="o">=</span> <span class="n">correct_grad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">=</span> <span class="n">num_workers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_func</span> <span class="o">=</span> <span class="n">agg_func</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.open">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.open">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the attribution h5 files.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5</span> <span class="o">=</span> <span class="p">[</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">attribution_h5</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">attribution_h5_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attribution_h5_file</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gene</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;genes&quot;</span><span class="p">][:]):</span>
+                        <span class="n">gene</span> <span class="o">=</span> <span class="n">gene</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="p">[</span><span class="n">gene</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">)</span> <span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="p">),</span> <span class="s2">&quot;All genes must be present in all attribution files.&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;genome&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;genome&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">genome</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">))</span>
+            <span class="p">),</span> <span class="s2">&quot;All attribution files must have the same genome version.&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">h5</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h5</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;model_name&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">gene</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gene</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;genes&quot;</span><span class="p">][:])}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;model_name&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;genome&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">genes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.close">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the attribution h5 files.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">h5</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">:</span>
+                <span class="n">h5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.__enter__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.__enter__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.aggregate">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.aggregate">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">agg_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Aggregate the attribution scores.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">agg_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span>
+        <span class="k">elif</span> <span class="n">agg_func</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">agg_func</span> <span class="o">==</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid aggregation function: </span><span class="si">{</span><span class="n">agg_func</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">correct_grad</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">gene_mask</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the attribution scores.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">gene</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;genes&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">gene_mask_start</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;gene_mask_start&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">gene_mask_end</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;gene_mask_end&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">tss_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">gene_mask_start</span> <span class="o">+</span> <span class="n">tss_distance</span> <span class="o">&gt;</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">gene_mask_start</span> <span class="o">-</span> <span class="n">tss_distance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Window around the TSS is greater than the context size and adding zero padding to `</span><span class="si">{</span><span class="n">gene</span><span class="si">}</span><span class="s2">`&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot; where window around the TSS: `</span><span class="si">{</span><span class="n">gene_mask_start</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">tss_distance</span><span class="si">}</span><span class="s2">`.&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot; The context size of decima is `</span><span class="si">{</span><span class="n">DECIMA_CONTEXT_SIZE</span><span class="si">}</span><span class="s2">`.&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="n">padding</span> <span class="o">=</span> <span class="n">tss_distance</span> <span class="ow">or</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">gene_mask</span><span class="p">:</span>
+                <span class="n">seqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">seqs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">gene_mask_start</span> <span class="p">:</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">gene_mask_end</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+
+            <span class="n">seqs</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span> <span class="n">padding</span> <span class="p">:</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span>
+                <span class="n">f</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">),</span> <span class="s2">&quot;one_hot&quot;</span><span class="p">,</span> <span class="n">input_type</span><span class="o">=</span><span class="s2">&quot;indices&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">attrs</span><span class="p">[:,</span> <span class="n">padding</span> <span class="p">:</span> <span class="n">DECIMA_CONTEXT_SIZE</span> <span class="o">+</span> <span class="n">padding</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;attribution&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tss_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">gene_mask_start</span> <span class="o">-</span> <span class="n">tss_distance</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">tss_distance</span> <span class="o">*</span> <span class="mi">2</span>
+
+            <span class="n">seqs</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">correct_grad</span><span class="p">:</span>
+            <span class="c1"># The following line applies a trick from Madjdandzic et al. to center the attributions.</span>
+            <span class="c1"># By subtracting the mean attribution for each sequence, we ensure that the contributions of individual base</span>
+            <span class="c1"># substitutions &quot;speak for themselves.&quot; This prevents downstream tasks, like motif discovery, from being</span>
+            <span class="c1"># influenced by the overall importance of a site rather than the specific mutational consequence of each base.</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span> <span class="o">-</span> <span class="n">attrs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_multiple</span><span class="p">(</span>
+        <span class="n">attribution_h5_files</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">correct_grad</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">gene_mask</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">agg_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the attribution scores from multiple attribution h5 files.&quot;&quot;&quot;</span>
+        <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">(</span>
+                <span class="n">AttributionResult</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">attribution_h5_file</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">tss_distance</span><span class="p">,</span> <span class="n">correct_grad</span><span class="p">,</span> <span class="n">gene_mask</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">attribution_h5_file</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">attribution_h5_files</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">AttributionResult</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seqs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">attrs</span><span class="p">),</span> <span class="n">agg_func</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AttributionResult.load">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gene_mask</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the attribution scores for a list of genes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            genes: List of genes to load.</span>
+<span class="sd">            gene_mask: Whether to mask the gene.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            seqs: Array of sequences.</span>
+<span class="sd">            attrs: Array of attribution scores.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;h5&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;AttributionResult is not open. Please open it with `with AttributionResult(attribution_h5) as ar:`.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">load_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load</span>
+        <span class="n">load_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;tss_distance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span><span class="p">,</span>
+            <span class="s2">&quot;correct_grad&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_grad</span><span class="p">,</span>
+            <span class="s2">&quot;gene_mask&quot;</span><span class="p">:</span> <span class="n">gene_mask</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">load_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_multiple</span>
+            <span class="n">load_kwargs</span><span class="p">[</span><span class="s2">&quot;agg_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agg_func</span>
+
+        <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">)(</span>
+                <span class="n">delayed</span><span class="p">(</span><span class="n">load_func</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span> <span class="o">**</span><span class="n">load_kwargs</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Loading attributions and sequences...&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seqs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_attribution</span><span class="p">(</span>
+        <span class="n">attribution_h5</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">chrom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">agg_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;tss_distance&quot;</span><span class="p">:</span> <span class="n">tss_distance</span><span class="p">,</span>
+            <span class="s2">&quot;correct_grad&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;gene_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">agg_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Aggregation function must be set to use recursive seqlet calling.&quot;</span>
+            <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span> <span class="o">=</span> <span class="n">AttributionResult</span><span class="o">.</span><span class="n">_load_multiple</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">agg_func</span><span class="o">=</span><span class="n">agg_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seqs</span><span class="p">,</span> <span class="n">attrs</span> <span class="o">=</span> <span class="n">AttributionResult</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">attribution_h5</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Attribution</span><span class="p">(</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="n">seqs</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
+            <span class="n">gene</span><span class="o">=</span><span class="n">gene</span><span class="p">,</span>
+            <span class="n">chrom</span><span class="o">=</span><span class="n">chrom</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+            <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+            <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+            <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">custom_genome</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">custom_genome</span><span class="p">:</span>
+            <span class="n">chroms</span> <span class="o">=</span> <span class="n">genes</span>
+            <span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ends</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ends</span> <span class="o">=</span> <span class="p">[</span><span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span> <span class="ow">or</span> <span class="n">model_name</span><span class="p">)</span>
+            <span class="n">chroms</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">chrom</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tss_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">gene_end</span><span class="p">,</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">gene_start</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">starts</span> <span class="o">=</span> <span class="n">tss_pos</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span>
+                <span class="n">ends</span> <span class="o">=</span> <span class="n">tss_pos</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">starts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">start</span>
+                <span class="n">ends</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span><span class="o">.</span><span class="n">end</span>
+        <span class="k">return</span> <span class="n">chroms</span><span class="p">,</span> <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span>
+
+<div class="viewcode-block" id="AttributionResult.load_attribution">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.load_attribution">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_attribution</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">custom_genome</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the attribution scores for a gene.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gene: Gene to load.</span>
+<span class="sd">            metadata_anndata: Metadata anndata object.</span>
+<span class="sd">            custom_genome: Whether to use custom genome.</span>
+<span class="sd">            threshold: Threshold for peak finding.</span>
+<span class="sd">            min_seqlet_len: Minimum sequence length for peak finding.</span>
+<span class="sd">            max_seqlet_len: Maximum sequence length for peak finding.</span>
+<span class="sd">            additional_flanks: Additional flanks to add to the gene.</span>
+<span class="sd">            pattern_type: Pattern type to use for peak finding default is &quot;both&quot;, alternatively &quot;pos&quot; or &quot;neg&quot; which will only consider positive or negative peaks respectively.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Attribution object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chroms</span><span class="p">,</span> <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">metadata_anndata</span><span class="p">,</span> <span class="n">custom_genome</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_attribution</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span>
+            <span class="n">gene</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span><span class="p">,</span>
+            <span class="n">chroms</span><span class="p">,</span>
+            <span class="n">starts</span><span class="p">,</span>
+            <span class="n">ends</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agg_func</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+            <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+            <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+            <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_recursive_seqlet_calling</span><span class="p">(</span>
+        <span class="n">attribution_h5</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">chrom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">agg_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>
+        <span class="n">meme_motif_db</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hocomoco_v13&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">attribution</span> <span class="o">=</span> <span class="n">AttributionResult</span><span class="o">.</span><span class="n">_load_attribution</span><span class="p">(</span>
+            <span class="n">attribution_h5</span><span class="p">,</span>
+            <span class="n">idx</span><span class="p">,</span>
+            <span class="n">gene</span><span class="p">,</span>
+            <span class="n">tss_distance</span><span class="p">,</span>
+            <span class="n">chrom</span><span class="p">,</span>
+            <span class="n">start</span><span class="p">,</span>
+            <span class="n">end</span><span class="p">,</span>
+            <span class="n">agg_func</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+            <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+            <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+            <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">df_peaks</span> <span class="o">=</span> <span class="n">attribution</span><span class="o">.</span><span class="n">peaks_to_bed</span><span class="p">()</span>
+        <span class="n">df_motifs</span> <span class="o">=</span> <span class="n">attribution</span><span class="o">.</span><span class="n">scan_motifs</span><span class="p">(</span><span class="n">motifs</span><span class="o">=</span><span class="n">meme_motif_db</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df_peaks</span><span class="p">,</span> <span class="n">df_motifs</span>
+
+<div class="viewcode-block" id="AttributionResult.recursive_seqlet_calling">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.recursive_seqlet_calling">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">recursive_seqlet_calling</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">genes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">custom_genome</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span>
+        <span class="n">min_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_seqlet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="n">additional_flanks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>
+        <span class="n">meme_motif_db</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hocomoco_v13&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform recursive seqlet calling on the attribution scores.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            genes: List of genes to perform recursive seqlet calling on.</span>
+<span class="sd">            metadata_anndata: Metadata anndata object.</span>
+<span class="sd">            custom_genome: Whether to use custom genome.</span>
+<span class="sd">            threshold: Threshold for peak finding.</span>
+<span class="sd">            min_seqlet_len: Minimum sequence length for peak finding.</span>
+<span class="sd">            max_seqlet_len: Maximum sequence length for peak finding.</span>
+<span class="sd">            additional_flanks: Additional flanks to add to the gene.</span>
+<span class="sd">            pattern_type: Pattern type to use for peak finding default is &quot;both&quot;, alternatively &quot;pos&quot; or &quot;neg&quot; which will only consider positive or negative peaks respectively.</span>
+<span class="sd">            meme_motif_db: MEME motif database to use for motif discovery.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            df_peaks: DataFrame of peaks.</span>
+<span class="sd">            df_motifs: DataFrame of motifs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">genes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">genes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">genes</span>
+
+        <span class="n">chroms</span><span class="p">,</span> <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">metadata_anndata</span><span class="p">,</span> <span class="n">custom_genome</span><span class="p">)</span>
+
+        <span class="n">df_peaks</span><span class="p">,</span> <span class="n">df_motifs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">)(</span>
+                <span class="n">delayed</span><span class="p">(</span><span class="n">AttributionResult</span><span class="o">.</span><span class="n">_recursive_seqlet_calling</span><span class="p">)(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_idx</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span>
+                    <span class="n">gene</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tss_distance</span><span class="p">,</span>
+                    <span class="n">chrom</span><span class="p">,</span>
+                    <span class="n">start</span><span class="p">,</span>
+                    <span class="n">end</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">agg_func</span><span class="p">,</span>
+                    <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+                    <span class="n">min_seqlet_len</span><span class="o">=</span><span class="n">min_seqlet_len</span><span class="p">,</span>
+                    <span class="n">max_seqlet_len</span><span class="o">=</span><span class="n">max_seqlet_len</span><span class="p">,</span>
+                    <span class="n">additional_flanks</span><span class="o">=</span><span class="n">additional_flanks</span><span class="p">,</span>
+                    <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+                    <span class="n">meme_motif_db</span><span class="o">=</span><span class="n">meme_motif_db</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">gene</span><span class="p">,</span> <span class="n">chrom</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="nb">zip</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">chroms</span><span class="p">,</span> <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Computing recursive seqlet calling...&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df_motifs</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.__exit__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.__exit__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AttributionResult.__repr__">
+<a class="viewcode-back" href="../../../api/decima.core.html#decima.core.attribution.AttributionResult.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;AttributionResult(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">attribution_h5</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=52fac5ed"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

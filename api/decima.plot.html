@@ -6,10 +6,9 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.tools package" href="decima.tools.html"><link rel="prev" title="decima.model package" href="decima.model.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.plot package - decima unknown documentation</title>
+        <title>decima.plot package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,11 +256,54 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="decima-plot-visualize-module">
-<h2>decima.plot.visualize module<a class="headerlink" href="#decima-plot-visualize-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.plot.visualize">
+<span id="decima-plot-visualize-module"></span><h2>decima.plot.visualize module<a class="headerlink" href="#module-decima.plot.visualize" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.plot.visualize.import_plotnine">
+<span class="sig-prename descclassname"><span class="pre">decima.plot.visualize.</span></span><span class="sig-name descname"><span class="pre">import_plotnine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/plot/visualize.html#import_plotnine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.plot.visualize.import_plotnine" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.plot.visualize.plot_gene_scatter">
+<span class="sig-prename descclassname"><span class="pre">decima.plot.visualize.</span></span><span class="sig-name descname"><span class="pre">plot_gene_scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_abline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">2.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pearson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/plot/visualize.html#plot_gene_scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.plot.visualize.plot_gene_scatter" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.plot.visualize.plot_marker_box">
+<span class="sig-prename descclassname"><span class="pre">decima.plot.visualize.</span></span><span class="sig-name descname"><span class="pre">plot_marker_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_preds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/plot/visualize.html#plot_marker_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.plot.visualize.plot_marker_box" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.plot.visualize.plot_peaks">
+<span class="sig-prename descclassname"><span class="pre">decima.plot.visualize.</span></span><span class="sig-name descname"><span class="pre">plot_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlapping_min_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/plot/visualize.html#plot_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.plot.visualize.plot_peaks" title="Link to this definition">¶</a></dt>
+<dd><p>Plot peaks in attribution scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attr</strong> – Attribution scores array</p></li>
+<li><p><strong>tss_pos</strong> – Position of TSS (relative to the gene)</p></li>
+<li><p><strong>df_peaks</strong> – DataFrame containing peak information</p></li>
+<li><p><strong>overlapping_min_dist</strong> – Minimum distance between peaks to consider them overlapping</p></li>
+<li><p><strong>figsize</strong> – Figure size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The plotted figure</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotnine.ggplot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.plot.visualize.plot_track_scatter">
+<span class="sig-prename descclassname"><span class="pre">decima.plot.visualize.</span></span><span class="sig-name descname"><span class="pre">plot_track_scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_abline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">2.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/plot/visualize.html#plot_track_scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.plot.visualize.plot_track_scatter" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-decima.plot">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.plot" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -327,8 +364,15 @@
             <ul>
 <li><a class="reference internal" href="#">decima.plot package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#decima-plot-visualize-module">decima.plot.visualize module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-decima.plot.visualize">decima.plot.visualize module</a><ul>
+<li><a class="reference internal" href="#decima.plot.visualize.import_plotnine"><code class="docutils literal notranslate"><span class="pre">import_plotnine()</span></code></a></li>
+<li><a class="reference internal" href="#decima.plot.visualize.plot_gene_scatter"><code class="docutils literal notranslate"><span class="pre">plot_gene_scatter()</span></code></a></li>
+<li><a class="reference internal" href="#decima.plot.visualize.plot_marker_box"><code class="docutils literal notranslate"><span class="pre">plot_marker_box()</span></code></a></li>
+<li><a class="reference internal" href="#decima.plot.visualize.plot_peaks"><code class="docutils literal notranslate"><span class="pre">plot_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.plot.visualize.plot_track_scatter"><code class="docutils literal notranslate"><span class="pre">plot_track_scatter()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.plot">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -340,7 +384,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -1,0 +1,921 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>decima.interpret.modisco - decima 0.0.post1.dev1+g6e9347243 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/modules.html">Module Reference</a><input aria-label="Toggle navigation of Module Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/decima.html">decima package</a><input aria-label="Toggle navigation of decima package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.cli.html">decima.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.core.html">decima.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.data.html">decima.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.hub.html">decima.hub package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.interpret.html">decima.interpret package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.model.html">decima.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.plot.html">decima.plot package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.tools.html">decima.tools package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.train.html">decima.train package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.utils.html">decima.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/decima.vep.html">decima.vep package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for decima.interpret.modisco</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Modisco module perform modisco motif clustering from attributions.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    &gt;&gt;&gt; predict_save_modisco_attributions(</span>
+<span class="sd">    ...     output_prefix=&quot;output_prefix&quot;,</span>
+<span class="sd">    ...     tasks=[</span>
+<span class="sd">    ...         &quot;agg1&quot;,</span>
+<span class="sd">    ...         &quot;agg2&quot;,</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     off_tasks=[</span>
+<span class="sd">    ...         &quot;agg3&quot;,</span>
+<span class="sd">    ...         &quot;agg4&quot;,</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ... )</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fastermodiscolite</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_meme_file_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.interpret.motifs</span><span class="w"> </span><span class="kn">import</span> <span class="n">trim_pwm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">,</span> <span class="n">DEFAULT_ENSEMBLE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_get_on_off_tasks</span><span class="p">,</span> <span class="n">_get_genes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils.motifs</span><span class="w"> </span><span class="kn">import</span> <span class="n">motif_start_end</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.core.attribution</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributionResult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.attributions</span><span class="w"> </span><span class="kn">import</span> <span class="n">predict_save_attributions</span>
+
+
+<div class="viewcode-block" id="predict_save_modisco_attributions">
+<a class="viewcode-back" href="../../../api/decima.interpret.html#decima.interpret.modisco.predict_save_modisco_attributions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">predict_save_modisco_attributions</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span>
+    <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;saliency&quot;</span><span class="p">,</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;specificity&quot;</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">genes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bigwig</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">correct_grad_bigwig</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">genome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate and save attribution analysis results optimized for MoDISco motif discovery.</span>
+
+<span class="sd">    This function performs attribution analysis for specified genes and cell types, generating</span>
+<span class="sd">    attribution scores that will be used downstream for MoDISco pattern discovery and motif analysis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_prefix: Prefix for the output files where attribution results will be saved.</span>
+<span class="sd">        tasks: Tasks to analyze for modisco attribution either list of task names or query string to filter cell types to analyze attributions for (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, all tasks will be analyzed.</span>
+<span class="sd">        off_tasks: Off tasks to analyze for modisco attribution either list of task names or query string to filter cell types to contrast against (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, no contrast will be performed.</span>
+<span class="sd">        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.</span>
+<span class="sd">        metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.</span>
+<span class="sd">        method: Method to use for attribution analysis default is &quot;saliency&quot;. Available options: &quot;saliency&quot;, &quot;inputxgradient&quot;, &quot;integratedgradients&quot;. For MoDISco, &quot;saliency&quot; is often preferred for pattern discovery.</span>
+<span class="sd">        transform: Transform to use for attribution analysis default is &quot;specificity&quot;. Available options: &quot;specificity&quot;, &quot;aggregate&quot;. Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.</span>
+<span class="sd">        batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.</span>
+<span class="sd">        genes: Genes to analyze for modisco attribution if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.</span>
+<span class="sd">        top_n_markers: Top n markers for modisco attribution if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.</span>
+<span class="sd">        bigwig: Whether to save attribution scores as a bigwig file default is True. Bigwig files can be loaded in genome browsers for visualization.</span>
+<span class="sd">        correct_grad_bigwig: Whether to correct the gradient bigwig file default is True. Applies gradient correction for better visualization quality.</span>
+<span class="sd">        num_workers: Number of workers for attribution analysis default is 4. Increasing number of workers will speed up the process but requires more memory.</span>
+<span class="sd">        device: Device to use for attribution analysis (e.g. &#39;cuda&#39;, &#39;cpu&#39;). If not provided, the best available device will be used automatically.</span>
+<span class="sd">        genome: Genome to use for attribution analysis default is &quot;hg38&quot;. Can be genome name or path to custom genome fasta file.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    &gt;&gt;&gt; predict_save_modisco_attributions(</span>
+<span class="sd">    ...     output_dir=&quot;output_dir&quot;,</span>
+<span class="sd">    ...     tasks=&quot;cell_type == &#39;classical monocyte&#39;&quot;,</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">predict_save_attributions</span><span class="p">(</span>
+        <span class="n">output_prefix</span><span class="o">=</span><span class="n">output_prefix</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span>
+        <span class="n">off_tasks</span><span class="o">=</span><span class="n">off_tasks</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">metadata_anndata</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">genes</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
+        <span class="n">top_n_markers</span><span class="o">=</span><span class="n">top_n_markers</span><span class="p">,</span>
+        <span class="n">bigwig</span><span class="o">=</span><span class="n">bigwig</span><span class="p">,</span>
+        <span class="n">correct_grad_bigwig</span><span class="o">=</span><span class="n">correct_grad_bigwig</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="n">genome</span><span class="o">=</span><span class="n">genome</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modisco_patterns">
+<a class="viewcode-back" href="../../../api/decima.interpret.html#decima.interpret.modisco.modisco_patterns">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modisco_patterns</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">attributions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">,</span>
+    <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">genes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">correct_grad</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="c1"># tfmodisco parameters</span>
+    <span class="n">sliding_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">flank_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">min_metacluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">weak_threshold_for_counting_sign</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">max_seqlets_per_metacluster</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20_000</span><span class="p">,</span>
+    <span class="n">target_seqlet_fdr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_passing_windows_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">max_passing_windows_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">n_leiden_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="n">n_leiden_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">min_overlap_while_sliding</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">nearest_neighbors_to_compute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">affmat_correlation_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">tsne_perplexity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">frac_support_to_trim_to</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_num_to_trim_to</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">trim_to_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">initial_flank_to_add</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">final_flank_to_add</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)],</span>
+    <span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">subcluster_perplexity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">merging_max_seqlets_subsample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">final_min_cluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">min_ic_in_window</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">min_ic_windowsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">ppm_pseudocount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">stranded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>  <span class="c1"># &quot;both&quot;, &quot;pos&quot;, or &quot;neg&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform TF-MoDISco pattern discovery and motif clustering from attribution data.</span>
+
+<span class="sd">    This function runs the core TF-MoDISco algorithm to discover recurring patterns (motifs)</span>
+<span class="sd">    in attribution data by clustering similar seqlets and identifying consensus motifs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_prefix: Prefix for the output files where MoDISco results will be saved. Results will be saved as &quot;{output_prefix}.modisco.h5&quot;.</span>
+<span class="sd">        attributions: Path to attribution file(s) or list of attribution files containing computed attribution scores from previous analysis.</span>
+<span class="sd">        tasks: Tasks to analyze either list of task names or query string to filter cell types to analyze attributions for (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, all tasks will be analyzed.</span>
+<span class="sd">        off_tasks: Off tasks to analyze either list of task names or query string to filter cell types to contrast against (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, all tasks will be used as off tasks.</span>
+<span class="sd">        tss_distance: Distance from TSS to analyze for pattern discovery default is 10000. Controls the genomic window size around TSS for seqlet detection and motif discovery.</span>
+<span class="sd">        metadata_anndata: Name of the model or path to metadata anndata file or DecimaResult object. If not provided, the compatible metadata of the saved attribution files will be used.</span>
+<span class="sd">        genes: Genes to analyze for pattern discovery if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.</span>
+<span class="sd">        top_n_markers: Top n markers to analyze for pattern discovery if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.</span>
+<span class="sd">        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality before pattern discovery.</span>
+<span class="sd">        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.</span>
+<span class="sd">        sliding_window_size: Sliding window size.</span>
+<span class="sd">        flank_size: Flank size.</span>
+<span class="sd">        min_metacluster_size: Min metacluster size.</span>
+<span class="sd">        weak_threshold_for_counting_sign: Weak threshold for counting sign.</span>
+<span class="sd">        max_seqlets_per_metacluster: Max seqlets per metacluster.</span>
+<span class="sd">        target_seqlet_fdr: Target seqlet FDR.</span>
+<span class="sd">        min_passing_windows_frac: Min passing windows fraction.</span>
+<span class="sd">        max_passing_windows_frac: Max passing windows fraction.</span>
+<span class="sd">        n_leiden_runs: Number of Leiden runs.</span>
+<span class="sd">        n_leiden_iterations: Number of Leiden iterations.</span>
+<span class="sd">        min_overlap_while_sliding: Min overlap while sliding.</span>
+<span class="sd">        nearest_neighbors_to_compute: Nearest neighbors to compute.</span>
+<span class="sd">        affmat_correlation_threshold: Affmat correlation threshold.</span>
+<span class="sd">        tsne_perplexity: TSNE perplexity.</span>
+<span class="sd">        frac_support_to_trim_to: Frac support to trim to.</span>
+<span class="sd">        min_num_to_trim_to: Min num to trim to.</span>
+<span class="sd">        trim_to_window_size: Trim to window size.</span>
+<span class="sd">        initial_flank_to_add: Initial flank to add.</span>
+<span class="sd">        final_flank_to_add: Final flank to add.</span>
+<span class="sd">        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.</span>
+<span class="sd">        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.</span>
+<span class="sd">        subcluster_perplexity: Subcluster perplexity.</span>
+<span class="sd">        merging_max_seqlets_subsample: Merging max seqlets subsample.</span>
+<span class="sd">        final_min_cluster_size: Final min cluster size.</span>
+<span class="sd">        min_ic_in_window: Min IC in window.</span>
+<span class="sd">        min_ic_windowsize: Min IC windowsize.</span>
+<span class="sd">        ppm_pseudocount: PPM pseudocount.</span>
+<span class="sd">        stranded: Stranded.</span>
+<span class="sd">        pattern_type: Pattern type.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; modisco_patterns(</span>
+<span class="sd">        ...     output_prefix=&quot;output_prefix&quot;,</span>
+<span class="sd">        ...     attributions=&quot;attributions.h5&quot;,</span>
+<span class="sd">        ...     tasks=[</span>
+<span class="sd">        ...         &quot;agg1&quot;,</span>
+<span class="sd">        ...         &quot;agg2&quot;,</span>
+<span class="sd">        ...     ],</span>
+<span class="sd">        ...     off_tasks=[</span>
+<span class="sd">        ...         &quot;agg3&quot;,</span>
+<span class="sd">        ...         &quot;agg4&quot;,</span>
+<span class="sd">        ...     ],</span>
+<span class="sd">        ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;decima&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributions</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">attributions_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">attributions</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">attributions_files</span> <span class="o">=</span> <span class="n">attributions</span>
+
+    <span class="k">with</span> <span class="n">AttributionResult</span><span class="p">(</span>
+        <span class="n">attributions_files</span><span class="p">,</span> <span class="n">tss_distance</span><span class="p">,</span> <span class="n">correct_grad</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="n">agg_func</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
+        <span class="n">genome</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">genome</span>
+        <span class="n">model_names</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">model_name</span>
+
+        <span class="n">metadata_anndata</span> <span class="o">=</span> <span class="n">metadata_anndata</span> <span class="ow">or</span> <span class="n">model_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading metadata for model </span><span class="si">{</span><span class="n">metadata_anndata</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span><span class="p">)</span>
+
+        <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span> <span class="o">=</span> <span class="n">_get_on_off_tasks</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span><span class="p">)</span>
+        <span class="n">all_genes</span> <span class="o">=</span> <span class="n">_get_genes</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">top_n_markers</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span><span class="p">)</span>
+        <span class="n">sequences</span><span class="p">,</span> <span class="n">attributions</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">all_genes</span><span class="p">)</span>
+
+    <span class="n">pos_patterns</span><span class="p">,</span> <span class="n">neg_patterns</span> <span class="o">=</span> <span class="n">fastermodiscolite</span><span class="o">.</span><span class="n">tfmodisco</span><span class="o">.</span><span class="n">TFMoDISco</span><span class="p">(</span>
+        <span class="n">hypothetical_contribs</span><span class="o">=</span><span class="n">attributions</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">one_hot</span><span class="o">=</span><span class="n">sequences</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">sliding_window_size</span><span class="o">=</span><span class="n">sliding_window_size</span><span class="p">,</span>
+        <span class="n">flank_size</span><span class="o">=</span><span class="n">flank_size</span><span class="p">,</span>
+        <span class="n">min_metacluster_size</span><span class="o">=</span><span class="n">min_metacluster_size</span><span class="p">,</span>
+        <span class="n">weak_threshold_for_counting_sign</span><span class="o">=</span><span class="n">weak_threshold_for_counting_sign</span><span class="p">,</span>
+        <span class="n">max_seqlets_per_metacluster</span><span class="o">=</span><span class="n">max_seqlets_per_metacluster</span><span class="p">,</span>
+        <span class="n">target_seqlet_fdr</span><span class="o">=</span><span class="n">target_seqlet_fdr</span><span class="p">,</span>
+        <span class="n">min_passing_windows_frac</span><span class="o">=</span><span class="n">min_passing_windows_frac</span><span class="p">,</span>
+        <span class="n">max_passing_windows_frac</span><span class="o">=</span><span class="n">max_passing_windows_frac</span><span class="p">,</span>
+        <span class="n">n_leiden_runs</span><span class="o">=</span><span class="n">n_leiden_runs</span><span class="p">,</span>
+        <span class="n">n_leiden_iterations</span><span class="o">=</span><span class="n">n_leiden_iterations</span><span class="p">,</span>
+        <span class="n">min_overlap_while_sliding</span><span class="o">=</span><span class="n">min_overlap_while_sliding</span><span class="p">,</span>
+        <span class="n">nearest_neighbors_to_compute</span><span class="o">=</span><span class="n">nearest_neighbors_to_compute</span><span class="p">,</span>
+        <span class="n">affmat_correlation_threshold</span><span class="o">=</span><span class="n">affmat_correlation_threshold</span><span class="p">,</span>
+        <span class="n">tsne_perplexity</span><span class="o">=</span><span class="n">tsne_perplexity</span><span class="p">,</span>
+        <span class="n">frac_support_to_trim_to</span><span class="o">=</span><span class="n">frac_support_to_trim_to</span><span class="p">,</span>
+        <span class="n">min_num_to_trim_to</span><span class="o">=</span><span class="n">min_num_to_trim_to</span><span class="p">,</span>
+        <span class="n">trim_to_window_size</span><span class="o">=</span><span class="n">trim_to_window_size</span><span class="p">,</span>
+        <span class="n">initial_flank_to_add</span><span class="o">=</span><span class="n">initial_flank_to_add</span><span class="p">,</span>
+        <span class="n">final_flank_to_add</span><span class="o">=</span><span class="n">final_flank_to_add</span><span class="p">,</span>
+        <span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="o">=</span><span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="p">,</span>
+        <span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="o">=</span><span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="p">,</span>
+        <span class="n">subcluster_perplexity</span><span class="o">=</span><span class="n">subcluster_perplexity</span><span class="p">,</span>
+        <span class="n">merging_max_seqlets_subsample</span><span class="o">=</span><span class="n">merging_max_seqlets_subsample</span><span class="p">,</span>
+        <span class="n">final_min_cluster_size</span><span class="o">=</span><span class="n">final_min_cluster_size</span><span class="p">,</span>
+        <span class="n">min_ic_in_window</span><span class="o">=</span><span class="n">min_ic_in_window</span><span class="p">,</span>
+        <span class="n">min_ic_windowsize</span><span class="o">=</span><span class="n">min_ic_windowsize</span><span class="p">,</span>
+        <span class="n">ppm_pseudocount</span><span class="o">=</span><span class="n">ppm_pseudocount</span><span class="p">,</span>
+        <span class="n">stranded</span><span class="o">=</span><span class="n">stranded</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+        <span class="n">num_cores</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">h5_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_prefix</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.modisco.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
+    <span class="n">fastermodiscolite</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">save_hdf5</span><span class="p">(</span>
+        <span class="n">h5_path</span><span class="p">,</span>
+        <span class="n">pos_patterns</span><span class="p">,</span>
+        <span class="n">neg_patterns</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="o">=</span><span class="n">tss_distance</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">tss_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">h5_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;genes&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_genes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S100&quot;</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;tss_distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tss_distance</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;model_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_names</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;genome&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genome</span></div>
+
+
+
+<div class="viewcode-block" id="modisco_reports">
+<a class="viewcode-back" href="../../../api/decima.interpret.html#decima.interpret.modisco.modisco_reports">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modisco_reports</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">modisco_h5</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">meme_motif_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;hocomoco_v13&quot;</span><span class="p">,</span>
+    <span class="n">img_path_suffix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">is_writing_tomtom_matrix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">top_n_matches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">trim_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">trim_min_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">tomtomlite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate comprehensive HTML reports and motif comparisons from MoDISco results.</span>
+
+<span class="sd">    This function takes MoDISco pattern discovery results and generates detailed HTML reports</span>
+<span class="sd">    including motif visualizations, database comparisons, and statistical summaries.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_prefix: Prefix for the output report files where results will be saved. A &quot;_report&quot; suffix will be added to create the output directory.</span>
+<span class="sd">        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and motifs from previous MoDISco analysis.</span>
+<span class="sd">        meme_motif_db: MEME motif database for comparison default is &quot;hocomoco_v13&quot;. Database used for motif comparison and annotation. Can be database name or path to custom MEME format database.</span>
+<span class="sd">        img_path_suffix: Image path suffix for output plots default is &quot;&quot;. Optional suffix to add to image file paths for organizational purposes.</span>
+<span class="sd">        is_writing_tomtom_matrix: Whether to write TOMTOM comparison matrix default is False. If True, outputs detailed comparison matrix between discovered and database motifs for downstream analysis.</span>
+<span class="sd">        top_n_matches: Top n matches to report default is 3. Number of top database matches to report for each discovered motif in the HTML output.</span>
+<span class="sd">        trim_threshold: Trim threshold for motif boundaries default is 0.3. Threshold for determining where to trim motif boundaries based on information content when generating logos.</span>
+<span class="sd">        trim_min_length: Minimum trim length default is 3. Minimum number of positions to retain when trimming motifs to ensure meaningful motif representations.</span>
+<span class="sd">        tomtomlite: Whether to use TOMTOM lite mode default is False. If True, uses a faster but less comprehensive version of TOMTOM for motif comparison.</span>
+<span class="sd">        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up report generation but requires more memory.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; modisco_reports(</span>
+<span class="sd">        ...     output_prefix=&quot;output_prefix&quot;,</span>
+<span class="sd">        ...     modisco_h5=&quot;modisco.h5&quot;,</span>
+<span class="sd">        ...     meme_motif_db=&quot;hocomoco_v13&quot;,</span>
+<span class="sd">        ...     img_path_suffix=&quot;&quot;,</span>
+<span class="sd">        ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_prefix</span><span class="si">}</span><span class="s2">_report&quot;</span><span class="p">)</span>
+    <span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fastermodiscolite</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">report_motifs</span><span class="p">(</span>
+        <span class="n">modisco_h5</span><span class="p">,</span>
+        <span class="n">output_dir</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span>
+        <span class="n">img_path_suffix</span><span class="p">,</span>
+        <span class="n">meme_motif_db</span><span class="o">=</span><span class="n">get_meme_file_path</span><span class="p">(</span><span class="n">meme_motif_db</span><span class="p">),</span>
+        <span class="n">is_writing_tomtom_matrix</span><span class="o">=</span><span class="n">is_writing_tomtom_matrix</span><span class="p">,</span>
+        <span class="n">top_n_matches</span><span class="o">=</span><span class="n">top_n_matches</span><span class="p">,</span>
+        <span class="n">trim_threshold</span><span class="o">=</span><span class="n">trim_threshold</span><span class="p">,</span>
+        <span class="n">trim_min_length</span><span class="o">=</span><span class="n">trim_min_length</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="o">=</span><span class="n">tomtomlite</span><span class="p">,</span>
+        <span class="n">num_cores</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modisco_seqlet_bed">
+<a class="viewcode-back" href="../../../api/decima.interpret.html#decima.interpret.modisco.modisco_seqlet_bed">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modisco_seqlet_bed</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">modisco_h5</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">trim_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract seqlet locations from MoDISco results and save as BED format file.</span>
+
+<span class="sd">    This function processes MoDISco pattern discovery results to extract the genomic coordinates</span>
+<span class="sd">    of discovered seqlets (sequence motifs) and outputs them in standard BED format for</span>
+<span class="sd">    downstream analysis and visualization in genome browsers.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_prefix: Prefix for the output BED file where seqlet coordinates will be saved. The output will be saved as &quot;{output_prefix}.seqlets.bed&quot;.</span>
+<span class="sd">        modisco_h5: Path to the MoDISco HDF5 file containing discovered patterns and seqlet information from previous MoDISco analysis.</span>
+<span class="sd">        metadata_anndata: Path to metadata anndata file or DecimaResult object default is None. Required for mapping seqlet coordinates to genomic positions. If not provided, relative coordinates will be used.</span>
+<span class="sd">        trim_threshold: Trim threshold for seqlet boundaries default is 0.2. Threshold for determining seqlet boundaries based on contribution scores - lower values result in longer seqlets.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; modisco_seqlet_bed(</span>
+<span class="sd">        ...     output_prefix=&quot;my_analysis&quot;,</span>
+<span class="sd">        ...     modisco_h5=&quot;my_analysis.modisco.h5&quot;,</span>
+<span class="sd">        ...     metadata_anndata=&quot;metadata.h5ad&quot;,</span>
+<span class="sd">        ...     trim_threshold=0.15,</span>
+<span class="sd">        ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">modisco_h5</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;model_names&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span> <span class="ow">or</span> <span class="n">model_name</span><span class="p">)</span>
+
+        <span class="n">tss_distance</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;tss_distance&quot;</span><span class="p">]</span>
+        <span class="n">genes</span> <span class="o">=</span> <span class="p">[</span><span class="n">gene</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;genes&quot;</span><span class="p">][:]]</span>
+        <span class="n">genes_idx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">genes</span><span class="p">))</span>
+        <span class="n">df_genes</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">gene_metadata</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">pattern_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pos_patterns&quot;</span><span class="p">,</span> <span class="s2">&quot;neg_patterns&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">pattern_type</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pattern_name</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">pattern_type</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">pattern_type</span><span class="si">}</span><span class="s2"> patterns...&quot;</span><span class="p">):</span>
+                    <span class="n">pattern</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">pattern_type</span><span class="p">][</span><span class="n">pattern_name</span><span class="p">]</span>
+                    <span class="n">pattern_seqlets</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">[</span><span class="s2">&quot;seqlets&quot;</span><span class="p">]</span>
+
+                    <span class="n">_genes</span> <span class="o">=</span> <span class="p">[</span><span class="n">genes_idx</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">pattern_seqlets</span><span class="p">[</span><span class="s2">&quot;example_idx&quot;</span><span class="p">][:]]</span>
+
+                    <span class="n">cwm_seqlet</span> <span class="o">=</span> <span class="n">pattern_seqlets</span><span class="p">[</span><span class="s2">&quot;contrib_scores&quot;</span><span class="p">][:]</span>
+                    <span class="n">motif_starts</span><span class="p">,</span> <span class="n">motif_ends</span> <span class="o">=</span> <span class="n">motif_start_end</span><span class="p">(</span>
+                        <span class="n">cwm_seqlet</span><span class="p">,</span>
+                        <span class="n">trim_pwm</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="s2">&quot;contrib_scores&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">trim_threshold</span><span class="o">=</span><span class="n">trim_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;_start&quot;</span><span class="p">:</span> <span class="n">pattern_seqlets</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                <span class="s2">&quot;_end&quot;</span><span class="p">:</span> <span class="n">pattern_seqlets</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pattern_type</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">pattern_name</span><span class="si">}</span><span class="s2">.seqlet_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">gene</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gene</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_genes</span><span class="p">)</span>
+                                <span class="p">],</span>
+                                <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">cwm_seqlet</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                <span class="s2">&quot;revcomp&quot;</span><span class="p">:</span> <span class="n">pattern_seqlets</span><span class="p">[</span><span class="s2">&quot;is_revcomp&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                <span class="s2">&quot;gene&quot;</span><span class="p">:</span> <span class="n">_genes</span><span class="p">,</span>
+                                <span class="s2">&quot;_motif_start&quot;</span><span class="p">:</span> <span class="n">motif_starts</span><span class="p">,</span>
+                                <span class="s2">&quot;_motif_end&quot;</span><span class="p">:</span> <span class="n">motif_ends</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;gene&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_genes</span><span class="p">[[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;strand&quot;</span><span class="p">,</span> <span class="s2">&quot;gene_start&quot;</span><span class="p">,</span> <span class="s2">&quot;gene_end&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">)</span>
+
+    <span class="c1"># `_strand` of the seqlet, `strand` of the gene, `revcomp` of the motif respect to the gene</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_strand&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;revcomp&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;+&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span> <span class="s2">&quot;+&quot;</span><span class="p">}),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">])</span>
+    <span class="n">tss_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;gene_start&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;gene_end&quot;</span><span class="p">])</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_start&quot;</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tss_distance</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_end&quot;</span><span class="p">])</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;strand&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_end&quot;</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tss_distance</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_start&quot;</span><span class="p">])</span>
+
+    <span class="n">lengths</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_end&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_start&quot;</span><span class="p">]</span>
+    <span class="n">motif_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;revcomp&quot;</span><span class="p">],</span> <span class="n">lengths</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_motif_end&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_motif_start&quot;</span><span class="p">])</span>
+    <span class="n">motif_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;revcomp&quot;</span><span class="p">],</span> <span class="n">lengths</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_motif_start&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;_motif_end&quot;</span><span class="p">])</span>
+
+    <span class="n">region_start</span> <span class="o">=</span> <span class="n">tss_pos</span> <span class="o">-</span> <span class="n">tss_distance</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_start</span> <span class="o">+</span> <span class="n">start</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_start</span> <span class="o">+</span> <span class="n">end</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;motif_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">motif_start</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;motif_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">motif_end</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;65,105,225&quot;</span>  <span class="c1"># blue # TO THINK: can be colored by significance</span>
+
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;_strand&quot;</span><span class="p">,</span> <span class="s2">&quot;motif_start&quot;</span><span class="p">,</span> <span class="s2">&quot;motif_end&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">output_prefix</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.seqlets.bed&quot;</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modisco">
+<a class="viewcode-back" href="../../../api/decima.interpret.html#decima.interpret.modisco.modisco">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modisco</span><span class="p">(</span>
+    <span class="n">output_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">off_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span>
+    <span class="n">tss_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">metadata_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">genes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">top_n_markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">correct_grad</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">genome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;saliency&quot;</span><span class="p">,</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;specificity&quot;</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># tfmodisco parameters</span>
+    <span class="n">sliding_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="n">flank_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">min_metacluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">weak_threshold_for_counting_sign</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">max_seqlets_per_metacluster</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20000</span><span class="p">,</span>
+    <span class="n">target_seqlet_fdr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_passing_windows_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">max_passing_windows_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">n_leiden_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="n">n_leiden_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">min_overlap_while_sliding</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">nearest_neighbors_to_compute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">affmat_correlation_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">tsne_perplexity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">frac_support_to_trim_to</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_num_to_trim_to</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">trim_to_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">initial_flank_to_add</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">final_flank_to_add</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)],</span>
+    <span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">subcluster_perplexity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">merging_max_seqlets_subsample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">final_min_cluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">min_ic_in_window</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">min_ic_windowsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">ppm_pseudocount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">stranded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">pattern_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="p">,</span>  <span class="c1"># &quot;both&quot;, &quot;pos&quot;, or &quot;neg&quot;</span>
+    <span class="c1"># reports parameters</span>
+    <span class="n">img_path_suffix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">meme_motif_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;hocomoco_v13&quot;</span><span class="p">,</span>
+    <span class="n">is_writing_tomtom_matrix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">top_n_matches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">trim_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">trim_min_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">tomtomlite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># seqlet thresholds</span>
+    <span class="n">seqlet_motif_trim_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform modisco motif clustering from attributions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_prefix: Path prefix to save comprehensive modisco results where all output files will be written.</span>
+<span class="sd">        tasks: Tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to analyze attributions for (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, all tasks will be analyzed.</span>
+<span class="sd">        off_tasks: Off tasks to analyze for full modisco pipeline either list of task names or query string to filter cell types to contrast against (e.g. &#39;cell_type == &#39;classical monocyte&#39;&#39;). If not provided, no contrast will be performed.</span>
+<span class="sd">        model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.</span>
+<span class="sd">        tss_distance: Distance from TSS to call seqlets default is 1000. Controls the genomic window size around TSS for seqlet detection. If set to full context size of decima (524288), analyzes the entire accessible region.</span>
+<span class="sd">        metadata_anndata: Path to metadata anndata file or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.</span>
+<span class="sd">        genes: List of genes to analyze for full modisco pipeline if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.</span>
+<span class="sd">        top_n_markers: Top n markers to analyze for full modisco pipeline if not provided, all markers will be analyzed. Useful for focusing on the most important marker genes for the specified tasks.</span>
+<span class="sd">        correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality.</span>
+<span class="sd">        num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.</span>
+<span class="sd">        genome: Genome reference to use default is &quot;hg38&quot;. Can be genome name or path to custom genome fasta file.</span>
+<span class="sd">        method: Method to use for attribution analysis default is &quot;saliency&quot;. Available options: &quot;saliency&quot;, &quot;inputxgradient&quot;, &quot;integratedgradients&quot;. For MoDISco, &quot;saliency&quot; is often preferred for pattern discovery.</span>
+<span class="sd">        transform: Transform to use for attribution analysis default is &quot;specificity&quot;. Available options: &quot;specificity&quot;, &quot;aggregate&quot;. Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.</span>
+<span class="sd">        batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.</span>
+<span class="sd">        device: Device to use for computation (e.g. &#39;cuda&#39;, &#39;cpu&#39;). If not provided, the best available device will be used automatically.</span>
+<span class="sd">        sliding_window_size: Sliding window size.</span>
+<span class="sd">        flank_size: Flank size.</span>
+<span class="sd">        min_metacluster_size: Min metacluster size.</span>
+<span class="sd">        weak_threshold_for_counting_sign: Weak threshold for counting sign.</span>
+<span class="sd">        max_seqlets_per_metacluster: Max seqlets per metacluster.</span>
+<span class="sd">        target_seqlet_fdr: Target seqlet FDR.</span>
+<span class="sd">        min_passing_windows_frac: Min passing windows fraction.</span>
+<span class="sd">        max_passing_windows_frac: Max passing windows fraction.</span>
+<span class="sd">        n_leiden_runs: Number of Leiden runs.</span>
+<span class="sd">        n_leiden_iterations: Number of Leiden iterations.</span>
+<span class="sd">        min_overlap_while_sliding: Min overlap while sliding.</span>
+<span class="sd">        nearest_neighbors_to_compute: Nearest neighbors to compute.</span>
+<span class="sd">        affmat_correlation_threshold: Affmat correlation threshold.</span>
+<span class="sd">        tsne_perplexity: TSNE perplexity.</span>
+<span class="sd">        frac_support_to_trim_to: Frac support to trim to.</span>
+<span class="sd">        min_num_to_trim_to: Min num to trim to.</span>
+<span class="sd">        trim_to_window_size: Trim to window size.</span>
+<span class="sd">        initial_flank_to_add: Initial flank to add.</span>
+<span class="sd">        final_flank_to_add: Final flank to add.</span>
+<span class="sd">        prob_and_pertrack_sim_merge_thresholds: Prob and pertrack sim merge thresholds.</span>
+<span class="sd">        prob_and_pertrack_sim_dealbreaker_thresholds: Prob and pertrack sim dealbreaker thresholds.</span>
+<span class="sd">        subcluster_perplexity: Subcluster perplexity.</span>
+<span class="sd">        merging_max_seqlets_subsample: Merging max seqlets subsample.</span>
+<span class="sd">        final_min_cluster_size: Final min cluster size.</span>
+<span class="sd">        min_ic_in_window: Min IC in window.</span>
+<span class="sd">        min_ic_windowsize: Min IC windowsize.</span>
+<span class="sd">        ppm_pseudocount: PPM pseudocount.</span>
+<span class="sd">        stranded: Stranded.</span>
+<span class="sd">        pattern_type: Pattern type.</span>
+<span class="sd">        img_path_suffix: Image path suffix.</span>
+<span class="sd">        meme_motif_db: Meme motif db.</span>
+<span class="sd">        is_writing_tomtom_matrix: Whether to write tomtom matrix.</span>
+<span class="sd">        top_n_matches: Top n matches.</span>
+<span class="sd">        trim_threshold: Trim threshold.</span>
+<span class="sd">        trim_min_length: Trim min length.</span>
+<span class="sd">        tomtomlite: Whether to use tomtomlite.</span>
+<span class="sd">        seqlet_motif_trim_threshold: Seqlet motif trim threshold.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output_prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_prefix</span><span class="p">)</span>
+    <span class="n">output_prefix</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">attributions_paths</span> <span class="o">=</span> <span class="n">predict_save_modisco_attributions</span><span class="p">(</span>
+        <span class="n">output_prefix</span><span class="o">=</span><span class="n">output_prefix</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span>
+        <span class="n">off_tasks</span><span class="o">=</span><span class="n">off_tasks</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">metadata_anndata</span><span class="p">,</span>
+        <span class="n">genes</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
+        <span class="n">top_n_markers</span><span class="o">=</span><span class="n">top_n_markers</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">correct_grad_bigwig</span><span class="o">=</span><span class="n">correct_grad</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">genome</span><span class="o">=</span><span class="n">genome</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">modisco_patterns</span><span class="p">(</span>
+        <span class="n">output_prefix</span><span class="o">=</span><span class="n">output_prefix</span><span class="p">,</span>
+        <span class="n">attributions</span><span class="o">=</span><span class="n">attributions_paths</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span>
+        <span class="n">off_tasks</span><span class="o">=</span><span class="n">off_tasks</span><span class="p">,</span>
+        <span class="n">tss_distance</span><span class="o">=</span><span class="n">tss_distance</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">metadata_anndata</span><span class="p">,</span>
+        <span class="n">genes</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
+        <span class="n">top_n_markers</span><span class="o">=</span><span class="n">top_n_markers</span><span class="p">,</span>
+        <span class="n">correct_grad</span><span class="o">=</span><span class="n">correct_grad</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="c1"># tfmodisco parameters</span>
+        <span class="n">sliding_window_size</span><span class="o">=</span><span class="n">sliding_window_size</span><span class="p">,</span>
+        <span class="n">flank_size</span><span class="o">=</span><span class="n">flank_size</span><span class="p">,</span>
+        <span class="n">min_metacluster_size</span><span class="o">=</span><span class="n">min_metacluster_size</span><span class="p">,</span>
+        <span class="n">weak_threshold_for_counting_sign</span><span class="o">=</span><span class="n">weak_threshold_for_counting_sign</span><span class="p">,</span>
+        <span class="n">max_seqlets_per_metacluster</span><span class="o">=</span><span class="n">max_seqlets_per_metacluster</span><span class="p">,</span>
+        <span class="n">target_seqlet_fdr</span><span class="o">=</span><span class="n">target_seqlet_fdr</span><span class="p">,</span>
+        <span class="n">min_passing_windows_frac</span><span class="o">=</span><span class="n">min_passing_windows_frac</span><span class="p">,</span>
+        <span class="n">max_passing_windows_frac</span><span class="o">=</span><span class="n">max_passing_windows_frac</span><span class="p">,</span>
+        <span class="n">n_leiden_runs</span><span class="o">=</span><span class="n">n_leiden_runs</span><span class="p">,</span>
+        <span class="n">n_leiden_iterations</span><span class="o">=</span><span class="n">n_leiden_iterations</span><span class="p">,</span>
+        <span class="n">min_overlap_while_sliding</span><span class="o">=</span><span class="n">min_overlap_while_sliding</span><span class="p">,</span>
+        <span class="n">nearest_neighbors_to_compute</span><span class="o">=</span><span class="n">nearest_neighbors_to_compute</span><span class="p">,</span>
+        <span class="n">affmat_correlation_threshold</span><span class="o">=</span><span class="n">affmat_correlation_threshold</span><span class="p">,</span>
+        <span class="n">tsne_perplexity</span><span class="o">=</span><span class="n">tsne_perplexity</span><span class="p">,</span>
+        <span class="n">frac_support_to_trim_to</span><span class="o">=</span><span class="n">frac_support_to_trim_to</span><span class="p">,</span>
+        <span class="n">min_num_to_trim_to</span><span class="o">=</span><span class="n">min_num_to_trim_to</span><span class="p">,</span>
+        <span class="n">trim_to_window_size</span><span class="o">=</span><span class="n">trim_to_window_size</span><span class="p">,</span>
+        <span class="n">initial_flank_to_add</span><span class="o">=</span><span class="n">initial_flank_to_add</span><span class="p">,</span>
+        <span class="n">final_flank_to_add</span><span class="o">=</span><span class="n">final_flank_to_add</span><span class="p">,</span>
+        <span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="o">=</span><span class="n">prob_and_pertrack_sim_merge_thresholds</span><span class="p">,</span>
+        <span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="o">=</span><span class="n">prob_and_pertrack_sim_dealbreaker_thresholds</span><span class="p">,</span>
+        <span class="n">subcluster_perplexity</span><span class="o">=</span><span class="n">subcluster_perplexity</span><span class="p">,</span>
+        <span class="n">merging_max_seqlets_subsample</span><span class="o">=</span><span class="n">merging_max_seqlets_subsample</span><span class="p">,</span>
+        <span class="n">final_min_cluster_size</span><span class="o">=</span><span class="n">final_min_cluster_size</span><span class="p">,</span>
+        <span class="n">min_ic_in_window</span><span class="o">=</span><span class="n">min_ic_in_window</span><span class="p">,</span>
+        <span class="n">min_ic_windowsize</span><span class="o">=</span><span class="n">min_ic_windowsize</span><span class="p">,</span>
+        <span class="n">ppm_pseudocount</span><span class="o">=</span><span class="n">ppm_pseudocount</span><span class="p">,</span>
+        <span class="n">stranded</span><span class="o">=</span><span class="n">stranded</span><span class="p">,</span>
+        <span class="n">pattern_type</span><span class="o">=</span><span class="n">pattern_type</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">modisco_reports</span><span class="p">(</span>
+        <span class="n">output_prefix</span><span class="o">=</span><span class="n">output_prefix</span><span class="p">,</span>
+        <span class="n">modisco_h5</span><span class="o">=</span><span class="n">output_prefix</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.modisco.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span>
+        <span class="n">img_path_suffix</span><span class="o">=</span><span class="n">img_path_suffix</span><span class="p">,</span>
+        <span class="n">meme_motif_db</span><span class="o">=</span><span class="n">meme_motif_db</span><span class="p">,</span>
+        <span class="n">is_writing_tomtom_matrix</span><span class="o">=</span><span class="n">is_writing_tomtom_matrix</span><span class="p">,</span>
+        <span class="n">top_n_matches</span><span class="o">=</span><span class="n">top_n_matches</span><span class="p">,</span>
+        <span class="n">trim_threshold</span><span class="o">=</span><span class="n">trim_threshold</span><span class="p">,</span>
+        <span class="n">trim_min_length</span><span class="o">=</span><span class="n">trim_min_length</span><span class="p">,</span>
+        <span class="n">tomtomlite</span><span class="o">=</span><span class="n">tomtomlite</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">modisco_seqlet_bed</span><span class="p">(</span>
+        <span class="n">output_prefix</span><span class="o">=</span><span class="n">output_prefix</span><span class="p">,</span>
+        <span class="n">modisco_h5</span><span class="o">=</span><span class="n">output_prefix</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.modisco.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">metadata_anndata</span><span class="p">,</span>
+        <span class="n">trim_threshold</span><span class="o">=</span><span class="n">seqlet_motif_trim_threshold</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Gokcen Eraslan
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=52fac5ed"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

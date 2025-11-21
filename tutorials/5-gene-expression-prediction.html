@@ -3,13 +3,12 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Contributing" href="../contributing.html"><link rel="prev" title="Detecting and Clustering Seqlets with Modisco" href="4-modisco.html">
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Contributing" href="../contributing.html"><link rel="prev" title="&lt;no title&gt;" href="4-modisco.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Predicting Gene Expression with Decima - decima unknown documentation</title>
+        <title>&lt;no title&gt; - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -173,7 +172,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -191,7 +190,7 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
+  <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">Module Reference</a><input aria-label="Toggle navigation of Module Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/decima.html">decima package</a><input aria-label="Toggle navigation of decima package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -252,1398 +246,2177 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section class="tex2jax_ignore mathjax_ignore" id="predicting-gene-expression-with-decima">
-<h1>Predicting Gene Expression with Decima<a class="headerlink" href="#predicting-gene-expression-with-decima" title="Link to this heading">¶</a></h1>
-<p>Decima allows prediction of gene expression at the cell type level, and this tutorial demonstrates how to leverage the prediction API for both genes in the training data and custom genes.</p>
-<section id="precomputed-predictions">
-<h2>Precomputed Predictions<a class="headerlink" href="#precomputed-predictions" title="Link to this heading">¶</a></h2>
-<p>Scores for all genes in the training data are precomputed and saved to metadata h5ad object for each model replicate and are available under the <code class="docutils literal notranslate"><span class="pre">DecimaResult</span></code> class. <code class="docutils literal notranslate"><span class="pre">predicted_expression_matrix</span></code> class returns predicted average gene expression across the replicates.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
-
-<span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-<span class="n">result</span><span class="o">.</span><span class="n">predicted_expression_matrix</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-  warnings.warn(
-/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-  warnings.warn(
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:05.9 (533.2MB/s)
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>STRADA</th>
-      <th>ETV4</th>
-      <th>USP25</th>
-      <th>ZSWIM5</th>
-      <th>C21orf58</th>
-      <th>MIR497HG</th>
-      <th>CFAP74</th>
-      <th>GSE1</th>
-      <th>LPP</th>
-      <th>CLK1</th>
-      <th>...</th>
-      <th>STRIP2</th>
-      <th>TNFRSF1A</th>
-      <th>RBM14-RBM4</th>
-      <th>C1orf21</th>
-      <th>LINC00639</th>
-      <th>NPDC1</th>
-      <th>ZNF425</th>
-      <th>COL5A1</th>
-      <th>BRD3</th>
-      <th>EVI5L</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>agg_0</th>
-      <td>2.973438</td>
-      <td>1.845565</td>
-      <td>4.592531</td>
-      <td>5.099802</td>
-      <td>1.774879</td>
-      <td>0.356812</td>
-      <td>2.590836</td>
-      <td>4.629774</td>
-      <td>4.897171</td>
-      <td>3.326940</td>
-      <td>...</td>
-      <td>2.836060</td>
-      <td>0.297015</td>
-      <td>1.883849</td>
-      <td>4.293593</td>
-      <td>1.463565</td>
-      <td>3.183534</td>
-      <td>2.340202</td>
-      <td>2.374942</td>
-      <td>2.911916</td>
-      <td>3.230072</td>
-    </tr>
-    <tr>
-      <th>agg_1</th>
-      <td>2.954213</td>
-      <td>1.896726</td>
-      <td>4.688557</td>
-      <td>5.510440</td>
-      <td>1.666929</td>
-      <td>0.352725</td>
-      <td>2.292625</td>
-      <td>4.459535</td>
-      <td>4.915286</td>
-      <td>3.192858</td>
-      <td>...</td>
-      <td>3.125704</td>
-      <td>0.242543</td>
-      <td>1.908177</td>
-      <td>4.439424</td>
-      <td>1.236739</td>
-      <td>3.494824</td>
-      <td>2.425672</td>
-      <td>2.054568</td>
-      <td>2.713408</td>
-      <td>3.491463</td>
-    </tr>
-    <tr>
-      <th>agg_2</th>
-      <td>2.938851</td>
-      <td>2.197247</td>
-      <td>4.861410</td>
-      <td>5.617520</td>
-      <td>1.773381</td>
-      <td>0.380867</td>
-      <td>2.394917</td>
-      <td>4.415038</td>
-      <td>4.836399</td>
-      <td>3.390717</td>
-      <td>...</td>
-      <td>3.082098</td>
-      <td>0.263285</td>
-      <td>2.006456</td>
-      <td>4.383455</td>
-      <td>1.208590</td>
-      <td>4.013819</td>
-      <td>2.408381</td>
-      <td>2.297343</td>
-      <td>2.892222</td>
-      <td>3.695785</td>
-    </tr>
-    <tr>
-      <th>agg_3</th>
-      <td>3.045972</td>
-      <td>2.138573</td>
-      <td>4.863791</td>
-      <td>5.273604</td>
-      <td>1.760097</td>
-      <td>0.463555</td>
-      <td>2.391702</td>
-      <td>3.940975</td>
-      <td>4.857763</td>
-      <td>3.410926</td>
-      <td>...</td>
-      <td>2.882890</td>
-      <td>0.290327</td>
-      <td>1.922963</td>
-      <td>4.550189</td>
-      <td>1.430520</td>
-      <td>3.693118</td>
-      <td>2.297103</td>
-      <td>2.121887</td>
-      <td>2.626117</td>
-      <td>3.223912</td>
-    </tr>
-    <tr>
-      <th>agg_4</th>
-      <td>3.025518</td>
-      <td>2.019096</td>
-      <td>4.602948</td>
-      <td>5.257001</td>
-      <td>1.755338</td>
-      <td>0.382190</td>
-      <td>2.432810</td>
-      <td>4.392480</td>
-      <td>4.959488</td>
-      <td>3.250500</td>
-      <td>...</td>
-      <td>3.082296</td>
-      <td>0.258540</td>
-      <td>2.038277</td>
-      <td>4.464807</td>
-      <td>1.249043</td>
-      <td>3.665800</td>
-      <td>2.400820</td>
-      <td>2.255862</td>
-      <td>2.925619</td>
-      <td>3.471005</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>agg_9533</th>
-      <td>2.333562</td>
-      <td>0.633322</td>
-      <td>4.675825</td>
-      <td>2.793023</td>
-      <td>0.752030</td>
-      <td>0.692083</td>
-      <td>0.503531</td>
-      <td>4.327948</td>
-      <td>6.903193</td>
-      <td>3.695593</td>
-      <td>...</td>
-      <td>0.549795</td>
-      <td>2.270181</td>
-      <td>1.563218</td>
-      <td>4.395422</td>
-      <td>0.550088</td>
-      <td>1.330252</td>
-      <td>1.044471</td>
-      <td>3.759369</td>
-      <td>2.491346</td>
-      <td>1.872717</td>
-    </tr>
-    <tr>
-      <th>agg_9535</th>
-      <td>0.835037</td>
-      <td>0.358773</td>
-      <td>1.964896</td>
-      <td>0.307449</td>
-      <td>0.337240</td>
-      <td>0.834196</td>
-      <td>0.093885</td>
-      <td>1.853794</td>
-      <td>3.700790</td>
-      <td>4.467302</td>
-      <td>...</td>
-      <td>0.176885</td>
-      <td>1.370898</td>
-      <td>1.022708</td>
-      <td>3.400267</td>
-      <td>0.052162</td>
-      <td>1.908870</td>
-      <td>0.253417</td>
-      <td>1.448111</td>
-      <td>1.622033</td>
-      <td>1.064292</td>
-    </tr>
-    <tr>
-      <th>agg_9536</th>
-      <td>3.008039</td>
-      <td>1.209324</td>
-      <td>4.798392</td>
-      <td>3.931870</td>
-      <td>1.401328</td>
-      <td>1.638555</td>
-      <td>0.969720</td>
-      <td>4.779201</td>
-      <td>6.631931</td>
-      <td>4.127797</td>
-      <td>...</td>
-      <td>1.174298</td>
-      <td>1.870530</td>
-      <td>2.506874</td>
-      <td>5.151776</td>
-      <td>0.967644</td>
-      <td>1.809947</td>
-      <td>2.205356</td>
-      <td>4.244005</td>
-      <td>2.974467</td>
-      <td>2.659873</td>
-    </tr>
-    <tr>
-      <th>agg_9537</th>
-      <td>1.241936</td>
-      <td>0.455059</td>
-      <td>2.919995</td>
-      <td>0.571672</td>
-      <td>0.486448</td>
-      <td>1.175586</td>
-      <td>0.145397</td>
-      <td>2.412148</td>
-      <td>4.759118</td>
-      <td>4.913945</td>
-      <td>...</td>
-      <td>0.371035</td>
-      <td>1.361073</td>
-      <td>1.668085</td>
-      <td>4.005738</td>
-      <td>0.078611</td>
-      <td>1.571750</td>
-      <td>0.508187</td>
-      <td>2.067150</td>
-      <td>2.323764</td>
-      <td>1.429850</td>
-    </tr>
-    <tr>
-      <th>agg_9538</th>
-      <td>1.715507</td>
-      <td>0.700955</td>
-      <td>3.044732</td>
-      <td>0.858696</td>
-      <td>0.903406</td>
-      <td>1.763168</td>
-      <td>0.215304</td>
-      <td>2.604478</td>
-      <td>4.549708</td>
-      <td>4.839124</td>
-      <td>...</td>
-      <td>0.594310</td>
-      <td>1.801298</td>
-      <td>2.075996</td>
-      <td>3.933860</td>
-      <td>0.165590</td>
-      <td>1.970268</td>
-      <td>0.993521</td>
-      <td>2.232347</td>
-      <td>2.473388</td>
-      <td>1.902884</td>
-    </tr>
-  </tbody>
-</table>
-<p>8856 rows × 18457 columns</p>
-</div></div></div>
-</div>
-<p>To access the predicted expression matrix for a specific model, you can use the <code class="docutils literal notranslate"><span class="pre">model_name</span></code> parameter. In this example, we obtain the predicted gene expression for first model replicate.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">predicted_expression_matrix</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;v1_rep0&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>STRADA</th>
-      <th>ETV4</th>
-      <th>USP25</th>
-      <th>ZSWIM5</th>
-      <th>C21orf58</th>
-      <th>MIR497HG</th>
-      <th>CFAP74</th>
-      <th>GSE1</th>
-      <th>LPP</th>
-      <th>CLK1</th>
-      <th>...</th>
-      <th>STRIP2</th>
-      <th>TNFRSF1A</th>
-      <th>RBM14-RBM4</th>
-      <th>C1orf21</th>
-      <th>LINC00639</th>
-      <th>NPDC1</th>
-      <th>ZNF425</th>
-      <th>COL5A1</th>
-      <th>BRD3</th>
-      <th>EVI5L</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>agg_0</th>
-      <td>2.932758</td>
-      <td>2.020476</td>
-      <td>4.795636</td>
-      <td>5.142194</td>
-      <td>1.721651</td>
-      <td>0.403188</td>
-      <td>3.207011</td>
-      <td>4.647735</td>
-      <td>4.823714</td>
-      <td>3.241457</td>
-      <td>...</td>
-      <td>1.804592</td>
-      <td>0.392356</td>
-      <td>1.923160</td>
-      <td>4.256888</td>
-      <td>1.837033</td>
-      <td>3.382362</td>
-      <td>2.358378</td>
-      <td>2.471895</td>
-      <td>2.808940</td>
-      <td>3.232095</td>
-    </tr>
-    <tr>
-      <th>agg_1</th>
-      <td>2.816624</td>
-      <td>1.938934</td>
-      <td>4.917684</td>
-      <td>5.402302</td>
-      <td>1.319163</td>
-      <td>0.393221</td>
-      <td>2.809423</td>
-      <td>4.842717</td>
-      <td>4.939364</td>
-      <td>2.980938</td>
-      <td>...</td>
-      <td>1.753353</td>
-      <td>0.307677</td>
-      <td>2.096857</td>
-      <td>4.221365</td>
-      <td>1.679307</td>
-      <td>3.917950</td>
-      <td>2.459049</td>
-      <td>2.356942</td>
-      <td>2.696189</td>
-      <td>3.447138</td>
-    </tr>
-    <tr>
-      <th>agg_2</th>
-      <td>2.742950</td>
-      <td>2.394729</td>
-      <td>4.805934</td>
-      <td>5.102471</td>
-      <td>1.731927</td>
-      <td>0.452663</td>
-      <td>2.778222</td>
-      <td>4.538105</td>
-      <td>4.443571</td>
-      <td>3.041557</td>
-      <td>...</td>
-      <td>1.804225</td>
-      <td>0.364422</td>
-      <td>2.145009</td>
-      <td>4.004273</td>
-      <td>1.471316</td>
-      <td>4.249442</td>
-      <td>2.204638</td>
-      <td>2.687080</td>
-      <td>2.793549</td>
-      <td>3.760900</td>
-    </tr>
-    <tr>
-      <th>agg_3</th>
-      <td>2.804515</td>
-      <td>2.358393</td>
-      <td>4.676318</td>
-      <td>5.462350</td>
-      <td>1.543962</td>
-      <td>0.483929</td>
-      <td>2.695394</td>
-      <td>4.411092</td>
-      <td>4.355472</td>
-      <td>3.220853</td>
-      <td>...</td>
-      <td>1.663766</td>
-      <td>0.429275</td>
-      <td>2.065255</td>
-      <td>4.045637</td>
-      <td>1.837513</td>
-      <td>3.879115</td>
-      <td>2.242636</td>
-      <td>2.191440</td>
-      <td>2.614539</td>
-      <td>3.287658</td>
-    </tr>
-    <tr>
-      <th>agg_4</th>
-      <td>2.815917</td>
-      <td>2.098659</td>
-      <td>4.594968</td>
-      <td>4.648893</td>
-      <td>1.517963</td>
-      <td>0.426446</td>
-      <td>3.173781</td>
-      <td>4.829787</td>
-      <td>4.389949</td>
-      <td>3.011941</td>
-      <td>...</td>
-      <td>2.119307</td>
-      <td>0.320393</td>
-      <td>2.064416</td>
-      <td>3.868720</td>
-      <td>1.499770</td>
-      <td>4.144956</td>
-      <td>2.074824</td>
-      <td>2.375941</td>
-      <td>2.745383</td>
-      <td>3.339186</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>agg_9533</th>
-      <td>2.510139</td>
-      <td>0.811121</td>
-      <td>5.367220</td>
-      <td>2.944120</td>
-      <td>0.668071</td>
-      <td>0.898573</td>
-      <td>0.737285</td>
-      <td>4.750776</td>
-      <td>7.324188</td>
-      <td>3.585325</td>
-      <td>...</td>
-      <td>0.258857</td>
-      <td>1.437364</td>
-      <td>1.913985</td>
-      <td>4.471622</td>
-      <td>0.823436</td>
-      <td>1.486110</td>
-      <td>1.288418</td>
-      <td>3.211422</td>
-      <td>2.712792</td>
-      <td>1.665431</td>
-    </tr>
-    <tr>
-      <th>agg_9535</th>
-      <td>1.245692</td>
-      <td>0.397959</td>
-      <td>2.112123</td>
-      <td>0.537773</td>
-      <td>0.231708</td>
-      <td>0.898190</td>
-      <td>0.114970</td>
-      <td>2.234345</td>
-      <td>4.391264</td>
-      <td>4.418188</td>
-      <td>...</td>
-      <td>0.132106</td>
-      <td>0.980370</td>
-      <td>1.672495</td>
-      <td>3.558780</td>
-      <td>0.072055</td>
-      <td>2.029817</td>
-      <td>0.418454</td>
-      <td>1.192156</td>
-      <td>1.853873</td>
-      <td>1.099853</td>
-    </tr>
-    <tr>
-      <th>agg_9536</th>
-      <td>2.808824</td>
-      <td>1.503026</td>
-      <td>4.660236</td>
-      <td>3.781434</td>
-      <td>1.292014</td>
-      <td>1.926411</td>
-      <td>1.174456</td>
-      <td>4.833678</td>
-      <td>6.598332</td>
-      <td>4.183246</td>
-      <td>...</td>
-      <td>0.833774</td>
-      <td>1.562745</td>
-      <td>2.589504</td>
-      <td>5.134478</td>
-      <td>1.171923</td>
-      <td>1.833690</td>
-      <td>2.468382</td>
-      <td>4.154689</td>
-      <td>2.939265</td>
-      <td>2.304627</td>
-    </tr>
-    <tr>
-      <th>agg_9537</th>
-      <td>1.579961</td>
-      <td>0.518564</td>
-      <td>2.777915</td>
-      <td>0.865460</td>
-      <td>0.373625</td>
-      <td>1.167617</td>
-      <td>0.173764</td>
-      <td>2.826529</td>
-      <td>4.751182</td>
-      <td>4.572947</td>
-      <td>...</td>
-      <td>0.219681</td>
-      <td>0.967018</td>
-      <td>2.106584</td>
-      <td>4.237208</td>
-      <td>0.087220</td>
-      <td>1.733176</td>
-      <td>0.613084</td>
-      <td>1.758543</td>
-      <td>2.333462</td>
-      <td>1.247311</td>
-    </tr>
-    <tr>
-      <th>agg_9538</th>
-      <td>2.013838</td>
-      <td>0.808357</td>
-      <td>3.148299</td>
-      <td>1.180536</td>
-      <td>0.818062</td>
-      <td>1.499798</td>
-      <td>0.267851</td>
-      <td>3.099998</td>
-      <td>4.809313</td>
-      <td>4.769134</td>
-      <td>...</td>
-      <td>0.497330</td>
-      <td>1.301714</td>
-      <td>2.513882</td>
-      <td>4.128883</td>
-      <td>0.159118</td>
-      <td>2.036867</td>
-      <td>1.212433</td>
-      <td>1.859695</td>
-      <td>2.457608</td>
-      <td>1.816770</td>
-    </tr>
-  </tbody>
-</table>
-<p>8856 rows × 18457 columns</p>
-</div></div></div>
-</div>
-<p>and for the second model replicate.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">predicted_expression_matrix</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;v1_rep1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>STRADA</th>
-      <th>ETV4</th>
-      <th>USP25</th>
-      <th>ZSWIM5</th>
-      <th>C21orf58</th>
-      <th>MIR497HG</th>
-      <th>CFAP74</th>
-      <th>GSE1</th>
-      <th>LPP</th>
-      <th>CLK1</th>
-      <th>...</th>
-      <th>STRIP2</th>
-      <th>TNFRSF1A</th>
-      <th>RBM14-RBM4</th>
-      <th>C1orf21</th>
-      <th>LINC00639</th>
-      <th>NPDC1</th>
-      <th>ZNF425</th>
-      <th>COL5A1</th>
-      <th>BRD3</th>
-      <th>EVI5L</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>agg_0</th>
-      <td>2.892922</td>
-      <td>1.268846</td>
-      <td>4.257362</td>
-      <td>5.062403</td>
-      <td>1.708644</td>
-      <td>0.509606</td>
-      <td>2.129140</td>
-      <td>5.102046</td>
-      <td>3.987716</td>
-      <td>3.229576</td>
-      <td>...</td>
-      <td>3.279328</td>
-      <td>0.496723</td>
-      <td>2.626515</td>
-      <td>3.294918</td>
-      <td>1.754605</td>
-      <td>3.018026</td>
-      <td>2.396543</td>
-      <td>1.611294</td>
-      <td>2.942932</td>
-      <td>3.334204</td>
-    </tr>
-    <tr>
-      <th>agg_1</th>
-      <td>2.812950</td>
-      <td>1.338056</td>
-      <td>4.490562</td>
-      <td>5.533390</td>
-      <td>1.759490</td>
-      <td>0.507474</td>
-      <td>1.839018</td>
-      <td>4.959751</td>
-      <td>4.505932</td>
-      <td>3.428190</td>
-      <td>...</td>
-      <td>3.428484</td>
-      <td>0.463658</td>
-      <td>2.532722</td>
-      <td>4.212840</td>
-      <td>1.994184</td>
-      <td>3.312843</td>
-      <td>2.755963</td>
-      <td>1.515888</td>
-      <td>2.539843</td>
-      <td>3.585655</td>
-    </tr>
-    <tr>
-      <th>agg_2</th>
-      <td>2.971495</td>
-      <td>1.536687</td>
-      <td>4.427551</td>
-      <td>5.517713</td>
-      <td>1.655871</td>
-      <td>0.504365</td>
-      <td>1.900368</td>
-      <td>4.990572</td>
-      <td>4.717015</td>
-      <td>3.675014</td>
-      <td>...</td>
-      <td>3.258069</td>
-      <td>0.498031</td>
-      <td>2.830813</td>
-      <td>3.899091</td>
-      <td>1.731513</td>
-      <td>3.000879</td>
-      <td>2.582952</td>
-      <td>1.570875</td>
-      <td>2.792023</td>
-      <td>3.834818</td>
-    </tr>
-    <tr>
-      <th>agg_3</th>
-      <td>3.346772</td>
-      <td>1.558132</td>
-      <td>4.612154</td>
-      <td>4.838746</td>
-      <td>1.690119</td>
-      <td>0.695964</td>
-      <td>2.075206</td>
-      <td>3.900921</td>
-      <td>4.603170</td>
-      <td>3.397104</td>
-      <td>...</td>
-      <td>3.024333</td>
-      <td>0.464141</td>
-      <td>2.634533</td>
-      <td>4.260577</td>
-      <td>1.873491</td>
-      <td>3.353543</td>
-      <td>2.285160</td>
-      <td>1.407212</td>
-      <td>2.382554</td>
-      <td>3.494318</td>
-    </tr>
-    <tr>
-      <th>agg_4</th>
-      <td>3.088684</td>
-      <td>1.522742</td>
-      <td>4.351163</td>
-      <td>4.806933</td>
-      <td>1.668947</td>
-      <td>0.553315</td>
-      <td>1.892262</td>
-      <td>4.495190</td>
-      <td>4.887375</td>
-      <td>3.282181</td>
-      <td>...</td>
-      <td>3.286668</td>
-      <td>0.475796</td>
-      <td>2.699739</td>
-      <td>4.285741</td>
-      <td>1.986780</td>
-      <td>3.199118</td>
-      <td>2.432456</td>
-      <td>1.463589</td>
-      <td>2.867734</td>
-      <td>3.607585</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>agg_9533</th>
-      <td>2.760382</td>
-      <td>0.603564</td>
-      <td>4.133419</td>
-      <td>2.195248</td>
-      <td>1.040137</td>
-      <td>0.813743</td>
-      <td>0.439841</td>
-      <td>4.018094</td>
-      <td>6.189613</td>
-      <td>3.845854</td>
-      <td>...</td>
-      <td>0.460953</td>
-      <td>2.616969</td>
-      <td>2.051131</td>
-      <td>3.720593</td>
-      <td>0.373556</td>
-      <td>1.720908</td>
-      <td>0.799354</td>
-      <td>2.626200</td>
-      <td>2.094780</td>
-      <td>2.103047</td>
-    </tr>
-    <tr>
-      <th>agg_9535</th>
-      <td>1.192427</td>
-      <td>0.355300</td>
-      <td>1.690948</td>
-      <td>0.294813</td>
-      <td>0.529883</td>
-      <td>1.071292</td>
-      <td>0.109688</td>
-      <td>1.716427</td>
-      <td>2.887877</td>
-      <td>4.564609</td>
-      <td>...</td>
-      <td>0.117188</td>
-      <td>1.749936</td>
-      <td>1.504746</td>
-      <td>2.753326</td>
-      <td>0.032030</td>
-      <td>2.539737</td>
-      <td>0.283777</td>
-      <td>1.469010</td>
-      <td>1.537342</td>
-      <td>1.323113</td>
-    </tr>
-    <tr>
-      <th>agg_9536</th>
-      <td>3.369931</td>
-      <td>0.922407</td>
-      <td>4.246971</td>
-      <td>3.432078</td>
-      <td>1.621070</td>
-      <td>1.825625</td>
-      <td>0.817042</td>
-      <td>4.820827</td>
-      <td>6.642282</td>
-      <td>4.045234</td>
-      <td>...</td>
-      <td>0.992599</td>
-      <td>1.805059</td>
-      <td>3.023350</td>
-      <td>4.650090</td>
-      <td>0.711800</td>
-      <td>2.415006</td>
-      <td>1.855187</td>
-      <td>3.172574</td>
-      <td>2.799354</td>
-      <td>2.962450</td>
-    </tr>
-    <tr>
-      <th>agg_9537</th>
-      <td>1.533311</td>
-      <td>0.472664</td>
-      <td>2.386347</td>
-      <td>0.445858</td>
-      <td>0.655848</td>
-      <td>1.248309</td>
-      <td>0.157859</td>
-      <td>1.858983</td>
-      <td>3.740174</td>
-      <td>5.334047</td>
-      <td>...</td>
-      <td>0.221859</td>
-      <td>1.986270</td>
-      <td>2.305407</td>
-      <td>3.003855</td>
-      <td>0.045920</td>
-      <td>1.986692</td>
-      <td>0.455313</td>
-      <td>1.756422</td>
-      <td>2.054446</td>
-      <td>1.544962</td>
-    </tr>
-    <tr>
-      <th>agg_9538</th>
-      <td>2.077998</td>
-      <td>0.637752</td>
-      <td>2.782059</td>
-      <td>0.618168</td>
-      <td>1.017707</td>
-      <td>1.815663</td>
-      <td>0.241223</td>
-      <td>2.105849</td>
-      <td>4.217391</td>
-      <td>4.784609</td>
-      <td>...</td>
-      <td>0.379386</td>
-      <td>2.361434</td>
-      <td>2.744125</td>
-      <td>3.384300</td>
-      <td>0.075347</td>
-      <td>2.696805</td>
-      <td>0.822292</td>
-      <td>2.332086</td>
-      <td>2.385205</td>
-      <td>2.119385</td>
-    </tr>
-  </tbody>
-</table>
-<p>8856 rows × 18457 columns</p>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">anndata</span><span class="o">.</span><span class="n">layers</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Layers with keys: preds, v1_rep0, v1_rep1, v1_rep2, v1_rep3
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="cli-api">
-<h2>CLI API<a class="headerlink" href="#cli-api" title="Link to this heading">¶</a></h2>
-<p>If you want to perform gene expression prediction again, rather than using the precomputed scores, you can use the Decima command-line interface (CLI) to generate new predictions for any set of genes you specify. For example, you can run the <code class="docutils literal notranslate"><span class="pre">decima</span> <span class="pre">predict-genes</span></code> command with the <code class="docutils literal notranslate"><span class="pre">--genes</span></code> argument to provide a comma-separated list of gene names (such as “STRADA,ETV4,USP25”) if no gene provided it will perform expression predictions for all genes, select the prediction model with the <code class="docutils literal notranslate"><span class="pre">--model</span></code> option (for instance, “ensemble” or a specific replicate like “0”), and use <code class="docutils literal notranslate"><span class="pre">--save-replicates</span></code> to save predictions for each replicate. The <code class="docutils literal notranslate"><span class="pre">-o</span></code> flag lets you specify the output file path for the predictions in <code class="docutils literal notranslate"><span class="pre">.h5ad</span></code> format.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>predict-genes<span class="w"> </span>--genes<span class="w"> </span><span class="s2">&quot;STRADA,ETV4,USP25&quot;</span><span class="w"> </span>--model<span class="w"> </span>ensemble<span class="w"> </span>--save-replicates<span class="w"> </span>-o<span class="w"> </span>example/predict_genes/predictions.h5ad<span class="w"> </span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda and genome: hg38 for prediction.
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1433.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1374.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep2:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.7 (1016.5MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep3:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1371.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.5 (2022.8MB/s)
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/celikm5/miniforge3/envs/decima/bin/decima  ...
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
-GPU available: True (cuda), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-Predicting DataLoader 0: 100%|████████████████████| 1/1 [00:06&lt;00:00,  0.15it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The ``compute`` method of metric WarningCounter was called before the ``update`` method which may lead to errors, as metric states have not yet been updated.
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>After running this command, you can load the resulting predictions in Python using the <code class="docutils literal notranslate"><span class="pre">DecimaResult</span></code> class and access the predicted expression matrix as:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;example/predict_genes/predictions.h5ad&quot;</span><span class="p">)</span>
-<span class="n">result</span><span class="o">.</span><span class="n">predicted_expression_matrix</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>STRADA</th>
-      <th>ETV4</th>
-      <th>USP25</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>agg_0</th>
-      <td>2.973423</td>
-      <td>1.845874</td>
-      <td>4.592660</td>
-    </tr>
-    <tr>
-      <th>agg_1</th>
-      <td>2.954493</td>
-      <td>1.897248</td>
-      <td>4.688962</td>
-    </tr>
-    <tr>
-      <th>agg_2</th>
-      <td>2.938927</td>
-      <td>2.197576</td>
-      <td>4.861925</td>
-    </tr>
-    <tr>
-      <th>agg_3</th>
-      <td>3.046052</td>
-      <td>2.138910</td>
-      <td>4.864000</td>
-    </tr>
-    <tr>
-      <th>agg_4</th>
-      <td>3.025393</td>
-      <td>2.019534</td>
-      <td>4.602815</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>agg_9533</th>
-      <td>2.334128</td>
-      <td>0.633340</td>
-      <td>4.675878</td>
-    </tr>
-    <tr>
-      <th>agg_9535</th>
-      <td>0.835045</td>
-      <td>0.358672</td>
-      <td>1.964816</td>
-    </tr>
-    <tr>
-      <th>agg_9536</th>
-      <td>3.008091</td>
-      <td>1.209339</td>
-      <td>4.798233</td>
-    </tr>
-    <tr>
-      <th>agg_9537</th>
-      <td>1.241775</td>
-      <td>0.455031</td>
-      <td>2.919700</td>
-    </tr>
-    <tr>
-      <th>agg_9538</th>
-      <td>1.715322</td>
-      <td>0.700902</td>
-      <td>3.044498</td>
-    </tr>
-  </tbody>
-</table>
-<p>8856 rows × 3 columns</p>
-</div></div></div>
-</div>
-<p>or for a specific replicate:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">predicted_expression_matrix</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;preds_v1_rep0&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>STRADA</th>
-      <th>ETV4</th>
-      <th>USP25</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>agg_0</th>
-      <td>2.932055</td>
-      <td>2.022040</td>
-      <td>4.795146</td>
-    </tr>
-    <tr>
-      <th>agg_1</th>
-      <td>2.816373</td>
-      <td>1.940856</td>
-      <td>4.917033</td>
-    </tr>
-    <tr>
-      <th>agg_2</th>
-      <td>2.742780</td>
-      <td>2.396595</td>
-      <td>4.806089</td>
-    </tr>
-    <tr>
-      <th>agg_3</th>
-      <td>2.804382</td>
-      <td>2.360139</td>
-      <td>4.676453</td>
-    </tr>
-    <tr>
-      <th>agg_4</th>
-      <td>2.815311</td>
-      <td>2.100366</td>
-      <td>4.594069</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>agg_9533</th>
-      <td>2.510625</td>
-      <td>0.811365</td>
-      <td>5.366706</td>
-    </tr>
-    <tr>
-      <th>agg_9535</th>
-      <td>1.245751</td>
-      <td>0.397869</td>
-      <td>2.111997</td>
-    </tr>
-    <tr>
-      <th>agg_9536</th>
-      <td>2.808623</td>
-      <td>1.503265</td>
-      <td>4.659208</td>
-    </tr>
-    <tr>
-      <th>agg_9537</th>
-      <td>1.580037</td>
-      <td>0.518710</td>
-      <td>2.777559</td>
-    </tr>
-    <tr>
-      <th>agg_9538</th>
-      <td>2.013807</td>
-      <td>0.808542</td>
-      <td>3.147933</td>
-    </tr>
-  </tbody>
-</table>
-<p>8856 rows × 3 columns</p>
-</div></div></div>
-</div>
-</section>
-<section id="python-api">
-<h2>Python API<a class="headerlink" href="#python-api" title="Link to this heading">¶</a></h2>
-<p>The same functionality is available through the Python API, allowing you to perform gene expression prediction programmatically. You can specify the genes, model, and other options directly in your Python code using the provided classes and functions.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.tools.inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">predict_gene_expression</span>
-
-<span class="n">ad</span> <span class="o">=</span> <span class="n">predict_gene_expression</span><span class="p">(</span>
-    <span class="n">genes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;STRADA&quot;</span><span class="p">,</span> <span class="s2">&quot;ETV4&quot;</span><span class="p">,</span> <span class="s2">&quot;USP25&quot;</span><span class="p">],</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ensemble&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1404.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1277.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep2:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1157.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep3:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1321.9MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1932.7MB/s)
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/celikm5/miniforge3/envs/decima/lib/python3.11/ ...
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
-GPU available: True (cuda), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3ab38f07a0724d099bcbaee7e9211463", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The ``compute`` method of metric WarningCounter was called before the ``update`` method which may lead to errors, as metric states have not yet been updated.
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="developer-api">
-<h2>Developer API<a class="headerlink" href="#developer-api" title="Link to this heading">¶</a></h2>
-<p>Under the hood, the Decima prediction API uses the <code class="docutils literal notranslate"><span class="pre">GeneDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">SeqDataset</span></code> pytorch Dataset classes to prepare the data for prediction. These classes provide a flexible way to handle different types of input data, including custom genes and DNA sequences. Internally, these datasets represent sequences using one-hot encoding and apply a gene mask to indicate which positions correspond to gene regions.</p>
-<p>For example, you can create a <code class="docutils literal notranslate"><span class="pre">GeneDataset</span></code> object to predict expression for the genes in your metadata. The <code class="docutils literal notranslate"><span class="pre">predict_on_dataset</span></code> method returns a dictionary containing the predicted expression values and if there is any warnings.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeneDataset</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="s2">&quot;rep0&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">GeneDataset</span><span class="p">(</span><span class="n">genes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;STRADA&quot;</span><span class="p">,</span> <span class="s2">&quot;ETV4&quot;</span><span class="p">,</span> <span class="s2">&quot;USP25&quot;</span><span class="p">])</span>
-
-<span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_on_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">pprint</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1333.5MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (2010.7MB/s)
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/celikm5/miniforge3/envs/decima/lib/python3.11/ ...
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
-GPU available: True (cuda), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=7` in the `DataLoader` to improve performance.
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3ff66d87baf44d02998ba910f6ed5217", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;expression&#39;: array([[2.9320552 , 2.8163733 , 2.7427804 , ..., 2.808623  , 1.5800365 ,
-        2.0138068 ],
-       [2.0220397 , 1.9408565 , 2.3965948 , ..., 1.5032653 , 0.51870984,
-        0.80854166],
-       [4.7951455 , 4.9170327 , 4.806089  , ..., 4.659208  , 2.7775593 ,
-        3.1479335 ]], dtype=float32),
- &#39;warnings&#39;: Counter({&#39;unknown&#39;: tensor(0),
-                      &#39;allele_mismatch_with_reference_genome&#39;: tensor(0)})}
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The ``compute`` method of metric WarningCounter was called before the ``update`` method which may lead to errors, as metric states have not yet been updated.
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="custom-expression-for-custom-genes">
-<h2>Custom Expression for custom genes<a class="headerlink" href="#custom-expression-for-custom-genes" title="Link to this heading">¶</a></h2>
-<p>If you have custom genes, you can create a <code class="docutils literal notranslate"><span class="pre">SeqDataset</span></code> object to predict expression for those genes.</p>
-<p>To do this, prepare a FASTA file where:</p>
-<ul class="simple">
-<li><p>Each sequence is exactly the Decima context size (524,288 bases).</p></li>
-<li><p>The FASTA header for each sequence must include the gene name and the gene mask coordinates, using the format:
-<code class="docutils literal notranslate"><span class="pre">&gt;gene_name|gene_mask_start=X|gene_mask_end=Y</span></code>
-where <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> specify the start and end positions (0-based, inclusive) of the gene region within the sequence. The gene mask indicates which region of the sequence corresponds to the gene for which expression will be predicted.</p></li>
-</ul>
-<p>For example, seqs.fasta contains these information:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>../tests/data/seqs.fasta<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span>-200
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&gt;CD68|gene_mask_start=163840|gene_mask_end=166460
-CTCTGCAGAGAGCGAGGACGGTGTGTCTGCCAGCGCCTTTGACTTCACTGTCTCCAACTTTGTGGACAACCTGTATGGCTACCCGGAAGGCAAGGATGTGCTTCGGGAGACCATCAAGTTTATGTACACAGACTGGGCCGACCGGGACAATGGCGAAATGCGCCGCAAAACCCTGCTGGCGCTCTTTACTGACCACCAAT
-&gt;SPI1|gene_mask_start=163840|gene_mask_end=187556
-TGCCACTTTTAGATATGTTCATGGGTGCAGATACGGCTTTATTTATTTGAGACAGAGTTTCACTCTTGTTGCCCAGGGTGGAGTGCAGTGGTGCGATCTCAGCTCACTGCAGCCTTCGCCTCCCGGGTTGAAGCGATTCTTCTGCCTCAACCTCGAGTAGCTGGGATTATAGGCACCTGCCAGCATGCCTGGCTAATTTT
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SeqDataset</span>
-
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="o">.</span><span class="n">from_fasta</span><span class="p">(</span><span class="s2">&quot;../tests/data/seqs.fasta&quot;</span><span class="p">)</span>
-
-<span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_on_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">pprint</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
-GPU available: True (cuda), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cca4f2bc479748b2af20bbc7361a15e4", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.22032928, 0.21946219, 0.230885  , ..., 1.0364848 , 1.2134479 ,
-        1.4428278 ],
-       [0.2652336 , 0.13350041, 0.14896178, ..., 0.44437772, 0.26560807,
-        0.30437455]], dtype=float32)
-</pre></div>
-</div>
-</div>
-</div>
-<p>See the documentation of SeqDataset for more details. SeqDataset can be created from a pandas DataFrame with the following columns: <code class="docutils literal notranslate"><span class="pre">seq</span></code>, <code class="docutils literal notranslate"><span class="pre">gene_mask_start</span></code>, <code class="docutils literal notranslate"><span class="pre">gene_mask_end</span></code>, and <code class="docutils literal notranslate"><span class="pre">gene_name</span></code> with <code class="docutils literal notranslate"><span class="pre">SeqDataset.from_dataframe</span></code> or from a one-hot encoded tensor with <code class="docutils literal notranslate"><span class="pre">SeqDataset.from_one_hot</span></code>.</p>
-</section>
-</section>
+          <dl>
+<dt>{</dt><dd><dl>
+<dt>“cells”: [</dt><dd><dl>
+<dt>{</dt><dd><p>“cell_type”: “markdown”,
+“id”: “05b7b43f”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“# Predicting Gene Expression with Decima”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “42034677”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“Decima allows prediction of gene expression at the cell type level, and this tutorial demonstrates how to leverage the prediction API for both genes in the training data and custom genes.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “1898aff7”,
+“metadata”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“vscode”: {</dt><dd><p>“languageId”: “plaintext”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>},
+“source”: [</p>
+<blockquote>
+<div><p>“### Precomputed Predictions”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “f4634c23”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“Scores for all genes in the training data are precomputed and saved to metadata h5ad object for each model replicate and are available under the <cite>DecimaResult</cite> class. <cite>predicted_expression_matrix</cite> class returns predicted average gene expression across the replicates.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 1,
+“id”: “6b76abce”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The ‘repr’ attribute with value False was provided to the <cite>Field()</cite> function, which has no effect in the context it was used. ‘repr’ is field-specific metadata, and can only be attached to a model field using <cite>Annotated</cite> metadata or by assignment. This may have happened because an <cite>Annotated</cite> type alias using the <cite>type</cite> statement was used, or if the <cite>Field()</cite> function was attached to a single member of a union type.n”,
+“  warnings.warn(n”,
+“/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The ‘frozen’ attribute with value True was provided to the <cite>Field()</cite> function, which has no effect in the context it was used. ‘frozen’ is field-specific metadata, and can only be attached to a model field using <cite>Annotated</cite> metadata or by assignment. This may have happened because an <cite>Annotated</cite> type alias using the <cite>type</cite> statement was used, or if the <cite>Field()</cite> function was attached to a single member of a union type.n”,
+“  warnings.warn(n”,
+“u001b[34mu001b[1mwandbu001b[0m: Currently logged in as: u001b[33mmhceliku001b[0m (u001b[33mmhcwu001b[0m) to u001b[32mhttps://api.wandb.aiu001b[0m. Use u001b[1m`wandb login –relogin`u001b[0m to force reloginn”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact ‘metadata:latest’, 3122.32MB. 1 files…n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 00:00:05.9 (533.2MB/s)n”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/html”: [</dt><dd><p>“&lt;div&gt;n”,
+“&lt;style scoped&gt;n”,
+“    .dataframe tbody tr th:only-of-type {n”,
+“        vertical-align: middle;n”,
+“    }n”,
+“n”,
+“    .dataframe tbody tr th {n”,
+“        vertical-align: top;n”,
+“    }n”,
+“n”,
+“    .dataframe thead th {n”,
+“        text-align: right;n”,
+“    }n”,
+“&lt;/style&gt;n”,
+“&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;n”,
+“  &lt;thead&gt;n”,
+“    &lt;tr style=&quot;text-align: right;&quot;&gt;n”,
+“      &lt;th&gt;&lt;/th&gt;n”,
+“      &lt;th&gt;STRADA&lt;/th&gt;n”,
+“      &lt;th&gt;ETV4&lt;/th&gt;n”,
+“      &lt;th&gt;USP25&lt;/th&gt;n”,
+“      &lt;th&gt;ZSWIM5&lt;/th&gt;n”,
+“      &lt;th&gt;C21orf58&lt;/th&gt;n”,
+“      &lt;th&gt;MIR497HG&lt;/th&gt;n”,
+“      &lt;th&gt;CFAP74&lt;/th&gt;n”,
+“      &lt;th&gt;GSE1&lt;/th&gt;n”,
+“      &lt;th&gt;LPP&lt;/th&gt;n”,
+“      &lt;th&gt;CLK1&lt;/th&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;th&gt;STRIP2&lt;/th&gt;n”,
+“      &lt;th&gt;TNFRSF1A&lt;/th&gt;n”,
+“      &lt;th&gt;RBM14-RBM4&lt;/th&gt;n”,
+“      &lt;th&gt;C1orf21&lt;/th&gt;n”,
+“      &lt;th&gt;LINC00639&lt;/th&gt;n”,
+“      &lt;th&gt;NPDC1&lt;/th&gt;n”,
+“      &lt;th&gt;ZNF425&lt;/th&gt;n”,
+“      &lt;th&gt;COL5A1&lt;/th&gt;n”,
+“      &lt;th&gt;BRD3&lt;/th&gt;n”,
+“      &lt;th&gt;EVI5L&lt;/th&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/thead&gt;n”,
+“  &lt;tbody&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_0&lt;/th&gt;n”,
+“      &lt;td&gt;2.973438&lt;/td&gt;n”,
+“      &lt;td&gt;1.845565&lt;/td&gt;n”,
+“      &lt;td&gt;4.592531&lt;/td&gt;n”,
+“      &lt;td&gt;5.099802&lt;/td&gt;n”,
+“      &lt;td&gt;1.774879&lt;/td&gt;n”,
+“      &lt;td&gt;0.356812&lt;/td&gt;n”,
+“      &lt;td&gt;2.590836&lt;/td&gt;n”,
+“      &lt;td&gt;4.629774&lt;/td&gt;n”,
+“      &lt;td&gt;4.897171&lt;/td&gt;n”,
+“      &lt;td&gt;3.326940&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;2.836060&lt;/td&gt;n”,
+“      &lt;td&gt;0.297015&lt;/td&gt;n”,
+“      &lt;td&gt;1.883849&lt;/td&gt;n”,
+“      &lt;td&gt;4.293593&lt;/td&gt;n”,
+“      &lt;td&gt;1.463565&lt;/td&gt;n”,
+“      &lt;td&gt;3.183534&lt;/td&gt;n”,
+“      &lt;td&gt;2.340202&lt;/td&gt;n”,
+“      &lt;td&gt;2.374942&lt;/td&gt;n”,
+“      &lt;td&gt;2.911916&lt;/td&gt;n”,
+“      &lt;td&gt;3.230072&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_1&lt;/th&gt;n”,
+“      &lt;td&gt;2.954213&lt;/td&gt;n”,
+“      &lt;td&gt;1.896726&lt;/td&gt;n”,
+“      &lt;td&gt;4.688557&lt;/td&gt;n”,
+“      &lt;td&gt;5.510440&lt;/td&gt;n”,
+“      &lt;td&gt;1.666929&lt;/td&gt;n”,
+“      &lt;td&gt;0.352725&lt;/td&gt;n”,
+“      &lt;td&gt;2.292625&lt;/td&gt;n”,
+“      &lt;td&gt;4.459535&lt;/td&gt;n”,
+“      &lt;td&gt;4.915286&lt;/td&gt;n”,
+“      &lt;td&gt;3.192858&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.125704&lt;/td&gt;n”,
+“      &lt;td&gt;0.242543&lt;/td&gt;n”,
+“      &lt;td&gt;1.908177&lt;/td&gt;n”,
+“      &lt;td&gt;4.439424&lt;/td&gt;n”,
+“      &lt;td&gt;1.236739&lt;/td&gt;n”,
+“      &lt;td&gt;3.494824&lt;/td&gt;n”,
+“      &lt;td&gt;2.425672&lt;/td&gt;n”,
+“      &lt;td&gt;2.054568&lt;/td&gt;n”,
+“      &lt;td&gt;2.713408&lt;/td&gt;n”,
+“      &lt;td&gt;3.491463&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_2&lt;/th&gt;n”,
+“      &lt;td&gt;2.938851&lt;/td&gt;n”,
+“      &lt;td&gt;2.197247&lt;/td&gt;n”,
+“      &lt;td&gt;4.861410&lt;/td&gt;n”,
+“      &lt;td&gt;5.617520&lt;/td&gt;n”,
+“      &lt;td&gt;1.773381&lt;/td&gt;n”,
+“      &lt;td&gt;0.380867&lt;/td&gt;n”,
+“      &lt;td&gt;2.394917&lt;/td&gt;n”,
+“      &lt;td&gt;4.415038&lt;/td&gt;n”,
+“      &lt;td&gt;4.836399&lt;/td&gt;n”,
+“      &lt;td&gt;3.390717&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.082098&lt;/td&gt;n”,
+“      &lt;td&gt;0.263285&lt;/td&gt;n”,
+“      &lt;td&gt;2.006456&lt;/td&gt;n”,
+“      &lt;td&gt;4.383455&lt;/td&gt;n”,
+“      &lt;td&gt;1.208590&lt;/td&gt;n”,
+“      &lt;td&gt;4.013819&lt;/td&gt;n”,
+“      &lt;td&gt;2.408381&lt;/td&gt;n”,
+“      &lt;td&gt;2.297343&lt;/td&gt;n”,
+“      &lt;td&gt;2.892222&lt;/td&gt;n”,
+“      &lt;td&gt;3.695785&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_3&lt;/th&gt;n”,
+“      &lt;td&gt;3.045972&lt;/td&gt;n”,
+“      &lt;td&gt;2.138573&lt;/td&gt;n”,
+“      &lt;td&gt;4.863791&lt;/td&gt;n”,
+“      &lt;td&gt;5.273604&lt;/td&gt;n”,
+“      &lt;td&gt;1.760097&lt;/td&gt;n”,
+“      &lt;td&gt;0.463555&lt;/td&gt;n”,
+“      &lt;td&gt;2.391702&lt;/td&gt;n”,
+“      &lt;td&gt;3.940975&lt;/td&gt;n”,
+“      &lt;td&gt;4.857763&lt;/td&gt;n”,
+“      &lt;td&gt;3.410926&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;2.882890&lt;/td&gt;n”,
+“      &lt;td&gt;0.290327&lt;/td&gt;n”,
+“      &lt;td&gt;1.922963&lt;/td&gt;n”,
+“      &lt;td&gt;4.550189&lt;/td&gt;n”,
+“      &lt;td&gt;1.430520&lt;/td&gt;n”,
+“      &lt;td&gt;3.693118&lt;/td&gt;n”,
+“      &lt;td&gt;2.297103&lt;/td&gt;n”,
+“      &lt;td&gt;2.121887&lt;/td&gt;n”,
+“      &lt;td&gt;2.626117&lt;/td&gt;n”,
+“      &lt;td&gt;3.223912&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_4&lt;/th&gt;n”,
+“      &lt;td&gt;3.025518&lt;/td&gt;n”,
+“      &lt;td&gt;2.019096&lt;/td&gt;n”,
+“      &lt;td&gt;4.602948&lt;/td&gt;n”,
+“      &lt;td&gt;5.257001&lt;/td&gt;n”,
+“      &lt;td&gt;1.755338&lt;/td&gt;n”,
+“      &lt;td&gt;0.382190&lt;/td&gt;n”,
+“      &lt;td&gt;2.432810&lt;/td&gt;n”,
+“      &lt;td&gt;4.392480&lt;/td&gt;n”,
+“      &lt;td&gt;4.959488&lt;/td&gt;n”,
+“      &lt;td&gt;3.250500&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.082296&lt;/td&gt;n”,
+“      &lt;td&gt;0.258540&lt;/td&gt;n”,
+“      &lt;td&gt;2.038277&lt;/td&gt;n”,
+“      &lt;td&gt;4.464807&lt;/td&gt;n”,
+“      &lt;td&gt;1.249043&lt;/td&gt;n”,
+“      &lt;td&gt;3.665800&lt;/td&gt;n”,
+“      &lt;td&gt;2.400820&lt;/td&gt;n”,
+“      &lt;td&gt;2.255862&lt;/td&gt;n”,
+“      &lt;td&gt;2.925619&lt;/td&gt;n”,
+“      &lt;td&gt;3.471005&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9533&lt;/th&gt;n”,
+“      &lt;td&gt;2.333562&lt;/td&gt;n”,
+“      &lt;td&gt;0.633322&lt;/td&gt;n”,
+“      &lt;td&gt;4.675825&lt;/td&gt;n”,
+“      &lt;td&gt;2.793023&lt;/td&gt;n”,
+“      &lt;td&gt;0.752030&lt;/td&gt;n”,
+“      &lt;td&gt;0.692083&lt;/td&gt;n”,
+“      &lt;td&gt;0.503531&lt;/td&gt;n”,
+“      &lt;td&gt;4.327948&lt;/td&gt;n”,
+“      &lt;td&gt;6.903193&lt;/td&gt;n”,
+“      &lt;td&gt;3.695593&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.549795&lt;/td&gt;n”,
+“      &lt;td&gt;2.270181&lt;/td&gt;n”,
+“      &lt;td&gt;1.563218&lt;/td&gt;n”,
+“      &lt;td&gt;4.395422&lt;/td&gt;n”,
+“      &lt;td&gt;0.550088&lt;/td&gt;n”,
+“      &lt;td&gt;1.330252&lt;/td&gt;n”,
+“      &lt;td&gt;1.044471&lt;/td&gt;n”,
+“      &lt;td&gt;3.759369&lt;/td&gt;n”,
+“      &lt;td&gt;2.491346&lt;/td&gt;n”,
+“      &lt;td&gt;1.872717&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9535&lt;/th&gt;n”,
+“      &lt;td&gt;0.835037&lt;/td&gt;n”,
+“      &lt;td&gt;0.358773&lt;/td&gt;n”,
+“      &lt;td&gt;1.964896&lt;/td&gt;n”,
+“      &lt;td&gt;0.307449&lt;/td&gt;n”,
+“      &lt;td&gt;0.337240&lt;/td&gt;n”,
+“      &lt;td&gt;0.834196&lt;/td&gt;n”,
+“      &lt;td&gt;0.093885&lt;/td&gt;n”,
+“      &lt;td&gt;1.853794&lt;/td&gt;n”,
+“      &lt;td&gt;3.700790&lt;/td&gt;n”,
+“      &lt;td&gt;4.467302&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.176885&lt;/td&gt;n”,
+“      &lt;td&gt;1.370898&lt;/td&gt;n”,
+“      &lt;td&gt;1.022708&lt;/td&gt;n”,
+“      &lt;td&gt;3.400267&lt;/td&gt;n”,
+“      &lt;td&gt;0.052162&lt;/td&gt;n”,
+“      &lt;td&gt;1.908870&lt;/td&gt;n”,
+“      &lt;td&gt;0.253417&lt;/td&gt;n”,
+“      &lt;td&gt;1.448111&lt;/td&gt;n”,
+“      &lt;td&gt;1.622033&lt;/td&gt;n”,
+“      &lt;td&gt;1.064292&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9536&lt;/th&gt;n”,
+“      &lt;td&gt;3.008039&lt;/td&gt;n”,
+“      &lt;td&gt;1.209324&lt;/td&gt;n”,
+“      &lt;td&gt;4.798392&lt;/td&gt;n”,
+“      &lt;td&gt;3.931870&lt;/td&gt;n”,
+“      &lt;td&gt;1.401328&lt;/td&gt;n”,
+“      &lt;td&gt;1.638555&lt;/td&gt;n”,
+“      &lt;td&gt;0.969720&lt;/td&gt;n”,
+“      &lt;td&gt;4.779201&lt;/td&gt;n”,
+“      &lt;td&gt;6.631931&lt;/td&gt;n”,
+“      &lt;td&gt;4.127797&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;1.174298&lt;/td&gt;n”,
+“      &lt;td&gt;1.870530&lt;/td&gt;n”,
+“      &lt;td&gt;2.506874&lt;/td&gt;n”,
+“      &lt;td&gt;5.151776&lt;/td&gt;n”,
+“      &lt;td&gt;0.967644&lt;/td&gt;n”,
+“      &lt;td&gt;1.809947&lt;/td&gt;n”,
+“      &lt;td&gt;2.205356&lt;/td&gt;n”,
+“      &lt;td&gt;4.244005&lt;/td&gt;n”,
+“      &lt;td&gt;2.974467&lt;/td&gt;n”,
+“      &lt;td&gt;2.659873&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9537&lt;/th&gt;n”,
+“      &lt;td&gt;1.241936&lt;/td&gt;n”,
+“      &lt;td&gt;0.455059&lt;/td&gt;n”,
+“      &lt;td&gt;2.919995&lt;/td&gt;n”,
+“      &lt;td&gt;0.571672&lt;/td&gt;n”,
+“      &lt;td&gt;0.486448&lt;/td&gt;n”,
+“      &lt;td&gt;1.175586&lt;/td&gt;n”,
+“      &lt;td&gt;0.145397&lt;/td&gt;n”,
+“      &lt;td&gt;2.412148&lt;/td&gt;n”,
+“      &lt;td&gt;4.759118&lt;/td&gt;n”,
+“      &lt;td&gt;4.913945&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.371035&lt;/td&gt;n”,
+“      &lt;td&gt;1.361073&lt;/td&gt;n”,
+“      &lt;td&gt;1.668085&lt;/td&gt;n”,
+“      &lt;td&gt;4.005738&lt;/td&gt;n”,
+“      &lt;td&gt;0.078611&lt;/td&gt;n”,
+“      &lt;td&gt;1.571750&lt;/td&gt;n”,
+“      &lt;td&gt;0.508187&lt;/td&gt;n”,
+“      &lt;td&gt;2.067150&lt;/td&gt;n”,
+“      &lt;td&gt;2.323764&lt;/td&gt;n”,
+“      &lt;td&gt;1.429850&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9538&lt;/th&gt;n”,
+“      &lt;td&gt;1.715507&lt;/td&gt;n”,
+“      &lt;td&gt;0.700955&lt;/td&gt;n”,
+“      &lt;td&gt;3.044732&lt;/td&gt;n”,
+“      &lt;td&gt;0.858696&lt;/td&gt;n”,
+“      &lt;td&gt;0.903406&lt;/td&gt;n”,
+“      &lt;td&gt;1.763168&lt;/td&gt;n”,
+“      &lt;td&gt;0.215304&lt;/td&gt;n”,
+“      &lt;td&gt;2.604478&lt;/td&gt;n”,
+“      &lt;td&gt;4.549708&lt;/td&gt;n”,
+“      &lt;td&gt;4.839124&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.594310&lt;/td&gt;n”,
+“      &lt;td&gt;1.801298&lt;/td&gt;n”,
+“      &lt;td&gt;2.075996&lt;/td&gt;n”,
+“      &lt;td&gt;3.933860&lt;/td&gt;n”,
+“      &lt;td&gt;0.165590&lt;/td&gt;n”,
+“      &lt;td&gt;1.970268&lt;/td&gt;n”,
+“      &lt;td&gt;0.993521&lt;/td&gt;n”,
+“      &lt;td&gt;2.232347&lt;/td&gt;n”,
+“      &lt;td&gt;2.473388&lt;/td&gt;n”,
+“      &lt;td&gt;1.902884&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/tbody&gt;n”,
+“&lt;/table&gt;n”,
+“&lt;p&gt;8856 rows × 18457 columns&lt;/p&gt;n”,
+“&lt;/div&gt;”</p>
+</dd>
+</dl>
+<p>],
+“text/plain”: [</p>
+<blockquote>
+<div><p>“            STRADA      ETV4     USP25    ZSWIM5  C21orf58  MIR497HG  \n”,
+“agg_0     2.973438  1.845565  4.592531  5.099802  1.774879  0.356812   n”,
+“agg_1     2.954213  1.896726  4.688557  5.510440  1.666929  0.352725   n”,
+“agg_2     2.938851  2.197247  4.861410  5.617520  1.773381  0.380867   n”,
+“agg_3     3.045972  2.138573  4.863791  5.273604  1.760097  0.463555   n”,
+“agg_4     3.025518  2.019096  4.602948  5.257001  1.755338  0.382190   n”,
+“…            …       …       …       …       …       …   n”,
+“agg_9533  2.333562  0.633322  4.675825  2.793023  0.752030  0.692083   n”,
+“agg_9535  0.835037  0.358773  1.964896  0.307449  0.337240  0.834196   n”,
+“agg_9536  3.008039  1.209324  4.798392  3.931870  1.401328  1.638555   n”,
+“agg_9537  1.241936  0.455059  2.919995  0.571672  0.486448  1.175586   n”,
+“agg_9538  1.715507  0.700955  3.044732  0.858696  0.903406  1.763168   n”,
+“n”,
+“            CFAP74      GSE1       LPP      CLK1  …    STRIP2  TNFRSF1A  \n”,
+“agg_0     2.590836  4.629774  4.897171  3.326940  …  2.836060  0.297015   n”,
+“agg_1     2.292625  4.459535  4.915286  3.192858  …  3.125704  0.242543   n”,
+“agg_2     2.394917  4.415038  4.836399  3.390717  …  3.082098  0.263285   n”,
+“agg_3     2.391702  3.940975  4.857763  3.410926  …  2.882890  0.290327   n”,
+“agg_4     2.432810  4.392480  4.959488  3.250500  …  3.082296  0.258540   n”,
+“…            …       …       …       …  …       …       …   n”,
+“agg_9533  0.503531  4.327948  6.903193  3.695593  …  0.549795  2.270181   n”,
+“agg_9535  0.093885  1.853794  3.700790  4.467302  …  0.176885  1.370898   n”,
+“agg_9536  0.969720  4.779201  6.631931  4.127797  …  1.174298  1.870530   n”,
+“agg_9537  0.145397  2.412148  4.759118  4.913945  …  0.371035  1.361073   n”,
+“agg_9538  0.215304  2.604478  4.549708  4.839124  …  0.594310  1.801298   n”,
+“n”,
+“          RBM14-RBM4   C1orf21  LINC00639     NPDC1    ZNF425    COL5A1  \n”,
+“agg_0       1.883849  4.293593   1.463565  3.183534  2.340202  2.374942   n”,
+“agg_1       1.908177  4.439424   1.236739  3.494824  2.425672  2.054568   n”,
+“agg_2       2.006456  4.383455   1.208590  4.013819  2.408381  2.297343   n”,
+“agg_3       1.922963  4.550189   1.430520  3.693118  2.297103  2.121887   n”,
+“agg_4       2.038277  4.464807   1.249043  3.665800  2.400820  2.255862   n”,
+“…              …       …        …       …       …       …   n”,
+“agg_9533    1.563218  4.395422   0.550088  1.330252  1.044471  3.759369   n”,
+“agg_9535    1.022708  3.400267   0.052162  1.908870  0.253417  1.448111   n”,
+“agg_9536    2.506874  5.151776   0.967644  1.809947  2.205356  4.244005   n”,
+“agg_9537    1.668085  4.005738   0.078611  1.571750  0.508187  2.067150   n”,
+“agg_9538    2.075996  3.933860   0.165590  1.970268  0.993521  2.232347   n”,
+“n”,
+“              BRD3     EVI5L  n”,
+“agg_0     2.911916  3.230072  n”,
+“agg_1     2.713408  3.491463  n”,
+“agg_2     2.892222  3.695785  n”,
+“agg_3     2.626117  3.223912  n”,
+“agg_4     2.925619  3.471005  n”,
+“…            …       …  n”,
+“agg_9533  2.491346  1.872717  n”,
+“agg_9535  1.622033  1.064292  n”,
+“agg_9536  2.974467  2.659873  n”,
+“agg_9537  2.323764  1.429850  n”,
+“agg_9538  2.473388  1.902884  n”,
+“n”,
+“[8856 rows x 18457 columns]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 1,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“from decima import DecimaResultn”,
+“n”,
+“result = DecimaResult.load()n”,
+“result.predicted_expression_matrix()”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “802943e2”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“To access the predicted expression matrix for a specific model, you can use the <cite>model_name</cite> parameter. In this example, we obtain the predicted gene expression for first model replicate.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 2,
+“id”: “acbb140a”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/html”: [</dt><dd><p>“&lt;div&gt;n”,
+“&lt;style scoped&gt;n”,
+“    .dataframe tbody tr th:only-of-type {n”,
+“        vertical-align: middle;n”,
+“    }n”,
+“n”,
+“    .dataframe tbody tr th {n”,
+“        vertical-align: top;n”,
+“    }n”,
+“n”,
+“    .dataframe thead th {n”,
+“        text-align: right;n”,
+“    }n”,
+“&lt;/style&gt;n”,
+“&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;n”,
+“  &lt;thead&gt;n”,
+“    &lt;tr style=&quot;text-align: right;&quot;&gt;n”,
+“      &lt;th&gt;&lt;/th&gt;n”,
+“      &lt;th&gt;STRADA&lt;/th&gt;n”,
+“      &lt;th&gt;ETV4&lt;/th&gt;n”,
+“      &lt;th&gt;USP25&lt;/th&gt;n”,
+“      &lt;th&gt;ZSWIM5&lt;/th&gt;n”,
+“      &lt;th&gt;C21orf58&lt;/th&gt;n”,
+“      &lt;th&gt;MIR497HG&lt;/th&gt;n”,
+“      &lt;th&gt;CFAP74&lt;/th&gt;n”,
+“      &lt;th&gt;GSE1&lt;/th&gt;n”,
+“      &lt;th&gt;LPP&lt;/th&gt;n”,
+“      &lt;th&gt;CLK1&lt;/th&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;th&gt;STRIP2&lt;/th&gt;n”,
+“      &lt;th&gt;TNFRSF1A&lt;/th&gt;n”,
+“      &lt;th&gt;RBM14-RBM4&lt;/th&gt;n”,
+“      &lt;th&gt;C1orf21&lt;/th&gt;n”,
+“      &lt;th&gt;LINC00639&lt;/th&gt;n”,
+“      &lt;th&gt;NPDC1&lt;/th&gt;n”,
+“      &lt;th&gt;ZNF425&lt;/th&gt;n”,
+“      &lt;th&gt;COL5A1&lt;/th&gt;n”,
+“      &lt;th&gt;BRD3&lt;/th&gt;n”,
+“      &lt;th&gt;EVI5L&lt;/th&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/thead&gt;n”,
+“  &lt;tbody&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_0&lt;/th&gt;n”,
+“      &lt;td&gt;2.932758&lt;/td&gt;n”,
+“      &lt;td&gt;2.020476&lt;/td&gt;n”,
+“      &lt;td&gt;4.795636&lt;/td&gt;n”,
+“      &lt;td&gt;5.142194&lt;/td&gt;n”,
+“      &lt;td&gt;1.721651&lt;/td&gt;n”,
+“      &lt;td&gt;0.403188&lt;/td&gt;n”,
+“      &lt;td&gt;3.207011&lt;/td&gt;n”,
+“      &lt;td&gt;4.647735&lt;/td&gt;n”,
+“      &lt;td&gt;4.823714&lt;/td&gt;n”,
+“      &lt;td&gt;3.241457&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;1.804592&lt;/td&gt;n”,
+“      &lt;td&gt;0.392356&lt;/td&gt;n”,
+“      &lt;td&gt;1.923160&lt;/td&gt;n”,
+“      &lt;td&gt;4.256888&lt;/td&gt;n”,
+“      &lt;td&gt;1.837033&lt;/td&gt;n”,
+“      &lt;td&gt;3.382362&lt;/td&gt;n”,
+“      &lt;td&gt;2.358378&lt;/td&gt;n”,
+“      &lt;td&gt;2.471895&lt;/td&gt;n”,
+“      &lt;td&gt;2.808940&lt;/td&gt;n”,
+“      &lt;td&gt;3.232095&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_1&lt;/th&gt;n”,
+“      &lt;td&gt;2.816624&lt;/td&gt;n”,
+“      &lt;td&gt;1.938934&lt;/td&gt;n”,
+“      &lt;td&gt;4.917684&lt;/td&gt;n”,
+“      &lt;td&gt;5.402302&lt;/td&gt;n”,
+“      &lt;td&gt;1.319163&lt;/td&gt;n”,
+“      &lt;td&gt;0.393221&lt;/td&gt;n”,
+“      &lt;td&gt;2.809423&lt;/td&gt;n”,
+“      &lt;td&gt;4.842717&lt;/td&gt;n”,
+“      &lt;td&gt;4.939364&lt;/td&gt;n”,
+“      &lt;td&gt;2.980938&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;1.753353&lt;/td&gt;n”,
+“      &lt;td&gt;0.307677&lt;/td&gt;n”,
+“      &lt;td&gt;2.096857&lt;/td&gt;n”,
+“      &lt;td&gt;4.221365&lt;/td&gt;n”,
+“      &lt;td&gt;1.679307&lt;/td&gt;n”,
+“      &lt;td&gt;3.917950&lt;/td&gt;n”,
+“      &lt;td&gt;2.459049&lt;/td&gt;n”,
+“      &lt;td&gt;2.356942&lt;/td&gt;n”,
+“      &lt;td&gt;2.696189&lt;/td&gt;n”,
+“      &lt;td&gt;3.447138&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_2&lt;/th&gt;n”,
+“      &lt;td&gt;2.742950&lt;/td&gt;n”,
+“      &lt;td&gt;2.394729&lt;/td&gt;n”,
+“      &lt;td&gt;4.805934&lt;/td&gt;n”,
+“      &lt;td&gt;5.102471&lt;/td&gt;n”,
+“      &lt;td&gt;1.731927&lt;/td&gt;n”,
+“      &lt;td&gt;0.452663&lt;/td&gt;n”,
+“      &lt;td&gt;2.778222&lt;/td&gt;n”,
+“      &lt;td&gt;4.538105&lt;/td&gt;n”,
+“      &lt;td&gt;4.443571&lt;/td&gt;n”,
+“      &lt;td&gt;3.041557&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;1.804225&lt;/td&gt;n”,
+“      &lt;td&gt;0.364422&lt;/td&gt;n”,
+“      &lt;td&gt;2.145009&lt;/td&gt;n”,
+“      &lt;td&gt;4.004273&lt;/td&gt;n”,
+“      &lt;td&gt;1.471316&lt;/td&gt;n”,
+“      &lt;td&gt;4.249442&lt;/td&gt;n”,
+“      &lt;td&gt;2.204638&lt;/td&gt;n”,
+“      &lt;td&gt;2.687080&lt;/td&gt;n”,
+“      &lt;td&gt;2.793549&lt;/td&gt;n”,
+“      &lt;td&gt;3.760900&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_3&lt;/th&gt;n”,
+“      &lt;td&gt;2.804515&lt;/td&gt;n”,
+“      &lt;td&gt;2.358393&lt;/td&gt;n”,
+“      &lt;td&gt;4.676318&lt;/td&gt;n”,
+“      &lt;td&gt;5.462350&lt;/td&gt;n”,
+“      &lt;td&gt;1.543962&lt;/td&gt;n”,
+“      &lt;td&gt;0.483929&lt;/td&gt;n”,
+“      &lt;td&gt;2.695394&lt;/td&gt;n”,
+“      &lt;td&gt;4.411092&lt;/td&gt;n”,
+“      &lt;td&gt;4.355472&lt;/td&gt;n”,
+“      &lt;td&gt;3.220853&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;1.663766&lt;/td&gt;n”,
+“      &lt;td&gt;0.429275&lt;/td&gt;n”,
+“      &lt;td&gt;2.065255&lt;/td&gt;n”,
+“      &lt;td&gt;4.045637&lt;/td&gt;n”,
+“      &lt;td&gt;1.837513&lt;/td&gt;n”,
+“      &lt;td&gt;3.879115&lt;/td&gt;n”,
+“      &lt;td&gt;2.242636&lt;/td&gt;n”,
+“      &lt;td&gt;2.191440&lt;/td&gt;n”,
+“      &lt;td&gt;2.614539&lt;/td&gt;n”,
+“      &lt;td&gt;3.287658&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_4&lt;/th&gt;n”,
+“      &lt;td&gt;2.815917&lt;/td&gt;n”,
+“      &lt;td&gt;2.098659&lt;/td&gt;n”,
+“      &lt;td&gt;4.594968&lt;/td&gt;n”,
+“      &lt;td&gt;4.648893&lt;/td&gt;n”,
+“      &lt;td&gt;1.517963&lt;/td&gt;n”,
+“      &lt;td&gt;0.426446&lt;/td&gt;n”,
+“      &lt;td&gt;3.173781&lt;/td&gt;n”,
+“      &lt;td&gt;4.829787&lt;/td&gt;n”,
+“      &lt;td&gt;4.389949&lt;/td&gt;n”,
+“      &lt;td&gt;3.011941&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;2.119307&lt;/td&gt;n”,
+“      &lt;td&gt;0.320393&lt;/td&gt;n”,
+“      &lt;td&gt;2.064416&lt;/td&gt;n”,
+“      &lt;td&gt;3.868720&lt;/td&gt;n”,
+“      &lt;td&gt;1.499770&lt;/td&gt;n”,
+“      &lt;td&gt;4.144956&lt;/td&gt;n”,
+“      &lt;td&gt;2.074824&lt;/td&gt;n”,
+“      &lt;td&gt;2.375941&lt;/td&gt;n”,
+“      &lt;td&gt;2.745383&lt;/td&gt;n”,
+“      &lt;td&gt;3.339186&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9533&lt;/th&gt;n”,
+“      &lt;td&gt;2.510139&lt;/td&gt;n”,
+“      &lt;td&gt;0.811121&lt;/td&gt;n”,
+“      &lt;td&gt;5.367220&lt;/td&gt;n”,
+“      &lt;td&gt;2.944120&lt;/td&gt;n”,
+“      &lt;td&gt;0.668071&lt;/td&gt;n”,
+“      &lt;td&gt;0.898573&lt;/td&gt;n”,
+“      &lt;td&gt;0.737285&lt;/td&gt;n”,
+“      &lt;td&gt;4.750776&lt;/td&gt;n”,
+“      &lt;td&gt;7.324188&lt;/td&gt;n”,
+“      &lt;td&gt;3.585325&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.258857&lt;/td&gt;n”,
+“      &lt;td&gt;1.437364&lt;/td&gt;n”,
+“      &lt;td&gt;1.913985&lt;/td&gt;n”,
+“      &lt;td&gt;4.471622&lt;/td&gt;n”,
+“      &lt;td&gt;0.823436&lt;/td&gt;n”,
+“      &lt;td&gt;1.486110&lt;/td&gt;n”,
+“      &lt;td&gt;1.288418&lt;/td&gt;n”,
+“      &lt;td&gt;3.211422&lt;/td&gt;n”,
+“      &lt;td&gt;2.712792&lt;/td&gt;n”,
+“      &lt;td&gt;1.665431&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9535&lt;/th&gt;n”,
+“      &lt;td&gt;1.245692&lt;/td&gt;n”,
+“      &lt;td&gt;0.397959&lt;/td&gt;n”,
+“      &lt;td&gt;2.112123&lt;/td&gt;n”,
+“      &lt;td&gt;0.537773&lt;/td&gt;n”,
+“      &lt;td&gt;0.231708&lt;/td&gt;n”,
+“      &lt;td&gt;0.898190&lt;/td&gt;n”,
+“      &lt;td&gt;0.114970&lt;/td&gt;n”,
+“      &lt;td&gt;2.234345&lt;/td&gt;n”,
+“      &lt;td&gt;4.391264&lt;/td&gt;n”,
+“      &lt;td&gt;4.418188&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.132106&lt;/td&gt;n”,
+“      &lt;td&gt;0.980370&lt;/td&gt;n”,
+“      &lt;td&gt;1.672495&lt;/td&gt;n”,
+“      &lt;td&gt;3.558780&lt;/td&gt;n”,
+“      &lt;td&gt;0.072055&lt;/td&gt;n”,
+“      &lt;td&gt;2.029817&lt;/td&gt;n”,
+“      &lt;td&gt;0.418454&lt;/td&gt;n”,
+“      &lt;td&gt;1.192156&lt;/td&gt;n”,
+“      &lt;td&gt;1.853873&lt;/td&gt;n”,
+“      &lt;td&gt;1.099853&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9536&lt;/th&gt;n”,
+“      &lt;td&gt;2.808824&lt;/td&gt;n”,
+“      &lt;td&gt;1.503026&lt;/td&gt;n”,
+“      &lt;td&gt;4.660236&lt;/td&gt;n”,
+“      &lt;td&gt;3.781434&lt;/td&gt;n”,
+“      &lt;td&gt;1.292014&lt;/td&gt;n”,
+“      &lt;td&gt;1.926411&lt;/td&gt;n”,
+“      &lt;td&gt;1.174456&lt;/td&gt;n”,
+“      &lt;td&gt;4.833678&lt;/td&gt;n”,
+“      &lt;td&gt;6.598332&lt;/td&gt;n”,
+“      &lt;td&gt;4.183246&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.833774&lt;/td&gt;n”,
+“      &lt;td&gt;1.562745&lt;/td&gt;n”,
+“      &lt;td&gt;2.589504&lt;/td&gt;n”,
+“      &lt;td&gt;5.134478&lt;/td&gt;n”,
+“      &lt;td&gt;1.171923&lt;/td&gt;n”,
+“      &lt;td&gt;1.833690&lt;/td&gt;n”,
+“      &lt;td&gt;2.468382&lt;/td&gt;n”,
+“      &lt;td&gt;4.154689&lt;/td&gt;n”,
+“      &lt;td&gt;2.939265&lt;/td&gt;n”,
+“      &lt;td&gt;2.304627&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9537&lt;/th&gt;n”,
+“      &lt;td&gt;1.579961&lt;/td&gt;n”,
+“      &lt;td&gt;0.518564&lt;/td&gt;n”,
+“      &lt;td&gt;2.777915&lt;/td&gt;n”,
+“      &lt;td&gt;0.865460&lt;/td&gt;n”,
+“      &lt;td&gt;0.373625&lt;/td&gt;n”,
+“      &lt;td&gt;1.167617&lt;/td&gt;n”,
+“      &lt;td&gt;0.173764&lt;/td&gt;n”,
+“      &lt;td&gt;2.826529&lt;/td&gt;n”,
+“      &lt;td&gt;4.751182&lt;/td&gt;n”,
+“      &lt;td&gt;4.572947&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.219681&lt;/td&gt;n”,
+“      &lt;td&gt;0.967018&lt;/td&gt;n”,
+“      &lt;td&gt;2.106584&lt;/td&gt;n”,
+“      &lt;td&gt;4.237208&lt;/td&gt;n”,
+“      &lt;td&gt;0.087220&lt;/td&gt;n”,
+“      &lt;td&gt;1.733176&lt;/td&gt;n”,
+“      &lt;td&gt;0.613084&lt;/td&gt;n”,
+“      &lt;td&gt;1.758543&lt;/td&gt;n”,
+“      &lt;td&gt;2.333462&lt;/td&gt;n”,
+“      &lt;td&gt;1.247311&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9538&lt;/th&gt;n”,
+“      &lt;td&gt;2.013838&lt;/td&gt;n”,
+“      &lt;td&gt;0.808357&lt;/td&gt;n”,
+“      &lt;td&gt;3.148299&lt;/td&gt;n”,
+“      &lt;td&gt;1.180536&lt;/td&gt;n”,
+“      &lt;td&gt;0.818062&lt;/td&gt;n”,
+“      &lt;td&gt;1.499798&lt;/td&gt;n”,
+“      &lt;td&gt;0.267851&lt;/td&gt;n”,
+“      &lt;td&gt;3.099998&lt;/td&gt;n”,
+“      &lt;td&gt;4.809313&lt;/td&gt;n”,
+“      &lt;td&gt;4.769134&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.497330&lt;/td&gt;n”,
+“      &lt;td&gt;1.301714&lt;/td&gt;n”,
+“      &lt;td&gt;2.513882&lt;/td&gt;n”,
+“      &lt;td&gt;4.128883&lt;/td&gt;n”,
+“      &lt;td&gt;0.159118&lt;/td&gt;n”,
+“      &lt;td&gt;2.036867&lt;/td&gt;n”,
+“      &lt;td&gt;1.212433&lt;/td&gt;n”,
+“      &lt;td&gt;1.859695&lt;/td&gt;n”,
+“      &lt;td&gt;2.457608&lt;/td&gt;n”,
+“      &lt;td&gt;1.816770&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/tbody&gt;n”,
+“&lt;/table&gt;n”,
+“&lt;p&gt;8856 rows × 18457 columns&lt;/p&gt;n”,
+“&lt;/div&gt;”</p>
+</dd>
+</dl>
+<p>],
+“text/plain”: [</p>
+<blockquote>
+<div><p>“            STRADA      ETV4     USP25    ZSWIM5  C21orf58  MIR497HG  \n”,
+“agg_0     2.932758  2.020476  4.795636  5.142194  1.721651  0.403188   n”,
+“agg_1     2.816624  1.938934  4.917684  5.402302  1.319163  0.393221   n”,
+“agg_2     2.742950  2.394729  4.805934  5.102471  1.731927  0.452663   n”,
+“agg_3     2.804515  2.358393  4.676318  5.462350  1.543962  0.483929   n”,
+“agg_4     2.815917  2.098659  4.594968  4.648893  1.517963  0.426446   n”,
+“…            …       …       …       …       …       …   n”,
+“agg_9533  2.510139  0.811121  5.367220  2.944120  0.668071  0.898573   n”,
+“agg_9535  1.245692  0.397959  2.112123  0.537773  0.231708  0.898190   n”,
+“agg_9536  2.808824  1.503026  4.660236  3.781434  1.292014  1.926411   n”,
+“agg_9537  1.579961  0.518564  2.777915  0.865460  0.373625  1.167617   n”,
+“agg_9538  2.013838  0.808357  3.148299  1.180536  0.818062  1.499798   n”,
+“n”,
+“            CFAP74      GSE1       LPP      CLK1  …    STRIP2  TNFRSF1A  \n”,
+“agg_0     3.207011  4.647735  4.823714  3.241457  …  1.804592  0.392356   n”,
+“agg_1     2.809423  4.842717  4.939364  2.980938  …  1.753353  0.307677   n”,
+“agg_2     2.778222  4.538105  4.443571  3.041557  …  1.804225  0.364422   n”,
+“agg_3     2.695394  4.411092  4.355472  3.220853  …  1.663766  0.429275   n”,
+“agg_4     3.173781  4.829787  4.389949  3.011941  …  2.119307  0.320393   n”,
+“…            …       …       …       …  …       …       …   n”,
+“agg_9533  0.737285  4.750776  7.324188  3.585325  …  0.258857  1.437364   n”,
+“agg_9535  0.114970  2.234345  4.391264  4.418188  …  0.132106  0.980370   n”,
+“agg_9536  1.174456  4.833678  6.598332  4.183246  …  0.833774  1.562745   n”,
+“agg_9537  0.173764  2.826529  4.751182  4.572947  …  0.219681  0.967018   n”,
+“agg_9538  0.267851  3.099998  4.809313  4.769134  …  0.497330  1.301714   n”,
+“n”,
+“          RBM14-RBM4   C1orf21  LINC00639     NPDC1    ZNF425    COL5A1  \n”,
+“agg_0       1.923160  4.256888   1.837033  3.382362  2.358378  2.471895   n”,
+“agg_1       2.096857  4.221365   1.679307  3.917950  2.459049  2.356942   n”,
+“agg_2       2.145009  4.004273   1.471316  4.249442  2.204638  2.687080   n”,
+“agg_3       2.065255  4.045637   1.837513  3.879115  2.242636  2.191440   n”,
+“agg_4       2.064416  3.868720   1.499770  4.144956  2.074824  2.375941   n”,
+“…              …       …        …       …       …       …   n”,
+“agg_9533    1.913985  4.471622   0.823436  1.486110  1.288418  3.211422   n”,
+“agg_9535    1.672495  3.558780   0.072055  2.029817  0.418454  1.192156   n”,
+“agg_9536    2.589504  5.134478   1.171923  1.833690  2.468382  4.154689   n”,
+“agg_9537    2.106584  4.237208   0.087220  1.733176  0.613084  1.758543   n”,
+“agg_9538    2.513882  4.128883   0.159118  2.036867  1.212433  1.859695   n”,
+“n”,
+“              BRD3     EVI5L  n”,
+“agg_0     2.808940  3.232095  n”,
+“agg_1     2.696189  3.447138  n”,
+“agg_2     2.793549  3.760900  n”,
+“agg_3     2.614539  3.287658  n”,
+“agg_4     2.745383  3.339186  n”,
+“…            …       …  n”,
+“agg_9533  2.712792  1.665431  n”,
+“agg_9535  1.853873  1.099853  n”,
+“agg_9536  2.939265  2.304627  n”,
+“agg_9537  2.333462  1.247311  n”,
+“agg_9538  2.457608  1.816770  n”,
+“n”,
+“[8856 rows x 18457 columns]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 2,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“result.predicted_expression_matrix(model_name=&quot;v1_rep0&quot;)”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “74b7cd00”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“and for the second model replicate.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 3,
+“id”: “95ebbd2f”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/html”: [</dt><dd><p>“&lt;div&gt;n”,
+“&lt;style scoped&gt;n”,
+“    .dataframe tbody tr th:only-of-type {n”,
+“        vertical-align: middle;n”,
+“    }n”,
+“n”,
+“    .dataframe tbody tr th {n”,
+“        vertical-align: top;n”,
+“    }n”,
+“n”,
+“    .dataframe thead th {n”,
+“        text-align: right;n”,
+“    }n”,
+“&lt;/style&gt;n”,
+“&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;n”,
+“  &lt;thead&gt;n”,
+“    &lt;tr style=&quot;text-align: right;&quot;&gt;n”,
+“      &lt;th&gt;&lt;/th&gt;n”,
+“      &lt;th&gt;STRADA&lt;/th&gt;n”,
+“      &lt;th&gt;ETV4&lt;/th&gt;n”,
+“      &lt;th&gt;USP25&lt;/th&gt;n”,
+“      &lt;th&gt;ZSWIM5&lt;/th&gt;n”,
+“      &lt;th&gt;C21orf58&lt;/th&gt;n”,
+“      &lt;th&gt;MIR497HG&lt;/th&gt;n”,
+“      &lt;th&gt;CFAP74&lt;/th&gt;n”,
+“      &lt;th&gt;GSE1&lt;/th&gt;n”,
+“      &lt;th&gt;LPP&lt;/th&gt;n”,
+“      &lt;th&gt;CLK1&lt;/th&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;th&gt;STRIP2&lt;/th&gt;n”,
+“      &lt;th&gt;TNFRSF1A&lt;/th&gt;n”,
+“      &lt;th&gt;RBM14-RBM4&lt;/th&gt;n”,
+“      &lt;th&gt;C1orf21&lt;/th&gt;n”,
+“      &lt;th&gt;LINC00639&lt;/th&gt;n”,
+“      &lt;th&gt;NPDC1&lt;/th&gt;n”,
+“      &lt;th&gt;ZNF425&lt;/th&gt;n”,
+“      &lt;th&gt;COL5A1&lt;/th&gt;n”,
+“      &lt;th&gt;BRD3&lt;/th&gt;n”,
+“      &lt;th&gt;EVI5L&lt;/th&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/thead&gt;n”,
+“  &lt;tbody&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_0&lt;/th&gt;n”,
+“      &lt;td&gt;2.892922&lt;/td&gt;n”,
+“      &lt;td&gt;1.268846&lt;/td&gt;n”,
+“      &lt;td&gt;4.257362&lt;/td&gt;n”,
+“      &lt;td&gt;5.062403&lt;/td&gt;n”,
+“      &lt;td&gt;1.708644&lt;/td&gt;n”,
+“      &lt;td&gt;0.509606&lt;/td&gt;n”,
+“      &lt;td&gt;2.129140&lt;/td&gt;n”,
+“      &lt;td&gt;5.102046&lt;/td&gt;n”,
+“      &lt;td&gt;3.987716&lt;/td&gt;n”,
+“      &lt;td&gt;3.229576&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.279328&lt;/td&gt;n”,
+“      &lt;td&gt;0.496723&lt;/td&gt;n”,
+“      &lt;td&gt;2.626515&lt;/td&gt;n”,
+“      &lt;td&gt;3.294918&lt;/td&gt;n”,
+“      &lt;td&gt;1.754605&lt;/td&gt;n”,
+“      &lt;td&gt;3.018026&lt;/td&gt;n”,
+“      &lt;td&gt;2.396543&lt;/td&gt;n”,
+“      &lt;td&gt;1.611294&lt;/td&gt;n”,
+“      &lt;td&gt;2.942932&lt;/td&gt;n”,
+“      &lt;td&gt;3.334204&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_1&lt;/th&gt;n”,
+“      &lt;td&gt;2.812950&lt;/td&gt;n”,
+“      &lt;td&gt;1.338056&lt;/td&gt;n”,
+“      &lt;td&gt;4.490562&lt;/td&gt;n”,
+“      &lt;td&gt;5.533390&lt;/td&gt;n”,
+“      &lt;td&gt;1.759490&lt;/td&gt;n”,
+“      &lt;td&gt;0.507474&lt;/td&gt;n”,
+“      &lt;td&gt;1.839018&lt;/td&gt;n”,
+“      &lt;td&gt;4.959751&lt;/td&gt;n”,
+“      &lt;td&gt;4.505932&lt;/td&gt;n”,
+“      &lt;td&gt;3.428190&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.428484&lt;/td&gt;n”,
+“      &lt;td&gt;0.463658&lt;/td&gt;n”,
+“      &lt;td&gt;2.532722&lt;/td&gt;n”,
+“      &lt;td&gt;4.212840&lt;/td&gt;n”,
+“      &lt;td&gt;1.994184&lt;/td&gt;n”,
+“      &lt;td&gt;3.312843&lt;/td&gt;n”,
+“      &lt;td&gt;2.755963&lt;/td&gt;n”,
+“      &lt;td&gt;1.515888&lt;/td&gt;n”,
+“      &lt;td&gt;2.539843&lt;/td&gt;n”,
+“      &lt;td&gt;3.585655&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_2&lt;/th&gt;n”,
+“      &lt;td&gt;2.971495&lt;/td&gt;n”,
+“      &lt;td&gt;1.536687&lt;/td&gt;n”,
+“      &lt;td&gt;4.427551&lt;/td&gt;n”,
+“      &lt;td&gt;5.517713&lt;/td&gt;n”,
+“      &lt;td&gt;1.655871&lt;/td&gt;n”,
+“      &lt;td&gt;0.504365&lt;/td&gt;n”,
+“      &lt;td&gt;1.900368&lt;/td&gt;n”,
+“      &lt;td&gt;4.990572&lt;/td&gt;n”,
+“      &lt;td&gt;4.717015&lt;/td&gt;n”,
+“      &lt;td&gt;3.675014&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.258069&lt;/td&gt;n”,
+“      &lt;td&gt;0.498031&lt;/td&gt;n”,
+“      &lt;td&gt;2.830813&lt;/td&gt;n”,
+“      &lt;td&gt;3.899091&lt;/td&gt;n”,
+“      &lt;td&gt;1.731513&lt;/td&gt;n”,
+“      &lt;td&gt;3.000879&lt;/td&gt;n”,
+“      &lt;td&gt;2.582952&lt;/td&gt;n”,
+“      &lt;td&gt;1.570875&lt;/td&gt;n”,
+“      &lt;td&gt;2.792023&lt;/td&gt;n”,
+“      &lt;td&gt;3.834818&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_3&lt;/th&gt;n”,
+“      &lt;td&gt;3.346772&lt;/td&gt;n”,
+“      &lt;td&gt;1.558132&lt;/td&gt;n”,
+“      &lt;td&gt;4.612154&lt;/td&gt;n”,
+“      &lt;td&gt;4.838746&lt;/td&gt;n”,
+“      &lt;td&gt;1.690119&lt;/td&gt;n”,
+“      &lt;td&gt;0.695964&lt;/td&gt;n”,
+“      &lt;td&gt;2.075206&lt;/td&gt;n”,
+“      &lt;td&gt;3.900921&lt;/td&gt;n”,
+“      &lt;td&gt;4.603170&lt;/td&gt;n”,
+“      &lt;td&gt;3.397104&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.024333&lt;/td&gt;n”,
+“      &lt;td&gt;0.464141&lt;/td&gt;n”,
+“      &lt;td&gt;2.634533&lt;/td&gt;n”,
+“      &lt;td&gt;4.260577&lt;/td&gt;n”,
+“      &lt;td&gt;1.873491&lt;/td&gt;n”,
+“      &lt;td&gt;3.353543&lt;/td&gt;n”,
+“      &lt;td&gt;2.285160&lt;/td&gt;n”,
+“      &lt;td&gt;1.407212&lt;/td&gt;n”,
+“      &lt;td&gt;2.382554&lt;/td&gt;n”,
+“      &lt;td&gt;3.494318&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_4&lt;/th&gt;n”,
+“      &lt;td&gt;3.088684&lt;/td&gt;n”,
+“      &lt;td&gt;1.522742&lt;/td&gt;n”,
+“      &lt;td&gt;4.351163&lt;/td&gt;n”,
+“      &lt;td&gt;4.806933&lt;/td&gt;n”,
+“      &lt;td&gt;1.668947&lt;/td&gt;n”,
+“      &lt;td&gt;0.553315&lt;/td&gt;n”,
+“      &lt;td&gt;1.892262&lt;/td&gt;n”,
+“      &lt;td&gt;4.495190&lt;/td&gt;n”,
+“      &lt;td&gt;4.887375&lt;/td&gt;n”,
+“      &lt;td&gt;3.282181&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;3.286668&lt;/td&gt;n”,
+“      &lt;td&gt;0.475796&lt;/td&gt;n”,
+“      &lt;td&gt;2.699739&lt;/td&gt;n”,
+“      &lt;td&gt;4.285741&lt;/td&gt;n”,
+“      &lt;td&gt;1.986780&lt;/td&gt;n”,
+“      &lt;td&gt;3.199118&lt;/td&gt;n”,
+“      &lt;td&gt;2.432456&lt;/td&gt;n”,
+“      &lt;td&gt;1.463589&lt;/td&gt;n”,
+“      &lt;td&gt;2.867734&lt;/td&gt;n”,
+“      &lt;td&gt;3.607585&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9533&lt;/th&gt;n”,
+“      &lt;td&gt;2.760382&lt;/td&gt;n”,
+“      &lt;td&gt;0.603564&lt;/td&gt;n”,
+“      &lt;td&gt;4.133419&lt;/td&gt;n”,
+“      &lt;td&gt;2.195248&lt;/td&gt;n”,
+“      &lt;td&gt;1.040137&lt;/td&gt;n”,
+“      &lt;td&gt;0.813743&lt;/td&gt;n”,
+“      &lt;td&gt;0.439841&lt;/td&gt;n”,
+“      &lt;td&gt;4.018094&lt;/td&gt;n”,
+“      &lt;td&gt;6.189613&lt;/td&gt;n”,
+“      &lt;td&gt;3.845854&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.460953&lt;/td&gt;n”,
+“      &lt;td&gt;2.616969&lt;/td&gt;n”,
+“      &lt;td&gt;2.051131&lt;/td&gt;n”,
+“      &lt;td&gt;3.720593&lt;/td&gt;n”,
+“      &lt;td&gt;0.373556&lt;/td&gt;n”,
+“      &lt;td&gt;1.720908&lt;/td&gt;n”,
+“      &lt;td&gt;0.799354&lt;/td&gt;n”,
+“      &lt;td&gt;2.626200&lt;/td&gt;n”,
+“      &lt;td&gt;2.094780&lt;/td&gt;n”,
+“      &lt;td&gt;2.103047&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9535&lt;/th&gt;n”,
+“      &lt;td&gt;1.192427&lt;/td&gt;n”,
+“      &lt;td&gt;0.355300&lt;/td&gt;n”,
+“      &lt;td&gt;1.690948&lt;/td&gt;n”,
+“      &lt;td&gt;0.294813&lt;/td&gt;n”,
+“      &lt;td&gt;0.529883&lt;/td&gt;n”,
+“      &lt;td&gt;1.071292&lt;/td&gt;n”,
+“      &lt;td&gt;0.109688&lt;/td&gt;n”,
+“      &lt;td&gt;1.716427&lt;/td&gt;n”,
+“      &lt;td&gt;2.887877&lt;/td&gt;n”,
+“      &lt;td&gt;4.564609&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.117188&lt;/td&gt;n”,
+“      &lt;td&gt;1.749936&lt;/td&gt;n”,
+“      &lt;td&gt;1.504746&lt;/td&gt;n”,
+“      &lt;td&gt;2.753326&lt;/td&gt;n”,
+“      &lt;td&gt;0.032030&lt;/td&gt;n”,
+“      &lt;td&gt;2.539737&lt;/td&gt;n”,
+“      &lt;td&gt;0.283777&lt;/td&gt;n”,
+“      &lt;td&gt;1.469010&lt;/td&gt;n”,
+“      &lt;td&gt;1.537342&lt;/td&gt;n”,
+“      &lt;td&gt;1.323113&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9536&lt;/th&gt;n”,
+“      &lt;td&gt;3.369931&lt;/td&gt;n”,
+“      &lt;td&gt;0.922407&lt;/td&gt;n”,
+“      &lt;td&gt;4.246971&lt;/td&gt;n”,
+“      &lt;td&gt;3.432078&lt;/td&gt;n”,
+“      &lt;td&gt;1.621070&lt;/td&gt;n”,
+“      &lt;td&gt;1.825625&lt;/td&gt;n”,
+“      &lt;td&gt;0.817042&lt;/td&gt;n”,
+“      &lt;td&gt;4.820827&lt;/td&gt;n”,
+“      &lt;td&gt;6.642282&lt;/td&gt;n”,
+“      &lt;td&gt;4.045234&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.992599&lt;/td&gt;n”,
+“      &lt;td&gt;1.805059&lt;/td&gt;n”,
+“      &lt;td&gt;3.023350&lt;/td&gt;n”,
+“      &lt;td&gt;4.650090&lt;/td&gt;n”,
+“      &lt;td&gt;0.711800&lt;/td&gt;n”,
+“      &lt;td&gt;2.415006&lt;/td&gt;n”,
+“      &lt;td&gt;1.855187&lt;/td&gt;n”,
+“      &lt;td&gt;3.172574&lt;/td&gt;n”,
+“      &lt;td&gt;2.799354&lt;/td&gt;n”,
+“      &lt;td&gt;2.962450&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9537&lt;/th&gt;n”,
+“      &lt;td&gt;1.533311&lt;/td&gt;n”,
+“      &lt;td&gt;0.472664&lt;/td&gt;n”,
+“      &lt;td&gt;2.386347&lt;/td&gt;n”,
+“      &lt;td&gt;0.445858&lt;/td&gt;n”,
+“      &lt;td&gt;0.655848&lt;/td&gt;n”,
+“      &lt;td&gt;1.248309&lt;/td&gt;n”,
+“      &lt;td&gt;0.157859&lt;/td&gt;n”,
+“      &lt;td&gt;1.858983&lt;/td&gt;n”,
+“      &lt;td&gt;3.740174&lt;/td&gt;n”,
+“      &lt;td&gt;5.334047&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.221859&lt;/td&gt;n”,
+“      &lt;td&gt;1.986270&lt;/td&gt;n”,
+“      &lt;td&gt;2.305407&lt;/td&gt;n”,
+“      &lt;td&gt;3.003855&lt;/td&gt;n”,
+“      &lt;td&gt;0.045920&lt;/td&gt;n”,
+“      &lt;td&gt;1.986692&lt;/td&gt;n”,
+“      &lt;td&gt;0.455313&lt;/td&gt;n”,
+“      &lt;td&gt;1.756422&lt;/td&gt;n”,
+“      &lt;td&gt;2.054446&lt;/td&gt;n”,
+“      &lt;td&gt;1.544962&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9538&lt;/th&gt;n”,
+“      &lt;td&gt;2.077998&lt;/td&gt;n”,
+“      &lt;td&gt;0.637752&lt;/td&gt;n”,
+“      &lt;td&gt;2.782059&lt;/td&gt;n”,
+“      &lt;td&gt;0.618168&lt;/td&gt;n”,
+“      &lt;td&gt;1.017707&lt;/td&gt;n”,
+“      &lt;td&gt;1.815663&lt;/td&gt;n”,
+“      &lt;td&gt;0.241223&lt;/td&gt;n”,
+“      &lt;td&gt;2.105849&lt;/td&gt;n”,
+“      &lt;td&gt;4.217391&lt;/td&gt;n”,
+“      &lt;td&gt;4.784609&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;0.379386&lt;/td&gt;n”,
+“      &lt;td&gt;2.361434&lt;/td&gt;n”,
+“      &lt;td&gt;2.744125&lt;/td&gt;n”,
+“      &lt;td&gt;3.384300&lt;/td&gt;n”,
+“      &lt;td&gt;0.075347&lt;/td&gt;n”,
+“      &lt;td&gt;2.696805&lt;/td&gt;n”,
+“      &lt;td&gt;0.822292&lt;/td&gt;n”,
+“      &lt;td&gt;2.332086&lt;/td&gt;n”,
+“      &lt;td&gt;2.385205&lt;/td&gt;n”,
+“      &lt;td&gt;2.119385&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/tbody&gt;n”,
+“&lt;/table&gt;n”,
+“&lt;p&gt;8856 rows × 18457 columns&lt;/p&gt;n”,
+“&lt;/div&gt;”</p>
+</dd>
+</dl>
+<p>],
+“text/plain”: [</p>
+<blockquote>
+<div><p>“            STRADA      ETV4     USP25    ZSWIM5  C21orf58  MIR497HG  \n”,
+“agg_0     2.892922  1.268846  4.257362  5.062403  1.708644  0.509606   n”,
+“agg_1     2.812950  1.338056  4.490562  5.533390  1.759490  0.507474   n”,
+“agg_2     2.971495  1.536687  4.427551  5.517713  1.655871  0.504365   n”,
+“agg_3     3.346772  1.558132  4.612154  4.838746  1.690119  0.695964   n”,
+“agg_4     3.088684  1.522742  4.351163  4.806933  1.668947  0.553315   n”,
+“…            …       …       …       …       …       …   n”,
+“agg_9533  2.760382  0.603564  4.133419  2.195248  1.040137  0.813743   n”,
+“agg_9535  1.192427  0.355300  1.690948  0.294813  0.529883  1.071292   n”,
+“agg_9536  3.369931  0.922407  4.246971  3.432078  1.621070  1.825625   n”,
+“agg_9537  1.533311  0.472664  2.386347  0.445858  0.655848  1.248309   n”,
+“agg_9538  2.077998  0.637752  2.782059  0.618168  1.017707  1.815663   n”,
+“n”,
+“            CFAP74      GSE1       LPP      CLK1  …    STRIP2  TNFRSF1A  \n”,
+“agg_0     2.129140  5.102046  3.987716  3.229576  …  3.279328  0.496723   n”,
+“agg_1     1.839018  4.959751  4.505932  3.428190  …  3.428484  0.463658   n”,
+“agg_2     1.900368  4.990572  4.717015  3.675014  …  3.258069  0.498031   n”,
+“agg_3     2.075206  3.900921  4.603170  3.397104  …  3.024333  0.464141   n”,
+“agg_4     1.892262  4.495190  4.887375  3.282181  …  3.286668  0.475796   n”,
+“…            …       …       …       …  …       …       …   n”,
+“agg_9533  0.439841  4.018094  6.189613  3.845854  …  0.460953  2.616969   n”,
+“agg_9535  0.109688  1.716427  2.887877  4.564609  …  0.117188  1.749936   n”,
+“agg_9536  0.817042  4.820827  6.642282  4.045234  …  0.992599  1.805059   n”,
+“agg_9537  0.157859  1.858983  3.740174  5.334047  …  0.221859  1.986270   n”,
+“agg_9538  0.241223  2.105849  4.217391  4.784609  …  0.379386  2.361434   n”,
+“n”,
+“          RBM14-RBM4   C1orf21  LINC00639     NPDC1    ZNF425    COL5A1  \n”,
+“agg_0       2.626515  3.294918   1.754605  3.018026  2.396543  1.611294   n”,
+“agg_1       2.532722  4.212840   1.994184  3.312843  2.755963  1.515888   n”,
+“agg_2       2.830813  3.899091   1.731513  3.000879  2.582952  1.570875   n”,
+“agg_3       2.634533  4.260577   1.873491  3.353543  2.285160  1.407212   n”,
+“agg_4       2.699739  4.285741   1.986780  3.199118  2.432456  1.463589   n”,
+“…              …       …        …       …       …       …   n”,
+“agg_9533    2.051131  3.720593   0.373556  1.720908  0.799354  2.626200   n”,
+“agg_9535    1.504746  2.753326   0.032030  2.539737  0.283777  1.469010   n”,
+“agg_9536    3.023350  4.650090   0.711800  2.415006  1.855187  3.172574   n”,
+“agg_9537    2.305407  3.003855   0.045920  1.986692  0.455313  1.756422   n”,
+“agg_9538    2.744125  3.384300   0.075347  2.696805  0.822292  2.332086   n”,
+“n”,
+“              BRD3     EVI5L  n”,
+“agg_0     2.942932  3.334204  n”,
+“agg_1     2.539843  3.585655  n”,
+“agg_2     2.792023  3.834818  n”,
+“agg_3     2.382554  3.494318  n”,
+“agg_4     2.867734  3.607585  n”,
+“…            …       …  n”,
+“agg_9533  2.094780  2.103047  n”,
+“agg_9535  1.537342  1.323113  n”,
+“agg_9536  2.799354  2.962450  n”,
+“agg_9537  2.054446  1.544962  n”,
+“agg_9538  2.385205  2.119385  n”,
+“n”,
+“[8856 rows x 18457 columns]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 3,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“result.predicted_expression_matrix(model_name=&quot;v1_rep1&quot;)”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 4,
+“id”: “3435f5fc”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/plain”: [</dt><dd><p>“Layers with keys: preds, v1_rep0, v1_rep1, v1_rep2, v1_rep3”</p>
+</dd>
+</dl>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 4,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“result.anndata.layers”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “345ff486”,
+“metadata”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“vscode”: {</dt><dd><p>“languageId”: “plaintext”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>},
+“source”: [</p>
+<blockquote>
+<div><p>“### CLI API”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “86e9f055”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“If you want to perform gene expression prediction again, rather than using the precomputed scores, you can use the Decima command-line interface (CLI) to generate new predictions for any set of genes you specify. For example, you can run the <cite>decima predict-genes</cite> command with the <cite>–genes</cite> argument to provide a comma-separated list of gene names (such as &quot;STRADA,ETV4,USP25&quot;) if no gene provided it will perform expression predictions for all genes, select the prediction model with the <cite>–model</cite> option (for instance, &quot;ensemble&quot; or a specific replicate like &quot;0&quot;), and use <cite>–save-replicates</cite> to save predictions for each replicate. The <cite>-o</cite> flag lets you specify the output file path for the predictions in <cite>.h5ad</cite> format. “</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 5,
+“id”: “6715257c”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stdout”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“decima - INFO - Using device: cuda and genome: hg38 for prediction.n”,
+“u001b[34mu001b[1mwandbu001b[0m: Currently logged in as: u001b[33mmhceliku001b[0m (u001b[33mmhcwu001b[0m) to u001b[32mhttps://api.wandb.aiu001b[0m. Use u001b[1m`wandb login –relogin`u001b[0m to force reloginn”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep0:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1433.8MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep1:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1374.8MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep2:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.7 (1016.5MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep3:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1371.2MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact metadata:latest, 3122.32MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:1.5 (2022.8MB/s)n”,
+“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The <cite>srun</cite> command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with <cite>srun</cite> like so: srun python3.11 /home/celikm5/miniforge3/envs/decima/bin/decima  …n”,
+“Using default <cite>ModelCheckpoint</cite>. Consider installing <cite>litmodels</cite> package to enable <cite>LitModelCheckpoint</cite> for automatic upload to the Lightning model registry.n”,
+“GPU available: True (cuda), used: Truen”,
+“TPU available: False, using: 0 TPU coresn”,
+“HPU available: False, using: 0 HPUsn”,
+“LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]n”,
+“Predicting DataLoader 0: 100%|████████████████████| 1/1 [00:06&lt;00:00,  0.15it/s]n”,
+“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The <code class="docutils literal notranslate"><span class="pre">compute</span></code> method of metric WarningCounter was called before the <code class="docutils literal notranslate"><span class="pre">update</span></code> method which may lead to errors, as metric states have not yet been updated.n”,
+“u001b[0m”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“! decima predict-genes –genes &quot;STRADA,ETV4,USP25&quot; –model ensemble –save-replicates -o example/predict_genes/predictions.h5ad “</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “4d2c0356”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“After running this command, you can load the resulting predictions in Python using the <cite>DecimaResult</cite> class and access the predicted expression matrix as:”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 6,
+“id”: “e598b85c”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/html”: [</dt><dd><p>“&lt;div&gt;n”,
+“&lt;style scoped&gt;n”,
+“    .dataframe tbody tr th:only-of-type {n”,
+“        vertical-align: middle;n”,
+“    }n”,
+“n”,
+“    .dataframe tbody tr th {n”,
+“        vertical-align: top;n”,
+“    }n”,
+“n”,
+“    .dataframe thead th {n”,
+“        text-align: right;n”,
+“    }n”,
+“&lt;/style&gt;n”,
+“&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;n”,
+“  &lt;thead&gt;n”,
+“    &lt;tr style=&quot;text-align: right;&quot;&gt;n”,
+“      &lt;th&gt;&lt;/th&gt;n”,
+“      &lt;th&gt;STRADA&lt;/th&gt;n”,
+“      &lt;th&gt;ETV4&lt;/th&gt;n”,
+“      &lt;th&gt;USP25&lt;/th&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/thead&gt;n”,
+“  &lt;tbody&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_0&lt;/th&gt;n”,
+“      &lt;td&gt;2.973423&lt;/td&gt;n”,
+“      &lt;td&gt;1.845874&lt;/td&gt;n”,
+“      &lt;td&gt;4.592660&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_1&lt;/th&gt;n”,
+“      &lt;td&gt;2.954493&lt;/td&gt;n”,
+“      &lt;td&gt;1.897248&lt;/td&gt;n”,
+“      &lt;td&gt;4.688962&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_2&lt;/th&gt;n”,
+“      &lt;td&gt;2.938927&lt;/td&gt;n”,
+“      &lt;td&gt;2.197576&lt;/td&gt;n”,
+“      &lt;td&gt;4.861925&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_3&lt;/th&gt;n”,
+“      &lt;td&gt;3.046052&lt;/td&gt;n”,
+“      &lt;td&gt;2.138910&lt;/td&gt;n”,
+“      &lt;td&gt;4.864000&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_4&lt;/th&gt;n”,
+“      &lt;td&gt;3.025393&lt;/td&gt;n”,
+“      &lt;td&gt;2.019534&lt;/td&gt;n”,
+“      &lt;td&gt;4.602815&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9533&lt;/th&gt;n”,
+“      &lt;td&gt;2.334128&lt;/td&gt;n”,
+“      &lt;td&gt;0.633340&lt;/td&gt;n”,
+“      &lt;td&gt;4.675878&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9535&lt;/th&gt;n”,
+“      &lt;td&gt;0.835045&lt;/td&gt;n”,
+“      &lt;td&gt;0.358672&lt;/td&gt;n”,
+“      &lt;td&gt;1.964816&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9536&lt;/th&gt;n”,
+“      &lt;td&gt;3.008091&lt;/td&gt;n”,
+“      &lt;td&gt;1.209339&lt;/td&gt;n”,
+“      &lt;td&gt;4.798233&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9537&lt;/th&gt;n”,
+“      &lt;td&gt;1.241775&lt;/td&gt;n”,
+“      &lt;td&gt;0.455031&lt;/td&gt;n”,
+“      &lt;td&gt;2.919700&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9538&lt;/th&gt;n”,
+“      &lt;td&gt;1.715322&lt;/td&gt;n”,
+“      &lt;td&gt;0.700902&lt;/td&gt;n”,
+“      &lt;td&gt;3.044498&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/tbody&gt;n”,
+“&lt;/table&gt;n”,
+“&lt;p&gt;8856 rows × 3 columns&lt;/p&gt;n”,
+“&lt;/div&gt;”</p>
+</dd>
+</dl>
+<p>],
+“text/plain”: [</p>
+<blockquote>
+<div><p>“            STRADA      ETV4     USP25n”,
+“agg_0     2.973423  1.845874  4.592660n”,
+“agg_1     2.954493  1.897248  4.688962n”,
+“agg_2     2.938927  2.197576  4.861925n”,
+“agg_3     3.046052  2.138910  4.864000n”,
+“agg_4     3.025393  2.019534  4.602815n”,
+“…            …       …       …n”,
+“agg_9533  2.334128  0.633340  4.675878n”,
+“agg_9535  0.835045  0.358672  1.964816n”,
+“agg_9536  3.008091  1.209339  4.798233n”,
+“agg_9537  1.241775  0.455031  2.919700n”,
+“agg_9538  1.715322  0.700902  3.044498n”,
+“n”,
+“[8856 rows x 3 columns]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 6,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“result = DecimaResult.load(&quot;example/predict_genes/predictions.h5ad&quot;)n”,
+“result.predicted_expression_matrix()”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “1da2ab16”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“or for a specific replicate:”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 7,
+“id”: “ce3884f4”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“text/html”: [</dt><dd><p>“&lt;div&gt;n”,
+“&lt;style scoped&gt;n”,
+“    .dataframe tbody tr th:only-of-type {n”,
+“        vertical-align: middle;n”,
+“    }n”,
+“n”,
+“    .dataframe tbody tr th {n”,
+“        vertical-align: top;n”,
+“    }n”,
+“n”,
+“    .dataframe thead th {n”,
+“        text-align: right;n”,
+“    }n”,
+“&lt;/style&gt;n”,
+“&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;n”,
+“  &lt;thead&gt;n”,
+“    &lt;tr style=&quot;text-align: right;&quot;&gt;n”,
+“      &lt;th&gt;&lt;/th&gt;n”,
+“      &lt;th&gt;STRADA&lt;/th&gt;n”,
+“      &lt;th&gt;ETV4&lt;/th&gt;n”,
+“      &lt;th&gt;USP25&lt;/th&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/thead&gt;n”,
+“  &lt;tbody&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_0&lt;/th&gt;n”,
+“      &lt;td&gt;2.932055&lt;/td&gt;n”,
+“      &lt;td&gt;2.022040&lt;/td&gt;n”,
+“      &lt;td&gt;4.795146&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_1&lt;/th&gt;n”,
+“      &lt;td&gt;2.816373&lt;/td&gt;n”,
+“      &lt;td&gt;1.940856&lt;/td&gt;n”,
+“      &lt;td&gt;4.917033&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_2&lt;/th&gt;n”,
+“      &lt;td&gt;2.742780&lt;/td&gt;n”,
+“      &lt;td&gt;2.396595&lt;/td&gt;n”,
+“      &lt;td&gt;4.806089&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_3&lt;/th&gt;n”,
+“      &lt;td&gt;2.804382&lt;/td&gt;n”,
+“      &lt;td&gt;2.360139&lt;/td&gt;n”,
+“      &lt;td&gt;4.676453&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_4&lt;/th&gt;n”,
+“      &lt;td&gt;2.815311&lt;/td&gt;n”,
+“      &lt;td&gt;2.100366&lt;/td&gt;n”,
+“      &lt;td&gt;4.594069&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;…&lt;/th&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“      &lt;td&gt;…&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9533&lt;/th&gt;n”,
+“      &lt;td&gt;2.510625&lt;/td&gt;n”,
+“      &lt;td&gt;0.811365&lt;/td&gt;n”,
+“      &lt;td&gt;5.366706&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9535&lt;/th&gt;n”,
+“      &lt;td&gt;1.245751&lt;/td&gt;n”,
+“      &lt;td&gt;0.397869&lt;/td&gt;n”,
+“      &lt;td&gt;2.111997&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9536&lt;/th&gt;n”,
+“      &lt;td&gt;2.808623&lt;/td&gt;n”,
+“      &lt;td&gt;1.503265&lt;/td&gt;n”,
+“      &lt;td&gt;4.659208&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9537&lt;/th&gt;n”,
+“      &lt;td&gt;1.580037&lt;/td&gt;n”,
+“      &lt;td&gt;0.518710&lt;/td&gt;n”,
+“      &lt;td&gt;2.777559&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“    &lt;tr&gt;n”,
+“      &lt;th&gt;agg_9538&lt;/th&gt;n”,
+“      &lt;td&gt;2.013807&lt;/td&gt;n”,
+“      &lt;td&gt;0.808542&lt;/td&gt;n”,
+“      &lt;td&gt;3.147933&lt;/td&gt;n”,
+“    &lt;/tr&gt;n”,
+“  &lt;/tbody&gt;n”,
+“&lt;/table&gt;n”,
+“&lt;p&gt;8856 rows × 3 columns&lt;/p&gt;n”,
+“&lt;/div&gt;”</p>
+</dd>
+</dl>
+<p>],
+“text/plain”: [</p>
+<blockquote>
+<div><p>“            STRADA      ETV4     USP25n”,
+“agg_0     2.932055  2.022040  4.795146n”,
+“agg_1     2.816373  1.940856  4.917033n”,
+“agg_2     2.742780  2.396595  4.806089n”,
+“agg_3     2.804382  2.360139  4.676453n”,
+“agg_4     2.815311  2.100366  4.594069n”,
+“…            …       …       …n”,
+“agg_9533  2.510625  0.811365  5.366706n”,
+“agg_9535  1.245751  0.397869  2.111997n”,
+“agg_9536  2.808623  1.503265  4.659208n”,
+“agg_9537  1.580037  0.518710  2.777559n”,
+“agg_9538  2.013807  0.808542  3.147933n”,
+“n”,
+“[8856 rows x 3 columns]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“execution_count”: 7,
+“metadata”: {},
+“output_type”: “execute_result”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“result.predicted_expression_matrix(model_name=&quot;preds_v1_rep0&quot;)”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “316629fe”,
+“metadata”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“vscode”: {</dt><dd><p>“languageId”: “plaintext”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>},
+“source”: [</p>
+<blockquote>
+<div><p>“### Python API”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “552b7245”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“The same functionality is available through the Python API, allowing you to perform gene expression prediction programmatically. You can specify the genes, model, and other options directly in your Python code using the provided classes and functions.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 8,
+“id”: “3a0dba6e”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep0:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1404.0MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep1:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.6 (1277.2MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep2:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.6 (1157.4MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep3:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1321.9MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact metadata:latest, 3122.32MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:1.6 (1932.7MB/s)n”,
+“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The <cite>srun</cite> command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with <cite>srun</cite> like so: srun python /home/celikm5/miniforge3/envs/decima/lib/python3.11/ …n”,
+“Using default <cite>ModelCheckpoint</cite>. Consider installing <cite>litmodels</cite> package to enable <cite>LitModelCheckpoint</cite> for automatic upload to the Lightning model registry.n”,
+“GPU available: True (cuda), used: Truen”,
+“TPU available: False, using: 0 TPU coresn”,
+“HPU available: False, using: 0 HPUsn”,
+“LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]n”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“application/vnd.jupyter.widget-view+json”: {</dt><dd><p>“model_id”: “3ab38f07a0724d099bcbaee7e9211463”,
+“version_major”: 2,
+“version_minor”: 0</p>
+</dd>
+</dl>
+<p>},
+“text/plain”: [</p>
+<blockquote>
+<div><p>“Predicting: |          | 0/? [00:00&lt;?, ?it/s]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“metadata”: {},
+“output_type”: “display_data”</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The <code class="docutils literal notranslate"><span class="pre">compute</span></code> method of metric WarningCounter was called before the <code class="docutils literal notranslate"><span class="pre">update</span></code> method which may lead to errors, as metric states have not yet been updated.n”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“from decima.tools.inference import predict_gene_expressionn”,
+“n”,
+“ad = predict_gene_expression(n”,
+“    genes=[&quot;STRADA&quot;, &quot;ETV4&quot;, &quot;USP25&quot;],n”,
+“    model=&quot;ensemble&quot;,n”,
+“)”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “346e4199”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“### Developer API”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “f3eac4fb”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“Under the hood, the Decima prediction API uses the <cite>GeneDataset</cite> and <cite>SeqDataset</cite> pytorch Dataset classes to prepare the data for prediction. These classes provide a flexible way to handle different types of input data, including custom genes and DNA sequences. Internally, these datasets represent sequences using one-hot encoding and apply a gene mask to indicate which positions correspond to gene regions.n”,
+“n”,
+“For example, you can create a <cite>GeneDataset</cite> object to predict expression for the genes in your metadata. The <cite>predict_on_dataset</cite> method returns a dictionary containing the predicted expression values and if there is any warnings.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: null,
+“id”: “d147aaff”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact rep0:latest, 720.03MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:0.5 (1333.5MB/s)n”,
+“u001b[34mu001b[1mwandbu001b[0m: Downloading large artifact metadata:latest, 3122.32MB. 1 files… n”,
+“u001b[34mu001b[1mwandbu001b[0m:   1 of 1 files downloaded.  n”,
+“Done. 0:0:1.6 (2010.7MB/s)n”,
+“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The <cite>srun</cite> command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with <cite>srun</cite> like so: srun python /home/celikm5/miniforge3/envs/decima/lib/python3.11/ …n”,
+“Using default <cite>ModelCheckpoint</cite>. Consider installing <cite>litmodels</cite> package to enable <cite>LitModelCheckpoint</cite> for automatic upload to the Lightning model registry.n”,
+“GPU available: True (cuda), used: Truen”,
+“TPU available: False, using: 0 TPU coresn”,
+“HPU available: False, using: 0 HPUsn”,
+“LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]n”,
+“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The ‘predict_dataloader’ does not have many workers which may be a bottleneck. Consider increasing the value of the <cite>num_workers</cite> argument` to <cite>num_workers=7</cite> in the <cite>DataLoader</cite> to improve performance.n”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“application/vnd.jupyter.widget-view+json”: {</dt><dd><p>“model_id”: “3ff66d87baf44d02998ba910f6ed5217”,
+“version_major”: 2,
+“version_minor”: 0</p>
+</dd>
+</dl>
+<p>},
+“text/plain”: [</p>
+<blockquote>
+<div><p>“Predicting: |          | 0/? [00:00&lt;?, ?it/s]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“metadata”: {},
+“output_type”: “display_data”</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“name”: “stdout”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“{‘expression’: array([[2.9320552 , 2.8163733 , 2.7427804 , …, 2.808623  , 1.5800365 ,n”,
+“        2.0138068 ],n”,
+“       [2.0220397 , 1.9408565 , 2.3965948 , …, 1.5032653 , 0.51870984,n”,
+“        0.80854166],n”,
+“       [4.7951455 , 4.9170327 , 4.806089  , …, 4.659208  , 2.7775593 ,n”,
+“        3.1479335 ]], dtype=float32),n”,
+“ ‘warnings’: Counter({‘unknown’: tensor(0),n”,
+“                      ‘allele_mismatch_with_reference_genome’: tensor(0)})}n”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: The <code class="docutils literal notranslate"><span class="pre">compute</span></code> method of metric WarningCounter was called before the <code class="docutils literal notranslate"><span class="pre">update</span></code> method which may lead to errors, as metric states have not yet been updated.n”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“from pprint import pprintn”,
+“from decima.data.dataset import GeneDatasetn”,
+“from decima.hub import load_decima_modeln”,
+“n”,
+“model = load_decima_model(&quot;rep0&quot;, device=0)n”,
+“ds = GeneDataset(genes=[&quot;STRADA&quot;, &quot;ETV4&quot;, &quot;USP25&quot;])n”,
+“n”,
+“preds = model.predict_on_dataset(ds, device=0)n”,
+“pprint(preds)”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “e91934dd”,
+“metadata”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“vscode”: {</dt><dd><p>“languageId”: “plaintext”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>},
+“source”: [</p>
+<blockquote>
+<div><p>“## Custom Expression for custom genes”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “7cd07af0”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“If you have custom genes, you can create a <cite>SeqDataset</cite> object to predict expression for those genes. n”,
+“n”,
+“To do this, prepare a FASTA file where:n”,
+“  - Each sequence is exactly the Decima context size (524,288 bases).n”,
+“  - The FASTA header for each sequence must include the gene name and the gene mask coordinates, using the format:n”,
+“        <cite>&gt;gene_name|gene_mask_start=X|gene_mask_end=Y</cite>n”,
+“    where <cite>X</cite> and <cite>Y</cite> specify the start and end positions (0-based, inclusive) of the gene region within the sequence. The gene mask indicates which region of the sequence corresponds to the gene for which expression will be predicted.n”,
+“n”,
+“For example, seqs.fasta contains these information:”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: 10,
+“id”: “2dfbdb1a”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stdout”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“&gt;CD68|gene_mask_start=163840|gene_mask_end=166460n”,
+“CTCTGCAGAGAGCGAGGACGGTGTGTCTGCCAGCGCCTTTGACTTCACTGTCTCCAACTTTGTGGACAACCTGTATGGCTACCCGGAAGGCAAGGATGTGCTTCGGGAGACCATCAAGTTTATGTACACAGACTGGGCCGACCGGGACAATGGCGAAATGCGCCGCAAAACCCTGCTGGCGCTCTTTACTGACCACCAATn”,
+“&gt;SPI1|gene_mask_start=163840|gene_mask_end=187556n”,
+“TGCCACTTTTAGATATGTTCATGGGTGCAGATACGGCTTTATTTATTTGAGACAGAGTTTCACTCTTGTTGCCCAGGGTGGAGTGCAGTGGTGCGATCTCAGCTCACTGCAGCCTTCGCCTCCCGGGTTGAAGCGATTCTTCTGCCTCAACCTCGAGTAGCTGGGATTATAGGCACCTGCCAGCATGCCTGGCTAATTTTn”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“! cat ../tests/data/seqs.fasta | cut -c 1-200”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “code”,
+“execution_count”: null,
+“id”: “0d15ea9e”,
+“metadata”: {},
+“outputs”: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>“name”: “stderr”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“Using default <cite>ModelCheckpoint</cite>. Consider installing <cite>litmodels</cite> package to enable <cite>LitModelCheckpoint</cite> for automatic upload to the Lightning model registry.n”,
+“GPU available: True (cuda), used: Truen”,
+“TPU available: False, using: 0 TPU coresn”,
+“HPU available: False, using: 0 HPUsn”,
+“LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]n”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><dl>
+<dt>“data”: {</dt><dd><dl class="simple">
+<dt>“application/vnd.jupyter.widget-view+json”: {</dt><dd><p>“model_id”: “cca4f2bc479748b2af20bbc7361a15e4”,
+“version_major”: 2,
+“version_minor”: 0</p>
+</dd>
+</dl>
+<p>},
+“text/plain”: [</p>
+<blockquote>
+<div><p>“Predicting: |          | 0/? [00:00&lt;?, ?it/s]”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+“metadata”: {},
+“output_type”: “display_data”</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“name”: “stdout”,
+“output_type”: “stream”,
+“text”: [</p>
+<blockquote>
+<div><p>“array([[0.22032928, 0.21946219, 0.230885  , …, 1.0364848 , 1.2134479 ,n”,
+“        1.4428278 ],n”,
+“       [0.2652336 , 0.13350041, 0.14896178, …, 0.44437772, 0.26560807,n”,
+“        0.30437455]], dtype=float32)n”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>],
+“source”: [</p>
+<blockquote>
+<div><p>“from decima.data.dataset import SeqDatasetn”,
+“n”,
+“n”,
+“ds = SeqDataset.from_fasta(&quot;../tests/data/seqs.fasta&quot;)n”,
+“n”,
+“preds = model.predict_on_dataset(ds, device=0)n”,
+“pprint(preds[&quot;expression&quot;])”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>“cell_type”: “markdown”,
+“id”: “171fd3d1”,
+“metadata”: {},
+“source”: [</p>
+<blockquote>
+<div><p>“See the documentation of SeqDataset for more details. SeqDataset can be created from a pandas DataFrame with the following columns: <cite>seq</cite>, <cite>gene_mask_start</cite>, <cite>gene_mask_end</cite>, and <cite>gene_name</cite> with <cite>SeqDataset.from_dataframe</cite> or from a one-hot encoded tensor with <cite>SeqDataset.from_one_hot</cite>.”</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>],
+“metadata”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“kernelspec”: {</dt><dd><p>“display_name”: “decima2”,
+“language”: “python”,
+“name”: “python3”</p>
+</dd>
+</dl>
+<p>},
+“language_info”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“codemirror_mode”: {</dt><dd><p>“name”: “ipython”,
+“version”: 3</p>
+</dd>
+</dl>
+<p>},
+“file_extension”: “.py”,
+“mimetype”: “text/x-python”,
+“name”: “python”,
+“nbconvert_exporter”: “python”,
+“pygments_lexer”: “ipython3”,
+“version”: “3.11.14”</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>},
+“nbformat”: 4,
+“nbformat_minor”: 5</p>
+</dd>
+</dl>
+<p>}</p>
 
         </article>
       </div>
@@ -1666,7 +2439,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Detecting and Clustering Seqlets with Modisco</div>
+                <div class="title">&lt;no title&gt;</div>
                 
               </div>
             </a>
@@ -1688,36 +2461,13 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Predicting Gene Expression with Decima</a><ul>
-<li><a class="reference internal" href="#precomputed-predictions">Precomputed Predictions</a></li>
-<li><a class="reference internal" href="#cli-api">CLI API</a></li>
-<li><a class="reference internal" href="#python-api">Python API</a></li>
-<li><a class="reference internal" href="#developer-api">Developer API</a></li>
-<li><a class="reference internal" href="#custom-expression-for-custom-genes">Custom Expression for custom genes</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

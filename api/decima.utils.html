@@ -6,10 +6,9 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.vep package" href="decima.vep.html"><link rel="prev" title="decima.train package" href="decima.train.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.utils package - decima unknown documentation</title>
+        <title>decima.utils package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,29 +256,614 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="decima-utils-dataframe-module">
-<h2>decima.utils.dataframe module<a class="headerlink" href="#decima-utils-dataframe-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.dataframe">
+<span id="decima-utils-dataframe-module"></span><h2>decima.utils.dataframe module<a class="headerlink" href="#module-decima.utils.dataframe" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">ChunkDataFrameWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__enter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__exit__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize ParquetWriter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output parquet file</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Metadata to write to the parquet file. Keys and values must be string-like / coercible to bytes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ChunkDataFrameWriter.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ChunkDataFrameWriter.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ChunkDataFrameWriter.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write dataframe chunk to parquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunk</strong> (<em>pd.DataFrame</em>) – DataFrame chunk to write</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.chunk_df">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">chunk_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#chunk_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.chunk_df" title="Link to this definition">¶</a></dt>
+<dd><p>Chunk dataframe into chunks of size chunksize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Input dataframe</p></li>
+<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Size of each chunk</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Generator of dataframe chunks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generator[pd.DataFrame, None, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.ensemble_predictions">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">ensemble_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#ensemble_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.ensemble_predictions" title="Link to this definition">¶</a></dt>
+<dd><p>Aggregate replicates from parquet files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – List of parquet files to aggregate</p></li>
+<li><p><strong>output_pq</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – Path to the output parquet file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.read_metadata_from_replicate_parquets">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">read_metadata_from_replicate_parquets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#read_metadata_from_replicate_parquets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.read_metadata_from_replicate_parquets" title="Link to this definition">¶</a></dt>
+<dd><p>Read metadata from multiple parquet files and return as a DataFrame.</p>
+<p>This function reads key-value metadata from each parquet file and extracts
+model, distance parameters and other metadata into a structured DataFrame.
+All files must contain the required metadata fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>files</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – List of parquet file paths to read metadata from</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame containing metadata with columns:</dt><dd><ul class="simple">
+<li><p>model: Model identifier</p></li>
+<li><p>max_distance: Maximum distance used for predictions</p></li>
+<li><p>min_distance: Minimum distance used for predictions</p></li>
+<li><p>file: Source file path</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#KeyError" title="(in Python v3.11)"><strong>KeyError</strong></a> – If any required metadata field is missing from a file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.dataframe.write_df_chunks_to_parquet">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.dataframe.</span></span><span class="sig-name descname"><span class="pre">write_df_chunks_to_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/dataframe.html#write_df_chunks_to_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.dataframe.write_df_chunks_to_parquet" title="Link to this definition">¶</a></dt>
+<dd><p>Write dataframe chunks to parquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunks</strong> (<em>Iterator</em><em>[</em><em>pd.DataFrame</em><em>]</em>) – Iterator of dataframe chunks</p></li>
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output parquet file</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Metadata to write to the parquet file. If None, no metadata is written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-utils-inject-module">
-<h2>decima.utils.inject module<a class="headerlink" href="#decima-utils-inject-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.inject">
+<span id="decima-utils-inject-module"></span><h2>decima.utils.inject module<a class="headerlink" href="#module-decima.utils.inject" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.inject.SeqBuilder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.inject.</span></span><span class="sig-name descname"><span class="pre">SeqBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#SeqBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.SeqBuilder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Build the sequence from the variants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – chromosome</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – start position</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – end position</p></li>
+<li><p><strong>anchor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – anchor position</p></li>
+<li><p><strong>track</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – track positions shifts due to indels.</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Genome name or path to the genome fasta file. Defaults to “hg38”.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.inject.SeqBuilder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#SeqBuilder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.SeqBuilder.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.inject.SeqBuilder.concat">
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#SeqBuilder.concat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.SeqBuilder.concat" title="Link to this definition">¶</a></dt>
+<dd><p>Build the string from sequence objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the final sequence.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.inject.SeqBuilder.inject">
+<span class="sig-name descname"><span class="pre">inject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#SeqBuilder.inject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.SeqBuilder.inject" title="Link to this definition">¶</a></dt>
+<dd><p>Inject the variant into the sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>variant</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – variant to inject in the format of {“chrom”: str, “pos”: int, “ref”: str, “alt”: str}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.inject.prepare_seq_alt_allele">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.inject.</span></span><span class="sig-name descname"><span class="pre">prepare_seq_alt_allele</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/inject.html#prepare_seq_alt_allele"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.inject.prepare_seq_alt_allele" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare the sequence and alt allele for a gene.</p>
+<p class="rubric">Example</p>
+<p>————–{———}——–: ref
+<a href="#id1"><span class="problematic" id="id2">*</span></a>——x——{———}——–: alt new sequence fetched from the upsteam due to deletion.</p>
+<p>————–{———}——–: ref
+————–{—-++—}—-++–: alt 4 bp cropped from the downstream due to insertion.</p>
+<blockquote>
+<div><p>^anchor</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="decima.core.html#decima.core.metadata.GeneMetadata" title="decima.core.metadata.GeneMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a></span>) – gene metadata in the format of GeneMetadata.</p></li>
+<li><p><strong>variants</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span>) – variants to inject in the format of [{“chrom”: str, “pos”: int, “ref”: str, “alt”: str}, …].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the sequence (str) and gene mask start and end positions (int, int)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-utils-io-module">
-<h2>decima.utils.io module<a class="headerlink" href="#decima-utils-io-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.io">
+<span id="decima-utils-io-module"></span><h2>decima.utils.io module<a class="headerlink" href="#module-decima.utils.io" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">AttributionWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigwig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_grad_bigwig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Write gene attribution data to HDF5 and BigWig files.</p>
+<dl>
+<dt>Output files:</dt><dd><dl class="simple">
+<dt>HDF5 file:</dt><dd><ul class="simple">
+<li><p>genes: Gene names (string array)</p></li>
+<li><p>attribution: Attribution scores (genes x 4 x context_size)</p></li>
+<li><p>sequence: One-hot sequences (genes x 4 x context_size)</p></li>
+<li><p>Attributes: model_name, genome</p></li>
+</ul>
+</dd>
+</dl>
+<p>BigWig file: Mean attribution scores at genomic coordinates</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Output HDF5 file path.</p></li>
+<li><p><strong>genes</strong> – Gene names to write.</p></li>
+<li><p><strong>model_name</strong> – Model identifier for metadata.</p></li>
+<li><p><strong>metadata_anndata</strong> – Gene metadata source or path to the metadata anndata file. If not provided, the compatible metadata for the model will be used.</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Reference genome version.</p></li>
+<li><p><strong>bigwig</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Create BigWig file for genome browser.</p></li>
+<li><p><strong>correct_grad_bigwig</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Correct gradient bigwig for bias.</p></li>
+<li><p><strong>custom_genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, do not assert that the genes are in the result.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">AttributionWriter</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;attrs.h5&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="s2">&quot;SPI1&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;model_v1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span> <span class="k">as</span> <span class="n">writer</span>
+<span class="gp">... </span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">writer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">attribution_array</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">sequence_array</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.__enter__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager entry - opens files for writing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.__exit__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager exit - closes files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigwig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_grad_bigwig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add attribution data for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name from the genes list.</p></li>
+<li><p><strong>attrs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+<li><p><strong>seqs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+<li><p><strong>gene_mask_start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Gene mask start position. If None, the gene mask start position will be loaded from the result.</p></li>
+<li><p><strong>gene_mask_end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Gene mask end position. If None, the gene mask end position will be loaded from the result.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close HDF5 file and optional BigWig file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.AttributionWriter.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#AttributionWriter.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.AttributionWriter.open" title="Link to this definition">¶</a></dt>
+<dd><p>Open HDF5 file and optional BigWig file for writing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">BigWigWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Write genomic data to BigWig format for genome browser visualization.</p>
+<p>Opens a BigWig file for writing, accumulates data, then writes and closes on exit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Output BigWig file path.</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Reference genome name for chromosome sizes.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">BigWigWriter</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;output.bigwig&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">writer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;chr1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="mi">1000</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="mi">2000</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">attribution_scores</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.__enter__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager entry - opens BigWig file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.__exit__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager exit - closes BigWig file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add genomic interval data to be written.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Chromosome name.</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Start position.</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – End position.</p></li>
+<li><p><strong>values</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Array of values for each position.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.close" title="Link to this definition">¶</a></dt>
+<dd><p>Write accumulated data to BigWig file and close.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.open" title="Link to this definition">¶</a></dt>
+<dd><p>Open BigWig file for writing and add chromosome header.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.io.import_cyvcf2">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">import_cyvcf2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#import_cyvcf2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.import_cyvcf2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.io.read_fasta_gene_mask">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">read_fasta_gene_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fasta_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#read_fasta_gene_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.read_fasta_gene_mask" title="Link to this definition">¶</a></dt>
+<dd><p>Read the fasta file and return the gene mask</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fasta_file</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the fasta file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with the gene mask</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.io.read_vcf_chunks">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">read_vcf_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vcf_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#read_vcf_chunks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.read_vcf_chunks" title="Link to this definition">¶</a></dt>
+<dd><p>Read the vcf file and return the chunks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vcf_file</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the vcf file</p></li>
+<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Size of the chunks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator of DataFrames with the chunks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Iterator[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-utils-motifs-module">
-<h2>decima.utils.motifs module<a class="headerlink" href="#decima-utils-motifs-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.motifs">
+<span id="decima-utils-motifs-module"></span><h2>decima.utils.motifs module<a class="headerlink" href="#module-decima.utils.motifs" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.motifs.motif_start_end">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.motifs.</span></span><span class="sig-name descname"><span class="pre">motif_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">motif</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/motifs.html#motif_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.motifs.motif_start_end" title="Link to this definition">¶</a></dt>
+<dd><p>Get the start and end of the motif attributions and motif matrix and returns start and end positions for the window with maximum score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attributions</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores with shape (batch_size, seqlet_len, 4)</p></li>
+<li><p><strong>motif</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Motif matrix with shape (motif_len, 4)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Start and end positions of the motif with shape (batch_size, 2)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[np.ndarray, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-utils-qc-module">
-<h2>decima.utils.qc module<a class="headerlink" href="#decima-utils-qc-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.qc">
+<span id="decima-utils-qc-module"></span><h2>decima.utils.qc module<a class="headerlink" href="#module-decima.utils.qc" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.qc.</span></span><span class="sig-name descname"><span class="pre">QCLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Logger for QC</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log_file</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the log file</p></li>
+<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the metadata anndata file</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.__enter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.__exit__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.close" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.log" title="Link to this definition">¶</a></dt>
+<dd><p>Log a message</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Message to log</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Level of the message. Defaults to “info”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.log_correlation">
+<span class="sig-name descname"><span class="pre">log_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.log_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.log_correlation" title="Link to this definition">¶</a></dt>
+<dd><p>Log the correlation between tasks and off_tasks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Tasks to use for correlation</p></li>
+<li><p><strong>off_tasks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Off tasks to use for correlation</p></li>
+<li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to plot the correlation. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.log_gene">
+<span class="sig-name descname"><span class="pre">log_gene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.log_gene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.log_gene" title="Link to this definition">¶</a></dt>
+<dd><p>Log the correlation of a gene with the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Gene to log</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Threshold for logging. Defaults to 0.5.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.qc.QCLogger.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/qc.html#QCLogger.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.qc.QCLogger.open" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="decima-utils-sequence-module">
-<h2>decima.utils.sequence module<a class="headerlink" href="#decima-utils-sequence-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.sequence">
+<span id="decima-utils-sequence-module"></span><h2>decima.utils.sequence module<a class="headerlink" href="#module-decima.utils.sequence" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.sequence.one_hot_to_seq">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.sequence.</span></span><span class="sig-name descname"><span class="pre">one_hot_to_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">one_hot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/sequence.html#one_hot_to_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.sequence.one_hot_to_seq" title="Link to this definition">¶</a></dt>
+<dd><p>Convert one-hot encoded sequence to a string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>one_hot</strong> (<em>np.ndarray</em><em> or </em><em>torch.Tensor</em>) – One-hot encoded sequence</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>String representation of the sequence</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.sequence.prepare_mask_gene">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.sequence.</span></span><span class="sig-name descname"><span class="pre">prepare_mask_gene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/sequence.html#prepare_mask_gene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.sequence.prepare_mask_gene" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare gene mask tensor for gene regions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene_start</strong> – Start position of the gene</p></li>
+<li><p><strong>gene_end</strong> – End position of the gene</p></li>
+<li><p><strong>padding</strong> – Amount of padding to add on both sides. Defaults to 0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gene mask tensor with 1s in gene region and 0s elsewhere</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-utils-variant-module">
-<h2>decima.utils.variant module<a class="headerlink" href="#decima-utils-variant-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils.variant">
+<span id="decima-utils-variant-module"></span><h2>decima.utils.variant module<a class="headerlink" href="#module-decima.utils.variant" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.variant.process_variants">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.variant.</span></span><span class="sig-name descname"><span class="pre">process_variants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/variant.html#process_variants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.variant.process_variants" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-decima.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.utils" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.utils.get_compute_device">
+<span class="sig-prename descclassname"><span class="pre">decima.utils.</span></span><span class="sig-name descname"><span class="pre">get_compute_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils.html#get_compute_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.get_compute_device" title="Link to this definition">¶</a></dt>
+<dd><p>Get the best available device for computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional device specification. If None, automatically selects best available device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The selected device for computation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.device</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -345,14 +924,85 @@
             <ul>
 <li><a class="reference internal" href="#">decima.utils package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#decima-utils-dataframe-module">decima.utils.dataframe module</a></li>
-<li><a class="reference internal" href="#decima-utils-inject-module">decima.utils.inject module</a></li>
-<li><a class="reference internal" href="#decima-utils-io-module">decima.utils.io module</a></li>
-<li><a class="reference internal" href="#decima-utils-motifs-module">decima.utils.motifs module</a></li>
-<li><a class="reference internal" href="#decima-utils-qc-module">decima.utils.qc module</a></li>
-<li><a class="reference internal" href="#decima-utils-sequence-module">decima.utils.sequence module</a></li>
-<li><a class="reference internal" href="#decima-utils-variant-module">decima.utils.variant module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-decima.utils.dataframe">decima.utils.dataframe module</a><ul>
+<li><a class="reference internal" href="#decima.utils.dataframe.ChunkDataFrameWriter"><code class="docutils literal notranslate"><span class="pre">ChunkDataFrameWriter</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.dataframe.ChunkDataFrameWriter.__enter__"><code class="docutils literal notranslate"><span class="pre">ChunkDataFrameWriter.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.ChunkDataFrameWriter.__exit__"><code class="docutils literal notranslate"><span class="pre">ChunkDataFrameWriter.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.ChunkDataFrameWriter.__init__"><code class="docutils literal notranslate"><span class="pre">ChunkDataFrameWriter.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.ChunkDataFrameWriter.write"><code class="docutils literal notranslate"><span class="pre">ChunkDataFrameWriter.write()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.utils.dataframe.chunk_df"><code class="docutils literal notranslate"><span class="pre">chunk_df()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.ensemble_predictions"><code class="docutils literal notranslate"><span class="pre">ensemble_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.read_metadata_from_replicate_parquets"><code class="docutils literal notranslate"><span class="pre">read_metadata_from_replicate_parquets()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.dataframe.write_df_chunks_to_parquet"><code class="docutils literal notranslate"><span class="pre">write_df_chunks_to_parquet()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.inject">decima.utils.inject module</a><ul>
+<li><a class="reference internal" href="#decima.utils.inject.SeqBuilder"><code class="docutils literal notranslate"><span class="pre">SeqBuilder</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.inject.SeqBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">SeqBuilder.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.inject.SeqBuilder.concat"><code class="docutils literal notranslate"><span class="pre">SeqBuilder.concat()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.inject.SeqBuilder.inject"><code class="docutils literal notranslate"><span class="pre">SeqBuilder.inject()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.utils.inject.prepare_seq_alt_allele"><code class="docutils literal notranslate"><span class="pre">prepare_seq_alt_allele()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.io">decima.utils.io module</a><ul>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter"><code class="docutils literal notranslate"><span class="pre">AttributionWriter</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.__enter__"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.__exit__"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.__init__"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.add"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.add()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.close"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.AttributionWriter.open"><code class="docutils literal notranslate"><span class="pre">AttributionWriter.open()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter"><code class="docutils literal notranslate"><span class="pre">BigWigWriter</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.__enter__"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.__exit__"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.__init__"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.add"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.add()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.close"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.BigWigWriter.open"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.open()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.utils.io.import_cyvcf2"><code class="docutils literal notranslate"><span class="pre">import_cyvcf2()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.read_fasta_gene_mask"><code class="docutils literal notranslate"><span class="pre">read_fasta_gene_mask()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.read_vcf_chunks"><code class="docutils literal notranslate"><span class="pre">read_vcf_chunks()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.motifs">decima.utils.motifs module</a><ul>
+<li><a class="reference internal" href="#decima.utils.motifs.motif_start_end"><code class="docutils literal notranslate"><span class="pre">motif_start_end()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.qc">decima.utils.qc module</a><ul>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger"><code class="docutils literal notranslate"><span class="pre">QCLogger</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.__enter__"><code class="docutils literal notranslate"><span class="pre">QCLogger.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.__exit__"><code class="docutils literal notranslate"><span class="pre">QCLogger.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.__init__"><code class="docutils literal notranslate"><span class="pre">QCLogger.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.close"><code class="docutils literal notranslate"><span class="pre">QCLogger.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.log"><code class="docutils literal notranslate"><span class="pre">QCLogger.log()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.log_correlation"><code class="docutils literal notranslate"><span class="pre">QCLogger.log_correlation()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.log_gene"><code class="docutils literal notranslate"><span class="pre">QCLogger.log_gene()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.qc.QCLogger.open"><code class="docutils literal notranslate"><span class="pre">QCLogger.open()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.sequence">decima.utils.sequence module</a><ul>
+<li><a class="reference internal" href="#decima.utils.sequence.one_hot_to_seq"><code class="docutils literal notranslate"><span class="pre">one_hot_to_seq()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.sequence.prepare_mask_gene"><code class="docutils literal notranslate"><span class="pre">prepare_mask_gene()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils.variant">decima.utils.variant module</a><ul>
+<li><a class="reference internal" href="#decima.utils.variant.process_variants"><code class="docutils literal notranslate"><span class="pre">process_variants()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.utils">Module contents</a><ul>
+<li><a class="reference internal" href="#decima.utils.get_compute_device"><code class="docutils literal notranslate"><span class="pre">get_compute_device()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -364,7 +1014,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -6,10 +6,9 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.hub package" href="decima.hub.html"><link rel="prev" title="decima.core package" href="decima.core.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.data package - decima unknown documentation</title>
+        <title>decima.data package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,20 +256,743 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="decima-data-dataset-module">
-<h2>decima.data.dataset module<a class="headerlink" href="#decima-data-dataset-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.data.dataset">
+<span id="decima-data-dataset-module"></span><h2>decima.data.dataset module<a class="headerlink" href="#module-decima.data.dataset" title="Link to this heading">¶</a></h2>
+<p>pytorch Datasets for Decima.</p>
+<p>This module contains the datasets for Decima, including:
+- HDF5Dataset: Dataset for HDF5 files.
+- GeneDataset: Dataset for gene expression prediction.
+- SeqDataset: Dataset for sequence prediction.
+- VariantDataset: Dataset for variant effect prediction.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">GeneDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#GeneDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.GeneDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>Dataset for gene expression prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genes</strong> – List of genes to include in the dataset.</p></li>
+<li><p><strong>metadata_anndata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – AnnData object to use for extracting gene metadata.</p></li>
+<li><p><strong>max_seq_shift</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence shift.</p></li>
+<li><p><strong>seed</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Seed for the random number generator.</p></li>
+<li><p><strong>augment_mode</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Augmentation mode.</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the genome</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset for gene expression prediction.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;SPI2&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">GeneDataset</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">genes</span><span class="o">=</span><span class="n">genes</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collate_fn</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+<span class="go">    print(batch)</span>
+<span class="go">... (2, 524288, 5)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#GeneDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.GeneDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#GeneDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.GeneDataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#GeneDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.GeneDataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.GeneDataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.GeneDataset.collate_fn">
+<span class="sig-name descname"><span class="pre">collate_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#GeneDataset.collate_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.GeneDataset.collate_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">HDF5Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>Dataset for HDF5 files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Key to use to access the data in the HDF5 file.</p></li>
+<li><p><strong>h5_file</strong> – Path to the HDF5 file.</p></li>
+<li><p><strong>ad</strong> – AnnData object to use for extracting tasks.</p></li>
+<li><p><strong>seq_len</strong> – Length of the sequence.</p></li>
+<li><p><strong>max_seq_shift</strong> – Maximum sequence shift.</p></li>
+<li><p><strong>seed</strong> – Seed for the random number generator.</p></li>
+<li><p><strong>augment_mode</strong> – Augmentation mode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset for HDF5 files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.close" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_label">
+<span class="sig-name descname"><span class="pre">extract_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_label" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_seq">
+<span class="sig-name descname"><span class="pre">extract_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_seq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.HDF5Dataset.extract_tasks">
+<span class="sig-name descname"><span class="pre">extract_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#HDF5Dataset.extract_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.HDF5Dataset.extract_tasks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">SeqDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_starts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_ends</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>Dataset for sequence prediction with the masked gene sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seqs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of sequences as strings.</p></li>
+<li><p><strong>gene_mask_starts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – List of gene mask starts.</p></li>
+<li><p><strong>gene_mask_ends</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – List of gene mask ends.</p></li>
+<li><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of gene names.</p></li>
+<li><p><strong>max_seq_shift</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence shift.</p></li>
+<li><p><strong>seed</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Seed for the random number generator.</p></li>
+<li><p><strong>augment_mode</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Augmentation mode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset for sequence prediction with the masked gene sequence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s2">&quot;ATCG...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;ATCG..&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;ATCG...&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene_mask_starts</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene_mask_ends</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">seqs</span><span class="o">=</span><span class="n">seqs</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gene_mask_starts</span><span class="o">=</span><span class="n">gene_mask_starts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gene_mask_ends</span><span class="o">=</span><span class="n">gene_mask_ends</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collate_fn</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+<span class="go">    print(batch)</span>
+<span class="go">... (2, 524288, 5)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="o">.</span><span class="n">from_fasta</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">fasta_file</span><span class="o">=</span><span class="s2">&quot;example/seqs.fasta&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG..&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG......&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_start&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_end&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.data.dataset.SeqDataset.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_starts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_ends</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.SeqDataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.collate_fn">
+<span class="sig-name descname"><span class="pre">collate_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.collate_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.collate_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.from_dataframe">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.from_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.from_dataframe" title="Link to this definition">¶</a></dt>
+<dd><p>Create a SeqDataset from a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span>) – pandas DataFrame containing <cite>seq</cite>, <cite>gene_mask_start</cite>, and <cite>gene_mask_end</cite> columns.</p></li>
+<li><p><strong>max_seq_shift</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence shift.</p></li>
+<li><p><strong>seed</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Seed for the random number generator.</p></li>
+<li><p><strong>augment_mode</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Augmentation mode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SeqDataset object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#decima.data.dataset.SeqDataset" title="decima.data.dataset.SeqDataset">SeqDataset</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG..&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;ATCG......&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_start&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_end&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collate_fn</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+<span class="go">    print(batch)</span>
+<span class="go">... (2, 524288, 5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.from_fasta">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fasta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fasta_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.from_fasta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.from_fasta" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Create a SeqDataset from a FASTA file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fasta_file: Path to the FASTA file with header as gene name, maks and sequence as the sequence: “&gt;gene_name|gene_mask_start=10000|gene_mask_end=10000</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>ATACG…”.</dt><dd><blockquote>
+<div><p>max_seq_shift: Maximum sequence shift.
+seed: Seed for the random number generator.
+augment_mode: Augmentation mode.</p>
+</div></blockquote>
+<dl>
+<dt>Returns:</dt><dd><p>SeqDataset: SeqDataset object.</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">SeqDataset</span><span class="o">.</span><span class="n">from_fasta</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">fasta_file</span><span class="o">=</span><span class="s2">&quot;example/seqs.fasta&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collate_fn</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+<span class="go">    print(batch)</span>
+<span class="go">... (2, 524288, 5)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.SeqDataset.from_one_hot">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">one_hot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_starts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_ends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#SeqDataset.from_one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.SeqDataset.from_one_hot" title="Link to this definition">¶</a></dt>
+<dd><p>Create a SeqDataset from a one-hot encoded tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>one_hot</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></span>) – One-hot encoded tensor with shape (batch_size, 4 or 5, seq_len).</p></li>
+<li><p><strong>gene_mask_starts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – List of gene mask starts.</p></li>
+<li><p><strong>gene_mask_ends</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – List of gene mask ends.</p></li>
+<li><p><strong>max_seq_shift</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence shift.</p></li>
+<li><p><strong>seed</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Seed for the random number generator.</p></li>
+<li><p><strong>augment_mode</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Augmentation mode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SeqDataset object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#decima.data.dataset.SeqDataset" title="decima.data.dataset.SeqDataset">SeqDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.data.dataset.</span></span><span class="sig-name descname"><span class="pre">VariantDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>Dataset for variant effect prediction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variants</strong> (<em>pd.DataFrame</em>) – DataFrame with variants</p></li>
+<li><p><strong>anndata</strong> (<em>AnnData</em>) – AnnData object with gene metadata</p></li>
+<li><p><strong>seq_len</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Length of the sequence</p></li>
+<li><p><strong>max_seq_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum sequence shift</p></li>
+<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List of columns to include in the output</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Column name for gene names</p></li>
+<li><p><strong>min_from_end</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the end of the gene</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Type of distance</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Minimum distance from the TSS</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum distance from the TSS</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset for variant effect prediction</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">VariantDataset</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variants</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;variants.csv&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">VariantDataset</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">variants</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">{&#39;seq&#39;: tensor([[1.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 1.0000],</span>
+<span class="go">                [0.0000, 1.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 0.0000,  ..., 1.0000, 0.0000, 0.0000],</span>
+<span class="go">                [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]), &#39;warning&#39;: []}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collate_fn</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+<span class="go">    print(batch)</span>
+<span class="go">... {</span>
+<span class="go">    &#39;seq&#39;: tensor([[1.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 1.0000],</span>
+<span class="go">                    [0.0000, 1.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],</span>
+<span class="go">                    [0.0000, 0.0000, 1.0000,  ..., 0.0000, 1.0000, 0.0000],</span>
+<span class="go">                    [0.0000, 0.0000, 1.0000,  ..., 1.0000, 0.0000, 0.0000]]),</span>
+<span class="go">    &#39;warning&#39;: [],</span>
+<span class="go">    &#39;pred_expression&#39;: tensor([[0.0000, 0.0000],</span>
+<span class="go">                    [0.0000, 0.0000],</span>
+<span class="go">                    [0.0000, 0.0000],</span>
+<span class="go">                    [0.0000, 0.0000]]),</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.DEFAULT_COLUMNS">
+<span class="sig-name descname"><span class="pre">DEFAULT_COLUMNS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['chrom',</span> <span class="pre">'pos',</span> <span class="pre">'ref',</span> <span class="pre">'alt',</span> <span class="pre">'gene',</span> <span class="pre">'start',</span> <span class="pre">'end',</span> <span class="pre">'strand',</span> <span class="pre">'gene_mask_start',</span> <span class="pre">'gene_mask_end',</span> <span class="pre">'rel_pos',</span> <span class="pre">'ref_tx',</span> <span class="pre">'alt_tx',</span> <span class="pre">'tss_dist']</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.DEFAULT_COLUMNS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__parameters__">
+<span class="sig-name descname"><span class="pre">__parameters__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#decima.data.dataset.VariantDataset.__parameters__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.collate_fn">
+<span class="sig-name descname"><span class="pre">collate_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.collate_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.collate_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.overlap_genes">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">overlap_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_from_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.overlap_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.overlap_genes" title="Link to this definition">¶</a></dt>
+<dd><p>Overlap genes with variants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_variants</strong> – pandas DataFrame containing variants.</p></li>
+<li><p><strong>df_genes</strong> – pandas DataFrame containing genes.</p></li>
+<li><p><strong>gene_col</strong> – Column name for gene names.</p></li>
+<li><p><strong>include_cols</strong> – List of columns to include in the output.</p></li>
+<li><p><strong>min_from_end</strong> – Minimum distance from the end of the gene.</p></li>
+<li><p><strong>distance_type</strong> – Type of distance.</p></li>
+<li><p><strong>min_distance</strong> – Minimum distance from the TSS.</p></li>
+<li><p><strong>max_distance</strong> – Maximum distance from the TSS.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas DataFrame containing the overlap between genes and variants.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_variants</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;pos&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;ref&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI2&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI3&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_genes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI2&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;SPI3&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;strand&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="s2">&quot;+&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;+&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;+&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_start&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;gene_mask_end&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">VariantDataset</span><span class="o">.</span><span class="n">overlap_genes</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df_variants</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">df_genes</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">... </span>   <span class="n">chrom</span>  <span class="n">pos</span> <span class="n">ref</span> <span class="n">alt</span> <span class="n">gene</span>  <span class="n">start</span> <span class="n">end</span> <span class="n">strand</span>  <span class="n">gene_mask_start</span>  <span class="n">gene_mask_end</span>  <span class="n">rel_pos</span> <span class="n">ref_tx</span> <span class="n">alt_tx</span>  <span class="n">tss_dist</span>
+<span class="gp">... </span><span class="mi">0</span>     <span class="mi">1</span>  <span class="mi">10000</span>   <span class="n">A</span>   <span class="n">G</span>  <span class="n">SPI1</span>  <span class="mi">10000</span> <span class="mi">10000</span>      <span class="o">+</span>              <span class="mi">0</span>              <span class="mi">4</span>      <span class="mi">0</span>      <span class="n">A</span>     <span class="n">G</span>        <span class="mi">0</span>
+<span class="gp">... </span><span class="mi">1</span>     <span class="mi">1</span>  <span class="mi">10000</span>   <span class="n">A</span>   <span class="n">G</span>  <span class="n">SPI2</span>  <span class="mi">10000</span> <span class="mi">10000</span>      <span class="o">+</span>              <span class="mi">0</span>              <span class="mi">4</span>      <span class="mi">0</span>      <span class="n">A</span>     <span class="n">G</span>        <span class="mi">0</span>
+<span class="gp">... </span><span class="mi">2</span>     <span class="mi">1</span>  <span class="mi">10000</span>   <span class="n">A</span>   <span class="n">G</span>  <span class="n">SPI3</span>  <span class="mi">10000</span> <span class="mi">10000</span>      <span class="o">+</span>              <span class="mi">0</span>              <span class="mi">4</span>      <span class="mi">0</span>      <span class="n">A</span>     <span class="n">G</span>        <span class="mi">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.predicted_expression_cache">
+<span class="sig-name descname"><span class="pre">predicted_expression_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.predicted_expression_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.predicted_expression_cache" title="Link to this definition">¶</a></dt>
+<dd><p>Get predicted expression for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gene</strong> – Gene name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of predicted expression for each model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.data.dataset.VariantDataset.validate_allele_seq">
+<span class="sig-name descname"><span class="pre">validate_allele_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/dataset.html#VariantDataset.validate_allele_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.dataset.VariantDataset.validate_allele_seq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="decima-data-preprocess-module">
-<h2>decima.data.preprocess module<a class="headerlink" href="#decima-data-preprocess-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.data.preprocess">
+<span id="decima-data-preprocess-module"></span><h2>decima.data.preprocess module<a class="headerlink" href="#module-decima.data.preprocess" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.aggregate_anndata">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">aggregate_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cell_type',</span> <span class="pre">'tissue',</span> <span class="pre">'organ',</span> <span class="pre">'disease',</span> <span class="pre">'study',</span> <span class="pre">'dataset',</span> <span class="pre">'region',</span> <span class="pre">'subregion',</span> <span class="pre">'celltype_coarse']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['n_cells']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#aggregate_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.aggregate_anndata" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.assign_borzoi_folds">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">assign_borzoi_folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#assign_borzoi_folds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.assign_borzoi_folds" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.change_values">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">change_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#change_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.change_values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.get_frac_N">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">get_frac_N</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#get_frac_N"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.get_frac_N" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.load_ncbi_string">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">load_ncbi_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_dups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#load_ncbi_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.load_ncbi_string" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.make_inputs">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">make_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#make_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.make_inputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_cellranger_2024">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_cellranger_2024</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes24</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_cellranger_2024"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_cellranger_2024" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_ncbi">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_ncbi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncbi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_ncbi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_ncbi" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.match_ref_ad">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">match_ref_ad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#match_ref_ad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.match_ref_ad" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.merge_transcripts">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">merge_transcripts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#merge_transcripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.merge_transcripts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.return_ensembl">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">return_ensembl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gene_id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#return_ensembl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.return_ensembl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.preprocess.var_to_intervals">
+<span class="sig-prename descclassname"><span class="pre">decima.data.preprocess.</span></span><span class="sig-name descname"><span class="pre">var_to_intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chr_end_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">163840</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/preprocess.html#var_to_intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.preprocess.var_to_intervals" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="decima-data-read-hdf5-module">
-<h2>decima.data.read_hdf5 module<a class="headerlink" href="#decima-data-read-hdf5-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.data.read_hdf5">
+<span id="decima-data-read-hdf5-module"></span><h2>decima.data.read_hdf5 module<a class="headerlink" href="#module-decima.data.read_hdf5" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.count_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">count_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#count_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.count_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.extract_gene_data">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">extract_gene_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">524288</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#extract_gene_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.extract_gene_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.get_gene_idx">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">get_gene_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#get_gene_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.get_gene_idx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.index_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">index_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#index_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.index_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.list_genes">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">list_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#list_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.list_genes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.read_hdf5.mutate">
+<span class="sig-prename descclassname"><span class="pre">decima.data.read_hdf5.</span></span><span class="sig-name descname"><span class="pre">mutate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allele</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/read_hdf5.html#mutate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.read_hdf5.mutate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="decima-data-write-hdf5-module">
-<h2>decima.data.write_hdf5 module<a class="headerlink" href="#decima-data-write-hdf5-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.data.write_hdf5">
+<span id="decima-data-write-hdf5-module"></span><h2>decima.data.write_hdf5 module<a class="headerlink" href="#module-decima.data.write_hdf5" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.data.write_hdf5.write_hdf5">
+<span class="sig-prename descclassname"><span class="pre">decima.data.write_hdf5.</span></span><span class="sig-name descname"><span class="pre">write_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/data/write_hdf5.html#write_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.data.write_hdf5.write_hdf5" title="Link to this definition">¶</a></dt>
+<dd><p>Write AnnData object to HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – Path to the HDF5 file to write</p></li>
+<li><p><strong>ad</strong> – AnnData object containing the data</p></li>
+<li><p><strong>pad</strong> – Amount of padding to add. Defaults to 0</p></li>
+<li><p><strong>genome</strong> – Genome name or path to the genome fasta file. Defaults to “hg38”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-decima.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.data" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -336,11 +1053,84 @@
             <ul>
 <li><a class="reference internal" href="#">decima.data package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#decima-data-dataset-module">decima.data.dataset module</a></li>
-<li><a class="reference internal" href="#decima-data-preprocess-module">decima.data.preprocess module</a></li>
-<li><a class="reference internal" href="#decima-data-read-hdf5-module">decima.data.read_hdf5 module</a></li>
-<li><a class="reference internal" href="#decima-data-write-hdf5-module">decima.data.write_hdf5 module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-decima.data.dataset">decima.data.dataset module</a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset"><code class="docutils literal notranslate"><span class="pre">GeneDataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">GeneDataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset.__init__"><code class="docutils literal notranslate"><span class="pre">GeneDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset.__len__"><code class="docutils literal notranslate"><span class="pre">GeneDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">GeneDataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.GeneDataset.collate_fn"><code class="docutils literal notranslate"><span class="pre">GeneDataset.collate_fn()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__annotations__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__init__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__len__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.close"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_label"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_label()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_seq"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_seq()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.HDF5Dataset.extract_tasks"><code class="docutils literal notranslate"><span class="pre">HDF5Dataset.extract_tasks()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset"><code class="docutils literal notranslate"><span class="pre">SeqDataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.__annotations__"><code class="docutils literal notranslate"><span class="pre">SeqDataset.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">SeqDataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.__init__"><code class="docutils literal notranslate"><span class="pre">SeqDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.__len__"><code class="docutils literal notranslate"><span class="pre">SeqDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">SeqDataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.collate_fn"><code class="docutils literal notranslate"><span class="pre">SeqDataset.collate_fn()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.from_dataframe"><code class="docutils literal notranslate"><span class="pre">SeqDataset.from_dataframe()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.from_fasta"><code class="docutils literal notranslate"><span class="pre">SeqDataset.from_fasta()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.SeqDataset.from_one_hot"><code class="docutils literal notranslate"><span class="pre">SeqDataset.from_one_hot()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset"><code class="docutils literal notranslate"><span class="pre">VariantDataset</span></code></a><ul>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.DEFAULT_COLUMNS"><code class="docutils literal notranslate"><span class="pre">VariantDataset.DEFAULT_COLUMNS</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__annotations__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__init__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__len__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__parameters__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__parameters__</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.__repr__"><code class="docutils literal notranslate"><span class="pre">VariantDataset.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.collate_fn"><code class="docutils literal notranslate"><span class="pre">VariantDataset.collate_fn()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.overlap_genes"><code class="docutils literal notranslate"><span class="pre">VariantDataset.overlap_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.predicted_expression_cache"><code class="docutils literal notranslate"><span class="pre">VariantDataset.predicted_expression_cache()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.dataset.VariantDataset.validate_allele_seq"><code class="docutils literal notranslate"><span class="pre">VariantDataset.validate_allele_seq()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.preprocess">decima.data.preprocess module</a><ul>
+<li><a class="reference internal" href="#decima.data.preprocess.aggregate_anndata"><code class="docutils literal notranslate"><span class="pre">aggregate_anndata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.assign_borzoi_folds"><code class="docutils literal notranslate"><span class="pre">assign_borzoi_folds()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.change_values"><code class="docutils literal notranslate"><span class="pre">change_values()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.get_frac_N"><code class="docutils literal notranslate"><span class="pre">get_frac_N()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.load_ncbi_string"><code class="docutils literal notranslate"><span class="pre">load_ncbi_string()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.make_inputs"><code class="docutils literal notranslate"><span class="pre">make_inputs()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_cellranger_2024"><code class="docutils literal notranslate"><span class="pre">match_cellranger_2024()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_ncbi"><code class="docutils literal notranslate"><span class="pre">match_ncbi()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.match_ref_ad"><code class="docutils literal notranslate"><span class="pre">match_ref_ad()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.merge_transcripts"><code class="docutils literal notranslate"><span class="pre">merge_transcripts()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.return_ensembl"><code class="docutils literal notranslate"><span class="pre">return_ensembl()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.preprocess.var_to_intervals"><code class="docutils literal notranslate"><span class="pre">var_to_intervals()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.read_hdf5">decima.data.read_hdf5 module</a><ul>
+<li><a class="reference internal" href="#decima.data.read_hdf5.count_genes"><code class="docutils literal notranslate"><span class="pre">count_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.extract_gene_data"><code class="docutils literal notranslate"><span class="pre">extract_gene_data()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.get_gene_idx"><code class="docutils literal notranslate"><span class="pre">get_gene_idx()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.index_genes"><code class="docutils literal notranslate"><span class="pre">index_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.list_genes"><code class="docutils literal notranslate"><span class="pre">list_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.data.read_hdf5.mutate"><code class="docutils literal notranslate"><span class="pre">mutate()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data.write_hdf5">decima.data.write_hdf5 module</a><ul>
+<li><a class="reference internal" href="#decima.data.write_hdf5.write_hdf5"><code class="docutils literal notranslate"><span class="pre">write_hdf5()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.data">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -352,7 +1142,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

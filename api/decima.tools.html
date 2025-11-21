@@ -6,10 +6,9 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.train package" href="decima.train.html"><link rel="prev" title="decima.plot package" href="decima.plot.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.tools package - decima unknown documentation</title>
+        <title>decima.tools package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,17 +256,83 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="decima-tools-evaluate-module">
-<h2>decima.tools.evaluate module<a class="headerlink" href="#decima-tools-evaluate-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.tools.evaluate">
+<span id="decima-tools-evaluate-module"></span><h2>decima.tools.evaluate module<a class="headerlink" href="#module-decima.tools.evaluate" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.evaluate.compare_marker_zscores">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.evaluate.</span></span><span class="sig-name descname"><span class="pre">compare_marker_zscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell_type'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/evaluate.html#compare_marker_zscores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.evaluate.compare_marker_zscores" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.evaluate.compute_marker_metrics">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.evaluate.</span></span><span class="sig-name descname"><span class="pre">compute_marker_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">marker_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell_type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/evaluate.html#compute_marker_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.evaluate.compute_marker_metrics" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.evaluate.marker_zscores">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.evaluate.</span></span><span class="sig-name descname"><span class="pre">marker_zscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell_type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/evaluate.html#marker_zscores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.evaluate.marker_zscores" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.evaluate.match_criteria">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.evaluate.</span></span><span class="sig-name descname"><span class="pre">match_criteria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/evaluate.html#match_criteria"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.evaluate.match_criteria" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="decima-tools-inference-module">
-<h2>decima.tools.inference module<a class="headerlink" href="#decima-tools-inference-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.tools.inference">
+<span id="decima-tools-inference-module"></span><h2>decima.tools.inference module<a class="headerlink" href="#module-decima.tools.inference" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.inference.evaluate_gene_expression_predictions">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.inference.</span></span><span class="sig-name descname"><span class="pre">evaluate_gene_expression_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/inference.html#evaluate_gene_expression_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.inference.evaluate_gene_expression_predictions" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.inference.predict_gene_expression">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.inference.</span></span><span class="sig-name descname"><span class="pre">predict_gene_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/inference.html#predict_gene_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.inference.predict_gene_expression" title="Link to this definition">¶</a></dt>
+<dd><p>Predict gene expression for a list of genes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genes</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – List of genes to predict. Defaults to None.</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Model to use for prediction. Defaults to ‘ensemble’.</p></li>
+<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to the metadata anndata file. Defaults to None.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Device to use for prediction. Defaults to None.</p></li>
+<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Batch size for prediction. Defaults to 1.</p></li>
+<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of workers for prediction. Defaults to 4.</p></li>
+<li><p><strong>max_seq_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum sequence shift for prediction. Defaults to 0.</p></li>
+<li><p><strong>genome</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Genome name or path to the genome fasta file. Defaults to ‘hg38’.</p></li>
+<li><p><strong>save_replicates</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Save the replicates for prediction. Defaults to False.</p></li>
+<li><p><strong>float_precision</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Floating-point precision. Defaults to “32”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If the model is not ‘ensemble’ and save_replicates is True.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AnnData object with the predicted gene expression.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>anndata.AnnData</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="decima-tools-interpret-module">
-<h2>decima.tools.interpret module<a class="headerlink" href="#decima-tools-interpret-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.tools.interpret">
+<span id="decima-tools-interpret-module"></span><h2>decima.tools.interpret module<a class="headerlink" href="#module-decima.tools.interpret" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.interpret.find_attr_peaks">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.interpret.</span></span><span class="sig-name descname"><span class="pre">find_attr_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/interpret.html#find_attr_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.interpret.find_attr_peaks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.tools.interpret.scan_attributions">
+<span class="sig-prename descclassname"><span class="pre">decima.tools.interpret.</span></span><span class="sig-name descname"><span class="pre">scan_attributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">motifs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pthresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">18</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/tools/interpret.html#scan_attributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.tools.interpret.scan_attributions" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-decima.tools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.tools" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -333,10 +393,24 @@
             <ul>
 <li><a class="reference internal" href="#">decima.tools package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#decima-tools-evaluate-module">decima.tools.evaluate module</a></li>
-<li><a class="reference internal" href="#decima-tools-inference-module">decima.tools.inference module</a></li>
-<li><a class="reference internal" href="#decima-tools-interpret-module">decima.tools.interpret module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-decima.tools.evaluate">decima.tools.evaluate module</a><ul>
+<li><a class="reference internal" href="#decima.tools.evaluate.compare_marker_zscores"><code class="docutils literal notranslate"><span class="pre">compare_marker_zscores()</span></code></a></li>
+<li><a class="reference internal" href="#decima.tools.evaluate.compute_marker_metrics"><code class="docutils literal notranslate"><span class="pre">compute_marker_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#decima.tools.evaluate.marker_zscores"><code class="docutils literal notranslate"><span class="pre">marker_zscores()</span></code></a></li>
+<li><a class="reference internal" href="#decima.tools.evaluate.match_criteria"><code class="docutils literal notranslate"><span class="pre">match_criteria()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.tools.inference">decima.tools.inference module</a><ul>
+<li><a class="reference internal" href="#decima.tools.inference.evaluate_gene_expression_predictions"><code class="docutils literal notranslate"><span class="pre">evaluate_gene_expression_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#decima.tools.inference.predict_gene_expression"><code class="docutils literal notranslate"><span class="pre">predict_gene_expression()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.tools.interpret">decima.tools.interpret module</a><ul>
+<li><a class="reference internal" href="#decima.tools.interpret.find_attr_peaks"><code class="docutils literal notranslate"><span class="pre">find_attr_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.tools.interpret.scan_attributions"><code class="docutils literal notranslate"><span class="pre">scan_attributions()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.tools">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -348,7 +422,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

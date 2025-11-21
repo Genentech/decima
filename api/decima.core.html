@@ -6,10 +6,9 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.data package" href="decima.data.html"><link rel="prev" title="decima.cli package" href="decima.cli.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.core package - decima unknown documentation</title>
+        <title>decima.core package - decima 0.0.post1.dev1+g6e9347243 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima unknown documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+g6e9347243 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima unknown documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+g6e9347243 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,11 +209,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/1-attribution-motif-discovery.html">Tutorial: Attribution Motif Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/2-variant-effect-prediction.html">Tutorial: Variant Effect Prediction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/3-finetune.html">Tutorial: Finetuning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/4-modisco.html">Tutorial: Modisco</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/5-gene-expression-prediction.html">Tutorial: Gene Expression Prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
@@ -262,8 +256,475 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="decima-core-attribution-module">
-<h2>decima.core.attribution module<a class="headerlink" href="#decima-core-attribution-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.core.attribution">
+<span id="decima-core-attribution-module"></span><h2>decima.core.attribution module<a class="headerlink" href="#module-decima.core.attribution" title="Link to this heading">¶</a></h2>
+<p>Attribution analysis from decima model.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.attribution.</span></span><span class="sig-name descname"><span class="pre">Attribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Attribution analysis results for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Gene symbol or ID to analyze</p></li>
+<li><p><strong>inputs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></span>) – One-hot encoded sequence</p></li>
+<li><p><strong>attrs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores</p></li>
+<li><p><strong>gene</strong> – Gene name</p></li>
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Chromosome name</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Start position</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – End position</p></li>
+<li><p><strong>strand</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Strand</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Threshold for peak finding</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Minimum sequence length for peak finding</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Maximum sequence length for peak finding</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Additional flanks to add to the gene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Attribution analysis results for the gene and tasks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#decima.core.attribution.Attribution" title="decima.core.attribution.Attribution">Attribution</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attribution</span> <span class="o">=</span> <span class="n">Attribution</span><span class="p">(</span>
+<span class="go">    gene=&quot;A1BG&quot;,</span>
+<span class="go">    inputs=inputs,</span>
+<span class="go">    attrs=attrs,</span>
+<span class="go">    chrom=&quot;chr1&quot;,</span>
+<span class="go">    start=100,</span>
+<span class="go">    end=200,</span>
+<span class="go">    strand=&quot;+&quot;,</span>
+<span class="go">    threshold=5e-4,</span>
+<span class="go">    min_seqlet_len=4,</span>
+<span class="go">    max_seqlet_len=25,</span>
+<span class="go">    additional_flanks=0,</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attribution</span><span class="o">.</span><span class="n">plot_peaks</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attribution</span><span class="o">.</span><span class="n">scan_motifs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attribution</span><span class="o">.</span><span class="n">save_bigwig</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;attributions.bigwig&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attribution</span><span class="o">.</span><span class="n">peaks_to_bed</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize Attribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></span>) – One-hot encoded sequence</p></li>
+<li><p><strong>attrs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores</p></li>
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Gene name</p></li>
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Chromosome name</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Start position</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – End position</p></li>
+<li><p><strong>strand</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Strand</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Threshold for peak finding</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Minimum sequence length for peak finding</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Maximum sequence length for peak finding</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Additional flanks to add to the gene</p></li>
+<li><p><strong>pattern_type</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Pattern type to use for peak finding default is “both”, alternatively “pos” or “neg” which will only consider positive or negative peaks respectively.
+“both” means both positive and negative patterns are considered.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.chrom">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chrom</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.chrom" title="Link to this definition">¶</a></dt>
+<dd><p>Get the chromosome name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.end">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.end" title="Link to this definition">¶</a></dt>
+<dd><p>Get the end position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.fasta_str">
+<span class="sig-name descname"><span class="pre">fasta_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.fasta_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.fasta_str" title="Link to this definition">¶</a></dt>
+<dd><p>Get attribution scores as a fasta string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.find_peaks">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.find_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.find_peaks" title="Link to this definition">¶</a></dt>
+<dd><p>Find peaks in attribution scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attrs</strong> – Attribution scores</p></li>
+<li><p><strong>threshold</strong> – Threshold for peak finding</p></li>
+<li><p><strong>min_seqlet_len</strong> – Minimum sequence length for peak finding</p></li>
+<li><p><strong>max_seqlet_len</strong> – Maximum sequence length for peak finding</p></li>
+<li><p><strong>additional_flanks</strong> – Additional flanks to add to the gene</p></li>
+<li><p><strong>pattern_type</strong> – Pattern type to use for peak finding default is “both”, alternatively “pos” or “neg” which will only consider positive or negative peaks respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame of peaks with columns of:</dt><dd><ul class="simple">
+<li><p>”peak”: Peak name in format “<a class="reference external" href="mailto:pattern_type&#46;gene&#37;&#52;&#48;from_tss">pattern_type<span>&#46;</span>gene<span>&#64;</span>from_tss</a>”</p></li>
+<li><p>”start”: Start position of the peak</p></li>
+<li><p>”end”: End position of the peak</p></li>
+<li><p>”attribution”: Attribution score of the peak</p></li>
+<li><p>”p-value”: P-value of the peak</p></li>
+<li><p>”from_tss”: Distance from the TSS to the peak</p></li>
+<li><p>”pattern_type”: Pattern type of the peak</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.from_seq">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v1_rep0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'specificity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputxgradient'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.from_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.from_seq" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize Attribution from sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Sequence to analyze either string of sequence,
+torch.Tensor or np.ndarray with shape (4, 524288)
+or (5, 524288) where the last dimension is a binary mask.
+If 4-dimensional, gene_mask_start and gene_mask_end must be provided.</p></li>
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]</span>) – List of cell types to analyze attributions for</p></li>
+<li><p><strong>off_tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]</span>) – List of cell types to contrast against</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – Model to use for attribution analysis</p></li>
+<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Transformation to apply to attributions</p></li>
+<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Method to use for attribution analysis available options: “saliency”, “inputxgradient”, “integratedgradients”.</p></li>
+<li><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Device to use for attribution analysis</p></li>
+<li><p><strong>result</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Result object or path to result object or name of the model to load the result for.</p></li>
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Gene name</p></li>
+<li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Chromosome name</p></li>
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Start position</p></li>
+<li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – End position</p></li>
+<li><p><strong>strand</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Strand</p></li>
+<li><p><strong>gene_start</strong> – Gene start position</p></li>
+<li><p><strong>gene_end</strong> – Gene end position</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Threshold for peak finding</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Minimum sequence length for peak finding</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Maximum sequence length for peak finding</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Additional flanks to add to the gene</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.gene_end">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gene_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.gene_end" title="Link to this definition">¶</a></dt>
+<dd><p>Get the gene end position.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.gene_start">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gene_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.gene_start" title="Link to this definition">¶</a></dt>
+<dd><p>Get the gene start position.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.peaks">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">peaks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.peaks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.peaks_to_bed">
+<span class="sig-name descname"><span class="pre">peaks_to_bed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.peaks_to_bed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.peaks_to_bed" title="Link to this definition">¶</a></dt>
+<dd><p>Convert peaks to bed format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Peaks in bed format where columns are:</dt><dd><ul class="simple">
+<li><p>chrom: Chromosome name</p></li>
+<li><p>start: Start position in genome</p></li>
+<li><p>end: End position in genome</p></li>
+<li><p>name: Peak name in format “<a class="reference external" href="mailto:gene&#37;&#52;&#48;from_tss">gene<span>&#64;</span>from_tss</a>”</p></li>
+<li><p>score: Score (-log10(p-value)) clipped to 0-100 based on the seqlet calling</p></li>
+<li><p>strand: Strand == ‘.’</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.plot_peaks">
+<span class="sig-name descname"><span class="pre">plot_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overlapping_min_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.plot_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.plot_peaks" title="Link to this definition">¶</a></dt>
+<dd><p>Plot attribution scores and highlight peaks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>overlapping_min_dist</strong> – Minimum distance between peaks to consider them overlapping</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches (width, height)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The plotted figure showing attribution scores with highlighted peaks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotnine.ggplot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.plot_seqlogo">
+<span class="sig-name descname"><span class="pre">plot_seqlogo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relative_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">2)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.plot_seqlogo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.plot_seqlogo" title="Link to this definition">¶</a></dt>
+<dd><p>Plot attribution scores around a relative location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>relative_loc</strong> – Position relative to TSS to center plot on</p></li>
+<li><p><strong>window</strong> – Number of bases to show on each side of center</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Attribution plot</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.pyplot.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.save_bigwig">
+<span class="sig-name descname"><span class="pre">save_bigwig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bigwig_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.save_bigwig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.save_bigwig" title="Link to this definition">¶</a></dt>
+<dd><p>Save attribution scores as a bigwig file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bigwig_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to save bigwig file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.save_fasta">
+<span class="sig-name descname"><span class="pre">save_fasta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fasta_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.save_fasta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.save_fasta" title="Link to this definition">¶</a></dt>
+<dd><p>Save attribution scores as a fasta file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.save_peaks">
+<span class="sig-name descname"><span class="pre">save_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bed_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.save_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.save_peaks" title="Link to this definition">¶</a></dt>
+<dd><p>Save peaks to bed file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bed_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to save bed file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.scan_motifs">
+<span class="sig-name descname"><span class="pre">scan_motifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motifs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hocomoco_v13'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pthresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#Attribution.scan_motifs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.Attribution.scan_motifs" title="Link to this definition">¶</a></dt>
+<dd><p>Scan for motifs in peak regions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>motifs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Motif database to use</p></li>
+<li><p><strong>window</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Window size around peaks</p></li>
+<li><p><strong>pthresh</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – P-value threshold for motif matches</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Motif scan results with columns:</dt><dd><ul class="simple">
+<li><p>”motif”: Motif name</p></li>
+<li><p>”peak”: Peak name</p></li>
+<li><p>”start”: Start position of the peak</p></li>
+<li><p>”end”: End position of the peak</p></li>
+<li><p>”strand”: Strand of the peak</p></li>
+<li><p>”score”: Fimoe score of the motif</p></li>
+<li><p>”p-value”: Fimo p-value of the motif</p></li>
+<li><p>”matched_seq”: Matched sequence</p></li>
+<li><p>”site_attr_score”: Site attribution score</p></li>
+<li><p>”motif_attr_score”: Motif attribution score</p></li>
+<li><p>”from_tss”: Distance from the TSS to the peak</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.start">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.start" title="Link to this definition">¶</a></dt>
+<dd><p>Get the start position.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.attribution.Attribution.strand">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strand</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="headerlink" href="#decima.core.attribution.Attribution.strand" title="Link to this definition">¶</a></dt>
+<dd><p>Get the strand.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.attribution.</span></span><span class="sig-name descname"><span class="pre">AttributionResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribution_h5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Attribution result from decima model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attribution_h5</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Path to attribution h5 file or list of paths to attribution h5 files generated by <cite>decima attributions-predict</cite> or <cite>decima attributions</cite> commands.</p></li>
+<li><p><strong>tss_distance</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Distance from the TSS to include in the attribution analysis.</p></li>
+<li><p><strong>correct_grad</strong> – Whether to correct the gradient for the attribution analysis.</p></li>
+<li><p><strong>num_workers</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Number of workers to use for the attribution analysis.</p></li>
+<li><p><strong>agg_func</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Function to aggregate the attribution scores.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<dl class="simple">
+<dt>with AttributionResult(attribution_h5=[“example/attribution.h5”, “example/attribution2.h5”]) as ar:</dt><dd><p>seqs, attrs = ar.load(genes=[“SPI1”])
+attribution = ar.load_attribution(gene=”SPI1”)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.__enter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.__exit__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribution_h5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.aggregate">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.aggregate" title="Link to this definition">¶</a></dt>
+<dd><p>Aggregate the attribution scores.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the attribution h5 files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load the attribution scores for a list of genes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of genes to load.</p></li>
+<li><p><strong>gene_mask</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to mask the gene.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of sequences.
+attrs: Array of attribution scores.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>seqs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.load_attribution">
+<span class="sig-name descname"><span class="pre">load_attribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.load_attribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.load_attribution" title="Link to this definition">¶</a></dt>
+<dd><p>Load the attribution scores for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene to load.</p></li>
+<li><p><strong>metadata_anndata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Metadata anndata object.</p></li>
+<li><p><strong>custom_genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to use custom genome.</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Threshold for peak finding.</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum sequence length for peak finding.</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence length for peak finding.</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Additional flanks to add to the gene.</p></li>
+<li><p><strong>pattern_type</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Pattern type to use for peak finding default is “both”, alternatively “pos” or “neg” which will only consider positive or negative peaks respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Attribution object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.open" title="Link to this definition">¶</a></dt>
+<dd><p>Open the attribution h5 files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.attribution.AttributionResult.recursive_seqlet_calling">
+<span class="sig-name descname"><span class="pre">recursive_seqlet_calling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meme_motif_db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hocomoco_v13'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/attribution.html#AttributionResult.recursive_seqlet_calling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.attribution.AttributionResult.recursive_seqlet_calling" title="Link to this definition">¶</a></dt>
+<dd><p>Perform recursive seqlet calling on the attribution scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – List of genes to perform recursive seqlet calling on.</p></li>
+<li><p><strong>metadata_anndata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Metadata anndata object.</p></li>
+<li><p><strong>custom_genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to use custom genome.</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Threshold for peak finding.</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum sequence length for peak finding.</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum sequence length for peak finding.</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Additional flanks to add to the gene.</p></li>
+<li><p><strong>pattern_type</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Pattern type to use for peak finding default is “both”, alternatively “pos” or “neg” which will only consider positive or negative peaks respectively.</p></li>
+<li><p><strong>meme_motif_db</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – MEME motif database to use for motif discovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame of peaks.
+df_motifs: DataFrame of motifs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>df_peaks</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-decima.core.metadata">
 <span id="decima-core-metadata-module"></span><h2>decima.core.metadata module<a class="headerlink" href="#module-decima.core.metadata" title="Link to this heading">¶</a></h2>
@@ -830,8 +1291,443 @@
 </dd></dl>
 
 </section>
-<section id="decima-core-result-module">
-<h2>decima.core.result module<a class="headerlink" href="#decima-core-result-module" title="Link to this heading">¶</a></h2>
+<section id="module-decima.core.result">
+<span id="decima-core-result-module"></span><h2>decima.core.result module<a class="headerlink" href="#module-decima.core.result" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.core.result.</span></span><span class="sig-name descname"><span class="pre">DecimaResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Container for Decima results and model predictions.</p>
+<p>This class provides a unified interface for loading pre-trained Decima models and
+associated metadata, making predictions, and performing attribution analyses.</p>
+<dl class="simple">
+<dt>The DecimaResult object contains:</dt><dd><ul class="simple">
+<li><p>An AnnData object with gene expression and metadata</p></li>
+<li><p>A trained model for making predictions</p></li>
+<li><p>Methods for attribution analysis and interpretation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>anndata</strong> – AnnData object containing gene expression data and metadata</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load default pre-trained model and metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">rep</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform attribution analysis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attributions</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">attributions</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;attrs_SP1I_classical_monoctypes&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gene</span><span class="o">=</span><span class="s2">&quot;SPI1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="s1">&#39;cell_type == &quot;classical monocyte&quot;&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Properties:</dt><dd><p>model: Decima model
+genes: List of gene names
+cells: List of cell names
+cell_metadata: Cell metadata
+gene_metadata: Gene metadata
+shape: Shape of the expression matrix
+attributions: Attributions for a gene</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.core.result.DecimaResult.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.assert_genes">
+<span class="sig-name descname"><span class="pre">assert_genes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.assert_genes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.assert_genes" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the genes are in the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.attributions">
+<span class="sig-name descname"><span class="pre">attributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'specificity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputxgradient'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seqlet_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_flanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.attributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.attributions" title="Link to this definition">¶</a></dt>
+<dd><p>Get attributions for a specific gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name</p></li>
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – List of cells to use as on task</p></li>
+<li><p><strong>off_tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – List of cells to use as off task</p></li>
+<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Attribution transform method</p></li>
+<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Method to use for attribution analysis available options: “saliency”, “inputxgradient”, “integratedgradients”.</p></li>
+<li><p><strong>threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Threshold for attribution analysis</p></li>
+<li><p><strong>min_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum length for seqlet calling</p></li>
+<li><p><strong>max_seqlet_len</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum length for seqlet calling</p></li>
+<li><p><strong>additional_flanks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Additional flanks for seqlet calling</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Genome to use for attribution analysis default is “hg38”. Can be genome name or path to custom genome fasta file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Container with inputs, predictions, attribution scores and TSS position</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#decima.core.attribution.Attribution" title="decima.core.attribution.Attribution">Attribution</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.cell_metadata">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cell_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.cell_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Cell metadata including annotations, metrics, etc.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.cells">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cells</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#decima.core.result.DecimaResult.cells" title="Link to this definition">¶</a></dt>
+<dd><p>List of cell identifiers in the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.correlation">
+<span class="sig-name descname"><span class="pre">correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.correlation" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the correlation between the ground truth and the predicted expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> – List of cells to use as on task.</p></li>
+<li><p><strong>off_tasks</strong> – List of cells to use as off task.</p></li>
+<li><p><strong>dataset</strong> – Dataset to use for computation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pearson correlation coefficient.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.gene_metadata">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gene_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.gene_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Gene metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.gene_sequence">
+<span class="sig-name descname"><span class="pre">gene_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stranded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.gene_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.gene_sequence" title="Link to this definition">¶</a></dt>
+<dd><p>Get sequence for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name</p></li>
+<li><p><strong>stranded</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to return stranded sequence</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Genome name or path to the genome fasta file. Default: “hg38”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sequence for the gene</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.genes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#decima.core.result.DecimaResult.genes" title="Link to this definition">¶</a></dt>
+<dd><p>List of gene names in the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.get_cell_metadata">
+<span class="sig-name descname"><span class="pre">get_cell_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.get_cell_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.get_cell_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Get metadata for a specific cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.CellMetadata" title="decima.core.metadata.CellMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.get_gene_metadata">
+<span class="sig-name descname"><span class="pre">get_gene_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.get_gene_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.get_gene_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Get metadata for a specific gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#decima.core.metadata.GeneMetadata" title="decima.core.metadata.GeneMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneMetadata</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.ground_truth">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ground_truth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.ground_truth" title="Link to this definition">¶</a></dt>
+<dd><p>Ground truth expression matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.load">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata_name_or_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load a DecimaResult object from an anndata file or a path to an anndata file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anndata_name_or_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – Name of the model or path to anndata file or anndata object</p></li>
+<li><p><strong>model</strong> – Model name or path to model checkpoint. If not provided, the default model will be loaded.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DecimaResult object</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>  <span class="c1"># Load default decima metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;path/to/anndata.h5ad&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  <span class="c1"># Load custom anndata object from file</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v1_rep0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.load_model" title="Link to this definition">¶</a></dt>
+<dd><p>Load the trained model from a checkpoint path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – Path to model checkpoint or replicate number (0-3) for pre-trained models</p></li>
+<li><p><strong>device</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Device to load model on</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>  <span class="c1"># Load default model (rep0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;path/to/checkpoint.ckpt&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.marker_zscores">
+<span class="sig-name descname"><span class="pre">marker_zscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'preds'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.marker_zscores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.marker_zscores" title="Link to this definition">¶</a></dt>
+<dd><p>Compute marker z-scores to identify differentially expressed genes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> – Target cells. Query string or list of cell IDs.</p></li>
+<li><p><strong>off_tasks</strong> – Background cells. Query string, list of cell IDs, or None
+(uses all other cells).</p></li>
+<li><p><strong>layer</strong> – Expression data layer. “preds” (default), “expression”, or
+custom layer name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Columns are ‘gene’, ‘score’ (z-score), ‘task’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)">pandas.DataFrame</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classical monocytes vs all others</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">markers</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">marker_zscores</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_genes</span> <span class="o">=</span> <span class="n">markers</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">markers</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">marker_zscores</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;lymphoid progenitor&#39;&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.model">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#decima.core.result.DecimaResult.model" title="Link to this definition">¶</a></dt>
+<dd><p>Decima model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.plot_correlation">
+<span class="sig-name descname"><span class="pre">plot_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.plot_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.plot_correlation" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the correlation between the ground truth and the predicted expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> – List of cells to use as on task.</p></li>
+<li><p><strong>off_tasks</strong> – List of cells to use as off task.</p></li>
+<li><p><strong>dataset</strong> – Dataset to use for computation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Plot of the correlation between the ground truth and the predicted expression.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>p9.ggplot</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">plot_correlation</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">off_tasks</span><span class="o">=</span><span class="s2">&quot;cell_type == &#39;lymphoid progenitor&#39;&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.predicted_expression_matrix">
+<span class="sig-name descname"><span class="pre">predicted_expression_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.predicted_expression_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.predicted_expression_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Get predicted expression matrix for all or specific genes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>genes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Optional list of genes to get predictions for. If None, returns all genes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Predicted expression matrix (cells x genes)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.predicted_gene_expression">
+<span class="sig-name descname"><span class="pre">predicted_gene_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.predicted_gene_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.predicted_gene_expression" title="Link to this definition">¶</a></dt>
+<dd><p>Get predicted expression for a specific gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> – Gene name</p></li>
+<li><p><strong>model_name</strong> – Model name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Predicted expression for the gene</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.prepare_one_hot">
+<span class="sig-name descname"><span class="pre">prepare_one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.prepare_one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.prepare_one_hot" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare one-hot encoding for a gene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name</p></li>
+<li><p><strong>variants</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]]</span>) – Optional list of variant dictionaries to inject into the sequence</p></li>
+<li><p><strong>padding</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Amount of padding to add on both sides of the sequence</p></li>
+<li><p><strong>genome</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Genome name or path to the genome fasta file. Default: “hg38”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One-hot encoding of the gene</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.query_cells">
+<span class="sig-name descname"><span class="pre">query_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.query_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.query_cells" title="Link to this definition">¶</a></dt>
+<dd><p>Query cells based on a query string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Query string</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of cell names</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">query_cells</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span>
+<span class="go">[&#39;agg1&#39;, &#39;agg2&#39;, &#39;agg3&#39;, ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.query_tasks">
+<span class="sig-name descname"><span class="pre">query_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/core/result.html#DecimaResult.query_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.core.result.DecimaResult.query_tasks" title="Link to this definition">¶</a></dt>
+<dd><p>Query tasks based on a query string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Query string</p></li>
+<li><p><strong>off_tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Query string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of tasks</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tasks</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">query_tasks</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tasks</span>
+<span class="go">[...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="decima.core.result.DecimaResult.shape">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a></em><a class="headerlink" href="#decima.core.result.DecimaResult.shape" title="Link to this definition">¶</a></dt>
+<dd><p>Shape of the expression matrix (n_cells, n_genes).</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-decima.core">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.core" title="Link to this heading">¶</a></h2>
@@ -895,7 +1791,44 @@
             <ul>
 <li><a class="reference internal" href="#">decima.core package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#decima-core-attribution-module">decima.core.attribution module</a></li>
+<li><a class="reference internal" href="#module-decima.core.attribution">decima.core.attribution module</a><ul>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution"><code class="docutils literal notranslate"><span class="pre">Attribution</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.__init__"><code class="docutils literal notranslate"><span class="pre">Attribution.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.__repr__"><code class="docutils literal notranslate"><span class="pre">Attribution.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.chrom"><code class="docutils literal notranslate"><span class="pre">Attribution.chrom</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.end"><code class="docutils literal notranslate"><span class="pre">Attribution.end</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.fasta_str"><code class="docutils literal notranslate"><span class="pre">Attribution.fasta_str()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.find_peaks"><code class="docutils literal notranslate"><span class="pre">Attribution.find_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.from_seq"><code class="docutils literal notranslate"><span class="pre">Attribution.from_seq()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.gene_end"><code class="docutils literal notranslate"><span class="pre">Attribution.gene_end</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.gene_start"><code class="docutils literal notranslate"><span class="pre">Attribution.gene_start</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.peaks"><code class="docutils literal notranslate"><span class="pre">Attribution.peaks</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.peaks_to_bed"><code class="docutils literal notranslate"><span class="pre">Attribution.peaks_to_bed()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.plot_peaks"><code class="docutils literal notranslate"><span class="pre">Attribution.plot_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.plot_seqlogo"><code class="docutils literal notranslate"><span class="pre">Attribution.plot_seqlogo()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.save_bigwig"><code class="docutils literal notranslate"><span class="pre">Attribution.save_bigwig()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.save_fasta"><code class="docutils literal notranslate"><span class="pre">Attribution.save_fasta()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.save_peaks"><code class="docutils literal notranslate"><span class="pre">Attribution.save_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.scan_motifs"><code class="docutils literal notranslate"><span class="pre">Attribution.scan_motifs()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.start"><code class="docutils literal notranslate"><span class="pre">Attribution.start</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.Attribution.strand"><code class="docutils literal notranslate"><span class="pre">Attribution.strand</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult"><code class="docutils literal notranslate"><span class="pre">AttributionResult</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.__enter__"><code class="docutils literal notranslate"><span class="pre">AttributionResult.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.__exit__"><code class="docutils literal notranslate"><span class="pre">AttributionResult.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.__init__"><code class="docutils literal notranslate"><span class="pre">AttributionResult.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.__repr__"><code class="docutils literal notranslate"><span class="pre">AttributionResult.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.aggregate"><code class="docutils literal notranslate"><span class="pre">AttributionResult.aggregate()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.close"><code class="docutils literal notranslate"><span class="pre">AttributionResult.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.load"><code class="docutils literal notranslate"><span class="pre">AttributionResult.load()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.load_attribution"><code class="docutils literal notranslate"><span class="pre">AttributionResult.load_attribution()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.open"><code class="docutils literal notranslate"><span class="pre">AttributionResult.open()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.attribution.AttributionResult.recursive_seqlet_calling"><code class="docutils literal notranslate"><span class="pre">AttributionResult.recursive_seqlet_calling()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-decima.core.metadata">decima.core.metadata module</a><ul>
 <li><a class="reference internal" href="#decima.core.metadata.CellMetadata"><code class="docutils literal notranslate"><span class="pre">CellMetadata</span></code></a><ul>
 <li><a class="reference internal" href="#decima.core.metadata.CellMetadata.name"><code class="docutils literal notranslate"><span class="pre">CellMetadata.name</span></code></a></li>
@@ -1004,7 +1937,37 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#decima-core-result-module">decima.core.result module</a></li>
+<li><a class="reference internal" href="#module-decima.core.result">decima.core.result module</a><ul>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult"><code class="docutils literal notranslate"><span class="pre">DecimaResult</span></code></a><ul>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__annotations__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__init__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.__repr__"><code class="docutils literal notranslate"><span class="pre">DecimaResult.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.assert_genes"><code class="docutils literal notranslate"><span class="pre">DecimaResult.assert_genes()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.attributions"><code class="docutils literal notranslate"><span class="pre">DecimaResult.attributions()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.cell_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.cell_metadata</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.cells"><code class="docutils literal notranslate"><span class="pre">DecimaResult.cells</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.correlation"><code class="docutils literal notranslate"><span class="pre">DecimaResult.correlation()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.gene_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.gene_metadata</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.gene_sequence"><code class="docutils literal notranslate"><span class="pre">DecimaResult.gene_sequence()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.genes"><code class="docutils literal notranslate"><span class="pre">DecimaResult.genes</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.get_cell_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.get_cell_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.get_gene_metadata"><code class="docutils literal notranslate"><span class="pre">DecimaResult.get_gene_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.ground_truth"><code class="docutils literal notranslate"><span class="pre">DecimaResult.ground_truth</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.load"><code class="docutils literal notranslate"><span class="pre">DecimaResult.load()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.load_model"><code class="docutils literal notranslate"><span class="pre">DecimaResult.load_model()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.marker_zscores"><code class="docutils literal notranslate"><span class="pre">DecimaResult.marker_zscores()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.model"><code class="docutils literal notranslate"><span class="pre">DecimaResult.model</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.plot_correlation"><code class="docutils literal notranslate"><span class="pre">DecimaResult.plot_correlation()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.predicted_expression_matrix"><code class="docutils literal notranslate"><span class="pre">DecimaResult.predicted_expression_matrix()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.predicted_gene_expression"><code class="docutils literal notranslate"><span class="pre">DecimaResult.predicted_gene_expression()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.prepare_one_hot"><code class="docutils literal notranslate"><span class="pre">DecimaResult.prepare_one_hot()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.query_cells"><code class="docutils literal notranslate"><span class="pre">DecimaResult.query_cells()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.query_tasks"><code class="docutils literal notranslate"><span class="pre">DecimaResult.query_tasks()</span></code></a></li>
+<li><a class="reference internal" href="#decima.core.result.DecimaResult.shape"><code class="docutils literal notranslate"><span class="pre">DecimaResult.shape</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-decima.core">Module contents</a></li>
 </ul>
 </li>
@@ -1017,7 +1980,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3f1b9271"></script>
+</div><script src="../_static/documentation_options.js?v=52fac5ed"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
