@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Variant Effect Prediction with Decima" href="2-variant-effect-prediction.html"><link rel="prev" title="decima.vep package" href="../api/decima.vep.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Attribution and Motifs Detection with Decima - decima 0.0.post1.dev1+ga9d6eec85 documentation</title>
+        <title>Attribution and Motifs Detection with Decima - decima 0.0.post1.dev1+gf59fb6397 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+ga9d6eec85 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+gf59fb6397 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+ga9d6eec85 documentation</span>
+  <span class="sidebar-brand-text">decima 0.0.post1.dev1+gf59fb6397 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -270,10 +270,16 @@
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: decima attributions [OPTIONS]
 
   Generate and save attribution analysis results for a gene or a set of
-  sequences.
+  sequences and perform seqlet calling on the attributions.
 
   Output files:
 
@@ -316,8 +322,9 @@ Options:
   --model TEXT                    Model to use for attribution analysis either
                                   replicate number or path to the model.
                                   [default: ensemble]
-  --metadata PATH                 Path to the metadata anndata file. Default:
-                                  None.
+  --metadata TEXT                 Path to the metadata anndata file or name of
+                                  the model. If not provided, the compabilite
+                                  metadata for the model will be used.
   --method TEXT                   Method to use for attribution analysis.
   --transform [specificity|aggregate]
                                   Transform to use for attribution analysis.
@@ -350,32 +357,96 @@ Options:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1904.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1864.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1316.1MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...:  50%|█████████         | 1/2 [00:02&lt;00:02,  2.13s/it]decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
-Computing attributions...: 100%|██████████████████| 2/2 [00:03&lt;00:00,  1.84s/it]
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1845.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1869.1MB/s)
-Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 687.37it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0
+decima - INFO - Loading model v1_rep0 and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.6 (445.8MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:07.1 (437.5MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                          | 0/2 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|█████████         | 1/2 [00:02&lt;00:02,  2.23s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
 
+Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.33s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.49s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Loading model and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.0 (1528.2MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.0 (1574.5MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|              | 0/2 [00:00&lt;?, ?it/s]
+Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 459.62it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -387,11 +458,20 @@ Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>example/output_classical_monoctypes.attributions.bigwig
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>example/output_classical_monoctypes_0.attributions.bigwig
+example/output_classical_monoctypes_0.attributions.h5
+example/output_classical_monoctypes_0.warnings.qc.log
+example/output_classical_monoctypes_1.attributions.bigwig
+example/output_classical_monoctypes_1.attributions.h5
+example/output_classical_monoctypes_1.warnings.qc.log
+example/output_classical_monoctypes.attributions.bigwig
 example/output_classical_monoctypes.attributions.h5
 example/output_classical_monoctypes.motifs.tsv
 example/output_classical_monoctypes.seqlets.bed
 example/output_classical_monoctypes.warnings.qc.log
+
+example/output_classical_monoctypes_plots:
+BRD3.peaks.png	BRD3_seqlogos  SPI1.peaks.png  SPI1_seqlogos
 </pre></div>
 </div>
 </div>
@@ -410,7 +490,9 @@ example/output_classical_monoctypes.warnings.qc.log
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[b&#39;SPI1&#39; b&#39;BRD3&#39;]
 (2, 524288)
-(2, 4, 524288)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2, 4, 524288)
 </pre></div>
 </div>
 </div>
@@ -422,16 +504,16 @@ example/output_classical_monoctypes.warnings.qc.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>chr11  47152015  47152022  neg.SPI1@-29953  3  .  -0.42814336717128754
-chr11  47160163  47160167  neg.SPI1@-21805  3  .  -0.25199126452207565
-chr11  47160309  47160319  neg.SPI1@-21659  3  .  -0.7467306312173605
-chr11  47160323  47160333  neg.SPI1@-21645  3  .  -0.9774367886129767
-chr11  47165053  47165060  neg.SPI1@-16915  3  .  -0.46786930691450834
-chr11  47165593  47165606  pos.SPI1@-16375  3  .  1.7940459251403809
-chr11  47165642  47165653  pos.SPI1@-16326  3  .  1.0624531591311097
-chr11  47165653  47165664  neg.SPI1@-16315  3  .  -1.4263939633965492
-chr11  47165664  47165670  neg.SPI1@-16304  3  .  -0.40090638771653175
-chr11  47165690  47165703  pos.SPI1@-16278  3  .  1.1790284179151058
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>chr11  47152015  47152022  neg.SPI1@-29953  3.31894  .  -0.41688821464776993
+chr11  47160163  47160167  neg.SPI1@-21805  3.33346  .  -0.2519867978990078
+chr11  47160309  47160319  neg.SPI1@-21659  3.36046  .  -0.7482765801250935
+chr11  47160323  47160333  neg.SPI1@-21645  3.35597  .  -0.9791450921911746
+chr11  47165053  47165060  neg.SPI1@-16915  3.35769  .  -0.46799773909151554
+chr11  47165593  47165606  pos.SPI1@-16375  3.41662  .  1.8055671770125628
+chr11  47165642  47165653  pos.SPI1@-16326  3.37915  .  1.059839816763997
+chr11  47165653  47165664  neg.SPI1@-16315  3.64033  .  -1.4299414344131947
+chr11  47165664  47165670  neg.SPI1@-16304  3.36339  .  -0.4015889251604676
+chr11  47165690  47165703  pos.SPI1@-16278  3.3902   .  1.1793060060590506
 </pre></div>
 </div>
 </div>
@@ -443,16 +525,16 @@ chr11  47165690  47165703  pos.SPI1@-16278  3  .  1.1790284179151058
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RARA.H13CORE.1.P.B        neg.BRD3@2651    166492  166511  -  7.690212368965149   0.000499333134939661   CTACCTTCCTCTACCCTCT      -0.00013111276999361028  -0.0005596191433799649  2652
-RARA.H13CORE.1.P.B        neg.BRD3@32535   196372  196391  -  7.606964826583862   0.000499333134939661   TGAAGTTCCTCTCCCCTCC      -0.0005527154669260582   -0.0007040620484463215  32532
-RARA.H13CORE.1.P.B        pos.BRD3@2657    166492  166511  -  7.690212368965149   0.000499333134939661   CTACCTTCCTCTACCCTCT      -0.00013111276999361028  -0.0005596191433799649  2652
-SP1.H13CORE.0.P.B         pos.BRD3@46      163891  163905  -  4.692713022232056   0.000499375164508819   GCGCGCCGCCCCGC           -0.00021742627099488994  0.0003424161255357046   51
-ANDR.H13CORE.2.P.B        neg.BRD3@2454    166291  166310  +  7.7568066120147705  0.0004996894640498803  TTTTTATTTTTGTTTTGTT      -0.0008813150420074204   -0.0014833488872296214  2451
-ATOH1.H13CORE.0.P.B       pos.BRD3@6463    170307  170317  +  6.371594667434692   0.0004997253417968743  AGCAGTTGGC               0.00022125871619209646   -5.499589891702337e-05  6467
-CGGBP1.H13CORE.0.PSGIB.A  neg.BRD3@614     164462  164473  -  9.182251572608948   0.000499725341796875   GGGGCGGCGGG              4.643183505818756e-05    0.0006390382217894364   622
-ZN394.H13CORE.0.P.C       pos.BRD3@573     164409  164428  +  6.16656231880188    0.0004997442010790109  GCCGCCGGAGCCGCGAGGC      0.001674207092085118     0.003827750839971681    569
-ZNF30.H13CORE.0.P.C       neg.BRD3@291     164117  164140  -  7.218540787696838   0.0004997881442108104  CGGGCGCCGAGCCCCGCCCCCGC  -0.0007112058181361215   -0.0011016258332200105  277
-NR1H4.H13CORE.1.P.B       pos.BRD3@194003  357832  357850  -  7.282587766647339   0.0004999180964659896  CCTTGGAGGCAGTGACTC       0.0006504213249879993    0.0014391388014935464   193992
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ZNF507.H13CORE.0.I.B      pos.BRD3@1374     165221  165230  +  9.005010962486267   0.0004997253417968743  CTCCTTCCC                0.0001575700912831558   -0.0002066142760199578   1381
+PPARA.H13CORE.1.P.B       pos.BRD3@-61106   102728  102737  +  8.097402691841125   0.0004997253417968743  AAGAGGTGA                0.0009877644590435214   0.0027158458094883164    -61112
+ZNF507.H13CORE.0.I.B      neg.BRD3@1388     165221  165230  +  9.005010962486267   0.0004997253417968743  CTCCTTCCC                0.0001575700912831558   -0.0002066142760199578   1381
+ARNT.H13CORE.0.P.B        pos.BRD3@26580    190423  190432  +  8.84844446182251    0.0004997253417968755  GGACGTGTT                0.0001840576308798821   -0.00032131952384467405  26583
+ZN394.H13CORE.0.P.C       pos.BRD3@573      164409  164428  +  6.16656231880188    0.0004997442047169893  GCCGCCGGAGCCGCGAGGC      0.0016583528068670268   0.003810155552068253     569
+ZNF30.H13CORE.0.P.C       neg.BRD3@291      164117  164140  -  7.218540787696838   0.0004997881442250214  CGGGCGCCGAGCCCCGCCCCCGC  -0.0007085893436021212  -0.001097117428680497    277
+NR1H4.H13CORE.1.P.B       pos.BRD3@194003   357832  357850  -  7.282587647438049   0.0004999181110179031  CCTTGGAGGCAGTGACTC       0.0006487710052169859   0.0014354905397428942    193992
+CGGBP1.H13CORE.0.PSGIB.A  neg.BRD3@614      164462  164473  -  9.182251572608948   0.0004999637603759763  GGGGCGGCGGG              4.89058068276129e-05    0.000644476072918215     622
+KLF7.H13CORE.0.P.B        neg.BRD3@-102394  61443   61453   -  15.217368483543396                         CCCCGCCCCC               -0.0013154596599633805  -0.0038895047854197937   -102397
+KLF7.H13CORE.0.P.B        neg.BRD3@291      164128  164138  -  15.217368483543396                         CCCCGCCCCC               -0.0009656054913648404  -0.0033124240223047752   288
 </pre></div>
 </div>
 </div>
@@ -488,22 +570,50 @@ By chaining these subcommands, you can customize, debug, or parallelize each ste
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1899.6MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.8 (1769.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1315.5MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...:  50%|█████████         | 1/2 [00:02&lt;00:02,  2.14s/it]decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
-Computing attributions...: 100%|██████████████████| 2/2 [00:03&lt;00:00,  1.84s/it]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0
+decima - INFO - Loading model v1_rep0 and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.4 (524.8MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.0 (1580.3MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
 
+Computing attributions...:   0%|                          | 0/2 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|█████████         | 1/2 [00:01&lt;00:01,  1.33s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+
+Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.04it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.04s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -515,22 +625,50 @@ Computing attributions...: 100%|████████████████
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1859.3MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1901.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1387.3MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...:  50%|█████████         | 1/2 [00:02&lt;00:02,  2.10s/it]decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
-Computing attributions...: 100%|██████████████████| 2/2 [00:03&lt;00:00,  1.83s/it]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0
+decima - INFO - Loading model v1_rep1 and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep1:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:00.9 (803.4MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.9 (1614.1MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
 
+Computing attributions...:   0%|                          | 0/2 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|█████████         | 1/2 [00:01&lt;00:01,  1.37s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - WARNING - Gene BRD3 has low correlation with the model. Pearson: 0.3440624267844621. Be careful with the predictions of the model for this gene. Check `DecimaResult.load().gene_metadata[&#39;pearson&#39;]` to see the correlation of the gene with the model.
+
+Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.01it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.07s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -543,19 +681,64 @@ Computing attributions...: 100%|████████████████
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1844.8MB/s)
-decima - INFO - No genes provided, using all 2 genes in the attribution files.
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1874.6MB/s)
-Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 846.31it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.0 (1584.0MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - No genes provided, using all 2 genes in the attribution files.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.8 (1691.6MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|              | 0/2 [00:00&lt;?, ?it/s]
+Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 855.46it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -568,18 +751,45 @@ Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Plotting attributions...:   0%|                           | 0/2 [00:00&lt;?, ?it/s]<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1864.1MB/s)
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/plotnine/ggplot.py:615: PlotnineWarning: Saving 10 x 2 in image.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/plotnine/ggplot.py:616: PlotnineWarning: Filename: example/output_classical_monoctypes_plots/SPI1.peaks.png
-Plotting attributions...:  50%|█████████▌         | 1/2 [00:13&lt;00:13, 13.09s/it]<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1888.9MB/s)
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/plotnine/ggplot.py:615: PlotnineWarning: Saving 10 x 2 in image.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/plotnine/ggplot.py:616: PlotnineWarning: Filename: example/output_classical_monoctypes_plots/BRD3.peaks.png
-Plotting attributions...: 100%|███████████████████| 2/2 [00:24&lt;00:00, 12.45s/it]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Plotting attributions...:   0%|                           | 0/2 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.9 (1666.6MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/plotnine/ggplot.py:630: PlotnineWarning: Saving 10 x 2 in image.
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/plotnine/ggplot.py:631: PlotnineWarning: Filename: example/output_classical_monoctypes_plots/SPI1.peaks.png
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Plotting attributions...:  50%|█████████▌         | 1/2 [00:12&lt;00:12, 12.95s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.9 (1648.9MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/plotnine/ggplot.py:630: PlotnineWarning: Saving 10 x 2 in image.
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/plotnine/ggplot.py:631: PlotnineWarning: Filename: example/output_classical_monoctypes_plots/BRD3.peaks.png
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Plotting attributions...: 100%|███████████████████| 2/2 [00:23&lt;00:00, 11.76s/it]
+Plotting attributions...: 100%|███████████████████| 2/2 [00:23&lt;00:00, 11.94s/it]
 
 </pre></div>
 </div>
@@ -594,7 +804,7 @@ Plotting attributions...: 100%|████████████████�
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/17eb7a775bf4fca5448afd3086cd42f91f041e2d5fea521462b11593760b58a1.png" src="../_images/17eb7a775bf4fca5448afd3086cd42f91f041e2d5fea521462b11593760b58a1.png" />
+<img alt="../_images/7d6dfb4a4facc44844f463a3422a7d722e8fc8385f23b18283fa9237833bdf97.png" src="../_images/7d6dfb4a4facc44844f463a3422a7d722e8fc8385f23b18283fa9237833bdf97.png" />
 </div>
 </div>
 </section>
@@ -608,6 +818,12 @@ Plotting attributions...: 100%|████████████████�
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: decima query-cell [OPTIONS] [QUERY]
 
   Query a cell using query string
@@ -623,7 +839,9 @@ Plotting attributions...: 100%|████████████████�
       &quot;healthy&quot;&#39;     ...
 
 Options:
-  --help  Show this message and exit.
+  --metadata TEXT  Path to the metadata anndata file or name of the model.
+                   Default: ensemble.
+  --help           Show this message and exit.
 
 </pre></div>
 </div>
@@ -637,11 +855,23 @@ Options:
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1874.1MB/s)
-          cell_type           tissue                            organ           disease                                         study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts        n_genes  size_factor         train_pearson       val_pearson         test_pearson
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.8 (1700.8MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          cell_type           tissue                            organ           disease                                         study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts        n_genes  size_factor         train_pearson       val_pearson         test_pearson
 agg_4705  classical monocyte  alveolar system                   lung            COVID-19                                        GSE155249                             scimilarity  nan     nan                         7244     26544273.0          15325    34749.092791034054  0.946616874183219   0.8437000068912937  0.8506571540216992
 agg_4706  classical monocyte  alveolar system                   lung            healthy                                         GSE155249                             scimilarity  nan     nan                         72       218105.0            9142     30484.31888978114   0.9102228263646758  0.8083487523192785  0.8047828694155461
 agg_4707  classical monocyte  ampulla of uterine tube           fallopian tube  healthy                                         fc77d2ae-247d-44d7-aa24-3f4859254c2c  scimilarity  nan     nan                         78       550950.0            9639     30719.377971431015  0.9077670011915634  0.8045070167513724  0.7896845423359651
@@ -845,11 +1075,23 @@ agg_4903  classical monocyte  visceral fat                      adipose         
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1835.5MB/s)
-          cell_type               tissue                            organ           disease  study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts  n_genes  size_factor         train_pearson       val_pearson         test_pearson
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.9 (1657.8MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          cell_type               tissue                            organ           disease  study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts  n_genes  size_factor         train_pearson       val_pearson         test_pearson
 agg_4706  classical monocyte      alveolar system                   lung            healthy  GSE155249                             scimilarity  nan     nan                         72       218105.0      9142     30484.31888978114   0.9102228263646758  0.8083487523192785  0.8047828694155461
 agg_4707  classical monocyte      ampulla of uterine tube           fallopian tube  healthy  fc77d2ae-247d-44d7-aa24-3f4859254c2c  scimilarity  nan     nan                         78       550950.0      9639     30719.377971431015  0.9077670011915634  0.8045070167513724  0.7896845423359651
 agg_4709  classical monocyte      aorta                             vasculature     healthy  GSE166676                             scimilarity  nan     nan                         25       162858.0      8859     31216.275954364824  0.8819013257206973  0.7821403055329706  0.7646999711802146
@@ -1014,11 +1256,23 @@ agg_8046  non-classical monocyte  vasculature                       vasculature 
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1862.1MB/s)
-          cell_type           tissue  organ  disease  study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts  n_genes  size_factor         train_pearson       val_pearson         test_pearson
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:01.9 (1663.1MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          cell_type           tissue  organ  disease  study                                 dataset      region  subregion  celltype_coarse  n_cells  total_counts  n_genes  size_factor         train_pearson       val_pearson         test_pearson
 agg_4733  classical monocyte  blood   blood  healthy  03f821b4-87be-4ff4-b65a-b5fc00061da7  scimilarity  nan     nan                         32464    109280914.0   16158    33646.02843110038   0.9568728712803031  0.8545324533535094  0.8487445540580735
 agg_4734  classical monocyte  blood   blood  healthy  436154da-bcf1-4130-9c8b-120ff9a888f2  scimilarity  nan     nan                         76800    206490628.0   16683    30736.453324546856  0.955313650235467   0.8494127267867799  0.84210567312908
 agg_4735  classical monocyte  blood   blood  healthy  5d445965-6f1a-4b68-ba3a-b8f765155d3a  scimilarity  nan     nan                         1044     3638976.0     12306    30542.8977364245    0.9465384578921433  0.851991795617166   0.8308191715256182
@@ -1066,46 +1320,105 @@ For example, in the header:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&gt;CD68|gene_mask_start=163840|gene_mask_end=166460
-CTCTGCAGAGAGCGAGGACGGTGTGTCTGCCAGCGCCTTTGACTTCACTGTCTCCAACTTTGTGGACAACCTGTATGGCTACCCGGAAGGCAAGGATGTGCTTCGGGAGACCATCAAGTTTATGTACACAGACTGGGCCGACCGGGACAATGGCGAAATGCGCCGCAAAACCCTGCTGGCGCTCTTTACTGACCACCAAT
-&gt;SPI1|gene_mask_start=163840|gene_mask_end=187556
-TGCCACTTTTAGATATGTTCATGGGTGCAGATACGGCTTTATTTATTTGAGACAGAGTTTCACTCTTGTTGCCCAGGGTGGAGTGCAGTGGTGCGATCTCAGCTCACTGCAGCCTTCGCCTCCCGGGTTGAAGCGATTCTTCTGCCTCAACCTCGAGTAGCTGGGATTATAGGCACCTGCCAGCATGCCTGGCTAATTTT
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cat: ../tests/data/seqs.fasta: No such file or directory
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>attributions<span class="w"> </span>--model<span class="w"> </span>v1_rep0<span class="w"> </span>--seqs<span class="w"> </span>../tests/data/seqs.fasta<span class="w"> </span>--tasks<span class="w"> </span><span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span><span class="w"> </span>--output-prefix<span class="w"> </span>example/output_custom_seqs
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>attributions<span class="w"> </span>--model<span class="w"> </span>v1_rep0<span class="w"> </span>--seqs<span class="w"> </span>../../tests/data/seqs.fasta<span class="w"> </span>--tasks<span class="w"> </span><span class="s2">&quot;cell_type == &#39;classical monocyte&#39;&quot;</span><span class="w"> </span>--output-prefix<span class="w"> </span>example/output_custom_seqs
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: cuda
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1875.1MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1871.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1297.0MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████████████| 2/2 [00:04&lt;00:00,  2.09s/it]
-decima - INFO - Saving sequences...
-Saving sequences...: 2it [00:00, 4493.09it/s]
-decima - INFO - Loading model and metadata to compute attributions...
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1856.1MB/s)
-decima - INFO - No genes provided, using all 2 genes in the attribution files.
-Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 543.20it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0
+decima - INFO - Loading model v1_rep0 and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:00.9 (837.1MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.0 (1562.9MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                          | 0/2 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|█████████         | 1/2 [00:01&lt;00:01,  1.38s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.00it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████████████| 2/2 [00:02&lt;00:00,  1.08s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Saving sequences...
 
+Saving sequences...: 0it [00:00, ?it/s]
+Saving sequences...: 2it [00:00, 10965.50it/s]
+decima - INFO - Loading model and metadata to compute attributions...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+Done. 00:00:02.2 (1445.0MB/s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - No genes provided, using all 2 genes in the attribution files.
+
+Computing recursive seqlet calling...:   0%|              | 0/2 [00:00&lt;?, ?it/s]
+Computing recursive seqlet calling...: 100%|█████| 2/2 [00:00&lt;00:00, 597.44it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -1161,21 +1474,39 @@ example/output_classical_monoctypes.warnings.qc.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00, 469.84it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00, 432.31it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>seqs: [[[0. 0. 0. ... 0. 0. 0.]
   [0. 0. 1. ... 0. 0. 0.]
   [0. 1. 0. ... 1. 0. 1.]
   [1. 0. 0. ... 0. 1. 0.]]]
-attrs: [[[-5.04877644e-05 -3.64095758e-05  7.14814905e-06 ... -1.40671709e-05
-   -5.00998385e-06 -6.19171897e-06]
-  [-5.04877644e-05 -3.64095758e-05 -2.14444472e-05 ... -1.40671709e-05
-   -5.00998385e-06 -6.19171897e-06]
-  [-5.04877644e-05  1.09228728e-04  7.14814905e-06 ...  4.22015128e-05
-   -5.00998385e-06  1.85751569e-05]
-  [ 1.51463293e-04 -3.64095758e-05  7.14814905e-06 ... -1.40671709e-05
-    1.50299516e-05 -6.19171897e-06]]]
+attrs: [[[-5.10058962e-05 -3.67399698e-05  7.25216159e-06 ... -1.40011580e-05
+   -5.10658174e-06 -6.25329176e-06]
+  [-5.10058962e-05 -3.67399698e-05 -2.17564848e-05 ... -1.40011580e-05
+   -5.10658174e-06 -6.25329176e-06]
+  [-5.10058962e-05  1.10219909e-04  7.25216159e-06 ...  4.20034739e-05
+   -5.10658174e-06  1.87598753e-05]
+  [ 1.53017689e-04 -3.67399698e-05  7.25216159e-06 ... -1.40011580e-05
+    1.53197452e-05 -6.25329176e-06]]]
 </pre></div>
 </div>
 </div>
@@ -1191,9 +1522,15 @@ attrs: [[[-5.04877644e-05 -3.64095758e-05  7.14814905e-06 ... -1.40671709e-05
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1889.1MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (1731.2MB/s)
 </pre></div>
 </div>
 </div>
@@ -1208,7 +1545,7 @@ Done. 0:0:1.7 (1889.1MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a8075529a1a455f7b6595a2388c23173478683997206938a63428b961fedf9e3.png" src="../_images/a8075529a1a455f7b6595a2388c23173478683997206938a63428b961fedf9e3.png" />
+<img alt="../_images/a7c7ae33d1abb11712016404896cc7b974b61bfe7d6d2264a6f7315dbeffae79.png" src="../_images/a7c7ae33d1abb11712016404896cc7b974b61bfe7d6d2264a6f7315dbeffae79.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1218,7 +1555,7 @@ Done. 0:0:1.7 (1889.1MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/c9528e8d680a784d6469f3d3aec97b72e78408c09dd4e60669c7a3e34047886a.png"><img alt="../_images/c9528e8d680a784d6469f3d3aec97b72e78408c09dd4e60669c7a3e34047886a.png" src="../_images/c9528e8d680a784d6469f3d3aec97b72e78408c09dd4e60669c7a3e34047886a.png" style="width: 1000px; height: 200px;" />
+<a class="reference internal image-reference" href="../_images/7fdd8c135fc5e876ee359c8812a3ca38f6f39373a6fb76573591978127d53712.png"><img alt="../_images/7fdd8c135fc5e876ee359c8812a3ca38f6f39373a6fb76573591978127d53712.png" src="../_images/7fdd8c135fc5e876ee359c8812a3ca38f6f39373a6fb76573591978127d53712.png" style="width: 1000px; height: 200px;" />
 </a>
 </div>
 </div>
@@ -1259,58 +1596,175 @@ Done. 0:0:1.7 (1889.1MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1882.9MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1896.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1362.8MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 1/1 [00:02&lt;00:00,  2.19s/it]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1879.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1872.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1184.0MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.78s/it]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1869.6MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1906.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep2:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1223.8MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.78s/it]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1839.5MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.8 (1767.9MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep3:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1362.2MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.79s/it]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1798.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1875.8MB/s)
-Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.66s/it]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:00.6 (1180.1MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (1694.4MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.51s/it]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.55s/it]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep1:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.6 (442.2MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (1701.1MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep2:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (387.4MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (1684.4MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.07it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep3:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (402.4MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (1651.1MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (1737.2MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (1658.9MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.08s/it]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.08s/it]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
 </pre></div>
 </div>
 </div>
@@ -1329,51 +1783,71 @@ Computing recursive seqlet calling...: 100%|██████████| 1/1 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">28</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">df_seqs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../tests/data/seqs.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">df_seqs</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+<span class="nn">File ~/miniforge3/envs/decima2/lib/python3.11/site-packages/pandas/io/parsers/readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1014</span>     <span class="n">dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1015</span>     <span class="n">delimiter</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>   <span class="mi">1022</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1023</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1026</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>seq</th>
-      <th>gene_mask_start</th>
-      <th>gene_mask_end</th>
-    </tr>
-    <tr>
-      <th>name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>CD68</th>
-      <td>CTCTGCAGAGAGCGAGGACGGTGTGTCTGCCAGCGCCTTTGACTTC...</td>
-      <td>163840</td>
-      <td>166460</td>
-    </tr>
-    <tr>
-      <th>SPI1</th>
-      <td>TGCCACTTTTAGATATGTTCATGGGTGCAGATACGGCTTTATTTAT...</td>
-      <td>163840</td>
-      <td>187556</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<span class="nn">File ~/miniforge3/envs/decima2/lib/python3.11/site-packages/pandas/io/parsers/readers.py:620,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">617</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">619</span> <span class="c1"># Create the parser.</span>
+<span class="ne">--&gt; </span><span class="mi">620</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">623</span>     <span class="k">return</span> <span class="n">parser</span>
+
+<span class="nn">File ~/miniforge3/envs/decima2/lib/python3.11/site-packages/pandas/io/parsers/readers.py:1620,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1617</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1619</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1620</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="nn">File ~/miniforge3/envs/decima2/lib/python3.11/site-packages/pandas/io/parsers/readers.py:1880,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1878</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1879</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1880</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1881</span>     <span class="n">f</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1882</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1883</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1884</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1885</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1886</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1887</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1888</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1889</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1890</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1891</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File ~/miniforge3/envs/decima2/lib/python3.11/site-packages/pandas/io/common.py:873,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">868</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">869</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
+<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="g g-Whitespace">    </span><span class="mi">871</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="c1"># Encoding</span>
+<span class="ne">--&gt; </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">876</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">877</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../tests/data/seqs.csv&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1388,63 +1862,18 @@ Computing recursive seqlet calling...: 100%|██████████| 1/1 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1898.7MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1844.3MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1285.9MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 2/2 [00:03&lt;00:00,  1.66s/it]
-Saving sequences...: 2it [00:00, 3483.64it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1928.9MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1873.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep1:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1232.0MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 2/2 [00:03&lt;00:00,  1.65s/it]
-Saving sequences...: 2it [00:00, 2953.74it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1889.6MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.6 (1901.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep2:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.6 (1255.7MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 2/2 [00:03&lt;00:00,  1.64s/it]
-Saving sequences...: 2it [00:00, 3894.43it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1874.7MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1874.1MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep3:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1374.8MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 2/2 [00:03&lt;00:00,  1.64s/it]
-Saving sequences...: 2it [00:00, 2833.03it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1888.2MB/s)
-Computing recursive seqlet calling...: 100%|██████████| 2/2 [00:00&lt;00:00, 895.17it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ls: cannot access &#39;attrs_custom_seqs_monoctypes&#39;: No such file or directory
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">29</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">predict_attributions_seqlet_calling</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;example/attrs_custom_seqs_monoctypes&quot;</span><span class="p">,</span>
+<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="n">seqs</span><span class="o">=</span><span class="n">df_seqs</span><span class="p">,</span>  <span class="c1"># &lt;-- custom sequences</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">tasks</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;cell_type in </span><span class="si">{</span><span class="n">spi1_cell_types</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39; ls attrs_custom_seqs_monoctypes&#39;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;df_seqs&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1501,23 +1930,73 @@ Computing recursive seqlet calling...: 100%|██████████| 2/2 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1885.6MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1888.6MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1335.1MB/s)
-/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:43: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
-Computing attributions...: 100%|██████████| 1/1 [00:01&lt;00:00,  1.79s/it]
-Saving sequences...: 1it [00:00, 3806.08it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1854.2MB/s)
-Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:00&lt;00:00, 1219.63it/s]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:00.6 (1145.4MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.8 (1748.9MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/Projects/decima/src/decima/interpret/attributer.py:66: UserWarning: `off_tasks` is not provided. Using all other tasks as off_tasks.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saving sequences...: 0it [00:00, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saving sequences...: 1it [00:00, 8525.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.7 (1786.9MB/s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:00&lt;00:00, 1403.25it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;repr&#39; attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. &#39;repr&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The &#39;frozen&#39; attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. &#39;frozen&#39; is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
 </pre></div>
 </div>
 </div>
@@ -1553,9 +2032,13 @@ example/attrs_custom_tensors_monoctypes.warnings.qc.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact metadata:latest, 3122.32MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.7 (1877.9MB/s)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (1639.9MB/s)
 </pre></div>
 </div>
 </div>
@@ -2841,9 +3324,16 @@ Done. 0:0:1.7 (1877.9MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact rep0:latest, 720.03MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1332.8MB/s)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: <span class=" -Color -Color-Yellow">WARNING</span> A graphql request initiated by the public wandb API timed out (timeout=19 sec). Create a new API with an integer timeout larger than 19, e.g., `api = wandb.Api(timeout=29)` to increase the graphql timeout.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:00.7 (1008.5MB/s)
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DecimaResult(anndata=AnnData object with n_obs × n_vars = 8856 × 18457
@@ -2907,8 +3397,8 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>pos.SPI1@37</td>
       <td>163877</td>
       <td>163902</td>
-      <td>12.738598</td>
-      <td>2.189116e-11</td>
+      <td>12.817252</td>
+      <td>2.186883e-11</td>
       <td>37</td>
     </tr>
     <tr>
@@ -2916,8 +3406,8 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>pos.SPI1@-121</td>
       <td>163719</td>
       <td>163744</td>
-      <td>5.578619</td>
-      <td>1.900737e-05</td>
+      <td>5.595659</td>
+      <td>1.899081e-05</td>
       <td>-121</td>
     </tr>
     <tr>
@@ -2925,8 +3415,8 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>pos.SPI1@-57</td>
       <td>163783</td>
       <td>163803</td>
-      <td>9.269885</td>
-      <td>3.052090e-05</td>
+      <td>9.307484</td>
+      <td>3.054640e-05</td>
       <td>-57</td>
     </tr>
     <tr>
@@ -2934,8 +3424,8 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>pos.SPI1@62</td>
       <td>163902</td>
       <td>163909</td>
-      <td>1.285628</td>
-      <td>3.080049e-05</td>
+      <td>1.281183</td>
+      <td>3.068997e-05</td>
       <td>62</td>
     </tr>
     <tr>
@@ -2943,8 +3433,8 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>pos.SPI1@-79</td>
       <td>163761</td>
       <td>163765</td>
-      <td>0.832053</td>
-      <td>6.105891e-05</td>
+      <td>0.833269</td>
+      <td>6.109865e-05</td>
       <td>-79</td>
     </tr>
     <tr>
@@ -2958,52 +3448,52 @@ Done. 0:0:0.5 (1332.8MB/s)
     </tr>
     <tr>
       <th>72</th>
-      <td>neg.SPI1@-22</td>
-      <td>163818</td>
-      <td>163836</td>
-      <td>-11.178307</td>
-      <td>4.889269e-04</td>
-      <td>-22</td>
-    </tr>
-    <tr>
-      <th>73</th>
       <td>neg.SPI1@443</td>
       <td>164283</td>
       <td>164293</td>
-      <td>-0.718594</td>
-      <td>4.918033e-04</td>
+      <td>-0.717349</td>
+      <td>4.916059e-04</td>
       <td>443</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>neg.SPI1@23600</td>
+      <td>187440</td>
+      <td>187445</td>
+      <td>-0.267438</td>
+      <td>4.916059e-04</td>
+      <td>23600</td>
     </tr>
     <tr>
       <th>74</th>
       <td>neg.SPI1@32783</td>
       <td>196623</td>
       <td>196630</td>
-      <td>-0.460660</td>
-      <td>4.924140e-04</td>
+      <td>-0.461813</td>
+      <td>4.918151e-04</td>
       <td>32783</td>
     </tr>
     <tr>
       <th>75</th>
-      <td>neg.SPI1@-21806</td>
-      <td>142034</td>
-      <td>142040</td>
-      <td>-0.328668</td>
-      <td>4.924140e-04</td>
-      <td>-21806</td>
+      <td>neg.SPI1@1735</td>
+      <td>165575</td>
+      <td>165592</td>
+      <td>-1.437498</td>
+      <td>4.918151e-04</td>
+      <td>1735</td>
     </tr>
     <tr>
       <th>76</th>
       <td>neg.SPI1@31668</td>
       <td>195508</td>
       <td>195512</td>
-      <td>-0.212833</td>
-      <td>4.924140e-04</td>
+      <td>-0.213403</td>
+      <td>4.918151e-04</td>
       <td>31668</td>
     </tr>
   </tbody>
 </table>
-<p>136 rows × 6 columns</p>
+<p>135 rows × 6 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -3042,24 +3532,24 @@ Done. 0:0:0.5 (1332.8MB/s)
   </thead>
   <tbody>
     <tr>
-      <th>41</th>
+      <th>38</th>
       <td>chr11</td>
       <td>47216350</td>
       <td>47216357</td>
       <td>pos.SPI1@162219</td>
-      <td>3</td>
+      <td>3.33494</td>
       <td>.</td>
-      <td>0.542525</td>
+      <td>0.543797</td>
     </tr>
     <tr>
-      <th>45</th>
+      <th>49</th>
       <td>chr11</td>
       <td>47257597</td>
       <td>47257605</td>
       <td>pos.SPI1@120971</td>
-      <td>3</td>
+      <td>3.31931</td>
       <td>.</td>
-      <td>0.679172</td>
+      <td>0.680714</td>
     </tr>
     <tr>
       <th>65</th>
@@ -3067,29 +3557,29 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>47257633</td>
       <td>47257637</td>
       <td>neg.SPI1@120939</td>
-      <td>3</td>
+      <td>3.31455</td>
       <td>.</td>
-      <td>-0.220710</td>
+      <td>-0.221530</td>
     </tr>
     <tr>
-      <th>62</th>
+      <th>63</th>
       <td>chr11</td>
       <td>47257734</td>
       <td>47257739</td>
       <td>neg.SPI1@120837</td>
-      <td>3</td>
+      <td>3.32086</td>
       <td>.</td>
-      <td>-0.273576</td>
+      <td>-0.273840</td>
     </tr>
     <tr>
-      <th>44</th>
+      <th>43</th>
       <td>chr11</td>
       <td>47345731</td>
       <td>47345736</td>
       <td>neg.SPI1@32840</td>
-      <td>3</td>
+      <td>3.35317</td>
       <td>.</td>
-      <td>-0.296525</td>
+      <td>-0.298483</td>
     </tr>
     <tr>
       <th>...</th>
@@ -3102,44 +3592,44 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>...</td>
     </tr>
     <tr>
-      <th>70</th>
+      <th>69</th>
       <td>chr11</td>
       <td>47395483</td>
       <td>47395492</td>
       <td>neg.SPI1@-16916</td>
-      <td>3</td>
+      <td>3.31094</td>
       <td>.</td>
-      <td>-0.567591</td>
+      <td>-0.567760</td>
     </tr>
     <tr>
-      <th>40</th>
+      <th>39</th>
       <td>chr11</td>
       <td>47400211</td>
       <td>47400221</td>
       <td>neg.SPI1@-21645</td>
-      <td>3</td>
+      <td>3.35527</td>
       <td>.</td>
-      <td>-0.898548</td>
+      <td>-0.900000</td>
     </tr>
     <tr>
-      <th>38</th>
+      <th>37</th>
       <td>chr11</td>
       <td>47400225</td>
       <td>47400235</td>
       <td>neg.SPI1@-21659</td>
-      <td>3</td>
+      <td>3.35844</td>
       <td>.</td>
-      <td>-0.727634</td>
+      <td>-0.729126</td>
     </tr>
     <tr>
-      <th>75</th>
+      <th>68</th>
       <td>chr11</td>
       <td>47400376</td>
       <td>47400382</td>
       <td>neg.SPI1@-21806</td>
-      <td>3</td>
+      <td>3.31094</td>
       <td>.</td>
-      <td>-0.328668</td>
+      <td>-0.329538</td>
     </tr>
     <tr>
       <th>58</th>
@@ -3147,13 +3637,13 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>47400703</td>
       <td>47400709</td>
       <td>neg.SPI1@-22133</td>
-      <td>3</td>
+      <td>3.33067</td>
       <td>.</td>
-      <td>-0.327103</td>
+      <td>-0.325769</td>
     </tr>
   </tbody>
 </table>
-<p>136 rows × 7 columns</p>
+<p>135 rows × 7 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -3163,7 +3653,7 @@ Done. 0:0:0.5 (1332.8MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/bb32b1c7540af7b5de7e23e7c2a3a46e06932cf72ca407b0baecdc6cdd532928.png"><img alt="../_images/bb32b1c7540af7b5de7e23e7c2a3a46e06932cf72ca407b0baecdc6cdd532928.png" src="../_images/bb32b1c7540af7b5de7e23e7c2a3a46e06932cf72ca407b0baecdc6cdd532928.png" style="width: 1000px; height: 200px;" />
+<a class="reference internal image-reference" href="../_images/67990ada3c2562725dbe7744c1cba0b485f59173052003a61e89d078c3118334.png"><img alt="../_images/67990ada3c2562725dbe7744c1cba0b485f59173052003a61e89d078c3118334.png" src="../_images/67990ada3c2562725dbe7744c1cba0b485f59173052003a61e89d078c3118334.png" style="width: 1000px; height: 200px;" />
 </a>
 </div>
 </div>
@@ -3177,7 +3667,7 @@ Done. 0:0:0.5 (1332.8MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0a0147bfe257595d918a0c2359b5972a0475f37ffdd99865bd5a74e29783108b.png" src="../_images/0a0147bfe257595d918a0c2359b5972a0475f37ffdd99865bd5a74e29783108b.png" />
+<img alt="../_images/6810de75f87b46c8dece1b8dbc94b0e2b1a9b90b061bed80ba588c1c2ed319e7.png" src="../_images/6810de75f87b46c8dece1b8dbc94b0e2b1a9b90b061bed80ba588c1c2ed319e7.png" />
 </div>
 </div>
 <p>This comment takes around ~1 minutes and detects motifs in the attributions using FIMO. The motifs are ranked by their attribution scores:</p>
@@ -3222,74 +3712,74 @@ Done. 0:0:0.5 (1332.8MB/s)
   </thead>
   <tbody>
     <tr>
-      <th>2918</th>
-      <td>KLF7.H13CORE.0.P.B</td>
-      <td>neg.SPI1@1813</td>
-      <td>165662</td>
-      <td>165672</td>
-      <td>+</td>
-      <td>15.217368</td>
-      <td>0.000000e+00</td>
-      <td>GGGGGCGGGG</td>
-      <td>0.009462</td>
-      <td>0.027049</td>
-      <td>1822</td>
-    </tr>
-    <tr>
-      <th>7458</th>
-      <td>KLF7.H13CORE.0.P.B</td>
-      <td>pos.SPI1@1820</td>
-      <td>165662</td>
-      <td>165672</td>
-      <td>+</td>
-      <td>15.217368</td>
-      <td>0.000000e+00</td>
-      <td>GGGGGCGGGG</td>
-      <td>0.009462</td>
-      <td>0.027049</td>
-      <td>1822</td>
-    </tr>
-    <tr>
-      <th>2992</th>
-      <td>KLF7.H13CORE.0.P.B</td>
-      <td>neg.SPI1@1832</td>
-      <td>165662</td>
-      <td>165672</td>
-      <td>+</td>
-      <td>15.217368</td>
-      <td>0.000000e+00</td>
-      <td>GGGGGCGGGG</td>
-      <td>0.009462</td>
-      <td>0.027049</td>
-      <td>1822</td>
-    </tr>
-    <tr>
-      <th>2068</th>
-      <td>RXRB.H13CORE.2.PS.A</td>
-      <td>neg.SPI1@1182</td>
-      <td>165019</td>
-      <td>165030</td>
-      <td>-</td>
-      <td>12.213856</td>
-      <td>0.000000e+00</td>
-      <td>CCATGACCTCT</td>
-      <td>-0.008296</td>
-      <td>-0.024166</td>
-      <td>1179</td>
-    </tr>
-    <tr>
-      <th>3882</th>
+      <th>3874</th>
       <td>ZNF746.H13CORE.0.PSG.A</td>
       <td>neg.SPI1@1917</td>
       <td>165744</td>
       <td>165770</td>
       <td>-</td>
       <td>26.355452</td>
-      <td>7.435328e-10</td>
+      <td>7.435330e-10</td>
       <td>AGGGAGGAGGGAGGAAGGTGGGAGGA</td>
-      <td>-0.010776</td>
-      <td>-0.016254</td>
+      <td>-0.010775</td>
+      <td>-0.016253</td>
       <td>1904</td>
+    </tr>
+    <tr>
+      <th>3453</th>
+      <td>ZN263.H13CORE.1.P.B</td>
+      <td>neg.SPI1@1898</td>
+      <td>165732</td>
+      <td>165753</td>
+      <td>+</td>
+      <td>24.008722</td>
+      <td>1.311946e-09</td>
+      <td>GGGGAGGAGGACAGGGAGGAG</td>
+      <td>-0.006567</td>
+      <td>-0.016637</td>
+      <td>1892</td>
+    </tr>
+    <tr>
+      <th>781</th>
+      <td>ZN479.H13CORE.0.P.C</td>
+      <td>neg.SPI1@-174</td>
+      <td>163668</td>
+      <td>163686</td>
+      <td>-</td>
+      <td>22.937369</td>
+      <td>2.837623e-09</td>
+      <td>GCCCCCAAAGTCATCCCT</td>
+      <td>-0.007155</td>
+      <td>-0.013835</td>
+      <td>-172</td>
+    </tr>
+    <tr>
+      <th>1036</th>
+      <td>ZNF746.H13CORE.0.PSG.A</td>
+      <td>neg.SPI1@-191</td>
+      <td>163639</td>
+      <td>163665</td>
+      <td>+</td>
+      <td>24.462995</td>
+      <td>3.833248e-09</td>
+      <td>TCTCCCTCCCATCCTCCCTCCCCAGC</td>
+      <td>-0.002449</td>
+      <td>-0.001297</td>
+      <td>-201</td>
+    </tr>
+    <tr>
+      <th>3545</th>
+      <td>ZNF746.H13CORE.0.PSG.A</td>
+      <td>neg.SPI1@1898</td>
+      <td>165732</td>
+      <td>165758</td>
+      <td>-</td>
+      <td>23.523391</td>
+      <td>7.853286e-09</td>
+      <td>GGGGAGGAGGACAGGGAGGAGGGAGG</td>
+      <td>-0.005327</td>
+      <td>-0.010747</td>
+      <td>1892</td>
     </tr>
     <tr>
       <th>...</th>
@@ -3306,78 +3796,78 @@ Done. 0:0:0.5 (1332.8MB/s)
       <td>...</td>
     </tr>
     <tr>
-      <th>5618</th>
-      <td>ZN394.H13CORE.0.P.C</td>
-      <td>pos.SPI1@-144</td>
-      <td>163691</td>
-      <td>163710</td>
-      <td>-</td>
-      <td>6.136955</td>
-      <td>4.997442e-04</td>
-      <td>TCCCAGCTTCCTCTGGGCA</td>
-      <td>0.028328</td>
-      <td>0.048309</td>
-      <td>-149</td>
-    </tr>
-    <tr>
-      <th>5894</th>
-      <td>ZN394.H13CORE.0.P.C</td>
-      <td>pos.SPI1@-150</td>
-      <td>163691</td>
-      <td>163710</td>
-      <td>-</td>
-      <td>6.136955</td>
-      <td>4.997442e-04</td>
-      <td>TCCCAGCTTCCTCTGGGCA</td>
-      <td>0.028328</td>
-      <td>0.048309</td>
-      <td>-149</td>
-    </tr>
-    <tr>
-      <th>3069</th>
-      <td>ZNF30.H13CORE.0.P.C</td>
-      <td>neg.SPI1@1832</td>
-      <td>165664</td>
-      <td>165687</td>
-      <td>+</td>
-      <td>7.201793</td>
-      <td>4.997881e-04</td>
-      <td>GGGCGGGGAGGCCTGATGACTGT</td>
-      <td>0.008337</td>
-      <td>0.010769</td>
-      <td>1824</td>
-    </tr>
-    <tr>
-      <th>4702</th>
-      <td>ZN543.H13CORE.0.P.C</td>
-      <td>neg.SPI1@19730</td>
-      <td>183562</td>
-      <td>183583</td>
-      <td>-</td>
-      <td>6.760764</td>
-      <td>4.998900e-04</td>
-      <td>TGGGGAGACAGGTGGGGCACC</td>
-      <td>-0.005565</td>
-      <td>-0.008536</td>
-      <td>19722</td>
-    </tr>
-    <tr>
-      <th>1373</th>
+      <th>1088</th>
       <td>CREB3.H13CORE.0.SM.B</td>
-      <td>neg.SPI1@-22</td>
+      <td>neg.SPI1@-21</td>
       <td>163819</td>
       <td>163833</td>
       <td>+</td>
       <td>1.754682</td>
-      <td>4.999302e-04</td>
+      <td>4.999340e-04</td>
       <td>GCGGTGATGTCACC</td>
-      <td>-0.206415</td>
-      <td>-0.585105</td>
+      <td>-0.206348</td>
+      <td>-0.585193</td>
       <td>-21</td>
+    </tr>
+    <tr>
+      <th>2067</th>
+      <td>RXRB.H13CORE.2.PS.A</td>
+      <td>neg.SPI1@1182</td>
+      <td>165019</td>
+      <td>165030</td>
+      <td>-</td>
+      <td>12.213856</td>
+      <td>NaN</td>
+      <td>CCATGACCTCT</td>
+      <td>-0.008323</td>
+      <td>-0.024233</td>
+      <td>1179</td>
+    </tr>
+    <tr>
+      <th>2913</th>
+      <td>KLF7.H13CORE.0.P.B</td>
+      <td>neg.SPI1@1813</td>
+      <td>165662</td>
+      <td>165672</td>
+      <td>+</td>
+      <td>15.217368</td>
+      <td>NaN</td>
+      <td>GGGGGCGGGG</td>
+      <td>0.008973</td>
+      <td>0.025625</td>
+      <td>1822</td>
+    </tr>
+    <tr>
+      <th>2986</th>
+      <td>KLF7.H13CORE.0.P.B</td>
+      <td>neg.SPI1@1832</td>
+      <td>165662</td>
+      <td>165672</td>
+      <td>+</td>
+      <td>15.217368</td>
+      <td>NaN</td>
+      <td>GGGGGCGGGG</td>
+      <td>0.008973</td>
+      <td>0.025625</td>
+      <td>1822</td>
+    </tr>
+    <tr>
+      <th>7451</th>
+      <td>KLF7.H13CORE.0.P.B</td>
+      <td>pos.SPI1@1820</td>
+      <td>165662</td>
+      <td>165672</td>
+      <td>+</td>
+      <td>15.217368</td>
+      <td>NaN</td>
+      <td>GGGGGCGGGG</td>
+      <td>0.008973</td>
+      <td>0.025625</td>
+      <td>1822</td>
     </tr>
   </tbody>
 </table>
-<p>8595 rows × 11 columns</p>
+<p>8556 rows × 11 columns</p>
 </div></div></div>
 </div>
 <p>If you just want attribution tensor from input one_hot encoded sequence prepare your input and call attributions object:</p>
@@ -3415,12 +3905,12 @@ Done. 0:0:0.5 (1332.8MB/s)
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[[-0.0000e+00,  0.0000e+00, -0.0000e+00,  ..., -0.0000e+00,
            0.0000e+00,  0.0000e+00],
-         [-0.0000e+00, -0.0000e+00, -2.7323e-05,  ...,  0.0000e+00,
+         [-0.0000e+00, -0.0000e+00, -2.6888e-05,  ...,  0.0000e+00,
            0.0000e+00,  0.0000e+00],
-         [-0.0000e+00,  1.2544e-04,  0.0000e+00,  ...,  3.7231e-05,
-          -0.0000e+00,  1.4978e-05],
-         [ 1.7231e-04, -0.0000e+00,  0.0000e+00,  ..., -0.0000e+00,
-           1.2230e-05, -0.0000e+00]]], device=&#39;cuda:0&#39;)
+         [-0.0000e+00,  1.2651e-04,  0.0000e+00,  ...,  3.7016e-05,
+          -0.0000e+00,  1.5136e-05],
+         [ 1.7333e-04, -0.0000e+00,  0.0000e+00,  ..., -0.0000e+00,
+           1.2473e-05, -0.0000e+00]]], device=&#39;cuda:0&#39;)
 </pre></div>
 </div>
 </div>
@@ -3507,7 +3997,7 @@ Done. 0:0:0.5 (1332.8MB/s)
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=68a6d85b"></script>
+</div><script src="../_static/documentation_options.js?v=441e7bca"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
