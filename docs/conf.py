@@ -62,7 +62,7 @@ except Exception as e:
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    "myst_nb",
+    # "myst_nb",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
@@ -309,6 +309,8 @@ print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 # Enable execution of code chunks in markdown
 extensions.remove('myst_parser')
 extensions.append('myst_nb')
+
+nb_execution_mode = "off"
 
 # Less verbose api documentation
 extensions.append('sphinx_autodoc_typehints')

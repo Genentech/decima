@@ -1,3 +1,5 @@
+crc32c
+decima
 furo
 ipython
 myst-nb
