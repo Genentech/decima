@@ -624,7 +624,15 @@ class AttributionResult:
             raise ValueError(f"Invalid aggregation function: {agg_func}")
 
     @staticmethod
-    def _load(attribution_h5, idx: int, tss_distance: int, correct_grad: bool, gene_mask: bool = False):
+    def _load(
+        attribution_h5,
+        idx: int,
+        tss_distance: int,
+        correct_grad: bool,
+        gene_mask: bool = False,
+        sequence_key: str = "sequence",
+        attribution_key: str = "attribution",
+    ):
         """Load the attribution scores."""
         with h5py.File(str(attribution_h5), "r") as f:
             gene = f["genes"][idx].decode("utf-8")
@@ -647,11 +655,11 @@ class AttributionResult:
                 seqs = np.zeros((4, DECIMA_CONTEXT_SIZE + padding * 2))
 
             seqs[:4, padding : DECIMA_CONTEXT_SIZE + padding] = convert_input_type(
-                f["sequence"][idx].astype("int"), "one_hot", input_type="indices"
+                f[sequence_key][idx].astype("int"), "one_hot", input_type="indices"
             )
 
             attrs = np.zeros((4, DECIMA_CONTEXT_SIZE + padding * 2))
-            attrs[:, padding : DECIMA_CONTEXT_SIZE + padding] = f["attribution"][idx].astype(np.float32)
+            attrs[:, padding : DECIMA_CONTEXT_SIZE + padding] = f[attribution_key][idx].astype(np.float32)
 
         if tss_distance is not None:
             start = padding + gene_mask_start - tss_distance
@@ -677,17 +685,21 @@ class AttributionResult:
         correct_grad: bool,
         gene_mask: bool = False,
         agg_func: Optional[str] = None,
+        sequence_key: str = "sequence",
+        attribution_key: str = "attribution",
     ):
         """Load the attribution scores from multiple attribution h5 files."""
         seqs, attrs = zip(
             *(
-                AttributionResult._load(attribution_h5_file, idx, tss_distance, correct_grad, gene_mask)
+                AttributionResult._load(
+                    attribution_h5_file, idx, tss_distance, correct_grad, gene_mask, sequence_key, attribution_key
+                )
                 for idx, attribution_h5_file in zip(indices, attribution_h5_files)
             )
         )
         return AttributionResult.aggregate(np.array(seqs), np.array(attrs), agg_func)
 
-    def load(self, genes: List[str], gene_mask: bool = False):
+    def load(self, genes: List[str], gene_mask: bool = False, **kwargs):
         """Load the attribution scores for a list of genes.
 
         Args:
@@ -708,6 +720,7 @@ class AttributionResult:
             "tss_distance": self.tss_distance,
             "correct_grad": self.correct_grad,
             "gene_mask": gene_mask,
+            **kwargs,
         }
         if isinstance(self.attribution_h5, list):
             load_func = self._load_multiple
@@ -736,11 +749,15 @@ class AttributionResult:
         max_seqlet_len: int = 25,
         additional_flanks: int = 0,
         pattern_type: str = "both",
+        sequence_key: str = "sequence",
+        attribution_key: str = "attribution",
     ):
         kwargs = {
             "tss_distance": tss_distance,
             "correct_grad": False,
             "gene_mask": True,
+            "sequence_key": sequence_key,
+            "attribution_key": attribution_key,
         }
         if isinstance(attribution_h5, list):
             assert agg_func is not None, "Aggregation function must be set to use recursive seqlet calling."
@@ -798,6 +815,7 @@ class AttributionResult:
         max_seqlet_len: int = 25,
         additional_flanks: int = 0,
         pattern_type: str = "both",
+        **kwargs,
     ):
         """Load the attribution scores for a gene.
 
@@ -829,6 +847,7 @@ class AttributionResult:
             max_seqlet_len=max_seqlet_len,
             additional_flanks=additional_flanks,
             pattern_type=pattern_type,
+            **kwargs,
         )
 
     @staticmethod
@@ -847,6 +866,7 @@ class AttributionResult:
         additional_flanks: int = 0,
         pattern_type: str = "both",
         meme_motif_db: str = "hocomoco_v13",
+        **kwargs,
     ):
         attribution = AttributionResult._load_attribution(
             attribution_h5,
@@ -862,6 +882,7 @@ class AttributionResult:
             max_seqlet_len=max_seqlet_len,
             additional_flanks=additional_flanks,
             pattern_type=pattern_type,
+            **kwargs,
         )
         df_peaks = attribution.peaks_to_bed()
         df_motifs = attribution.scan_motifs(motifs=meme_motif_db)
@@ -935,3 +956,141 @@ class AttributionResult:
 
     def __str__(self):
         return f"AttributionResult({self.attribution_h5})"
+
+
+class VariantAttributionResult(AttributionResult):
+    def __init__(
+        self,
+        attribution_h5: Union[str, List[str]],
+        tss_distance: Optional[int] = None,
+        correct_grad: bool = True,
+        num_workers: Optional[int] = -1,
+        agg_func: Optional[str] = None,
+    ):
+        super().__init__(attribution_h5, tss_distance, correct_grad, num_workers, agg_func)
+
+    def open(self):
+        super().open()
+        # self.relative_dist = self.h5.attrs["relative_dist"]
+        if isinstance(self.attribution_h5, list):
+            for attribution_h5_file in self.attribution_h5:
+                with h5py.File(str(attribution_h5_file), "r") as f:
+                    for i, (variant, gene) in enumerate(zip(f["variants"][:], f["genes"][:])):
+                        gene = gene.decode("utf-8")
+                        variant = variant.decode("utf-8")
+                        self._idx[(variant, gene)].append(i)
+            self._idx = dict(self._idx)
+        else:
+            self._idx = {
+                (variant.decode("utf-8"), gene.decode("utf-8")): i
+                for i, (variant, gene) in enumerate(zip(self.h5["variants"][:], self.h5["genes"][:]))
+            }
+
+    def load(self, variants: List[str], genes: List[str], gene_mask: bool = False):
+        """Load the attribution scores for a list of genes and variants."""
+        variant_gene = list(zip(variants, genes))
+        seqs_ref, attrs_ref = super().load(
+            variant_gene, gene_mask, sequence_key="sequence", attribution_key="attribution"
+        )
+        seqs_alt, attrs_alt = super().load(
+            variant_gene, gene_mask, sequence_key="sequence_alt", attribution_key="attribution_alt"
+        )
+        return seqs_ref, attrs_ref, seqs_alt, attrs_alt
+
+    def load_attribution(
+        self,
+        variant: str,
+        gene: str,
+        metadata_anndata: Optional[str] = None,
+        custom_genome: bool = False,
+        threshold: float = 5e-4,
+        min_seqlet_len: int = 4,
+        max_seqlet_len: int = 25,
+        additional_flanks: int = 0,
+        pattern_type: str = "both",
+        **kwargs,
+    ):
+        chroms, starts, ends = self._get_metadata(gene, metadata_anndata, custom_genome)
+        attribution_ref = self._load_attribution(
+            self.attribution_h5,
+            self._idx[(variant, gene)],
+            gene,
+            self.tss_distance,
+            chroms,
+            starts,
+            ends,
+            self.agg_func,
+            threshold=threshold,
+            min_seqlet_len=min_seqlet_len,
+            max_seqlet_len=max_seqlet_len,
+            additional_flanks=additional_flanks,
+            pattern_type=pattern_type,
+            sequence_key="sequence",
+            attribution_key="attribution",
+        )
+        attribution_alt = self._load_attribution(
+            self.attribution_h5,
+            self._idx[(variant, gene)],
+            gene,
+            self.tss_distance,
+            chroms,
+            starts,
+            ends,
+            self.agg_func,
+            threshold=threshold,
+            min_seqlet_len=min_seqlet_len,
+            max_seqlet_len=max_seqlet_len,
+            additional_flanks=additional_flanks,
+            pattern_type=pattern_type,
+            sequence_key="sequence_alt",
+            attribution_key="attribution_alt",
+        )
+        return attribution_ref, attribution_alt
+
+    def recursive_seqlet_calling(
+        self,
+        variants: List[str],
+        genes: Optional[List[str]] = None,
+        metadata_anndata: Optional[str] = None,
+        custom_genome: bool = False,
+        threshold: float = 5e-4,
+        min_seqlet_len: int = 4,
+        max_seqlet_len: int = 25,
+        additional_flanks: int = 0,
+        pattern_type: str = "both",
+        meme_motif_db: str = "hocomoco_v13",
+    ):
+        variant_gene = list(zip(variants, genes))
+        df_peaks_ref, df_motifs_ref = super().recursive_seqlet_calling(
+            variant_gene,
+            metadata_anndata,
+            custom_genome,
+            threshold,
+            min_seqlet_len,
+            max_seqlet_len,
+            additional_flanks,
+            pattern_type,
+            meme_motif_db,
+            sequence_key="sequence",
+            attribution_key="attribution",
+        )
+        df_peaks_alt, df_motifs_alt = super().recursive_seqlet_calling(
+            variant_gene,
+            metadata_anndata,
+            custom_genome,
+            threshold,
+            min_seqlet_len,
+            max_seqlet_len,
+            additional_flanks,
+            pattern_type,
+            meme_motif_db,
+            sequence_key="sequence_alt",
+            attribution_key="attribution_alt",
+        )
+        df_peaks = pd.concat([df_peaks_ref.assign(allele="ref"), df_peaks_alt.assign(allele="alt")]).reset_index(
+            drop=True
+        )
+        df_motifs = pd.concat([df_motifs_ref.assign(allele="ref"), df_motifs_alt.assign(allele="alt")]).reset_index(
+            drop=True
+        )
+        return df_peaks, df_motifs

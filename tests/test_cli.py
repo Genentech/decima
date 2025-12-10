@@ -325,3 +325,18 @@ def test_cli_modisco(tmp_path):
     assert (output_prefix.with_suffix(".attributions.h5")).exists()
     assert (output_prefix.with_suffix(".modisco.h5")).exists()
     assert Path(str(output_prefix) + "_report").exists()
+
+
+@pytest.mark.long_running
+def test_cli_vep_attributions(tmp_path):
+    output_file = tmp_path / "test_vep_attributions.h5"
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "vep-attribution",
+        "-v", "tests/data/variants.tsv",
+        "-o", str(output_file),
+        "--model", "0",
+        "--device", device,
+    ])
+    assert result.exit_code == 0, result.__dict__
+    assert (output_file.exists())
