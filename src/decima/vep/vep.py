@@ -1,3 +1,16 @@
+"""
+Variant Effect Prediction Module.
+
+This module provides functionality to predict the effect of genetic variants on gene expression.
+
+Examples:
+    >>> predict_variant_effect(
+    ...     df_variant="variants.vcf",
+    ...     output_pq="predictions.parquet",
+    ...     model=0,
+    ... )
+"""
+
 import logging
 import warnings
 from pathlib import Path

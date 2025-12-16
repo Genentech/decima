@@ -13,11 +13,10 @@ from conftest import attribution_h5_file, attribution_data
 def test_AttributionResult(attribution_h5_file, attribution_data):
     with AttributionResult(str(attribution_h5_file), tss_distance=10_000, num_workers=1) as ar:
         assert len(ar.genes) == 10
-        assert ar.genes == attribution_data['genes']
+        assert all(ar.genes == attribution_data['genes'])
         assert ar.model_name == 'v1_rep0'
         assert ar.genome == 'hg38'
 
-        assert ar.genes == attribution_data['genes']
         genes = attribution_data['genes']
 
         seqs, attrs = ar._load(str(attribution_h5_file), 0, 10_000, True)
@@ -72,7 +71,7 @@ def test_AttributionResult(attribution_h5_file, attribution_data):
 
     with AttributionResult([str(attribution_h5_file), str(attribution_h5_file)], tss_distance=10_000) as ar:
         assert len(ar.genes) == 10
-        assert ar.genes == attribution_data['genes']
+        assert all(ar.genes == attribution_data['genes'])
         assert ar.model_name == ['v1_rep0', 'v1_rep0']
         assert ar.genome == 'hg38'
 

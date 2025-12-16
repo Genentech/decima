@@ -388,6 +388,12 @@ class VariantAttributionWriter(AttributionWriter):
             compression="gzip",
         )
         self.h5_writer.create_dataset(
+            "rel_pos",
+            (len(self.variants),),
+            dtype="i4",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
             "attribution_alt",
             (len(self.genes), 4, DECIMA_CONTEXT_SIZE),
             chunks=(1, 4, DECIMA_CONTEXT_SIZE),
@@ -407,6 +413,7 @@ class VariantAttributionWriter(AttributionWriter):
         self,
         variant: str,
         gene: str,
+        rel_pos: int,
         seqs_ref: np.ndarray,
         attrs_ref: np.ndarray,
         seqs_alt: np.ndarray,
@@ -425,6 +432,7 @@ class VariantAttributionWriter(AttributionWriter):
         super().add((variant, gene), seqs_ref, attrs_ref, gene_mask_start, gene_mask_end)
         idx = self.idx[(variant, gene)]
         self.h5_writer["variants"][idx] = np.array(variant, dtype="S100")
+        self.h5_writer["rel_pos"][idx] = int(rel_pos)
         self.h5_writer["sequence_alt"][idx, :] = convert_input_type(
             torch.from_numpy(seqs_alt),  # convert_input_type only support Tensor
             "indices",

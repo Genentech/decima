@@ -10,7 +10,7 @@ from decima.core.result import DecimaResult
 from decima.hub import load_decima_model
 from decima.data.dataset import VariantDataset
 from decima.model.metrics import WarningType
-from decima.vep import _predict_variant_effect, predict_variant_effect
+from decima.vep.vep import _predict_variant_effect, predict_variant_effect
 from decima.utils.io import read_vcf_chunks
 
 from conftest import device

@@ -15,7 +15,7 @@ from decima.vep.attributions import variant_effect_attribution
     type=click.Path(exists=True),
     help="Path to the variant file .vcf file. VCF file need to be normalized. Try normalizing th vcf file incase of an error. `bcftools norm -f ref.fasta input.vcf.gz -o output.vcf.gz`",
 )
-@click.option("-o", "--output_h5", type=click.Path(), help="Path to the output h5 file.")
+@click.option("-o", "--output_prefix", type=click.Path(), help="Path to the output prefix.")
 @click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")
 @click.option(
     "--off-tasks",
@@ -25,7 +25,7 @@ from decima.vep.attributions import variant_effect_attribution
 )
 @click.option(
     "--model",
-    default=0,
+    default=DEFAULT_ENSEMBLE,
     callback=parse_model,
     help=f"Model to use for attribution analysis. Available options: {list(MODEL_METADATA.keys())}.",
 )
@@ -50,6 +50,7 @@ from decima.vep.attributions import variant_effect_attribution
 @click.option(
     "--device", type=str, default=None, help="Device to use. Default: None which automatically selects the best device."
 )
+@click.option("--batch-size", type=int, default=1, help="Batch size for the loader. Default: 1")
 @click.option("--num-workers", type=int, default=4, help="Number of workers for the loader. Default: 4")
 @click.option("--distance-type", type=str, default="tss", help="Type of distance. Default: tss.")
 @click.option(
@@ -71,15 +72,9 @@ from decima.vep.attributions import variant_effect_attribution
     help="Column name for gene names. Default: None.",
 )
 @click.option("--genome", type=str, default="hg38", help="Genome build. Default: hg38.")
-@click.option(
-    "--float-precision",
-    type=str,
-    default="32",
-    help="Floating-point precision to be used in calculations. Avaliable options include: '16-true', '16-mixed', 'bf16-true', 'bf16-mixed', '32-true', '64-true', '32', '16', and 'bf16'.",
-)
 def cli_vep_attribution(
     variants,
-    output_h5,
+    output_prefix,
     tasks,
     off_tasks,
     model,
@@ -87,23 +82,23 @@ def cli_vep_attribution(
     method,
     transform,
     device,
+    batch_size,
     num_workers,
     distance_type,
     min_distance,
     max_distance,
     gene_col,
     genome,
-    float_precision,
 ):
     """Predict variant effect and save to parquet
 
     Examples:
 
-        >>> decima vep-attribution -v "data/sample.vcf" -o "vep_results.h5"
+        >>> decima vep-attribution -v "data/sample.vcf" -o "vep_results"
     """
     variant_effect_attribution(
-        variants,
-        output_h5=output_h5,
+        variants=variants,
+        output_prefix=output_prefix,
         tasks=tasks,
         off_tasks=off_tasks,
         model=model,
@@ -111,11 +106,11 @@ def cli_vep_attribution(
         method=method,
         transform=transform,
         num_workers=num_workers,
+        batch_size=batch_size,
         device=device,
         distance_type=distance_type,
         min_distance=min_distance,
         max_distance=max_distance,
         gene_col=gene_col,
         genome=genome,
-        float_precision=float_precision,
     )
