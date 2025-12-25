@@ -13,6 +13,7 @@ from decima.cli.query_cell import cli_query_cell
 from decima.cli.vep import cli_predict_variant_effect
 from decima.cli.finetune import cli_finetune
 from decima.cli.vep import cli_vep_ensemble
+from decima.cli.vep_attribution import cli_vep_attribution
 from decima.cli.modisco import (
     cli_modisco_attributions,
     cli_modisco_patterns,
@@ -51,6 +52,7 @@ main.add_command(cli_attributions_plot, name="attributions-plot")
 main.add_command(cli_attributions_recursive_seqlet_calling, name="attributions-recursive-seqlet-calling")
 main.add_command(cli_predict_variant_effect, name="vep")
 main.add_command(cli_vep_ensemble, name="vep-ensemble")
+main.add_command(cli_vep_attribution, name="vep-attribution")
 main.add_command(cli_finetune, name="finetune")
 main.add_command(cli_modisco, name="modisco")
 main.add_command(cli_modisco_attributions, name="modisco-attributions")

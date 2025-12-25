@@ -32,7 +32,7 @@ from decima.vep import predict_variant_effect
     "-v",
     "--variants",
     type=click.Path(exists=True),
-    help="Path to the variant file .vcf file. VCF file need to be normalized. Try normalizing th vcf file incase of an error. `bcftools norm -f ref.fasta input.vcf.gz -o output.vcf.gz`",
+    help="Path to the variant .vcf file. VCF file needs to be normalized. Try normalizing th vcf file in case of an error. `bcftools norm -f ref.fasta input.vcf.gz -o output.vcf.gz`",
 )
 @click.option("-o", "--output_pq", type=click.Path(), help="Path to the output parquet file.")
 @click.option("--tasks", type=str, default=None, help="Tasks to predict. If not provided, all tasks will be predicted.")

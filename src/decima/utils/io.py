@@ -316,15 +316,15 @@ class AttributionWriter:
             raise ValueError(
                 "Either `gene_mask_start` and `gene_mask_end` must be provided together or both must be None."
             )
-
-        self.h5_writer["gene_mask_start"][self.idx[gene]] = int(gene_mask_start)
-        self.h5_writer["gene_mask_end"][self.idx[gene]] = int(gene_mask_end)
-        self.h5_writer["sequence"][self.idx[gene], :] = convert_input_type(
+        idx = self.idx[gene]
+        self.h5_writer["gene_mask_start"][idx] = int(gene_mask_start)
+        self.h5_writer["gene_mask_end"][idx] = int(gene_mask_end)
+        self.h5_writer["sequence"][idx, :] = convert_input_type(
             torch.from_numpy(seqs),  # convert_input_type only support Tensor
             "indices",
             input_type="one_hot",
         )[np.newaxis].astype("i1")
-        self.h5_writer["attribution"][self.idx[gene], :, :] = attrs.astype("float32")
+        self.h5_writer["attribution"][idx, :, :] = attrs.astype("float32")
 
         if self.bigwig:
             if self.custom_genes:
@@ -332,7 +332,7 @@ class AttributionWriter:
                 start = 0
                 end = DECIMA_CONTEXT_SIZE
             else:
-                gene_meta = self.result.get_gene_metadata(gene)
+                gene_meta = self.result.get_gene_metadata(self.genes[idx])
                 chrom = gene_meta.chrom
                 start = gene_meta.start
                 end = gene_meta.end
@@ -351,3 +351,96 @@ class AttributionWriter:
     def __exit__(self, exc_type, exc_value, traceback):
         """Context manager exit - closes files."""
         self.close()
+
+
+class VariantAttributionWriter(AttributionWriter):
+    def __init__(
+        self,
+        path,
+        genes,
+        variants,
+        model_name,
+        metadata_anndata=None,
+        genome: str = "hg38",
+    ):
+        super().__init__(
+            path,
+            genes,
+            model_name,
+            metadata_anndata,
+            genome,
+            bigwig=False,
+            custom_genes=False,
+        )
+        assert len(variants) == len(
+            genes
+        ), "Number of variants must be equal to number of genes. AttributionWriter saves variant gene pairs."
+        self.idx = {(v, g): i for i, (v, g) in enumerate(zip(variants, genes))}
+        self.variants = variants
+
+    def open(self):
+        """Open HDF5 file and optional BigWig file for writing."""
+        super().open()
+        self.h5_writer.create_dataset(
+            "variants",
+            (len(self.variants),),
+            dtype="S100",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
+            "rel_pos",
+            (len(self.variants),),
+            dtype="i4",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
+            "attribution_alt",
+            (len(self.genes), 4, DECIMA_CONTEXT_SIZE),
+            chunks=(1, 4, DECIMA_CONTEXT_SIZE),
+            dtype="float32",
+            compression="gzip",
+        )
+        self.h5_writer.create_dataset(
+            "sequence_alt",
+            (len(self.genes), DECIMA_CONTEXT_SIZE),
+            chunks=(1, DECIMA_CONTEXT_SIZE),
+            dtype="i1",
+            compression="gzip",
+        )
+        self.h5_writer["variants"][:] = np.array(self.variants, dtype="S100")
+
+    def add(
+        self,
+        variant: str,
+        gene: str,
+        rel_pos: int,
+        seqs_ref: np.ndarray,
+        attrs_ref: np.ndarray,
+        seqs_alt: np.ndarray,
+        attrs_alt: np.ndarray,
+        gene_mask_start: int,
+        gene_mask_end: int,
+    ):
+        """Add attribution data for a variant gene pair.
+
+        Args:
+            variant: Variant name from the variants list.
+            gene: Gene name from the genes list.
+            attrs: Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).
+            seqs: One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).
+        """
+        super().add((variant, gene), seqs_ref, attrs_ref, gene_mask_start, gene_mask_end)
+        idx = self.idx[(variant, gene)]
+        self.h5_writer["variants"][idx] = np.array(variant, dtype="S100")
+        self.h5_writer["rel_pos"][idx] = int(rel_pos)
+        self.h5_writer["sequence_alt"][idx, :] = convert_input_type(
+            torch.from_numpy(seqs_alt),  # convert_input_type only support Tensor
+            "indices",
+            input_type="one_hot",
+        )[np.newaxis].astype("i1")
+        self.h5_writer["attribution_alt"][idx, :, :] = attrs_alt.astype("float32")
+
+    def close(self):
+        """Close HDF5 file and optional BigWig file."""
+        super().close()
+        self.h5_writer.close()

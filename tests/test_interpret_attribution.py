@@ -403,3 +403,54 @@ def test_recursive_seqlet_calling(tmp_path, attribution_h5_file):
     )
     assert (output_prefix.with_suffix(".seqlets.bed")).exists()
     assert (output_prefix.with_suffix(".motifs.tsv")).exists()
+
+
+def test_Attribution_sub(attributions):
+    # Test valid subtraction
+    other_attrs = attributions.attrs * 2
+    other = Attribution(
+        gene="OTHER_GENE",
+        inputs=attributions.inputs,
+        attrs=other_attrs,
+        chrom=attributions.chrom,
+        start=attributions.start,
+        end=attributions.end,
+        strand=attributions.strand,
+        threshold=attributions.threshold,
+    )
+
+    diff = other - attributions
+    assert (diff.attrs == attributions.attrs).all()
+    assert diff.gene == "OTHER_GENE-TEST2"
+    assert diff.chrom == attributions.chrom
+    assert diff.start == attributions.start
+
+    # Test failure: different metadata
+    other_diff_chrom = Attribution(
+        gene="OTHER_GENE",
+        inputs=attributions.inputs,
+        attrs=other_attrs,
+        chrom="chr2",
+        start=attributions.start,
+        end=attributions.end,
+        strand=attributions.strand,
+        threshold=attributions.threshold,
+    )
+    with pytest.raises(AssertionError, match="Chromosomes must be the same"):
+        _ = other_diff_chrom - attributions
+
+def test_Attribution__sub__(attributions):
+    other = Attribution(
+        gene="OTHER",
+        inputs=attributions.inputs,
+        attrs=attributions.attrs + 1,
+        chrom=attributions.chrom,
+        start=attributions.start,
+        end=attributions.end,
+        strand=attributions.strand,
+        threshold=attributions.threshold,
+    )
+
+    diff = other - attributions
+    assert np.allclose(diff.attrs, 1.0)
+    assert diff.gene == "OTHER-TEST2"
