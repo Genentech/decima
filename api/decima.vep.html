@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Attribution and Motifs Detection with Decima" href="../tutorials/1-attribution-motif-discovery.html"><link rel="prev" title="decima.utils package" href="decima.utils.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.vep package - decima 0.0.post1.dev1+gf59fb6397 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>decima.vep package - decima 0.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+gf59fb6397 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.5.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+gf59fb6397 documentation</span>
+  <span class="sidebar-brand-text">decima 0.5.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -259,11 +259,110 @@
         <article role="main" id="furo-main-content">
           <section id="decima-vep-package">
 <h1>decima.vep package<a class="headerlink" href="#decima-vep-package" title="Link to this heading">¶</a></h1>
-<section id="module-decima.vep">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.vep" title="Link to this heading">¶</a></h2>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-decima.vep.attributions">
+<span id="decima-vep-attributions-module"></span><h2>decima.vep.attributions module<a class="headerlink" href="#module-decima.vep.attributions" title="Link to this heading">¶</a></h2>
+<p>Variant Effect Attribution Module.</p>
+<p>This module provides functionality to compute feature attributions for genetic variants.
+It calculates the contribution of input sequences to model predictions, allowing for the
+interpretation of variant effects in motifs of transcription factors.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">variant_effect_attribution</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df_variant</span><span class="o">=</span><span class="s2">&quot;variants.vcf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">output_h5</span><span class="o">=</span><span class="s2">&quot;attributions.h5&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="s2">&quot;T_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;B_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">metadata_anndata</span><span class="o">=</span><span class="s2">&quot;results.h5ad&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py function">
-<dt class="sig sig-object py" id="decima.vep.predict_variant_effect">
-<span class="sig-prename descclassname"><span class="pre">decima.vep.</span></span><span class="sig-name descname"><span class="pre">predict_variant_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep.html#predict_variant_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.vep.predict_variant_effect" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decima.vep.attributions.variant_effect_attribution">
+<span class="sig-prename descclassname"><span class="pre">decima.vep.attributions.</span></span><span class="sig-name descname"><span class="pre">variant_effect_attribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputxgradient'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'specificity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep/attributions.html#variant_effect_attribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.vep.attributions.variant_effect_attribution" title="Link to this definition">¶</a></dt>
+<dd><p>Computes variant effect attributions for a set of variants and writes them to an HDF5 file.</p>
+<p>This function calculates the contribution of input features (sequence) to the model’s
+prediction for specific tasks (cell types), contrasting with off-target tasks if specified.
+It supports various attribution methods (e.g., InputXGradient) and transformations
+(e.g., Specificity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_variant</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – Input variants. Can be a pandas DataFrame or a path
+to a file (.tsv, .csv, or .vcf). If a file path is provided, it will be loaded.
+Required columns/fields depend on the input format but generally include chromosome,
+position, reference allele, alternate allele.</p></li>
+<li><p><strong>output_prefix</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output HDF5 file where attributions will be saved.
+If None, results might not be persisted.</p></li>
+<li><p><strong>tasks</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Specific task(s) or cell type(s) to compute
+attributions for. If None, uses all available tasks or a default set. Defaults to None.</p></li>
+<li><p><strong>off_tasks</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Task(s) to use as a background or negative
+set for specificity calculations. Defaults to None.</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Index or identifier of the model to use from the ensemble.
+Defaults to 0.</p></li>
+<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to the AnnData file containing model metadata and
+results (DecimaResult). Used to resolve task names and indices. Defaults to None.</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – The attribution method to use. Options: “inputxgradient”,
+“saliency”, “integratedgradients”. Defaults to “inputxgradient”.</p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Transformation to apply to the model output before attribution.
+Options: “specificity” (target - off_target) or “aggregate”. Defaults to “specificity”.</p></li>
+<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of worker processes for data loading. Defaults to 4.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Compute device to use (e.g., “cpu”, “cuda”, “cuda:0”).
+If None, automatically detects available device. Defaults to None.</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the column in <cite>df_variant</cite> containing gene identifiers.
+If provided, variants are associated with specific genes. Defaults to None.</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Method to calculate distance between variant and gene.
+Options: “tss” (Transcription Start Site). Defaults to “tss”.</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum distance from the gene feature (e.g., TSS) for a
+variant to be included. Defaults to 0.</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum distance from the gene feature (e.g., TSS) for a
+variant to be included. Defaults to infinity.</p></li>
+<li><p><strong>genome</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Genome assembly version (e.g., “hg38”). Defaults to “hg38”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to the output HDF5 files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Compute attributions for variants in a VCF file for specific tasks:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">variant_effect_attribution</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">variants</span><span class="o">=</span><span class="s2">&quot;variants.vcf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;attributions&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="s2">&quot;T_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;B_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">metadata_anndata</span><span class="o">=</span><span class="s2">&quot;results.h5ad&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-decima.vep.vep">
+<span id="decima-vep-vep-module"></span><h2>decima.vep.vep module<a class="headerlink" href="#module-decima.vep.vep" title="Link to this heading">¶</a></h2>
+<p>Variant Effect Prediction Module.</p>
+<p>This module provides functionality to predict the effect of genetic variants on gene expression.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict_variant_effect</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df_variant</span><span class="o">=</span><span class="s2">&quot;variants.vcf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">output_pq</span><span class="o">=</span><span class="s2">&quot;predictions.parquet&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.vep.vep.predict_variant_effect">
+<span class="sig-prename descclassname"><span class="pre">decima.vep.vep.</span></span><span class="sig-name descname"><span class="pre">predict_variant_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep/vep.html#predict_variant_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.vep.vep.predict_variant_effect" title="Link to this definition">¶</a></dt>
 <dd><p>Predict variant effect and save to parquet</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -292,6 +391,108 @@
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="module-decima.vep">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-decima.vep" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.vep.predict_variant_effect">
+<span class="sig-prename descclassname"><span class="pre">decima.vep.</span></span><span class="sig-name descname"><span class="pre">predict_variant_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep/vep.html#predict_variant_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.vep.predict_variant_effect" title="Link to this definition">¶</a></dt>
+<dd><p>Predict variant effect and save to parquet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_variant</strong> (<em>pd.DataFrame</em><em> or </em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – DataFrame with variant information or path to variant file</p></li>
+<li><p><strong>output_pq</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to save the parquet file. Defaults to None.</p></li>
+<li><p><strong>tasks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Tasks to predict. Defaults to None.</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Model to use. Defaults to DEFAULT_ENSEMBLE.</p></li>
+<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to anndata file. Defaults to None.</p></li>
+<li><p><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of variants to predict in each chunk. Defaults to 10_000.</p></li>
+<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Batch size. Defaults to 1.</p></li>
+<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of workers. Defaults to 16.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Device to use. Defaults to None.</p></li>
+<li><p><strong>include_cols</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – Columns to include in the output. Defaults to None.</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for gene names. Defaults to None.</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Type of distance. Defaults to “tss”.</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum distance from the end of the gene. Defaults to 0 (inclusive).</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum distance from the TSS. Defaults to inf (exclusive).</p></li>
+<li><p><strong>genome</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Genome name or path to the genome fasta file. Defaults to “hg38”.</p></li>
+<li><p><strong>save_replicates</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Save the replicates in the output. Defaults to False.</p></li>
+<li><p><strong>reference_cache</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to use reference cache. Defaults to True.</p></li>
+<li><p><strong>float_precision</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Floating-point precision. Defaults to “32”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="decima.vep.variant_effect_attribution">
+<span class="sig-prename descclassname"><span class="pre">decima.vep.</span></span><span class="sig-name descname"><span class="pre">variant_effect_attribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputxgradient'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'specificity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep/attributions.html#variant_effect_attribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.vep.variant_effect_attribution" title="Link to this definition">¶</a></dt>
+<dd><p>Computes variant effect attributions for a set of variants and writes them to an HDF5 file.</p>
+<p>This function calculates the contribution of input features (sequence) to the model’s
+prediction for specific tasks (cell types), contrasting with off-target tasks if specified.
+It supports various attribution methods (e.g., InputXGradient) and transformations
+(e.g., Specificity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_variant</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em>) – Input variants. Can be a pandas DataFrame or a path
+to a file (.tsv, .csv, or .vcf). If a file path is provided, it will be loaded.
+Required columns/fields depend on the input format but generally include chromosome,
+position, reference allele, alternate allele.</p></li>
+<li><p><strong>output_prefix</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the output HDF5 file where attributions will be saved.
+If None, results might not be persisted.</p></li>
+<li><p><strong>tasks</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Specific task(s) or cell type(s) to compute
+attributions for. If None, uses all available tasks or a default set. Defaults to None.</p></li>
+<li><p><strong>off_tasks</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Task(s) to use as a background or negative
+set for specificity calculations. Defaults to None.</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Index or identifier of the model to use from the ensemble.
+Defaults to 0.</p></li>
+<li><p><strong>metadata_anndata</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Path to the AnnData file containing model metadata and
+results (DecimaResult). Used to resolve task names and indices. Defaults to None.</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – The attribution method to use. Options: “inputxgradient”,
+“saliency”, “integratedgradients”. Defaults to “inputxgradient”.</p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Transformation to apply to the model output before attribution.
+Options: “specificity” (target - off_target) or “aggregate”. Defaults to “specificity”.</p></li>
+<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of worker processes for data loading. Defaults to 4.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Compute device to use (e.g., “cpu”, “cuda”, “cuda:0”).
+If None, automatically detects available device. Defaults to None.</p></li>
+<li><p><strong>gene_col</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the column in <cite>df_variant</cite> containing gene identifiers.
+If provided, variants are associated with specific genes. Defaults to None.</p></li>
+<li><p><strong>distance_type</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Method to calculate distance between variant and gene.
+Options: “tss” (Transcription Start Site). Defaults to “tss”.</p></li>
+<li><p><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum distance from the gene feature (e.g., TSS) for a
+variant to be included. Defaults to 0.</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum distance from the gene feature (e.g., TSS) for a
+variant to be included. Defaults to infinity.</p></li>
+<li><p><strong>genome</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Genome assembly version (e.g., “hg38”). Defaults to “hg38”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to the output HDF5 files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Compute attributions for variants in a VCF file for specific tasks:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">variant_effect_attribution</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">variants</span><span class="o">=</span><span class="s2">&quot;variants.vcf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">output_prefix</span><span class="o">=</span><span class="s2">&quot;attributions&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tasks</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="s2">&quot;T_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;B_cell&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">metadata_anndata</span><span class="o">=</span><span class="s2">&quot;results.h5ad&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -353,8 +554,18 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">decima.vep package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-decima.vep.attributions">decima.vep.attributions module</a><ul>
+<li><a class="reference internal" href="#decima.vep.attributions.variant_effect_attribution"><code class="docutils literal notranslate"><span class="pre">variant_effect_attribution()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-decima.vep.vep">decima.vep.vep module</a><ul>
+<li><a class="reference internal" href="#decima.vep.vep.predict_variant_effect"><code class="docutils literal notranslate"><span class="pre">predict_variant_effect()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-decima.vep">Module contents</a><ul>
 <li><a class="reference internal" href="#decima.vep.predict_variant_effect"><code class="docutils literal notranslate"><span class="pre">predict_variant_effect()</span></code></a></li>
+<li><a class="reference internal" href="#decima.vep.variant_effect_attribution"><code class="docutils literal notranslate"><span class="pre">variant_effect_attribution()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -368,7 +579,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=441e7bca"></script>
+</div><script src="../_static/documentation_options.js?v=8e576371"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

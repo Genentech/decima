@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.cli package" href="decima.cli.html"><link rel="prev" title="decima" href="modules.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima package - decima 0.0.post1.dev1+gf59fb6397 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>decima package - decima 0.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+gf59fb6397 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.5.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+gf59fb6397 documentation</span>
+  <span class="sidebar-brand-text">decima 0.5.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -280,6 +280,7 @@
 <li class="toctree-l2"><a class="reference internal" href="decima.cli.html#module-decima.cli.predict_genes">decima.cli.predict_genes module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decima.cli.html#module-decima.cli.query_cell">decima.cli.query_cell module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decima.cli.html#module-decima.cli.vep">decima.cli.vep module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decima.cli.html#module-decima.cli.vep_attribution">decima.cli.vep_attribution module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decima.cli.html#module-decima.cli">Module contents</a></li>
 </ul>
 </li>
@@ -289,6 +290,7 @@
 <li class="toctree-l3"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution"><code class="docutils literal notranslate"><span class="pre">Attribution</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.__init__"><code class="docutils literal notranslate"><span class="pre">Attribution.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.__repr__"><code class="docutils literal notranslate"><span class="pre">Attribution.__repr__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.__sub__"><code class="docutils literal notranslate"><span class="pre">Attribution.__sub__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.chrom"><code class="docutils literal notranslate"><span class="pre">Attribution.chrom</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.end"><code class="docutils literal notranslate"><span class="pre">Attribution.end</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.Attribution.fasta_str"><code class="docutils literal notranslate"><span class="pre">Attribution.fasta_str()</span></code></a></li>
@@ -319,6 +321,15 @@
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.AttributionResult.load_attribution"><code class="docutils literal notranslate"><span class="pre">AttributionResult.load_attribution()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.AttributionResult.open"><code class="docutils literal notranslate"><span class="pre">AttributionResult.open()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.AttributionResult.recursive_seqlet_calling"><code class="docutils literal notranslate"><span class="pre">AttributionResult.recursive_seqlet_calling()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.__annotations__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.__init__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.load"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.load_attribution"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.load_attribution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.open"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.core.html#decima.core.attribution.VariantAttributionResult.recursive_seqlet_calling"><code class="docutils literal notranslate"><span class="pre">VariantAttributionResult.recursive_seqlet_calling()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -789,6 +800,14 @@
 <li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.BigWigWriter.open"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.open()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter.__annotations__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter.__init__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter.add"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter.close"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="decima.utils.html#decima.utils.io.VariantAttributionWriter.open"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.open()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="decima.utils.html#decima.utils.io.import_cyvcf2"><code class="docutils literal notranslate"><span class="pre">import_cyvcf2()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="decima.utils.html#decima.utils.io.read_fasta_gene_mask"><code class="docutils literal notranslate"><span class="pre">read_fasta_gene_mask()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="decima.utils.html#decima.utils.io.read_vcf_chunks"><code class="docutils literal notranslate"><span class="pre">read_vcf_chunks()</span></code></a></li>
@@ -828,8 +847,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="decima.vep.html">decima.vep package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="decima.vep.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decima.vep.html#module-decima.vep.attributions">decima.vep.attributions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="decima.vep.html#decima.vep.attributions.variant_effect_attribution"><code class="docutils literal notranslate"><span class="pre">variant_effect_attribution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="decima.vep.html#module-decima.vep.vep">decima.vep.vep module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="decima.vep.html#decima.vep.vep.predict_variant_effect"><code class="docutils literal notranslate"><span class="pre">predict_variant_effect()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="decima.vep.html#module-decima.vep">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="decima.vep.html#decima.vep.predict_variant_effect"><code class="docutils literal notranslate"><span class="pre">predict_variant_effect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="decima.vep.html#decima.vep.variant_effect_attribution"><code class="docutils literal notranslate"><span class="pre">variant_effect_attribution()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1320,7 +1349,7 @@ the following output files to the specified directory:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="decima.predict_variant_effect">
-<span class="sig-prename descclassname"><span class="pre">decima.</span></span><span class="sig-name descname"><span class="pre">predict_variant_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep.html#predict_variant_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.predict_variant_effect" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">decima.</span></span><span class="sig-name descname"><span class="pre">predict_variant_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ensemble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/vep/vep.html#predict_variant_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.predict_variant_effect" title="Link to this definition">¶</a></dt>
 <dd><p>Predict variant effect and save to parquet</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1456,7 +1485,7 @@ the following output files to the specified directory:</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=441e7bca"></script>
+</div><script src="../_static/documentation_options.js?v=8e576371"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

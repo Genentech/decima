@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.utils.io - decima 0.0.post1.dev1+gf59fb6397 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>decima.utils.io - decima 0.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.0.post1.dev1+gf59fb6397 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.5.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+gf59fb6397 documentation</span>
+  <span class="sidebar-brand-text">decima 0.5.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -612,15 +612,15 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Either `gene_mask_start` and `gene_mask_end` must be provided together or both must be None.&quot;</span>
             <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;gene_mask_start&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">gene</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gene_mask_start</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;gene_mask_end&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">gene</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gene_mask_end</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">gene</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;gene_mask_start&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gene_mask_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;gene_mask_end&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gene_mask_end</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">seqs</span><span class="p">),</span>  <span class="c1"># convert_input_type only support Tensor</span>
             <span class="s2">&quot;indices&quot;</span><span class="p">,</span>
             <span class="n">input_type</span><span class="o">=</span><span class="s2">&quot;one_hot&quot;</span><span class="p">,</span>
         <span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;i1&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;attribution&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">gene</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;attribution&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bigwig</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_genes</span><span class="p">:</span>
@@ -628,7 +628,7 @@
                 <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">end</span> <span class="o">=</span> <span class="n">DECIMA_CONTEXT_SIZE</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">gene_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get_gene_metadata</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>
+                <span class="n">gene_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get_gene_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genes</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
                 <span class="n">chrom</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="o">.</span><span class="n">chrom</span>
                 <span class="n">start</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="o">.</span><span class="n">start</span>
                 <span class="n">end</span> <span class="o">=</span> <span class="n">gene_meta</span><span class="o">.</span><span class="n">end</span>
@@ -653,6 +653,114 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager exit - closes files.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="VariantAttributionWriter">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.VariantAttributionWriter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VariantAttributionWriter</span><span class="p">(</span><span class="n">AttributionWriter</span><span class="p">):</span>
+<div class="viewcode-block" id="VariantAttributionWriter.__init__">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.VariantAttributionWriter.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">genes</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">genome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hg38&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">path</span><span class="p">,</span>
+            <span class="n">genes</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="p">,</span>
+            <span class="n">metadata_anndata</span><span class="p">,</span>
+            <span class="n">genome</span><span class="p">,</span>
+            <span class="n">bigwig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">custom_genes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">variants</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+            <span class="n">genes</span>
+        <span class="p">),</span> <span class="s2">&quot;Number of variants must be equal to number of genes. AttributionWriter saves variant gene pairs.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="p">{(</span><span class="n">v</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">variants</span><span class="p">,</span> <span class="n">genes</span><span class="p">))}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variants</span> <span class="o">=</span> <span class="n">variants</span></div>
+
+
+<div class="viewcode-block" id="VariantAttributionWriter.open">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.VariantAttributionWriter.open">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open HDF5 file and optional BigWig file for writing.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+            <span class="s2">&quot;variants&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variants</span><span class="p">),),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S100&quot;</span><span class="p">,</span>
+            <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+            <span class="s2">&quot;rel_pos&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variants</span><span class="p">),),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;i4&quot;</span><span class="p">,</span>
+            <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+            <span class="s2">&quot;attribution_alt&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genes</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">),</span>
+            <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+            <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+            <span class="s2">&quot;sequence_alt&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genes</span><span class="p">),</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">),</span>
+            <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DECIMA_CONTEXT_SIZE</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;i1&quot;</span><span class="p">,</span>
+            <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variants</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S100&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VariantAttributionWriter.add">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.VariantAttributionWriter.add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">gene</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">rel_pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">seqs_ref</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">attrs_ref</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">seqs_alt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">attrs_alt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">gene_mask_start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gene_mask_end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add attribution data for a variant gene pair.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            variant: Variant name from the variants list.</span>
+<span class="sd">            gene: Gene name from the genes list.</span>
+<span class="sd">            attrs: Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).</span>
+<span class="sd">            seqs: One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">variant</span><span class="p">,</span> <span class="n">gene</span><span class="p">),</span> <span class="n">seqs_ref</span><span class="p">,</span> <span class="n">attrs_ref</span><span class="p">,</span> <span class="n">gene_mask_start</span><span class="p">,</span> <span class="n">gene_mask_end</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[(</span><span class="n">variant</span><span class="p">,</span> <span class="n">gene</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S100&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;rel_pos&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rel_pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;sequence_alt&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">convert_input_type</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">seqs_alt</span><span class="p">),</span>  <span class="c1"># convert_input_type only support Tensor</span>
+            <span class="s2">&quot;indices&quot;</span><span class="p">,</span>
+            <span class="n">input_type</span><span class="o">=</span><span class="s2">&quot;one_hot&quot;</span><span class="p">,</span>
+        <span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;i1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="p">[</span><span class="s2">&quot;attribution_alt&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">attrs_alt</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VariantAttributionWriter.close">
+<a class="viewcode-back" href="../../../api/decima.utils.html#decima.utils.io.VariantAttributionWriter.close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close HDF5 file and optional BigWig file.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </div>
 
 </pre></div>
@@ -687,7 +795,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=441e7bca"></script>
+</div><script src="../../../_static/documentation_options.js?v=8e576371"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

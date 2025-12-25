@@ -1,6 +1,25 @@
 decima.vep package
 ==================
 
+Submodules
+----------
+
+decima.vep.attributions module
+------------------------------
+
+.. automodule:: decima.vep.attributions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+decima.vep.vep module
+---------------------
+
+.. automodule:: decima.vep.vep
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

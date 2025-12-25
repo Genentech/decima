@@ -68,6 +68,14 @@ decima.cli.vep module
    :show-inheritance:
    :undoc-members:
 
+decima.cli.vep\_attribution module
+----------------------------------
+
+.. automodule:: decima.cli.vep_attribution
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

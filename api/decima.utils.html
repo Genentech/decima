@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="decima.vep package" href="decima.vep.html"><link rel="prev" title="decima.train package" href="decima.train.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>decima.utils package - decima 0.0.post1.dev1+gf59fb6397 documentation</title>
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>decima.utils package - decima 0.5.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.0.post1.dev1+gf59fb6397 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.5.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.0.post1.dev1+gf59fb6397 documentation</span>
+  <span class="sidebar-brand-text">decima 0.5.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -553,8 +553,8 @@ All files must contain the required metadata fields.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name from the genes list.</p></li>
-<li><p><strong>attrs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
-<li><p><strong>seqs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+<li><p><strong>attrs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+<li><p><strong>seqs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
 <li><p><strong>gene_mask_start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Gene mask start position. If None, the gene mask start position will be loaded from the result.</p></li>
 <li><p><strong>gene_mask_end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Gene mask end position. If None, the gene mask end position will be loaded from the result.</p></li>
 </ul>
@@ -630,7 +630,7 @@ All files must contain the required metadata fields.</p>
 <li><p><strong>chrom</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Chromosome name.</p></li>
 <li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Start position.</p></li>
 <li><p><strong>end</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – End position.</p></li>
-<li><p><strong>values</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Array of values for each position.</p></li>
+<li><p><strong>values</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Array of values for each position.</p></li>
 </ul>
 </dd>
 </dl>
@@ -646,6 +646,50 @@ All files must contain the required metadata fields.</p>
 <dt class="sig sig-object py" id="decima.utils.io.BigWigWriter.open">
 <span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#BigWigWriter.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.BigWigWriter.open" title="Link to this definition">¶</a></dt>
 <dd><p>Open BigWig file for writing and add chromosome header.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decima.utils.io.</span></span><span class="sig-name descname"><span class="pre">VariantAttributionWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#VariantAttributionWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#decima.utils.io.AttributionWriter" title="decima.utils.io.AttributionWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributionWriter</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_anndata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genome</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hg38'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#VariantAttributionWriter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqs_alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs_alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_mask_end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#VariantAttributionWriter.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add attribution data for a variant gene pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variant</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Variant name from the variants list.</p></li>
+<li><p><strong>gene</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Gene name from the genes list.</p></li>
+<li><p><strong>attrs</strong> – Attribution scores, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+<li><p><strong>seqs</strong> – One-hot DNA sequence, shape (4, DECIMA_CONTEXT_SIZE).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#VariantAttributionWriter.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close HDF5 file and optional BigWig file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decima.utils.io.VariantAttributionWriter.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/decima/utils/io.html#VariantAttributionWriter.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#decima.utils.io.VariantAttributionWriter.open" title="Link to this definition">¶</a></dt>
+<dd><p>Open HDF5 file and optional BigWig file for writing.</p>
 </dd></dl>
 
 </dd></dl>
@@ -702,8 +746,8 @@ All files must contain the required metadata fields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>attributions</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores with shape (batch_size, seqlet_len, 4)</p></li>
-<li><p><strong>motif</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Motif matrix with shape (motif_len, 4)</p></li>
+<li><p><strong>attributions</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Attribution scores with shape (batch_size, seqlet_len, 4)</p></li>
+<li><p><strong>motif</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Motif matrix with shape (motif_len, 4)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -973,6 +1017,14 @@ All files must contain the required metadata fields.</p>
 <li><a class="reference internal" href="#decima.utils.io.BigWigWriter.open"><code class="docutils literal notranslate"><span class="pre">BigWigWriter.open()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter</span></code></a><ul>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter.__annotations__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter.__init__"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter.add"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.add()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter.close"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.close()</span></code></a></li>
+<li><a class="reference internal" href="#decima.utils.io.VariantAttributionWriter.open"><code class="docutils literal notranslate"><span class="pre">VariantAttributionWriter.open()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#decima.utils.io.import_cyvcf2"><code class="docutils literal notranslate"><span class="pre">import_cyvcf2()</span></code></a></li>
 <li><a class="reference internal" href="#decima.utils.io.read_fasta_gene_mask"><code class="docutils literal notranslate"><span class="pre">read_fasta_gene_mask()</span></code></a></li>
 <li><a class="reference internal" href="#decima.utils.io.read_vcf_chunks"><code class="docutils literal notranslate"><span class="pre">read_vcf_chunks()</span></code></a></li>
@@ -1020,7 +1072,7 @@ All files must contain the required metadata fields.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=441e7bca"></script>
+</div><script src="../_static/documentation_options.js?v=8e576371"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
