@@ -262,7 +262,7 @@ def _log_vep_warnings(warning_counter: Counter, num_variants: int, genome_path: 
         if warning == WarningType.ALLELE_MISMATCH_WITH_REFERENCE_GENOME.value:
             logger.warning(
                 f"{warning}: {count} alleles out of {num_variants} predictions mismatched with the genome file {genome_path}."
-                "If this is not expected, please check if you are using the correct genome version."
+                " If this is not expected, please check if you are using the correct genome version."
             )
         elif warning == "no_overlap_found_for_chunk":
             logger.warning(f"{warning}: {count} chunks with no overlap found with genes.")

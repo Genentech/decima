@@ -548,7 +548,7 @@ class Attribution:
             or (self.pattern_type != other.pattern_type)
         ):
             warnings.warn(
-                "`threshold`, `min_seqlet_len`, `max_seqlet_len`, `additional_flanks`, and `pattern_type` are not same overriding "
+                "`threshold`, `min_seqlet_len`, `max_seqlet_len`, `additional_flanks`, and `pattern_type` are not the same, overriding "
                 "them with the values of the first attribution object."
             )
 
@@ -623,7 +623,6 @@ class AttributionResult:
                 self.model_name.append(h5.attrs["model_name"])
         else:
             self.h5 = h5py.File(str(self.attribution_h5), "r")
-            self.genes = self.h5["genes"][:].astype("U100")
             self.model_name = self.h5.attrs["model_name"]
             self.genome = self.h5.attrs["genome"]
             self.genes = self.h5["genes"][:].astype("U100")
