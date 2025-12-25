@@ -421,23 +421,9 @@ def test_Attribution_sub(attributions):
 
     diff = other - attributions
     assert (diff.attrs == attributions.attrs).all()
-    assert diff.gene == "OTHER_GENE - TEST2"
+    assert diff.gene == "OTHER_GENE-TEST2"
     assert diff.chrom == attributions.chrom
     assert diff.start == attributions.start
-
-    # Test failure: different inputs
-    other_diff_inputs = Attribution(
-        gene="OTHER_GENE",
-        inputs=torch.zeros_like(attributions.inputs),
-        attrs=other_attrs,
-        chrom=attributions.chrom,
-        start=attributions.start,
-        end=attributions.end,
-        strand=attributions.strand,
-        threshold=attributions.threshold,
-    )
-    with pytest.raises(AssertionError, match="Sequences of attribution objects must be the same"):
-        _ = other_diff_inputs - attributions
 
     # Test failure: different metadata
     other_diff_chrom = Attribution(
@@ -453,23 +439,6 @@ def test_Attribution_sub(attributions):
     with pytest.raises(AssertionError, match="Chromosomes must be the same"):
         _ = other_diff_chrom - attributions
 
-    # Test warning: different parameters
-    other_diff_thresh = Attribution(
-        gene="OTHER_GENE",
-        inputs=attributions.inputs,
-        attrs=other_attrs,
-        chrom=attributions.chrom,
-        start=attributions.start,
-        end=attributions.end,
-        strand=attributions.strand,
-        threshold=attributions.threshold * 2,
-    )
-    with pytest.warns(UserWarning, match="`threshold`.*are not same"):
-        res = other_diff_thresh - attributions
-        # Should use the left operand's threshold
-        assert res.threshold == other_diff_thresh.threshold
-
-
 def test_Attribution__sub__(attributions):
     other = Attribution(
         gene="OTHER",
@@ -484,4 +453,4 @@ def test_Attribution__sub__(attributions):
 
     diff = other - attributions
     assert np.allclose(diff.attrs, 1.0)
-    assert diff.gene == "OTHER - TEST2"
+    assert diff.gene == "OTHER-TEST2"

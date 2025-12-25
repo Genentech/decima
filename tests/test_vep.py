@@ -261,7 +261,7 @@ def test_predict_variant_effect_save(df_variant, tmp_path):
 def test_predict_variant_effect_vcf(tmp_path):
 
     output_file = tmp_path / "test_predictions.parquet"
-    warnings_file = tmp_path / "test_predictions.parquet.warnings.log"
+    warnings_file = tmp_path / "test_predictions.warnings.log"
 
     predict_variant_effect(
         "tests/data/test.vcf",

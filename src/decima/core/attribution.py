@@ -555,7 +555,7 @@ class Attribution:
         return Attribution(
             inputs=self.inputs,
             attrs=self.attrs - other.attrs,
-            gene=f"{self.gene} - {other.gene}",
+            gene=f"{self.gene}-{other.gene}",
             chrom=self.chrom,
             start=self.start,
             end=self.end,
@@ -944,11 +944,6 @@ class AttributionResult:
             pattern_type=pattern_type,
             **kwargs,
         )
-        # if isinstance(attribution, list) or isinstance(attribution, tuple):
-        #     df_peaks = pd.concat(df_peaks for df_peaks in attribution).reset_index(drop=True)
-        #     df_motifs = pd.concat(df_motifs for df_motifs in attribution).reset_index(drop=True)
-        #     return df_peaks, df_motifs
-        # else:
         df_peaks = attribution.peaks_to_bed()
         df_motifs = attribution.scan_motifs(motifs=meme_motif_db)
         return df_peaks, df_motifs
@@ -993,7 +988,7 @@ class AttributionResult:
                 delayed(AttributionResult._recursive_seqlet_calling)(
                     self.attribution_h5,
                     self._idx[gene],
-                    "_".join(gene),
+                    gene if isinstance(gene, str) else "_".join(gene),
                     self.tss_distance,
                     chrom,
                     start,
