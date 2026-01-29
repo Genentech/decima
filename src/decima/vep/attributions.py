@@ -31,6 +31,7 @@ from decima.utils import get_compute_device, _get_on_off_tasks
 from decima.utils.io import read_vcf_chunks, VariantAttributionWriter
 from decima.core.result import DecimaResult
 from decima.data.dataset import VariantDataset
+from decima.hub import load_decima_model
 from decima.interpret.attributer import DecimaAttributer
 from decima.model.metrics import WarningCounter
 from decima.vep.vep import _log_vep_warnings, _write_vep_warnings
@@ -158,16 +159,15 @@ def variant_effect_attribution(
             f"Unsupported input type: {type(variants)}. Must be pd.DataFrame or str (path to .tsv or .vcf)."
         )
 
-    result = DecimaResult.load(metadata_anndata)
-
+    model = load_decima_model(model, device=device)
+    result = DecimaResult.load(metadata_anndata or model.name)
     tasks, off_tasks = _get_on_off_tasks(result, tasks, off_tasks)
-    attributer = DecimaAttributer.load_decima_attributer(
-        model_name=model,
+    attributer = DecimaAttributer(
+        model=model,
         tasks=tasks,
         off_tasks=off_tasks,
         method=method,
         transform=transform,
-        device=device,
     )
 
     warning_counter = WarningCounter()

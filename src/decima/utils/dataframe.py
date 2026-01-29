@@ -44,12 +44,14 @@ class ChunkDataFrameWriter:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        # breakpoint()
         if self.writer is not None:
             if self.metadata is not None:
                 self.writer.add_key_value_metadata({str(k): str(v) for k, v in self.metadata.items()})
             self.writer.close()
         else:
             warnings.warn("NoDataFrameWrittenError: No dataframe was written to the parquet file.")
+            pd.DataFrame({}).to_parquet(self.output_path)
         self.first_chunk = True
 
     def write(self, chunk: pd.DataFrame) -> None:

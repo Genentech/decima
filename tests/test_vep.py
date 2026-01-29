@@ -82,6 +82,17 @@ def test_VariantDataset_overlap_genes(df_variant):
         })
         df = VariantDataset.overlap_genes(df_variant, df_genes)
 
+def test_VariantDataset_validate_allele_seq():
+    df_variant = pd.DataFrame({
+        "chrom": ["chr15"],
+        "pos": [44715509],
+        "ref": ["CC"],
+        "alt": ["TT"]
+    })
+    dataset = VariantDataset(df_variant)
+    ref_match, _ = dataset.validate_allele_seq("SPG11", dataset.variants.iloc[1])
+    assert ref_match
+
 def test_VariantDataset(df_variant):
 
     dataset = VariantDataset(df_variant, model_name="v1_rep0")
