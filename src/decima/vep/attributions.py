@@ -174,7 +174,7 @@ def variant_effect_attribution(
 
     dataset = VariantDataset(
         variants,
-        metadata_anndata=metadata_anndata,
+        metadata_anndata=result,
         gene_col=gene_col,
         distance_type=distance_type,
         min_distance=min_distance,

@@ -44,7 +44,6 @@ class ChunkDataFrameWriter:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # breakpoint()
         if self.writer is not None:
             if self.metadata is not None:
                 self.writer.add_key_value_metadata({str(k): str(v) for k, v in self.metadata.items()})
