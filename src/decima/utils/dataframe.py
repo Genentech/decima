@@ -50,6 +50,7 @@ class ChunkDataFrameWriter:
             self.writer.close()
         else:
             warnings.warn("NoDataFrameWrittenError: No dataframe was written to the parquet file.")
+            pd.DataFrame({}).to_parquet(self.output_path)
         self.first_chunk = True
 
     def write(self, chunk: pd.DataFrame) -> None:

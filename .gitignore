@@ -189,3 +189,4 @@ docs/wandb
 run_tutorial.s*
 
 logs/
+*.sbatch

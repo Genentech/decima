@@ -868,6 +868,8 @@ class VariantDataset(Dataset):
     def validate_allele_seq(self, gene, variant):
         seq = self.result.gene_sequence(gene, genome=self.genome)
         pos = variant.rel_pos
+        if variant.strand == "-":
+            pos = pos - len(variant.ref) + 1
         ref_match = seq[pos : pos + len(variant.ref)] == variant.ref_tx
         alt_match = seq[pos : pos + len(variant.alt)] == variant.alt_tx
         return ref_match, alt_match
@@ -888,6 +890,9 @@ class VariantDataset(Dataset):
 
         variant = self.variants.iloc[seq_idx]
         rel_pos = variant.rel_pos + self.max_seq_shift
+
+        if variant.strand == "-":
+            rel_pos = rel_pos - len(variant.ref) + 1
 
         # by default cache values are nan if matched with reference genome
         # then it will be replaced with the predicted expression from cache.
