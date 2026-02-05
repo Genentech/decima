@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>decima.vep.attributions - decima 0.5.2 documentation</title>
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>decima.vep.attributions - decima 0.6.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">decima 0.5.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">decima 0.6.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">decima 0.5.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.6.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -284,6 +284,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.utils.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_vcf_chunks</span><span class="p">,</span> <span class="n">VariantAttributionWriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">VariantDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.interpret.attributer</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaAttributer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningCounter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.vep.vep</span><span class="w"> </span><span class="kn">import</span> <span class="n">_log_vep_warnings</span><span class="p">,</span> <span class="n">_write_vep_warnings</span>
@@ -413,23 +414,22 @@
             <span class="sa">f</span><span class="s2">&quot;Unsupported input type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">variants</span><span class="p">)</span><span class="si">}</span><span class="s2">. Must be pd.DataFrame or str (path to .tsv or .vcf).&quot;</span>
         <span class="p">)</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span><span class="p">)</span>
-
+    <span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_anndata</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span> <span class="o">=</span> <span class="n">_get_on_off_tasks</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">off_tasks</span><span class="p">)</span>
-    <span class="n">attributer</span> <span class="o">=</span> <span class="n">DecimaAttributer</span><span class="o">.</span><span class="n">load_decima_attributer</span><span class="p">(</span>
-        <span class="n">model_name</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">attributer</span> <span class="o">=</span> <span class="n">DecimaAttributer</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">,</span>
         <span class="n">off_tasks</span><span class="o">=</span><span class="n">off_tasks</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
-        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">warning_counter</span> <span class="o">=</span> <span class="n">WarningCounter</span><span class="p">()</span>
 
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">VariantDataset</span><span class="p">(</span>
         <span class="n">variants</span><span class="p">,</span>
-        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">metadata_anndata</span><span class="p">,</span>
+        <span class="n">metadata_anndata</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
         <span class="n">gene_col</span><span class="o">=</span><span class="n">gene_col</span><span class="p">,</span>
         <span class="n">distance_type</span><span class="o">=</span><span class="n">distance_type</span><span class="p">,</span>
         <span class="n">min_distance</span><span class="o">=</span><span class="n">min_distance</span><span class="p">,</span>
@@ -534,9 +534,9 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=8e576371"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../../_static/documentation_options.js?v=2bd037f0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>
