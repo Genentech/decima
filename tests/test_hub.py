@@ -2,9 +2,16 @@ import pytest
 import anndata
 from decima.model.lightning import LightningModel
 from decima.hub import load_decima_model, load_decima_metadata
+from decima.constants import HF_MODEL_REPO, HF_DATA_REPO, HF_METADATA_FILENAME
 
 
-@pytest.mark.long_running
+def test_hf_constants():
+    assert HF_MODEL_REPO == "Genentech/decima-model"
+    assert HF_DATA_REPO == "Genentech/decima-data"
+    assert HF_METADATA_FILENAME == "metadata.h5ad"
+
+
+@pytest.mark.hf
 def test_load_decima_model():
     model_0 = load_decima_model()
     assert model_0 is not None
@@ -14,6 +21,7 @@ def test_load_decima_model():
     assert model_2 is not None
 
 
+@pytest.mark.hf
 def test_load_decima_metadata():
     metadata = load_decima_metadata()
     assert isinstance(metadata, anndata.AnnData)
