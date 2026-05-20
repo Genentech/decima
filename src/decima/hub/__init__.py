@@ -51,7 +51,7 @@ def load_decima_model(model: Union[str, int, List[str]] = DEFAULT_ENSEMBLE, devi
         return LightningModel.load_safetensor(model, device=device)
 
     if model in MODEL_METADATA:
-        if "model_path" in MODEL_METADATA[model]:
+        if "model_path" in MODEL_METADATA[model] and Path(MODEL_METADATA[model]["model_path"]).exists():
             return load_decima_model(MODEL_METADATA[model]["model_path"], device)
         name = MODEL_METADATA[model]["name"]
         cached = hf_hub_download(repo_id=HF_MODEL_REPO, filename=f"{name}.safetensors")
