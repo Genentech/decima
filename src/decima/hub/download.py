@@ -59,14 +59,13 @@ def download_decima_weights(model: Union[str, int] = DEFAULT_ENSEMBLE, download_
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima model weights for {model} to {download_dir / f'{name}.safetensors'}")
-    return hf_hub_download(repo_id=HF_MODEL_REPO, filename=f"{name}.safetensors", local_dir=str(download_dir))
+    return Path(hf_hub_download(repo_id=HF_MODEL_REPO, filename=f"{name}.safetensors", local_dir=str(download_dir)))
 
 
-def download_decima_metadata(metadata: str = DEFAULT_ENSEMBLE, download_dir: str = "."):
+def download_decima_metadata(download_dir: str = "."):
     """Download pre-trained Decima metadata from HuggingFace to a local directory.
 
     Args:
-        metadata: Model name to select metadata for.
         download_dir: Directory to save the metadata.
 
     Returns:
@@ -75,9 +74,9 @@ def download_decima_metadata(metadata: str = DEFAULT_ENSEMBLE, download_dir: str
     download_dir = Path(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima metadata to {download_dir / HF_METADATA_FILENAME}")
-    return hf_hub_download(
+    return Path(hf_hub_download(
         repo_id=HF_DATA_REPO, filename=HF_METADATA_FILENAME, repo_type="dataset", local_dir=str(download_dir)
-    )
+    ))
 
 
 def download_decima(model: str = DEFAULT_ENSEMBLE, download_dir: str = "."):
@@ -94,5 +93,5 @@ def download_decima(model: str = DEFAULT_ENSEMBLE, download_dir: str = "."):
     download_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Downloading Decima model weights and metadata to {download_dir}:")
     download_decima_weights(model, download_dir)
-    download_decima_metadata(model, download_dir)
+    download_decima_metadata(download_dir)
     return download_dir

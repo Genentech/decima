@@ -88,6 +88,11 @@ def load_decima_metadata(name_or_path: Optional[str] = None):
             warnings.warn(
                 f"Metadata path `{metadata['metadata_path']}` not found. Downloading from HuggingFace."
             )
+    else:
+        raise ValueError(
+            f"Invalid metadata: {name_or_path}. Must be a known model name {list(MODEL_METADATA.keys())} "
+            "or a local path."
+        )
 
     cached = hf_hub_download(repo_id=HF_DATA_REPO, filename=HF_METADATA_FILENAME, repo_type="dataset")
     return anndata.read_h5ad(cached)
