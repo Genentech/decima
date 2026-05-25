@@ -6,7 +6,6 @@ import torch
 import pytest
 
 from decima.constants import DECIMA_CONTEXT_SIZE
-from decima.hub import login_wandb
 from decima.hub.download import cache_hg38
 
 
@@ -38,7 +37,6 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_long_running)
 
 
-login_wandb()
 cache_hg38()
 
 

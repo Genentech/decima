@@ -3,6 +3,10 @@
 import json
 import os
 
+HF_MODEL_REPO = "Genentech/decima-model"
+HF_DATA_REPO = "Genentech/decima-data"
+HF_METADATA_FILENAME = "metadata.h5ad"
+
 
 # constants for all models
 DECIMA_CONTEXT_SIZE = 524_288
