@@ -12,6 +12,14 @@ decima.hub.download module
    :show-inheritance:
    :undoc-members:
 
+decima.hub.wandb module
+-----------------------
+
+.. automodule:: decima.hub.wandb
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

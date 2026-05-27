@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>Variant Effect Prediction with Motif Intpretation with Attributions - decima 0.6.2 documentation</title>
+        <title>Variant Effect Prediction with Motif Intpretation with Attributions - decima 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.6.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.7.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.6.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.7.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,9 +279,9 @@
       &gt;&gt;&gt; decima vep-attribution -v &quot;data/sample.vcf&quot; -o &quot;vep_results&quot;
 
 Options:
-  -v, --variants PATH             Path to the variant file .vcf file. VCF file
-                                  need to be normalized. Try normalizing th
-                                  vcf file incase of an error. `bcftools norm
+  -v, --variants PATH             Path to the variant .vcf file. VCF file
+                                  needs to be normalized. Try normalizing the
+                                  vcf file in case of an error. `bcftools norm
                                   -f ref.fasta input.vcf.gz -o output.vcf.gz`
   -o, --output_prefix PATH        Path to the output prefix.
   --tasks TEXT                    Tasks to predict. If not provided, all tasks
@@ -330,1880 +330,27 @@ Options:
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:07.1 (439.7MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:08.4 (86.1MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:07.8 (399.0MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                         | 0/96 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   1%|▏                | 1/96 [00:09&lt;14:39,  9.26s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   2%|▎                | 2/96 [00:09&lt;06:24,  4.09s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   3%|▌                | 3/96 [00:10&lt;03:47,  2.44s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   4%|▋                | 4/96 [00:10&lt;02:33,  1.67s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   5%|▉                | 5/96 [00:11&lt;01:52,  1.24s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   6%|█                | 6/96 [00:11&lt;01:28,  1.02it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   7%|█▏               | 7/96 [00:12&lt;01:12,  1.22it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   8%|█▍               | 8/96 [00:12&lt;01:02,  1.41it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   9%|█▌               | 9/96 [00:13&lt;00:55,  1.57it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  10%|█▋              | 10/96 [00:13&lt;00:50,  1.70it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  11%|█▊              | 11/96 [00:14&lt;00:47,  1.80it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  12%|██              | 12/96 [00:14&lt;00:44,  1.88it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  14%|██▏             | 13/96 [00:15&lt;00:42,  1.94it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  15%|██▎             | 14/96 [00:15&lt;00:41,  1.98it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  16%|██▌             | 15/96 [00:15&lt;00:40,  2.01it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  17%|██▋             | 16/96 [00:16&lt;00:39,  2.03it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  18%|██▊             | 17/96 [00:16&lt;00:38,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  19%|███             | 18/96 [00:17&lt;00:37,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  20%|███▏            | 19/96 [00:17&lt;00:37,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  21%|███▎            | 20/96 [00:18&lt;00:36,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  22%|███▌            | 21/96 [00:18&lt;00:36,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  23%|███▋            | 22/96 [00:19&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  24%|███▊            | 23/96 [00:19&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  25%|████            | 24/96 [00:20&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  26%|████▏           | 25/96 [00:20&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  27%|████▎           | 26/96 [00:21&lt;00:33,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  28%|████▌           | 27/96 [00:21&lt;00:33,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  29%|████▋           | 28/96 [00:22&lt;00:32,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  30%|████▊           | 29/96 [00:22&lt;00:32,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  31%|█████           | 30/96 [00:23&lt;00:31,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  32%|█████▏          | 31/96 [00:23&lt;00:31,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  33%|█████▎          | 32/96 [00:24&lt;00:30,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  34%|█████▌          | 33/96 [00:24&lt;00:30,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  35%|█████▋          | 34/96 [00:25&lt;00:29,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  36%|█████▊          | 35/96 [00:25&lt;00:29,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  38%|██████          | 36/96 [00:26&lt;00:28,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  39%|██████▏         | 37/96 [00:26&lt;00:28,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  40%|██████▎         | 38/96 [00:27&lt;00:27,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  41%|██████▌         | 39/96 [00:27&lt;00:27,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  42%|██████▋         | 40/96 [00:27&lt;00:26,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  43%|██████▊         | 41/96 [00:28&lt;00:26,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  44%|███████         | 42/96 [00:28&lt;00:25,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  45%|███████▏        | 43/96 [00:29&lt;00:25,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  46%|███████▎        | 44/96 [00:29&lt;00:24,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  47%|███████▌        | 45/96 [00:30&lt;00:24,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  48%|███████▋        | 46/96 [00:30&lt;00:23,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  49%|███████▊        | 47/96 [00:31&lt;00:23,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|████████        | 48/96 [00:31&lt;00:23,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  51%|████████▏       | 49/96 [00:32&lt;00:22,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  52%|████████▎       | 50/96 [00:32&lt;00:22,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  53%|████████▌       | 51/96 [00:33&lt;00:21,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  54%|████████▋       | 52/96 [00:33&lt;00:21,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  55%|████████▊       | 53/96 [00:34&lt;00:20,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  56%|█████████       | 54/96 [00:34&lt;00:20,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  57%|█████████▏      | 55/96 [00:35&lt;00:19,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  58%|█████████▎      | 56/96 [00:35&lt;00:19,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  59%|█████████▌      | 57/96 [00:36&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  60%|█████████▋      | 58/96 [00:36&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  61%|█████████▊      | 59/96 [00:37&lt;00:17,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  62%|██████████      | 60/96 [00:37&lt;00:17,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  64%|██████████▏     | 61/96 [00:38&lt;00:16,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  65%|██████████▎     | 62/96 [00:38&lt;00:16,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  66%|██████████▌     | 63/96 [00:39&lt;00:15,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  67%|██████████▋     | 64/96 [00:39&lt;00:15,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  68%|██████████▊     | 65/96 [00:39&lt;00:14,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  69%|███████████     | 66/96 [00:40&lt;00:14,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  70%|███████████▏    | 67/96 [00:40&lt;00:13,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  71%|███████████▎    | 68/96 [00:41&lt;00:13,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  72%|███████████▌    | 69/96 [00:41&lt;00:12,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  73%|███████████▋    | 70/96 [00:42&lt;00:12,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  74%|███████████▊    | 71/96 [00:42&lt;00:11,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  75%|████████████    | 72/96 [00:43&lt;00:11,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  76%|████████████▏   | 73/96 [00:43&lt;00:11,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  77%|████████████▎   | 74/96 [00:44&lt;00:10,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  78%|████████████▌   | 75/96 [00:44&lt;00:10,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  79%|████████████▋   | 76/96 [00:45&lt;00:09,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  80%|████████████▊   | 77/96 [00:45&lt;00:09,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  81%|█████████████   | 78/96 [00:46&lt;00:08,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  82%|█████████████▏  | 79/96 [00:46&lt;00:08,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  83%|█████████████▎  | 80/96 [00:47&lt;00:07,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  84%|█████████████▌  | 81/96 [00:47&lt;00:07,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  85%|█████████████▋  | 82/96 [00:48&lt;00:06,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  86%|█████████████▊  | 83/96 [00:48&lt;00:06,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  88%|██████████████  | 84/96 [00:49&lt;00:05,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  89%|██████████████▏ | 85/96 [00:49&lt;00:05,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  90%|██████████████▎ | 86/96 [00:50&lt;00:04,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  91%|██████████████▌ | 87/96 [00:50&lt;00:04,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  92%|██████████████▋ | 88/96 [00:51&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  93%|██████████████▊ | 89/96 [00:51&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  94%|███████████████ | 90/96 [00:51&lt;00:02,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  95%|███████████████▏| 91/96 [00:52&lt;00:02,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  96%|███████████████▎| 92/96 [00:52&lt;00:01,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  97%|███████████████▌| 93/96 [00:53&lt;00:01,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  98%|███████████████▋| 94/96 [00:53&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  99%|███████████████▊| 95/96 [00:54&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:54&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:54&lt;00:00,  1.75it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   0%|                           | 0/48 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   2%|▍                  | 1/48 [00:00&lt;00:24,  1.91it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   4%|▊                  | 2/48 [00:00&lt;00:22,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   6%|█▏                 | 3/48 [00:01&lt;00:21,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   8%|█▌                 | 4/48 [00:01&lt;00:20,  2.11it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  10%|█▉                 | 5/48 [00:02&lt;00:20,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  12%|██▍                | 6/48 [00:02&lt;00:19,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  15%|██▊                | 7/48 [00:03&lt;00:19,  2.14it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  17%|███▏               | 8/48 [00:03&lt;00:18,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  19%|███▌               | 9/48 [00:04&lt;00:18,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  21%|███▊              | 10/48 [00:04&lt;00:17,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  23%|████▏             | 11/48 [00:05&lt;00:17,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  25%|████▌             | 12/48 [00:05&lt;00:16,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  27%|████▉             | 13/48 [00:06&lt;00:16,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  29%|█████▎            | 14/48 [00:06&lt;00:15,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  31%|█████▋            | 15/48 [00:07&lt;00:15,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  33%|██████            | 16/48 [00:07&lt;00:14,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  35%|██████▍           | 17/48 [00:07&lt;00:14,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  38%|██████▊           | 18/48 [00:08&lt;00:13,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  40%|███████▏          | 19/48 [00:08&lt;00:13,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  42%|███████▌          | 20/48 [00:09&lt;00:12,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  44%|███████▉          | 21/48 [00:09&lt;00:12,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  46%|████████▎         | 22/48 [00:10&lt;00:12,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  48%|████████▋         | 23/48 [00:10&lt;00:11,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  50%|█████████         | 24/48 [00:11&lt;00:11,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  52%|█████████▍        | 25/48 [00:11&lt;00:10,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  54%|█████████▊        | 26/48 [00:12&lt;00:10,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  56%|██████████▏       | 27/48 [00:12&lt;00:09,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  58%|██████████▌       | 28/48 [00:13&lt;00:09,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  60%|██████████▉       | 29/48 [00:13&lt;00:08,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  62%|███████████▎      | 30/48 [00:13&lt;00:08,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  65%|███████████▋      | 31/48 [00:14&lt;00:07,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  67%|████████████      | 32/48 [00:14&lt;00:07,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  69%|████████████▍     | 33/48 [00:15&lt;00:06,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  71%|████████████▊     | 34/48 [00:15&lt;00:06,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  73%|█████████████▏    | 35/48 [00:16&lt;00:06,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  75%|█████████████▌    | 36/48 [00:16&lt;00:05,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  77%|█████████████▉    | 37/48 [00:17&lt;00:05,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  79%|██████████████▎   | 38/48 [00:17&lt;00:04,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  81%|██████████████▋   | 39/48 [00:18&lt;00:04,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  83%|███████████████   | 40/48 [00:18&lt;00:03,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  85%|███████████████▍  | 41/48 [00:19&lt;00:03,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  88%|███████████████▊  | 42/48 [00:19&lt;00:02,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  90%|████████████████▏ | 43/48 [00:19&lt;00:02,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  92%|████████████████▌ | 44/48 [00:20&lt;00:01,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  94%|████████████████▉ | 45/48 [00:20&lt;00:01,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  96%|█████████████████▎| 46/48 [00:21&lt;00:00,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  98%|█████████████████▋| 47/48 [00:21&lt;00:00,  2.15it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████████████| 48/48 [00:22&lt;00:00,  2.15it/s]
-Writing attributions...: 100%|██████████████████| 48/48 [00:22&lt;00:00,  2.15it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Computing attributions...: 100%|████████████████| 96/96 [00:53&lt;00:00,  1.80it/s]
+Writing attributions...: 100%|██████████████████| 48/48 [00:24&lt;00:00,  1.97it/s]
 decima - WARNING - Warnings:
-decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38.If this is not expected, please check if you are using the correct genome version.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:01.9 (1603.5MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep1:latest&#39;, 720.03MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:02.0 (356.3MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:10.5 (297.8MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                         | 0/96 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   1%|▏                | 1/96 [00:00&lt;01:15,  1.27it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   2%|▎                | 2/96 [00:01&lt;00:57,  1.64it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   3%|▌                | 3/96 [00:01&lt;00:51,  1.82it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   4%|▋                | 4/96 [00:02&lt;00:48,  1.91it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   5%|▉                | 5/96 [00:02&lt;00:46,  1.97it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   6%|█                | 6/96 [00:03&lt;00:44,  2.00it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   7%|█▏               | 7/96 [00:03&lt;00:43,  2.03it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   8%|█▍               | 8/96 [00:04&lt;00:43,  2.04it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   9%|█▌               | 9/96 [00:04&lt;00:42,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  10%|█▋              | 10/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  11%|█▊              | 11/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  12%|██              | 12/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  14%|██▏             | 13/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  15%|██▎             | 14/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  16%|██▌             | 15/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  17%|██▋             | 16/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  18%|██▊             | 17/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  19%|███             | 18/96 [00:08&lt;00:37,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  20%|███▏            | 19/96 [00:09&lt;00:37,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  21%|███▎            | 20/96 [00:09&lt;00:36,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  22%|███▌            | 21/96 [00:10&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  23%|███▋            | 22/96 [00:10&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  24%|███▊            | 23/96 [00:11&lt;00:34,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  25%|████            | 24/96 [00:11&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  26%|████▏           | 25/96 [00:12&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  27%|████▎           | 26/96 [00:12&lt;00:33,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  28%|████▌           | 27/96 [00:13&lt;00:33,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  29%|████▋           | 28/96 [00:13&lt;00:32,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  30%|████▊           | 29/96 [00:14&lt;00:32,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  31%|█████           | 30/96 [00:14&lt;00:31,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  32%|█████▏          | 31/96 [00:15&lt;00:31,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  33%|█████▎          | 32/96 [00:15&lt;00:30,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  34%|█████▌          | 33/96 [00:16&lt;00:30,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  35%|█████▋          | 34/96 [00:16&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  36%|█████▊          | 35/96 [00:17&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  38%|██████          | 36/96 [00:17&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  39%|██████▏         | 37/96 [00:18&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  40%|██████▎         | 38/96 [00:18&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  41%|██████▌         | 39/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  42%|██████▋         | 40/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  43%|██████▊         | 41/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  44%|███████         | 42/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  45%|███████▏        | 43/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  46%|███████▎        | 44/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  47%|███████▌        | 45/96 [00:21&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  48%|███████▋        | 46/96 [00:22&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  49%|███████▊        | 47/96 [00:22&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|████████        | 48/96 [00:23&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  51%|████████▏       | 49/96 [00:23&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  52%|████████▎       | 50/96 [00:24&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  53%|████████▌       | 51/96 [00:24&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  54%|████████▋       | 52/96 [00:25&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  55%|████████▊       | 53/96 [00:25&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  56%|█████████       | 54/96 [00:26&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  57%|█████████▏      | 55/96 [00:26&lt;00:19,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  58%|█████████▎      | 56/96 [00:27&lt;00:19,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  59%|█████████▌      | 57/96 [00:27&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  60%|█████████▋      | 58/96 [00:28&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  61%|█████████▊      | 59/96 [00:28&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  62%|██████████      | 60/96 [00:29&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  64%|██████████▏     | 61/96 [00:29&lt;00:16,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  65%|██████████▎     | 62/96 [00:30&lt;00:16,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  66%|██████████▌     | 63/96 [00:30&lt;00:15,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  67%|██████████▋     | 64/96 [00:31&lt;00:15,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  68%|██████████▊     | 65/96 [00:31&lt;00:14,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  69%|███████████     | 66/96 [00:32&lt;00:14,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  70%|███████████▏    | 67/96 [00:32&lt;00:13,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  71%|███████████▎    | 68/96 [00:33&lt;00:13,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  72%|███████████▌    | 69/96 [00:33&lt;00:12,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  73%|███████████▋    | 70/96 [00:34&lt;00:12,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  74%|███████████▊    | 71/96 [00:34&lt;00:12,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  75%|████████████    | 72/96 [00:34&lt;00:11,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  76%|████████████▏   | 73/96 [00:35&lt;00:11,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  77%|████████████▎   | 74/96 [00:35&lt;00:10,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  78%|████████████▌   | 75/96 [00:36&lt;00:10,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  79%|████████████▋   | 76/96 [00:36&lt;00:09,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  80%|████████████▊   | 77/96 [00:37&lt;00:09,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  81%|█████████████   | 78/96 [00:37&lt;00:08,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  82%|█████████████▏  | 79/96 [00:38&lt;00:08,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  83%|█████████████▎  | 80/96 [00:38&lt;00:07,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  84%|█████████████▌  | 81/96 [00:39&lt;00:07,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  85%|█████████████▋  | 82/96 [00:39&lt;00:06,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  86%|█████████████▊  | 83/96 [00:40&lt;00:06,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  88%|██████████████  | 84/96 [00:40&lt;00:05,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  89%|██████████████▏ | 85/96 [00:41&lt;00:05,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  90%|██████████████▎ | 86/96 [00:41&lt;00:04,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  91%|██████████████▌ | 87/96 [00:42&lt;00:04,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  92%|██████████████▋ | 88/96 [00:42&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  93%|██████████████▊ | 89/96 [00:43&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  94%|███████████████ | 90/96 [00:43&lt;00:02,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  95%|███████████████▏| 91/96 [00:44&lt;00:02,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  96%|███████████████▎| 92/96 [00:44&lt;00:01,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  97%|███████████████▌| 93/96 [00:45&lt;00:01,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  98%|███████████████▋| 94/96 [00:45&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  99%|███████████████▊| 95/96 [00:46&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   0%|                           | 0/48 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   2%|▍                  | 1/48 [00:00&lt;00:23,  2.01it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   4%|▊                  | 2/48 [00:00&lt;00:23,  2.00it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   6%|█▏                 | 3/48 [00:01&lt;00:22,  1.97it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   8%|█▌                 | 4/48 [00:02&lt;00:22,  1.97it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  10%|█▉                 | 5/48 [00:02&lt;00:21,  1.98it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  12%|██▍                | 6/48 [00:03&lt;00:21,  1.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  15%|██▊                | 7/48 [00:03&lt;00:20,  1.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  17%|███▏               | 8/48 [00:04&lt;00:20,  1.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  19%|███▌               | 9/48 [00:04&lt;00:19,  1.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  21%|███▊              | 10/48 [00:05&lt;00:19,  1.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  23%|████▏             | 11/48 [00:05&lt;00:18,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  25%|████▌             | 12/48 [00:05&lt;00:17,  2.10it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  27%|████▉             | 13/48 [00:06&lt;00:16,  2.13it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  29%|█████▎            | 14/48 [00:06&lt;00:15,  2.16it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  31%|█████▋            | 15/48 [00:07&lt;00:15,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  33%|██████            | 16/48 [00:07&lt;00:14,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  35%|██████▍           | 17/48 [00:08&lt;00:14,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  38%|██████▊           | 18/48 [00:08&lt;00:13,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  40%|███████▏          | 19/48 [00:09&lt;00:13,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  42%|███████▌          | 20/48 [00:09&lt;00:12,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  44%|███████▉          | 21/48 [00:09&lt;00:12,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  46%|████████▎         | 22/48 [00:10&lt;00:11,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  48%|████████▋         | 23/48 [00:10&lt;00:11,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  50%|█████████         | 24/48 [00:11&lt;00:10,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  52%|█████████▍        | 25/48 [00:11&lt;00:10,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  54%|█████████▊        | 26/48 [00:12&lt;00:09,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  56%|██████████▏       | 27/48 [00:12&lt;00:09,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  58%|██████████▌       | 28/48 [00:13&lt;00:09,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  60%|██████████▉       | 29/48 [00:13&lt;00:08,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  62%|███████████▎      | 30/48 [00:14&lt;00:08,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  65%|███████████▋      | 31/48 [00:14&lt;00:07,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  67%|████████████      | 32/48 [00:14&lt;00:07,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  69%|████████████▍     | 33/48 [00:15&lt;00:06,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  71%|████████████▊     | 34/48 [00:15&lt;00:06,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  73%|█████████████▏    | 35/48 [00:16&lt;00:05,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  75%|█████████████▌    | 36/48 [00:16&lt;00:05,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  77%|█████████████▉    | 37/48 [00:17&lt;00:04,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  79%|██████████████▎   | 38/48 [00:17&lt;00:04,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  81%|██████████████▋   | 39/48 [00:18&lt;00:04,  2.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  83%|███████████████   | 40/48 [00:18&lt;00:03,  2.18it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  85%|███████████████▍  | 41/48 [00:19&lt;00:03,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  88%|███████████████▊  | 42/48 [00:19&lt;00:02,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  90%|████████████████▏ | 43/48 [00:19&lt;00:02,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  92%|████████████████▌ | 44/48 [00:20&lt;00:01,  2.19it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  94%|████████████████▉ | 45/48 [00:20&lt;00:01,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  96%|█████████████████▎| 46/48 [00:21&lt;00:00,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  98%|█████████████████▋| 47/48 [00:21&lt;00:00,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████████████| 48/48 [00:22&lt;00:00,  2.20it/s]
-Writing attributions...: 100%|██████████████████| 48/48 [00:22&lt;00:00,  2.16it/s]
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38. If this is not expected, please check if you are using the correct genome version.
+decima - INFO - Using device: 0 and genome: hg38
+Computing attributions...: 100%|████████████████| 96/96 [00:52&lt;00:00,  1.84it/s]
+Writing attributions...: 100%|██████████████████| 48/48 [00:25&lt;00:00,  1.92it/s]
 decima - WARNING - Warnings:
-decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38.If this is not expected, please check if you are using the correct genome version.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:01.9 (1654.3MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep2:latest&#39;, 720.03MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:08.4 (85.5MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:07.6 (411.9MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                         | 0/96 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   1%|▏                | 1/96 [00:00&lt;01:14,  1.27it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   2%|▎                | 2/96 [00:01&lt;00:57,  1.64it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   3%|▌                | 3/96 [00:01&lt;00:51,  1.81it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   4%|▋                | 4/96 [00:02&lt;00:48,  1.91it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   5%|▉                | 5/96 [00:02&lt;00:46,  1.96it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   6%|█                | 6/96 [00:03&lt;00:44,  2.00it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   7%|█▏               | 7/96 [00:03&lt;00:43,  2.02it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   8%|█▍               | 8/96 [00:04&lt;00:43,  2.04it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   9%|█▌               | 9/96 [00:04&lt;00:42,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  10%|█▋              | 10/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  11%|█▊              | 11/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  12%|██              | 12/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  14%|██▏             | 13/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  15%|██▎             | 14/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  16%|██▌             | 15/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  17%|██▋             | 16/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  18%|██▊             | 17/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  19%|███             | 18/96 [00:08&lt;00:37,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  20%|███▏            | 19/96 [00:09&lt;00:37,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  21%|███▎            | 20/96 [00:09&lt;00:36,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  22%|███▌            | 21/96 [00:10&lt;00:36,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  23%|███▋            | 22/96 [00:10&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  24%|███▊            | 23/96 [00:11&lt;00:35,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  25%|████            | 24/96 [00:11&lt;00:34,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  26%|████▏           | 25/96 [00:12&lt;00:34,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  27%|████▎           | 26/96 [00:12&lt;00:33,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  28%|████▌           | 27/96 [00:13&lt;00:33,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  29%|████▋           | 28/96 [00:13&lt;00:32,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  30%|████▊           | 29/96 [00:14&lt;00:32,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  31%|█████           | 30/96 [00:14&lt;00:31,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  32%|█████▏          | 31/96 [00:15&lt;00:31,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  33%|█████▎          | 32/96 [00:15&lt;00:30,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  34%|█████▌          | 33/96 [00:16&lt;00:30,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  35%|█████▋          | 34/96 [00:16&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  36%|█████▊          | 35/96 [00:17&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  38%|██████          | 36/96 [00:17&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  39%|██████▏         | 37/96 [00:18&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  40%|██████▎         | 38/96 [00:18&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  41%|██████▌         | 39/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  42%|██████▋         | 40/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  43%|██████▊         | 41/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  44%|███████         | 42/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  45%|███████▏        | 43/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  46%|███████▎        | 44/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  47%|███████▌        | 45/96 [00:22&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  48%|███████▋        | 46/96 [00:22&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  49%|███████▊        | 47/96 [00:22&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|████████        | 48/96 [00:23&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  51%|████████▏       | 49/96 [00:23&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  52%|████████▎       | 50/96 [00:24&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  53%|████████▌       | 51/96 [00:24&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  54%|████████▋       | 52/96 [00:25&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  55%|████████▊       | 53/96 [00:25&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  56%|█████████       | 54/96 [00:26&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  57%|█████████▏      | 55/96 [00:26&lt;00:19,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  58%|█████████▎      | 56/96 [00:27&lt;00:19,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  59%|█████████▌      | 57/96 [00:27&lt;00:18,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  60%|█████████▋      | 58/96 [00:28&lt;00:18,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  61%|█████████▊      | 59/96 [00:28&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  62%|██████████      | 60/96 [00:29&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  64%|██████████▏     | 61/96 [00:29&lt;00:16,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  65%|██████████▎     | 62/96 [00:30&lt;00:16,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  66%|██████████▌     | 63/96 [00:30&lt;00:15,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  67%|██████████▋     | 64/96 [00:31&lt;00:15,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  68%|██████████▊     | 65/96 [00:31&lt;00:14,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  69%|███████████     | 66/96 [00:32&lt;00:14,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  70%|███████████▏    | 67/96 [00:32&lt;00:14,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  71%|███████████▎    | 68/96 [00:33&lt;00:13,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  72%|███████████▌    | 69/96 [00:33&lt;00:13,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  73%|███████████▋    | 70/96 [00:34&lt;00:12,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  74%|███████████▊    | 71/96 [00:34&lt;00:12,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  75%|████████████    | 72/96 [00:35&lt;00:11,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  76%|████████████▏   | 73/96 [00:35&lt;00:11,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  77%|████████████▎   | 74/96 [00:36&lt;00:10,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  78%|████████████▌   | 75/96 [00:36&lt;00:10,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  79%|████████████▋   | 76/96 [00:36&lt;00:09,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  80%|████████████▊   | 77/96 [00:37&lt;00:09,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  81%|█████████████   | 78/96 [00:37&lt;00:08,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  82%|█████████████▏  | 79/96 [00:38&lt;00:08,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  83%|█████████████▎  | 80/96 [00:38&lt;00:07,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  84%|█████████████▌  | 81/96 [00:39&lt;00:07,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  85%|█████████████▋  | 82/96 [00:39&lt;00:06,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  86%|█████████████▊  | 83/96 [00:40&lt;00:06,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  88%|██████████████  | 84/96 [00:40&lt;00:05,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  89%|██████████████▏ | 85/96 [00:41&lt;00:05,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  90%|██████████████▎ | 86/96 [00:41&lt;00:04,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  91%|██████████████▌ | 87/96 [00:42&lt;00:04,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  92%|██████████████▋ | 88/96 [00:42&lt;00:03,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  93%|██████████████▊ | 89/96 [00:43&lt;00:03,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  94%|███████████████ | 90/96 [00:43&lt;00:02,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  95%|███████████████▏| 91/96 [00:44&lt;00:02,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  96%|███████████████▎| 92/96 [00:44&lt;00:01,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  97%|███████████████▌| 93/96 [00:45&lt;00:01,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  98%|███████████████▋| 94/96 [00:45&lt;00:00,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  99%|███████████████▊| 95/96 [00:46&lt;00:00,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   0%|                           | 0/48 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   2%|▍                  | 1/48 [00:00&lt;00:22,  2.12it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   4%|▊                  | 2/48 [00:00&lt;00:20,  2.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   6%|█▏                 | 3/48 [00:01&lt;00:20,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   8%|█▌                 | 4/48 [00:01&lt;00:19,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  10%|█▉                 | 5/48 [00:02&lt;00:19,  2.26it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  12%|██▍                | 6/48 [00:02&lt;00:18,  2.26it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  15%|██▊                | 7/48 [00:03&lt;00:18,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  17%|███▏               | 8/48 [00:03&lt;00:17,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  19%|███▌               | 9/48 [00:04&lt;00:17,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  21%|███▊              | 10/48 [00:04&lt;00:16,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  23%|████▏             | 11/48 [00:04&lt;00:16,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  25%|████▌             | 12/48 [00:05&lt;00:15,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  27%|████▉             | 13/48 [00:05&lt;00:15,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  29%|█████▎            | 14/48 [00:06&lt;00:15,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  31%|█████▋            | 15/48 [00:06&lt;00:14,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  33%|██████            | 16/48 [00:07&lt;00:14,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  35%|██████▍           | 17/48 [00:07&lt;00:13,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  38%|██████▊           | 18/48 [00:08&lt;00:13,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  40%|███████▏          | 19/48 [00:08&lt;00:12,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  42%|███████▌          | 20/48 [00:08&lt;00:12,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  44%|███████▉          | 21/48 [00:09&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  46%|████████▎         | 22/48 [00:09&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  48%|████████▋         | 23/48 [00:10&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  50%|█████████         | 24/48 [00:10&lt;00:10,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  52%|█████████▍        | 25/48 [00:11&lt;00:10,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  54%|█████████▊        | 26/48 [00:11&lt;00:09,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  56%|██████████▏       | 27/48 [00:12&lt;00:09,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  58%|██████████▌       | 28/48 [00:12&lt;00:08,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  60%|██████████▉       | 29/48 [00:12&lt;00:08,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  62%|███████████▎      | 30/48 [00:13&lt;00:07,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  65%|███████████▋      | 31/48 [00:13&lt;00:07,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  67%|████████████      | 32/48 [00:14&lt;00:07,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  69%|████████████▍     | 33/48 [00:14&lt;00:06,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  71%|████████████▊     | 34/48 [00:15&lt;00:06,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  73%|█████████████▏    | 35/48 [00:15&lt;00:05,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  75%|█████████████▌    | 36/48 [00:16&lt;00:05,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  77%|█████████████▉    | 37/48 [00:16&lt;00:04,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  79%|██████████████▎   | 38/48 [00:16&lt;00:04,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  81%|██████████████▋   | 39/48 [00:17&lt;00:04,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  83%|███████████████   | 40/48 [00:17&lt;00:03,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  85%|███████████████▍  | 41/48 [00:18&lt;00:03,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  88%|███████████████▊  | 42/48 [00:18&lt;00:02,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  90%|████████████████▏ | 43/48 [00:19&lt;00:02,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  92%|████████████████▌ | 44/48 [00:19&lt;00:01,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  94%|████████████████▉ | 45/48 [00:20&lt;00:01,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  96%|█████████████████▎| 46/48 [00:20&lt;00:00,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  98%|█████████████████▋| 47/48 [00:20&lt;00:00,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████████████| 48/48 [00:21&lt;00:00,  2.24it/s]
-Writing attributions...: 100%|██████████████████| 48/48 [00:21&lt;00:00,  2.24it/s]
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38. If this is not expected, please check if you are using the correct genome version.
+decima - INFO - Using device: 0 and genome: hg38
+Computing attributions...: 100%|████████████████| 96/96 [00:52&lt;00:00,  1.83it/s]
+Writing attributions...: 100%|██████████████████| 48/48 [00:24&lt;00:00,  1.93it/s]
 decima - WARNING - Warnings:
-decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38.If this is not expected, please check if you are using the correct genome version.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:08.8 (353.2MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep3:latest&#39;, 720.03MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:07.4 (97.7MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 00:00:01.8 (1722.5MB/s)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|                         | 0/96 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   1%|▏                | 1/96 [00:00&lt;01:16,  1.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   2%|▎                | 2/96 [00:01&lt;00:57,  1.62it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   3%|▌                | 3/96 [00:01&lt;00:51,  1.80it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   4%|▋                | 4/96 [00:02&lt;00:48,  1.90it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   5%|▉                | 5/96 [00:02&lt;00:46,  1.96it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   6%|█                | 6/96 [00:03&lt;00:45,  2.00it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   7%|█▏               | 7/96 [00:03&lt;00:43,  2.02it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   8%|█▍               | 8/96 [00:04&lt;00:43,  2.04it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   9%|█▌               | 9/96 [00:04&lt;00:42,  2.05it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  10%|█▋              | 10/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  11%|█▊              | 11/96 [00:05&lt;00:41,  2.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  12%|██              | 12/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  14%|██▏             | 13/96 [00:06&lt;00:40,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  15%|██▎             | 14/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  16%|██▌             | 15/96 [00:07&lt;00:39,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  17%|██▋             | 16/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  18%|██▊             | 17/96 [00:08&lt;00:38,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  19%|███             | 18/96 [00:09&lt;00:37,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  20%|███▏            | 19/96 [00:09&lt;00:37,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  21%|███▎            | 20/96 [00:09&lt;00:36,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  22%|███▌            | 21/96 [00:10&lt;00:36,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  23%|███▋            | 22/96 [00:10&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  24%|███▊            | 23/96 [00:11&lt;00:35,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  25%|████            | 24/96 [00:11&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  26%|████▏           | 25/96 [00:12&lt;00:34,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  27%|████▎           | 26/96 [00:12&lt;00:33,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  28%|████▌           | 27/96 [00:13&lt;00:33,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  29%|████▋           | 28/96 [00:13&lt;00:32,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  30%|████▊           | 29/96 [00:14&lt;00:32,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  31%|█████           | 30/96 [00:14&lt;00:31,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  32%|█████▏          | 31/96 [00:15&lt;00:31,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  33%|█████▎          | 32/96 [00:15&lt;00:30,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  34%|█████▌          | 33/96 [00:16&lt;00:30,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  35%|█████▋          | 34/96 [00:16&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  36%|█████▊          | 35/96 [00:17&lt;00:29,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  38%|██████          | 36/96 [00:17&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  39%|██████▏         | 37/96 [00:18&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  40%|██████▎         | 38/96 [00:18&lt;00:28,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  41%|██████▌         | 39/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  42%|██████▋         | 40/96 [00:19&lt;00:27,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  43%|██████▊         | 41/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  44%|███████         | 42/96 [00:20&lt;00:26,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  45%|███████▏        | 43/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  46%|███████▎        | 44/96 [00:21&lt;00:25,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  47%|███████▌        | 45/96 [00:22&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  48%|███████▋        | 46/96 [00:22&lt;00:24,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  49%|███████▊        | 47/96 [00:22&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|████████        | 48/96 [00:23&lt;00:23,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  51%|████████▏       | 49/96 [00:23&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  52%|████████▎       | 50/96 [00:24&lt;00:22,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  53%|████████▌       | 51/96 [00:24&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  54%|████████▋       | 52/96 [00:25&lt;00:21,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  55%|████████▊       | 53/96 [00:25&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  56%|█████████       | 54/96 [00:26&lt;00:20,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  57%|█████████▏      | 55/96 [00:26&lt;00:19,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  58%|█████████▎      | 56/96 [00:27&lt;00:19,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  59%|█████████▌      | 57/96 [00:27&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  60%|█████████▋      | 58/96 [00:28&lt;00:18,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  61%|█████████▊      | 59/96 [00:28&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  62%|██████████      | 60/96 [00:29&lt;00:17,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  64%|██████████▏     | 61/96 [00:29&lt;00:16,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  65%|██████████▎     | 62/96 [00:30&lt;00:16,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  66%|██████████▌     | 63/96 [00:30&lt;00:15,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  67%|██████████▋     | 64/96 [00:31&lt;00:15,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  68%|██████████▊     | 65/96 [00:31&lt;00:14,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  69%|███████████     | 66/96 [00:32&lt;00:14,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  70%|███████████▏    | 67/96 [00:32&lt;00:13,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  71%|███████████▎    | 68/96 [00:33&lt;00:13,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  72%|███████████▌    | 69/96 [00:33&lt;00:13,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  73%|███████████▋    | 70/96 [00:34&lt;00:12,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  74%|███████████▊    | 71/96 [00:34&lt;00:12,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  75%|████████████    | 72/96 [00:35&lt;00:11,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  76%|████████████▏   | 73/96 [00:35&lt;00:11,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  77%|████████████▎   | 74/96 [00:35&lt;00:10,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  78%|████████████▌   | 75/96 [00:36&lt;00:10,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  79%|████████████▋   | 76/96 [00:36&lt;00:09,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  80%|████████████▊   | 77/96 [00:37&lt;00:09,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  81%|█████████████   | 78/96 [00:37&lt;00:08,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  82%|█████████████▏  | 79/96 [00:38&lt;00:08,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  83%|█████████████▎  | 80/96 [00:38&lt;00:07,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  84%|█████████████▌  | 81/96 [00:39&lt;00:07,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  85%|█████████████▋  | 82/96 [00:39&lt;00:06,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  86%|█████████████▊  | 83/96 [00:40&lt;00:06,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  88%|██████████████  | 84/96 [00:40&lt;00:05,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  89%|██████████████▏ | 85/96 [00:41&lt;00:05,  2.07it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  90%|██████████████▎ | 86/96 [00:41&lt;00:04,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  91%|██████████████▌ | 87/96 [00:42&lt;00:04,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  92%|██████████████▋ | 88/96 [00:42&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  93%|██████████████▊ | 89/96 [00:43&lt;00:03,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  94%|███████████████ | 90/96 [00:43&lt;00:02,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  95%|███████████████▏| 91/96 [00:44&lt;00:02,  2.08it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  96%|███████████████▎| 92/96 [00:44&lt;00:01,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  97%|███████████████▌| 93/96 [00:45&lt;00:01,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  98%|███████████████▋| 94/96 [00:45&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  99%|███████████████▊| 95/96 [00:46&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|████████████████| 96/96 [00:46&lt;00:00,  2.06it/s]
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38. If this is not expected, please check if you are using the correct genome version.
+decima - INFO - Using device: 0 and genome: hg38
+Computing attributions...: 100%|████████████████| 96/96 [00:52&lt;00:00,  1.82it/s]
+Writing attributions...: 100%|██████████████████| 48/48 [00:24&lt;00:00,  1.94it/s]
+decima - WARNING - Warnings:
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38. If this is not expected, please check if you are using the correct genome version.
 
-Writing attributions...:   0%|                           | 0/48 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   2%|▍                  | 1/48 [00:00&lt;00:20,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   4%|▊                  | 2/48 [00:00&lt;00:20,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   6%|█▏                 | 3/48 [00:01&lt;00:20,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   8%|█▌                 | 4/48 [00:01&lt;00:19,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  10%|█▉                 | 5/48 [00:02&lt;00:19,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  12%|██▍                | 6/48 [00:02&lt;00:18,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  15%|██▊                | 7/48 [00:03&lt;00:18,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  17%|███▏               | 8/48 [00:03&lt;00:17,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  19%|███▌               | 9/48 [00:04&lt;00:17,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  21%|███▊              | 10/48 [00:04&lt;00:16,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  23%|████▏             | 11/48 [00:04&lt;00:16,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  25%|████▌             | 12/48 [00:05&lt;00:16,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  27%|████▉             | 13/48 [00:05&lt;00:15,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  29%|█████▎            | 14/48 [00:06&lt;00:15,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  31%|█████▋            | 15/48 [00:06&lt;00:14,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  33%|██████            | 16/48 [00:07&lt;00:14,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  35%|██████▍           | 17/48 [00:07&lt;00:13,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  38%|██████▊           | 18/48 [00:08&lt;00:13,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  40%|███████▏          | 19/48 [00:08&lt;00:12,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  42%|███████▌          | 20/48 [00:08&lt;00:12,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  44%|███████▉          | 21/48 [00:09&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  46%|████████▎         | 22/48 [00:09&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  48%|████████▋         | 23/48 [00:10&lt;00:11,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  50%|█████████         | 24/48 [00:10&lt;00:10,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  52%|█████████▍        | 25/48 [00:11&lt;00:10,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  54%|█████████▊        | 26/48 [00:11&lt;00:09,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  56%|██████████▏       | 27/48 [00:12&lt;00:09,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  58%|██████████▌       | 28/48 [00:12&lt;00:08,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  60%|██████████▉       | 29/48 [00:12&lt;00:08,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  62%|███████████▎      | 30/48 [00:13&lt;00:08,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  65%|███████████▋      | 31/48 [00:13&lt;00:07,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  67%|████████████      | 32/48 [00:14&lt;00:07,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  69%|████████████▍     | 33/48 [00:14&lt;00:06,  2.25it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  71%|████████████▊     | 34/48 [00:15&lt;00:06,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  73%|█████████████▏    | 35/48 [00:15&lt;00:05,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  75%|█████████████▌    | 36/48 [00:16&lt;00:05,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  77%|█████████████▉    | 37/48 [00:16&lt;00:04,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  79%|██████████████▎   | 38/48 [00:16&lt;00:04,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  81%|██████████████▋   | 39/48 [00:17&lt;00:04,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  83%|███████████████   | 40/48 [00:17&lt;00:03,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  85%|███████████████▍  | 41/48 [00:18&lt;00:03,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  88%|███████████████▊  | 42/48 [00:18&lt;00:02,  2.22it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  90%|████████████████▏ | 43/48 [00:19&lt;00:02,  2.23it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  92%|████████████████▌ | 44/48 [00:19&lt;00:01,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  94%|████████████████▉ | 45/48 [00:20&lt;00:01,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  96%|█████████████████▎| 46/48 [00:20&lt;00:00,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:  98%|█████████████████▋| 47/48 [00:20&lt;00:00,  2.24it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████████████| 48/48 [00:21&lt;00:00,  2.24it/s]
-Writing attributions...: 100%|██████████████████| 48/48 [00:21&lt;00:00,  2.24it/s]
-decima - WARNING - Warnings:
-decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file hg38.If this is not expected, please check if you are using the correct genome version.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -2215,8 +362,7 @@ decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 p
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>example/vep_vcf_attributions.h5
-example/vep_vcf_attributions.h5_0.h5
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>example/vep_vcf_attributions.h5_0.h5
 example/vep_vcf_attributions.h5_0.warnings.log
 example/vep_vcf_attributions.h5_1.h5
 example/vep_vcf_attributions.h5_1.warnings.log
@@ -2234,7 +380,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </section>
 <section id="python-api">
 <h2>Python API<a class="headerlink" href="#python-api" title="Link to this heading">¶</a></h2>
-<p>Same as CLI API, <code class="docutils literal notranslate"><span class="pre">variant_effect_attribution</span></code> python api provides equlivant way to caulcate attribution for vairaints.</p>
+<p>Same as CLI API, <code class="docutils literal notranslate"><span class="pre">variant_effect_attribution</span></code> python api provides an equivalent way to calculate attributions for vairaints.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
@@ -2277,61 +423,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">mhcelik</span> (<span class=" -Color -Color-Yellow">mhcw</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:02.3 (1351.0MB/s)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;rep0:latest&#39;, 720.03MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:04.2 (171.5MB/s)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:01.9 (1636.2MB/s)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:   0%|          | 0/2 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...:  50%|█████     | 1/2 [00:01&lt;00:01,  1.55s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 2/2 [00:02&lt;00:00,  1.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 2/2 [00:02&lt;00:00,  1.03s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.77it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing attributions...: 100%|██████████| 2/2 [00:02&lt;00:00,  1.36s/it]
+Writing attributions...: 100%|██████████| 1/1 [00:00&lt;00:00,  1.92it/s]
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;example/vep_vcf_attributions.h5&#39;
@@ -2421,28 +514,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00,  9.58it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00,  9.52it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00,  9.64it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00,  9.59it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00, 14.85it/s]
+Loading attributions and sequences...: 100%|██████████| 1/1 [00:00&lt;00:00, 17.29it/s]
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1, 4, 20000), (1, 4, 20000), (1, 4, 20000), (1, 4, 20000))
@@ -2459,13 +532,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:04.6 (675.4MB/s)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 </pre></div>
 </div>
 </div>
@@ -2501,10 +568,10 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x14bcf51e4c10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x7f1df64ee710&gt;
 </pre></div>
 </div>
-<img alt="../_images/747431388a7795b3aafa9c8dd94d3547e67e33c570bfd2dfd075f63f43cca98b.png" src="../_images/747431388a7795b3aafa9c8dd94d3547e67e33c570bfd2dfd075f63f43cca98b.png" />
+<img alt="../_images/4c15484327e8cd10987a21d100d137463e87a4a934836d3613776dde06184b12.png" src="../_images/4c15484327e8cd10987a21d100d137463e87a4a934836d3613776dde06184b12.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2514,10 +581,10 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x14bcf51ba810&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x7f1e19f62e10&gt;
 </pre></div>
 </div>
-<img alt="../_images/f3641e298f8e52a6d0f2de38096f4146771aeebaaba8bce712169f1d764b9098.png" src="../_images/f3641e298f8e52a6d0f2de38096f4146771aeebaaba8bce712169f1d764b9098.png" />
+<img alt="../_images/e5baf41fea6837068908b33caea3bf82175fb7dc3326127f16729266f6195a43.png" src="../_images/e5baf41fea6837068908b33caea3bf82175fb7dc3326127f16729266f6195a43.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2528,10 +595,10 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x14bcf4f31050&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;logomaker.src.Logo.Logo at 0x7f1e19f53050&gt;
 </pre></div>
 </div>
-<img alt="../_images/df475a7de6f237574e7310323f65004172fed5352dd3269dc9edc09c0c08ebfa.png" src="../_images/df475a7de6f237574e7310323f65004172fed5352dd3269dc9edc09c0c08ebfa.png" />
+<img alt="../_images/88a9f3e6b1325b6ae0c53884eb53542a32ce892ab4d8d4901888cfe9376bddab.png" src="../_images/88a9f3e6b1325b6ae0c53884eb53542a32ce892ab4d8d4901888cfe9376bddab.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2573,7 +640,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>pos.chr9_133251979_C_T_ABO-ABO@24040</td>
       <td>74040</td>
       <td>74054</td>
-      <td>1.062168</td>
+      <td>1.062003</td>
       <td>0.000249</td>
       <td>24040</td>
     </tr>
@@ -2582,7 +649,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>pos.chr9_133251979_C_T_ABO-ABO@24071</td>
       <td>74071</td>
       <td>74077</td>
-      <td>0.084875</td>
+      <td>0.084775</td>
       <td>0.000300</td>
       <td>24071</td>
     </tr>
@@ -2591,7 +658,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>pos.chr9_133251979_C_T_ABO-ABO@23950</td>
       <td>73950</td>
       <td>73956</td>
-      <td>0.077155</td>
+      <td>0.077116</td>
       <td>0.000300</td>
       <td>23950</td>
     </tr>
@@ -2600,7 +667,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>pos.chr9_133251979_C_T_ABO-ABO@784</td>
       <td>50784</td>
       <td>50790</td>
-      <td>0.073198</td>
+      <td>0.073299</td>
       <td>0.000300</td>
       <td>784</td>
     </tr>
@@ -2609,8 +676,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>pos.chr9_133251979_C_T_ABO-ABO@755</td>
       <td>50755</td>
       <td>50760</td>
-      <td>0.051404</td>
-      <td>0.000338</td>
+      <td>0.051431</td>
+      <td>0.000340</td>
       <td>755</td>
     </tr>
     <tr>
@@ -2624,39 +691,39 @@ example/vep_vcf_attributions.h5_3.warnings.log
     </tr>
     <tr>
       <th>39</th>
-      <td>neg.chr9_133251979_C_T_ABO-ABO@479</td>
-      <td>50479</td>
-      <td>50483</td>
-      <td>-0.028738</td>
-      <td>0.000431</td>
-      <td>479</td>
-    </tr>
-    <tr>
-      <th>40</th>
       <td>neg.chr9_133251979_C_T_ABO-ABO@19662</td>
       <td>69662</td>
       <td>69671</td>
-      <td>-0.100773</td>
-      <td>0.000451</td>
+      <td>-0.100774</td>
+      <td>0.000441</td>
       <td>19662</td>
     </tr>
     <tr>
-      <th>41</th>
-      <td>neg.chr9_133251979_C_T_ABO-ABO@857</td>
-      <td>50857</td>
-      <td>50862</td>
-      <td>-0.039062</td>
-      <td>0.000451</td>
-      <td>857</td>
+      <th>40</th>
+      <td>neg.chr9_133251979_C_T_ABO-ABO@479</td>
+      <td>50479</td>
+      <td>50483</td>
+      <td>-0.028684</td>
+      <td>0.000441</td>
+      <td>479</td>
     </tr>
     <tr>
-      <th>42</th>
+      <th>41</th>
       <td>neg.chr9_133251979_C_T_ABO-ABO@24184</td>
       <td>74184</td>
       <td>74190</td>
-      <td>-0.038328</td>
-      <td>0.000484</td>
+      <td>-0.038351</td>
+      <td>0.000466</td>
       <td>24184</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>neg.chr9_133251979_C_T_ABO-ABO@19688</td>
+      <td>69688</td>
+      <td>69694</td>
+      <td>-0.044377</td>
+      <td>0.000498</td>
+      <td>19688</td>
     </tr>
     <tr>
       <th>43</th>
@@ -2664,7 +731,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>73624</td>
       <td>73628</td>
       <td>-0.028224</td>
-      <td>0.000484</td>
+      <td>0.000498</td>
       <td>23624</td>
     </tr>
   </tbody>
@@ -2679,7 +746,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/lala8/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -2724,8 +791,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>10.482847</td>
       <td>0.000305</td>
       <td>CTTCCTC</td>
-      <td>0.026460</td>
-      <td>0.095351</td>
+      <td>0.026455</td>
+      <td>0.095332</td>
       <td>24046</td>
     </tr>
     <tr>
@@ -2738,8 +805,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>10.482847</td>
       <td>0.000305</td>
       <td>CTTCCTC</td>
-      <td>0.026460</td>
-      <td>0.095351</td>
+      <td>0.026455</td>
+      <td>0.095332</td>
       <td>24046</td>
     </tr>
     <tr>
@@ -2752,8 +819,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>10.482847</td>
       <td>0.000305</td>
       <td>CTTCCTC</td>
-      <td>0.026460</td>
-      <td>0.095351</td>
+      <td>0.026455</td>
+      <td>0.095332</td>
       <td>24046</td>
     </tr>
     <tr>
@@ -2766,8 +833,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.578735</td>
       <td>0.000074</td>
       <td>CACTTCCTCC</td>
-      <td>0.024599</td>
-      <td>0.081912</td>
+      <td>0.024595</td>
+      <td>0.081899</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2780,8 +847,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>13.125338</td>
       <td>0.000025</td>
       <td>CACTTCCTCC</td>
-      <td>0.024599</td>
-      <td>0.084022</td>
+      <td>0.024595</td>
+      <td>0.084009</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2794,8 +861,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.578735</td>
       <td>0.000074</td>
       <td>CACTTCCTCC</td>
-      <td>0.024599</td>
-      <td>0.081912</td>
+      <td>0.024595</td>
+      <td>0.081899</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2808,8 +875,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>13.125338</td>
       <td>0.000025</td>
       <td>CACTTCCTCC</td>
-      <td>0.024599</td>
-      <td>0.084022</td>
+      <td>0.024595</td>
+      <td>0.084009</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2822,8 +889,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>7.401650</td>
       <td>0.000276</td>
       <td>CCACTTCCTCC</td>
-      <td>0.023818</td>
-      <td>0.067815</td>
+      <td>0.023814</td>
+      <td>0.067804</td>
       <td>24043</td>
     </tr>
     <tr>
@@ -2836,8 +903,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>7.401650</td>
       <td>0.000276</td>
       <td>CCACTTCCTCC</td>
-      <td>0.023818</td>
-      <td>0.067815</td>
+      <td>0.023814</td>
+      <td>0.067804</td>
       <td>24043</td>
     </tr>
     <tr>
@@ -2850,8 +917,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>9.248973</td>
       <td>0.000253</td>
       <td>CCACTTCCTCC</td>
-      <td>0.023818</td>
-      <td>0.052393</td>
+      <td>0.023814</td>
+      <td>0.052384</td>
       <td>24043</td>
     </tr>
     <tr>
@@ -2864,8 +931,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>9.248973</td>
       <td>0.000253</td>
       <td>CCACTTCCTCC</td>
-      <td>0.023818</td>
-      <td>0.052393</td>
+      <td>0.023814</td>
+      <td>0.052384</td>
       <td>24043</td>
     </tr>
     <tr>
@@ -2878,8 +945,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.822033</td>
       <td>0.000050</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.073496</td>
+      <td>0.022753</td>
+      <td>0.073485</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2892,8 +959,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>7.946971</td>
       <td>0.000269</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.059993</td>
+      <td>0.022753</td>
+      <td>0.059981</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2906,8 +973,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.990291</td>
       <td>0.000048</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.073415</td>
+      <td>0.022753</td>
+      <td>0.073404</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2920,8 +987,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>7.946971</td>
       <td>0.000269</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.059993</td>
+      <td>0.022753</td>
+      <td>0.059981</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2934,8 +1001,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.822033</td>
       <td>0.000050</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.073496</td>
+      <td>0.022753</td>
+      <td>0.073485</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2948,8 +1015,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>11.990291</td>
       <td>0.000048</td>
       <td>CCCACTTCCTCC</td>
-      <td>0.022757</td>
-      <td>0.073415</td>
+      <td>0.022753</td>
+      <td>0.073404</td>
       <td>24042</td>
     </tr>
     <tr>
@@ -2962,8 +1029,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>5.086073</td>
       <td>0.000475</td>
       <td>CACTTCCTCCC</td>
-      <td>0.021733</td>
-      <td>0.076563</td>
+      <td>0.021729</td>
+      <td>0.076552</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2976,8 +1043,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>12.386636</td>
       <td>0.000032</td>
       <td>CACTTCCTCCC</td>
-      <td>0.021733</td>
-      <td>0.072298</td>
+      <td>0.021729</td>
+      <td>0.072286</td>
       <td>24044</td>
     </tr>
     <tr>
@@ -2990,8 +1057,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>12.386636</td>
       <td>0.000032</td>
       <td>CACTTCCTCCC</td>
-      <td>0.021733</td>
-      <td>0.072298</td>
+      <td>0.021729</td>
+      <td>0.072286</td>
       <td>24044</td>
     </tr>
   </tbody>
@@ -3007,52 +1074,10 @@ example/vep_vcf_attributions.h5_3.warnings.log
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:06.0 (522.3MB/s)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:03&lt;00:00,  3.32s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:03&lt;00:00,  3.32s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact &#39;metadata:latest&#39;, 3122.32MB. 1 files...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done. 00:00:02.0 (1546.6MB/s)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/celikm5/miniforge3/envs/decima2/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:02&lt;00:00,  2.92s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:02&lt;00:00,  2.92s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]/home/lala8/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:03&lt;00:00,  3.78s/it]
+Computing recursive seqlet calling...:   0%|          | 0/1 [00:00&lt;?, ?it/s]/home/lala8/miniforge3/envs/decima/lib/python3.11/site-packages/memelite/fimo.py:406: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+Computing recursive seqlet calling...: 100%|██████████| 1/1 [00:04&lt;00:00,  4.11s/it]
 </pre></div>
 </div>
 </div>
@@ -3107,8 +1132,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>21.043345</td>
       <td>2.714465e-08</td>
       <td>TCTTTGTTTTCCCTTTTTTGTCT</td>
-      <td>-0.003653</td>
-      <td>-0.008740</td>
+      <td>-0.003652</td>
+      <td>-0.008739</td>
       <td>2150</td>
       <td>ref</td>
     </tr>
@@ -3122,8 +1147,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>20.821767</td>
       <td>3.492460e-08</td>
       <td>GCCGGGAGGGGGCGCC</td>
-      <td>0.016934</td>
-      <td>0.059062</td>
+      <td>0.016929</td>
+      <td>0.059048</td>
       <td>756</td>
       <td>ref</td>
     </tr>
@@ -3137,8 +1162,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>20.821767</td>
       <td>3.492460e-08</td>
       <td>GCCGGGAGGGGGCGCC</td>
-      <td>0.016934</td>
-      <td>0.059062</td>
+      <td>0.016929</td>
+      <td>0.059048</td>
       <td>756</td>
       <td>ref</td>
     </tr>
@@ -3152,8 +1177,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>20.659863</td>
       <td>3.644891e-08</td>
       <td>AACCTGAAAAACCGGTTCA</td>
-      <td>-0.001653</td>
-      <td>-0.006104</td>
+      <td>-0.001654</td>
+      <td>-0.006107</td>
       <td>25111</td>
       <td>ref</td>
     </tr>
@@ -3167,8 +1192,8 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>20.023842</td>
       <td>3.720925e-08</td>
       <td>ACCTGAAAAACCGGTTCA</td>
-      <td>-0.001693</td>
-      <td>-0.006160</td>
+      <td>-0.001694</td>
+      <td>-0.006163</td>
       <td>25112</td>
       <td>ref</td>
     </tr>
@@ -3188,7 +1213,22 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>...</td>
     </tr>
     <tr>
-      <th>9765</th>
+      <th>9586</th>
+      <td>ZN124.H13CORE.0.P.C</td>
+      <td>neg.chr9_133251979_C_T_ABO@789</td>
+      <td>50797</td>
+      <td>50809</td>
+      <td>-</td>
+      <td>6.514214</td>
+      <td>4.991293e-04</td>
+      <td>CCGGGCGGAAGG</td>
+      <td>0.030397</td>
+      <td>0.064030</td>
+      <td>797</td>
+      <td>alt</td>
+    </tr>
+    <tr>
+      <th>9587</th>
       <td>ZN124.H13CORE.0.P.C</td>
       <td>pos.chr9_133251979_C_T_ABO@799</td>
       <td>50797</td>
@@ -3197,13 +1237,13 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>6.514214</td>
       <td>4.991293e-04</td>
       <td>CCGGGCGGAAGG</td>
-      <td>0.030402</td>
-      <td>0.064038</td>
+      <td>0.030397</td>
+      <td>0.064030</td>
       <td>797</td>
       <td>alt</td>
     </tr>
     <tr>
-      <th>9766</th>
+      <th>9588</th>
       <td>ZN320.H13CORE.0.P.B</td>
       <td>neg.chr9_133251979_C_T_ABO@24107</td>
       <td>74102</td>
@@ -3213,27 +1253,12 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>4.993357e-04</td>
       <td>GGGGGCGGAGTGGGGACCAGACC</td>
       <td>-0.001394</td>
-      <td>-0.001536</td>
+      <td>-0.001535</td>
       <td>24102</td>
       <td>alt</td>
     </tr>
     <tr>
-      <th>9767</th>
-      <td>ZN320.H13CORE.0.P.B</td>
-      <td>neg.chr9_133251979_C_T_ABO@24115</td>
-      <td>74102</td>
-      <td>74125</td>
-      <td>+</td>
-      <td>4.026217</td>
-      <td>4.993357e-04</td>
-      <td>GGGGGCGGAGTGGGGACCAGACC</td>
-      <td>-0.001394</td>
-      <td>-0.001536</td>
-      <td>24102</td>
-      <td>alt</td>
-    </tr>
-    <tr>
-      <th>9768</th>
+      <th>9589</th>
       <td>CGGBP1.H13CORE.0.PSGIB.A</td>
       <td>neg.chr9_133251979_C_T_ABO@736</td>
       <td>50737</td>
@@ -3242,13 +1267,13 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>9.182252</td>
       <td>4.999638e-04</td>
       <td>GGGGCGGCGGG</td>
-      <td>-0.001905</td>
+      <td>-0.001904</td>
       <td>-0.002937</td>
       <td>737</td>
       <td>alt</td>
     </tr>
     <tr>
-      <th>9769</th>
+      <th>9590</th>
       <td>CGGBP1.H13CORE.0.PSGIB.A</td>
       <td>neg.chr9_133251979_C_T_ABO@751</td>
       <td>50737</td>
@@ -3257,14 +1282,14 @@ example/vep_vcf_attributions.h5_3.warnings.log
       <td>9.182252</td>
       <td>4.999638e-04</td>
       <td>GGGGCGGCGGG</td>
-      <td>-0.001905</td>
+      <td>-0.001904</td>
       <td>-0.002937</td>
       <td>737</td>
       <td>alt</td>
     </tr>
   </tbody>
 </table>
-<p>9770 rows × 12 columns</p>
+<p>9591 rows × 12 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -3319,36 +1344,36 @@ example/vep_vcf_attributions.h5_3.warnings.log
     <tr>
       <th>TFDP1.H13CORE.0.P.B</th>
       <th>neg.chr9_133251979_C_T_ABO@789</th>
-      <td>0.005604</td>
-      <td>0.033031</td>
-      <td>0.027427</td>
+      <td>0.005606</td>
+      <td>0.033026</td>
+      <td>0.027421</td>
     </tr>
     <tr>
       <th>CTCFL.H13CORE.0.P.B</th>
       <th>pos.chr9_133251979_C_T_ABO@755</th>
       <td>-0.002148</td>
-      <td>0.020881</td>
-      <td>0.023029</td>
+      <td>0.020880</td>
+      <td>0.023028</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">SP5.H13CORE.0.P.B</th>
       <th>neg.chr9_133251979_C_T_ABO@751</th>
-      <td>-0.002173</td>
-      <td>0.020172</td>
-      <td>0.022344</td>
+      <td>-0.002172</td>
+      <td>0.020171</td>
+      <td>0.022343</td>
     </tr>
     <tr>
       <th>pos.chr9_133251979_C_T_ABO@755</th>
-      <td>-0.002173</td>
-      <td>0.020172</td>
-      <td>0.022344</td>
+      <td>-0.002172</td>
+      <td>0.020171</td>
+      <td>0.022343</td>
     </tr>
     <tr>
       <th>SLC2A4RG.H13CORE.0.PSG.A</th>
-      <th>pos.chr9_133251979_C_T_ABO@799</th>
-      <td>0.013545</td>
-      <td>0.034428</td>
-      <td>0.020883</td>
+      <th>neg.chr9_133251979_C_T_ABO@789</th>
+      <td>0.013543</td>
+      <td>0.034423</td>
+      <td>0.020880</td>
     </tr>
     <tr>
       <th>...</th>
@@ -3359,40 +1384,40 @@ example/vep_vcf_attributions.h5_3.warnings.log
     </tr>
     <tr>
       <th rowspan="2" valign="top">SP5.H13CORE.0.P.B</th>
-      <th>pos.chr9_133251979_C_T_ABO@755</th>
-      <td>0.016457</td>
-      <td>-0.001859</td>
-      <td>-0.018316</td>
+      <th>neg.chr9_133251979_C_T_ABO@751</th>
+      <td>0.016453</td>
+      <td>-0.001858</td>
+      <td>-0.018311</td>
     </tr>
     <tr>
-      <th>neg.chr9_133251979_C_T_ABO@751</th>
-      <td>0.016457</td>
-      <td>-0.001859</td>
-      <td>-0.018316</td>
+      <th>pos.chr9_133251979_C_T_ABO@755</th>
+      <td>0.016453</td>
+      <td>-0.001858</td>
+      <td>-0.018311</td>
     </tr>
     <tr>
       <th>CTCFL.H13CORE.0.P.B</th>
       <th>pos.chr9_133251979_C_T_ABO@755</th>
-      <td>0.016934</td>
-      <td>-0.001661</td>
-      <td>-0.018594</td>
+      <td>0.016929</td>
+      <td>-0.001660</td>
+      <td>-0.018590</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">SLC2A4RG.H13CORE.0.PSG.A</th>
       <th>pos.chr9_133251979_C_T_ABO@799</th>
-      <td>0.036024</td>
-      <td>0.012775</td>
-      <td>-0.023249</td>
+      <td>0.036018</td>
+      <td>0.012773</td>
+      <td>-0.023245</td>
     </tr>
     <tr>
       <th>neg.chr9_133251979_C_T_ABO@789</th>
-      <td>0.036024</td>
-      <td>0.012775</td>
-      <td>-0.023249</td>
+      <td>0.036018</td>
+      <td>0.012773</td>
+      <td>-0.023245</td>
     </tr>
   </tbody>
 </table>
-<p>4504 rows × 3 columns</p>
+<p>3877 rows × 3 columns</p>
 </div></div></div>
 </div>
 </section>
@@ -3449,7 +1474,7 @@ example/vep_vcf_attributions.h5_3.warnings.log
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=1c28bd9a"></script>
+</div><script src="../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>decima.hub - decima 0.6.2 documentation</title>
+        <title>decima.hub - decima 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">decima 0.6.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">decima 0.7.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">decima 0.6.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.7.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -251,40 +251,31 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for decima.hub</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">wandb</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">grelu.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_artifact</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span> <span class="n">ENSEMBLE_MODELS</span><span class="p">,</span> <span class="n">MODEL_METADATA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">hf_hub_download</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decima.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span>
+    <span class="n">ENSEMBLE_MODELS</span><span class="p">,</span>
+    <span class="n">MODEL_METADATA</span><span class="p">,</span>
+    <span class="n">HF_MODEL_REPO</span><span class="p">,</span>
+    <span class="n">HF_DATA_REPO</span><span class="p">,</span>
+    <span class="n">HF_METADATA_FILENAME</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">decima.model.lightning</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightningModel</span><span class="p">,</span> <span class="n">EnsembleLightningModel</span>
-
-
-<div class="viewcode-block" id="login_wandb">
-<a class="viewcode-back" href="../../api/decima.hub.html#decima.hub.login_wandb">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">login_wandb</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Login to wandb either as anonymous or as a user.&quot;&quot;&quot;</span>
-    <span class="n">host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WANDB_HOST&quot;</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;never&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">wandb</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">:</span>  <span class="c1"># login anonymously if not logged in already</span>
-        <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">relogin</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">anonymous</span><span class="o">=</span><span class="s2">&quot;must&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="load_decima_model">
 <a class="viewcode-back" href="../../api/decima.hub.html#decima.hub.load_decima_model">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_decima_model</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">DEFAULT_ENSEMBLE</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a pre-trained Decima model from wandb or local path.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a pre-trained Decima model from HuggingFace or a local path.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model: Model identifier or path. Can be:</span>
 <span class="sd">            - int: Replicate number (0-3)</span>
-<span class="sd">            - str: Model name on wandb</span>
+<span class="sd">            - str: Model name from MODEL_METADATA</span>
 <span class="sd">            - str: Path to local model checkpoint</span>
 <span class="sd">            - List: list of local model checkpoints</span>
 <span class="sd">        device: Device to load the model on. If None, automatically selects the best available device.</span>
@@ -298,59 +289,49 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">LightningModel</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">model</span>
 
-    <span class="k">elif</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ENSEMBLE_MODELS</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ENSEMBLE_MODELS</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EnsembleLightningModel</span><span class="p">(</span>
             <span class="p">[</span><span class="n">load_decima_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">]],</span>
             <span class="n">name</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">List</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">device</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">EnsembleLightningModel</span><span class="p">([</span><span class="n">load_decima_model</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">model</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EnsembleLightningModel</span><span class="p">([</span><span class="n">load_decima_model</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">model</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
-    <span class="c1"># Load directly from a path</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">:</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;model_path&quot;</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">]:</span>  <span class="c1"># if model path exist in metadata load it from the path</span>
-            <span class="k">return</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;model_path&quot;</span><span class="p">],</span> <span class="n">device</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;ckpt&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.ckpt&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_safetensor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Invalid model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2"> it needs to be either a string of model_names on wandb (&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">), path to a local model, or a list of paths.&quot;</span>
-        <span class="p">)</span>
-    <span class="c1"># load model from wandb</span>
-    <span class="n">art</span> <span class="o">=</span> <span class="n">get_artifact</span><span class="p">(</span>
-        <span class="n">model_name</span><span class="p">,</span>
-        <span class="n">project</span><span class="o">=</span><span class="s2">&quot;decima&quot;</span><span class="p">,</span>
-        <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WANDB_HOST&quot;</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
-        <span class="n">art</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_safetensor</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">.safetensors&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_safetensor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;model_path&quot;</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;model_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;model_path&quot;</span><span class="p">],</span> <span class="n">device</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">cached</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="n">HF_MODEL_REPO</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.safetensors&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">LightningModel</span><span class="o">.</span><span class="n">load_safetensor</span><span class="p">(</span><span class="n">cached</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Invalid model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">. Must be a known model name </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="s2">&quot;a local path, or a list of local paths.&quot;</span>
+    <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="load_decima_metadata">
 <a class="viewcode-back" href="../../api/decima.hub.html#decima.hub.load_decima_metadata">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_decima_metadata</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the Decima metadata from wandb.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the Decima metadata from HuggingFace or a local path.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        name_or_path: Path to local metadata file or name of the model to load metadata for using wandb. If None, default model&#39;s metadata will be downloaded from wandb.</span>
+<span class="sd">        name_or_path: Path to local metadata file or model name. If None, downloads from HuggingFace.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An AnnData object containing the Decima metadata.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">name_or_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name_or_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span>
 
     <span class="n">name_or_path</span> <span class="o">=</span> <span class="n">name_or_path</span> <span class="ow">or</span> <span class="n">DEFAULT_ENSEMBLE</span>
 
@@ -359,25 +340,20 @@
 
     <span class="k">if</span> <span class="n">name_or_path</span> <span class="ow">in</span> <span class="n">MODEL_METADATA</span><span class="p">:</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="n">MODEL_METADATA</span><span class="p">[</span><span class="n">name_or_path</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="s2">&quot;metadata_path&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata_path&quot;</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;metadata_path&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata_path&quot;</span><span class="p">])</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Metadata `</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;metadata_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">` provided in environment variables, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;but not found in `</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;metadata_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">` &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Trying to download `metadata` from wandb.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Metadata path `</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;metadata_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">` not found. Downloading from HuggingFace.&quot;</span>
             <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid metadata: </span><span class="si">{</span><span class="n">name_or_path</span><span class="si">}</span><span class="s2">. Must be a known model name </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">MODEL_METADATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot;or a local path.&quot;</span>
+        <span class="p">)</span>
 
-    <span class="n">art</span> <span class="o">=</span> <span class="n">get_artifact</span><span class="p">(</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">],</span>
-        <span class="n">project</span><span class="o">=</span><span class="s2">&quot;decima&quot;</span><span class="p">,</span>
-        <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WANDB_HOST&quot;</span><span class="p">,</span> <span class="n">DEFAULT_WANDB_HOST</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
-        <span class="n">art</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.h5ad&quot;</span><span class="p">)</span></div>
+    <span class="n">cached</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="n">HF_DATA_REPO</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">HF_METADATA_FILENAME</span><span class="p">,</span> <span class="n">repo_type</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">cached</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -411,7 +387,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=1c28bd9a"></script>
+</div><script src="../../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fine-tuning Borzoi to create a Decima model" href="3-finetune.html"><link rel="prev" title="Attribution and Motifs Detection with Decima" href="1-attribution-motif-discovery.html">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>Variant Effect Prediction with Decima - decima 0.6.2 documentation</title>
+        <title>Variant Effect Prediction with Decima - decima 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">decima 0.6.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">decima 0.7.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">decima 0.6.2 documentation</span>
+  <span class="sidebar-brand-text">decima 0.7.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -304,30 +304,63 @@
       genes and variants mapped based on these column not based on the genomic
       locus based on the annotaiton.
 
+      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --distance-
+      type tss --min-distance 50000 --max-distance 100000 # predict for
+      variants within 50kb of the TSS and 100kb of the TSS
+
+      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --save-
+      replicates # save the replicates in the output parquet file
+
+      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --genome
+      &quot;hg38&quot; # use hg38 genome build
+
+      &gt;&gt;&gt; decima vep -v &quot;data/sample.vcf&quot; -o &quot;vep_results.parquet&quot; --genome
+      &quot;path/to/fasta/hg38.fa&quot;  # use custom genome build
+
 Options:
-  -v, --variants PATH       Path to the variant file .vcf file
-  -o, --output_pq PATH      Path to the output parquet file.
-  --tasks TEXT              Tasks to predict. If not provided, all tasks will
-                            be predicted.
-  --chunksize INTEGER       Number of variants to process in each chunk.
-                            Loading variants in chunks is more memory
-                            efficient.This chuck of variants will be process
-                            and saved to output parquet file before contineus
-                            to next chunk. Default: 10_000.
-  --model INTEGER           Model to use for variant effect prediction either
-                            replicate number or path to the model.
-  --device TEXT             Device to use. Default: None which automatically
-                            selects the best device.
-  --batch-size INTEGER      Batch size for the model. Default: 1.
-  --num-workers INTEGER     Number of workers for the loader. Default: 1.
-  --max-distance FLOAT      Maximum distance from the TSS. Default: 524288.
-  --max-distance-type TEXT  Type of maximum distance. Default: tss.
-  --include-cols TEXT       Columns to include in the output in the original
-                            tsv file to include in the output parquet file.
-                            Default: None.
-  --gene-col TEXT           Column name for gene names. Default: None.
-  --genome TEXT             Genome build. Default: hg38.
-  --help                    Show this message and exit.
+  -v, --variants PATH        Path to the variant .vcf file. VCF file needs to
+                             be normalized. Try normalizing th vcf file in
+                             case of an error. `bcftools norm -f ref.fasta
+                             input.vcf.gz -o output.vcf.gz`
+  -o, --output_pq PATH       Path to the output parquet file.
+  --tasks TEXT               Tasks to predict. If not provided, all tasks will
+                             be predicted.
+  --chunksize INTEGER        Number of variants to process in each chunk.
+                             Loading variants in chunks is more memory
+                             efficient.This chuck of variants will be process
+                             and saved to output parquet file before contineus
+                             to next chunk. Default: 10_000.
+  --model TEXT               `0`, `1`, `2`, `3`, `ensemble` or a path or a
+                             comma-separated list of paths to safetensor files
+                             to perform variant effect prediction. Default:
+                             `ensemble`.
+  --metadata TEXT            Path to the metadata anndata file or name of the
+                             model. If not provided, the compabilite metadata
+                             for the model will be used. Default: ensemble.
+  --device TEXT              Device to use. Default: None which automatically
+                             selects the best device.
+  --batch-size INTEGER       Batch size for the model. Default: 8
+  --num-workers INTEGER      Number of workers for the loader. Default: 4
+  --distance-type TEXT       Type of distance. Default: tss.
+  --min-distance FLOAT       Minimum distance from the end of the gene.
+                             Default: 0.
+  --max-distance FLOAT       Maximum distance from the TSS. Default: 524288.
+  --include-cols TEXT        Columns to include in the output in the original
+                             tsv file to include in the output parquet file.
+                             Default: None.
+  --gene-col TEXT            Column name for gene names. Default: None.
+  --genome TEXT              Genome build. Default: hg38.
+  --save-replicates          Save the replicates in the output parquet file.
+                             Default: False. Only supported for ensemble
+                             models.
+  --disable-reference-cache  Disables the reference cache which significantly
+                             speeds up the computation by caching the
+                             reference expression predictios in the metadata.
+  --float-precision TEXT     Floating-point precision to be used in
+                             calculations. Avaliable options include:
+                             &#39;16-true&#39;, &#39;16-mixed&#39;, &#39;bf16-true&#39;, &#39;bf16-mixed&#39;,
+                             &#39;32-true&#39;, &#39;64-true&#39;, &#39;32&#39;, &#39;16&#39;, and &#39;bf16&#39;.
+  --help                     Show this message and exit.
 
 </pre></div>
 </div>
@@ -357,23 +390,40 @@ Options:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
+decima - INFO - Performing predictions on VariantDataset(48 variants from [&#39;chr1&#39;] between 516455 and 110234512 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/sample ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 96/96 <span class=" -Color -Color-Faint">0:00:48 • 0:00:00</span> <span class=" -Color -Color-Faint">1.77it/s</span> it/s it/s 
+?25hdecima - WARNING - Warnings:
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
+
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>vep_vcf_results.parquet.warnings.log
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>vep_vcf_results.warnings.log
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unknown: 0 / 48 
-allele_mismatch_with_reference_genome: 26 / 48 
+allele_mismatch_with_reference_genome: 10 / 48 
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;vep_vcf_results.parquet&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;vep_vcf_results.parquet&quot;</span><span class="p">)</span>
+<span class="n">results</span>
 </pre></div>
 </div>
 </div>
@@ -433,16 +483,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.000053</td>
-      <td>-0.000153</td>
-      <td>-0.000089</td>
-      <td>-0.000016</td>
-      <td>-0.000013</td>
-      <td>-0.000040</td>
-      <td>-0.000070</td>
-      <td>7.629395e-05</td>
-      <td>-0.000026</td>
-      <td>-0.000069</td>
+      <td>-0.038816</td>
+      <td>-0.132628</td>
+      <td>0.012945</td>
+      <td>-0.057034</td>
+      <td>-0.045095</td>
+      <td>-0.019845</td>
+      <td>-0.048861</td>
+      <td>-0.248287</td>
+      <td>-0.157361</td>
+      <td>-0.202191</td>
     </tr>
     <tr>
       <th>1</th>
@@ -457,16 +507,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.000586</td>
-      <td>-0.000891</td>
-      <td>-0.000565</td>
-      <td>-0.000311</td>
-      <td>-0.000461</td>
-      <td>-0.000252</td>
-      <td>-0.000376</td>
-      <td>-6.060898e-04</td>
-      <td>-0.000454</td>
-      <td>-0.000725</td>
+      <td>0.007422</td>
+      <td>-0.040294</td>
+      <td>0.037184</td>
+      <td>-0.039102</td>
+      <td>-0.069273</td>
+      <td>-0.089758</td>
+      <td>0.085668</td>
+      <td>-0.100051</td>
+      <td>0.199948</td>
+      <td>-0.228135</td>
     </tr>
     <tr>
       <th>2</th>
@@ -481,16 +531,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>170729</td>
       <td>...</td>
-      <td>-0.000565</td>
-      <td>-0.000787</td>
-      <td>-0.000515</td>
-      <td>-0.000279</td>
-      <td>-0.000354</td>
-      <td>-0.000202</td>
-      <td>-0.000342</td>
-      <td>-5.399883e-04</td>
-      <td>-0.000423</td>
-      <td>-0.000597</td>
+      <td>-0.039081</td>
+      <td>-0.132857</td>
+      <td>0.012576</td>
+      <td>-0.057286</td>
+      <td>-0.044211</td>
+      <td>-0.019335</td>
+      <td>-0.049245</td>
+      <td>-0.247860</td>
+      <td>-0.158028</td>
+      <td>-0.202599</td>
     </tr>
     <tr>
       <th>3</th>
@@ -505,16 +555,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>165050</td>
       <td>...</td>
-      <td>-0.001453</td>
-      <td>-0.001775</td>
-      <td>-0.001403</td>
-      <td>-0.000820</td>
-      <td>-0.000896</td>
-      <td>-0.000575</td>
-      <td>-0.001113</td>
-      <td>-1.119316e-03</td>
-      <td>-0.001036</td>
-      <td>-0.001202</td>
+      <td>0.007090</td>
+      <td>-0.040752</td>
+      <td>0.036865</td>
+      <td>-0.038709</td>
+      <td>-0.069798</td>
+      <td>-0.090022</td>
+      <td>0.085745</td>
+      <td>-0.100093</td>
+      <td>0.199475</td>
+      <td>-0.228633</td>
     </tr>
     <tr>
       <th>4</th>
@@ -529,16 +579,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>166306</td>
       <td>...</td>
-      <td>0.000045</td>
-      <td>0.000105</td>
-      <td>0.000060</td>
-      <td>-0.000030</td>
-      <td>-0.000049</td>
-      <td>0.000029</td>
-      <td>0.000135</td>
-      <td>1.490116e-07</td>
-      <td>0.000057</td>
-      <td>0.000001</td>
+      <td>0.384038</td>
+      <td>0.383892</td>
+      <td>0.209059</td>
+      <td>0.197611</td>
+      <td>0.147189</td>
+      <td>0.214235</td>
+      <td>0.429188</td>
+      <td>0.046692</td>
+      <td>0.232973</td>
+      <td>0.122444</td>
     </tr>
     <tr>
       <th>5</th>
@@ -553,16 +603,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>167179</td>
       <td>...</td>
-      <td>-0.000561</td>
-      <td>-0.000826</td>
-      <td>-0.000536</td>
-      <td>-0.000299</td>
-      <td>-0.000324</td>
-      <td>-0.000196</td>
-      <td>-0.000374</td>
-      <td>-3.589988e-04</td>
-      <td>-0.000342</td>
-      <td>-0.000426</td>
+      <td>0.128468</td>
+      <td>0.201122</td>
+      <td>0.096130</td>
+      <td>0.117577</td>
+      <td>-0.126177</td>
+      <td>-0.059776</td>
+      <td>0.184826</td>
+      <td>-0.009697</td>
+      <td>0.305417</td>
+      <td>-0.107728</td>
     </tr>
     <tr>
       <th>6</th>
@@ -577,16 +627,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>198383</td>
       <td>...</td>
-      <td>-0.000399</td>
-      <td>-0.000585</td>
-      <td>-0.000374</td>
-      <td>-0.000208</td>
-      <td>-0.000212</td>
-      <td>-0.000126</td>
-      <td>-0.000265</td>
-      <td>-2.926290e-04</td>
-      <td>-0.000266</td>
-      <td>-0.000376</td>
+      <td>0.382609</td>
+      <td>0.387782</td>
+      <td>0.206949</td>
+      <td>0.192670</td>
+      <td>0.148521</td>
+      <td>0.211755</td>
+      <td>0.428720</td>
+      <td>0.039945</td>
+      <td>0.232015</td>
+      <td>0.117866</td>
     </tr>
     <tr>
       <th>7</th>
@@ -601,16 +651,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>184493</td>
       <td>...</td>
-      <td>0.001317</td>
-      <td>0.001001</td>
-      <td>0.000884</td>
-      <td>0.001013</td>
-      <td>0.000691</td>
-      <td>0.001310</td>
-      <td>0.001097</td>
-      <td>5.598068e-04</td>
-      <td>0.000501</td>
-      <td>0.000827</td>
+      <td>0.127029</td>
+      <td>0.199535</td>
+      <td>0.092907</td>
+      <td>0.114106</td>
+      <td>-0.132683</td>
+      <td>-0.060256</td>
+      <td>0.180594</td>
+      <td>-0.008448</td>
+      <td>0.303062</td>
+      <td>-0.112591</td>
     </tr>
     <tr>
       <th>8</th>
@@ -625,16 +675,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>168975</td>
       <td>...</td>
-      <td>-0.000244</td>
-      <td>-0.000214</td>
-      <td>-0.000310</td>
-      <td>-0.000153</td>
-      <td>-0.000324</td>
-      <td>-0.000168</td>
-      <td>-0.000147</td>
-      <td>-4.823208e-04</td>
-      <td>-0.000211</td>
-      <td>-0.000401</td>
+      <td>-0.065035</td>
+      <td>-0.009808</td>
+      <td>-0.089304</td>
+      <td>-0.123990</td>
+      <td>-0.237687</td>
+      <td>-0.145043</td>
+      <td>-0.027265</td>
+      <td>-0.172405</td>
+      <td>-0.209000</td>
+      <td>-0.169588</td>
     </tr>
     <tr>
       <th>9</th>
@@ -649,16 +699,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>173223</td>
       <td>...</td>
-      <td>0.000012</td>
-      <td>-0.000113</td>
-      <td>0.000002</td>
-      <td>-0.000028</td>
-      <td>-0.000248</td>
-      <td>-0.000283</td>
-      <td>-0.000314</td>
-      <td>-1.890063e-04</td>
-      <td>-0.000022</td>
-      <td>-0.000029</td>
+      <td>0.149715</td>
+      <td>0.036652</td>
+      <td>0.236477</td>
+      <td>-0.033082</td>
+      <td>-0.059123</td>
+      <td>-0.109544</td>
+      <td>-0.116550</td>
+      <td>-0.056748</td>
+      <td>0.238428</td>
+      <td>-0.066090</td>
     </tr>
     <tr>
       <th>10</th>
@@ -673,16 +723,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>170339</td>
       <td>...</td>
-      <td>-0.000286</td>
-      <td>-0.000486</td>
-      <td>-0.000312</td>
-      <td>-0.000150</td>
-      <td>-0.000256</td>
-      <td>-0.000124</td>
-      <td>-0.000179</td>
-      <td>-3.057718e-04</td>
-      <td>-0.000183</td>
-      <td>-0.000252</td>
+      <td>-0.064055</td>
+      <td>-0.008839</td>
+      <td>-0.088600</td>
+      <td>-0.123287</td>
+      <td>-0.236878</td>
+      <td>-0.144462</td>
+      <td>-0.026132</td>
+      <td>-0.171725</td>
+      <td>-0.208052</td>
+      <td>-0.169746</td>
     </tr>
     <tr>
       <th>11</th>
@@ -697,16 +747,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>177242</td>
       <td>...</td>
-      <td>0.007558</td>
-      <td>0.004934</td>
-      <td>0.007966</td>
-      <td>0.007595</td>
-      <td>-0.001943</td>
-      <td>0.001598</td>
-      <td>0.007838</td>
-      <td>2.528191e-03</td>
-      <td>0.007137</td>
-      <td>0.009534</td>
+      <td>0.148965</td>
+      <td>0.036048</td>
+      <td>0.236015</td>
+      <td>-0.033107</td>
+      <td>-0.059445</td>
+      <td>-0.110096</td>
+      <td>-0.117363</td>
+      <td>-0.057286</td>
+      <td>0.237902</td>
+      <td>-0.067406</td>
     </tr>
     <tr>
       <th>12</th>
@@ -721,16 +771,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>166924</td>
       <td>...</td>
-      <td>-0.000190</td>
-      <td>-0.000248</td>
-      <td>-0.000215</td>
-      <td>-0.000113</td>
-      <td>-0.000070</td>
-      <td>-0.000076</td>
-      <td>-0.000159</td>
-      <td>-5.897880e-05</td>
-      <td>-0.000117</td>
-      <td>-0.000182</td>
+      <td>0.025167</td>
+      <td>0.316047</td>
+      <td>0.052610</td>
+      <td>-0.128209</td>
+      <td>-0.025701</td>
+      <td>0.018469</td>
+      <td>0.071030</td>
+      <td>0.035337</td>
+      <td>0.035106</td>
+      <td>0.198629</td>
     </tr>
     <tr>
       <th>13</th>
@@ -745,16 +795,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>166653</td>
       <td>...</td>
-      <td>-0.000217</td>
-      <td>-0.000332</td>
-      <td>-0.000225</td>
-      <td>-0.000132</td>
-      <td>-0.000127</td>
-      <td>-0.000102</td>
-      <td>-0.000146</td>
-      <td>-2.127588e-04</td>
-      <td>-0.000168</td>
-      <td>-0.000276</td>
+      <td>-0.060978</td>
+      <td>0.136151</td>
+      <td>0.222250</td>
+      <td>0.180415</td>
+      <td>-0.077709</td>
+      <td>0.059230</td>
+      <td>-0.152584</td>
+      <td>0.021212</td>
+      <td>0.387905</td>
+      <td>0.087836</td>
     </tr>
     <tr>
       <th>14</th>
@@ -769,16 +819,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>199838</td>
       <td>...</td>
-      <td>-0.000643</td>
-      <td>-0.000886</td>
-      <td>-0.000513</td>
-      <td>-0.001688</td>
-      <td>-0.000346</td>
-      <td>-0.000528</td>
-      <td>-0.000894</td>
-      <td>-4.293919e-04</td>
-      <td>-0.001309</td>
-      <td>-0.000301</td>
+      <td>0.024651</td>
+      <td>0.315260</td>
+      <td>0.050833</td>
+      <td>-0.121852</td>
+      <td>-0.024862</td>
+      <td>0.020706</td>
+      <td>0.065433</td>
+      <td>0.039559</td>
+      <td>0.038879</td>
+      <td>0.207624</td>
     </tr>
     <tr>
       <th>15</th>
@@ -793,16 +843,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>178999</td>
       <td>...</td>
-      <td>-0.000031</td>
-      <td>-0.000034</td>
-      <td>-0.000048</td>
-      <td>-0.000017</td>
-      <td>0.000019</td>
-      <td>-0.000002</td>
-      <td>-0.000036</td>
-      <td>-1.719594e-05</td>
-      <td>-0.000026</td>
-      <td>-0.000037</td>
+      <td>-0.069684</td>
+      <td>0.130147</td>
+      <td>0.214494</td>
+      <td>0.163851</td>
+      <td>-0.088984</td>
+      <td>0.049194</td>
+      <td>-0.161672</td>
+      <td>0.012433</td>
+      <td>0.376862</td>
+      <td>0.079508</td>
     </tr>
     <tr>
       <th>16</th>
@@ -817,16 +867,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>168116</td>
       <td>...</td>
-      <td>-0.000396</td>
-      <td>-0.000607</td>
-      <td>-0.000421</td>
-      <td>-0.000306</td>
-      <td>-0.000294</td>
-      <td>-0.000207</td>
-      <td>-0.000237</td>
-      <td>-3.867447e-04</td>
-      <td>-0.000289</td>
-      <td>-0.000498</td>
+      <td>-0.068721</td>
+      <td>-0.131200</td>
+      <td>-0.095311</td>
+      <td>0.046062</td>
+      <td>0.058227</td>
+      <td>-0.014569</td>
+      <td>-0.110806</td>
+      <td>0.156508</td>
+      <td>0.050760</td>
+      <td>0.086102</td>
     </tr>
     <tr>
       <th>17</th>
@@ -841,16 +891,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>183816</td>
       <td>...</td>
-      <td>-0.000809</td>
-      <td>-0.001129</td>
-      <td>-0.000884</td>
-      <td>-0.000664</td>
-      <td>-0.000741</td>
-      <td>-0.000528</td>
-      <td>-0.000512</td>
-      <td>-7.908940e-04</td>
-      <td>-0.000607</td>
-      <td>-0.000990</td>
+      <td>-0.000722</td>
+      <td>-0.065477</td>
+      <td>-0.015448</td>
+      <td>-0.048512</td>
+      <td>0.080478</td>
+      <td>0.044108</td>
+      <td>-0.040190</td>
+      <td>-0.109651</td>
+      <td>0.016822</td>
+      <td>-0.062620</td>
     </tr>
     <tr>
       <th>18</th>
@@ -865,16 +915,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>181059</td>
       <td>...</td>
-      <td>-0.000826</td>
-      <td>-0.001292</td>
-      <td>-0.000932</td>
-      <td>-0.000710</td>
-      <td>-0.000789</td>
-      <td>-0.000506</td>
-      <td>-0.000457</td>
-      <td>-9.316206e-04</td>
-      <td>-0.000666</td>
-      <td>-0.001122</td>
+      <td>-0.068239</td>
+      <td>-0.130473</td>
+      <td>-0.095077</td>
+      <td>0.046099</td>
+      <td>0.058977</td>
+      <td>-0.014226</td>
+      <td>-0.110129</td>
+      <td>0.156933</td>
+      <td>0.051034</td>
+      <td>0.086115</td>
     </tr>
     <tr>
       <th>19</th>
@@ -889,16 +939,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>176946</td>
       <td>...</td>
-      <td>-0.000033</td>
-      <td>-0.000067</td>
-      <td>-0.000013</td>
-      <td>-0.000010</td>
-      <td>0.000030</td>
-      <td>0.000017</td>
-      <td>-0.000020</td>
-      <td>1.147389e-04</td>
-      <td>-0.000005</td>
-      <td>-0.000017</td>
+      <td>-0.000799</td>
+      <td>-0.065457</td>
+      <td>-0.015547</td>
+      <td>-0.048479</td>
+      <td>0.080698</td>
+      <td>0.044615</td>
+      <td>-0.040375</td>
+      <td>-0.109146</td>
+      <td>0.016773</td>
+      <td>-0.063049</td>
     </tr>
     <tr>
       <th>20</th>
@@ -913,16 +963,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>177982</td>
       <td>...</td>
-      <td>-0.000297</td>
-      <td>-0.000456</td>
-      <td>-0.000343</td>
-      <td>-0.000253</td>
-      <td>-0.000310</td>
-      <td>-0.000204</td>
-      <td>-0.000172</td>
-      <td>-3.470182e-04</td>
-      <td>-0.000220</td>
-      <td>-0.000371</td>
+      <td>0.144724</td>
+      <td>0.096923</td>
+      <td>0.053529</td>
+      <td>0.178255</td>
+      <td>0.186835</td>
+      <td>-0.086366</td>
+      <td>0.078235</td>
+      <td>0.339634</td>
+      <td>0.164180</td>
+      <td>0.351917</td>
     </tr>
     <tr>
       <th>21</th>
@@ -937,16 +987,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172928</td>
       <td>...</td>
-      <td>-0.000118</td>
-      <td>-0.000153</td>
-      <td>-0.000130</td>
-      <td>-0.000090</td>
-      <td>-0.000128</td>
-      <td>-0.000076</td>
-      <td>-0.000053</td>
-      <td>-2.347827e-04</td>
-      <td>-0.000090</td>
-      <td>-0.000214</td>
+      <td>-0.204588</td>
+      <td>-0.164875</td>
+      <td>-0.161451</td>
+      <td>-0.077614</td>
+      <td>0.001604</td>
+      <td>-0.079316</td>
+      <td>-0.283131</td>
+      <td>-0.060867</td>
+      <td>-0.083952</td>
+      <td>-0.061946</td>
     </tr>
     <tr>
       <th>22</th>
@@ -961,16 +1011,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>180515</td>
       <td>...</td>
-      <td>0.000099</td>
-      <td>0.000077</td>
-      <td>0.000057</td>
-      <td>0.000040</td>
-      <td>0.000018</td>
-      <td>0.000047</td>
-      <td>0.000075</td>
-      <td>2.750456e-04</td>
-      <td>0.000065</td>
-      <td>0.000258</td>
+      <td>0.145371</td>
+      <td>0.099419</td>
+      <td>0.055633</td>
+      <td>0.177352</td>
+      <td>0.190575</td>
+      <td>-0.084158</td>
+      <td>0.083270</td>
+      <td>0.344398</td>
+      <td>0.166967</td>
+      <td>0.355001</td>
     </tr>
     <tr>
       <th>23</th>
@@ -985,16 +1035,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>180515</td>
       <td>...</td>
-      <td>0.003284</td>
-      <td>0.005105</td>
-      <td>0.002662</td>
-      <td>0.001423</td>
-      <td>0.001525</td>
-      <td>0.001257</td>
-      <td>0.001919</td>
-      <td>5.420089e-03</td>
-      <td>0.002166</td>
-      <td>0.005263</td>
+      <td>-0.216764</td>
+      <td>-0.175109</td>
+      <td>-0.172126</td>
+      <td>-0.086336</td>
+      <td>-0.018204</td>
+      <td>-0.098414</td>
+      <td>-0.295143</td>
+      <td>-0.081368</td>
+      <td>-0.096516</td>
+      <td>-0.078732</td>
     </tr>
     <tr>
       <th>24</th>
@@ -1009,16 +1059,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>179428</td>
       <td>...</td>
-      <td>0.002200</td>
-      <td>0.001744</td>
-      <td>0.001206</td>
-      <td>0.001263</td>
-      <td>0.001008</td>
-      <td>-0.000117</td>
-      <td>0.001218</td>
-      <td>2.799034e-04</td>
-      <td>0.001503</td>
-      <td>0.001372</td>
+      <td>0.125082</td>
+      <td>0.187445</td>
+      <td>0.094098</td>
+      <td>0.073541</td>
+      <td>0.153524</td>
+      <td>0.122184</td>
+      <td>0.178186</td>
+      <td>0.325020</td>
+      <td>0.131711</td>
+      <td>0.251710</td>
     </tr>
     <tr>
       <th>25</th>
@@ -1033,16 +1083,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>179428</td>
       <td>...</td>
-      <td>-0.004052</td>
-      <td>-0.003465</td>
-      <td>-0.003092</td>
-      <td>-0.003744</td>
-      <td>-0.003384</td>
-      <td>-0.003265</td>
-      <td>-0.003253</td>
-      <td>1.600981e-03</td>
-      <td>-0.001915</td>
-      <td>-0.002728</td>
+      <td>-0.072443</td>
+      <td>-0.081550</td>
+      <td>-0.038486</td>
+      <td>-0.047714</td>
+      <td>0.226176</td>
+      <td>0.045261</td>
+      <td>-0.126760</td>
+      <td>0.371777</td>
+      <td>0.060598</td>
+      <td>-0.005164</td>
     </tr>
     <tr>
       <th>26</th>
@@ -1057,16 +1107,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>173165</td>
       <td>...</td>
-      <td>0.000001</td>
-      <td>0.000010</td>
-      <td>0.000091</td>
-      <td>-0.000079</td>
-      <td>-0.000044</td>
-      <td>-0.000061</td>
-      <td>-0.000042</td>
-      <td>-4.082918e-05</td>
-      <td>-0.000022</td>
-      <td>-0.000060</td>
+      <td>0.125229</td>
+      <td>0.187538</td>
+      <td>0.094372</td>
+      <td>0.073884</td>
+      <td>0.154733</td>
+      <td>0.122949</td>
+      <td>0.178414</td>
+      <td>0.326226</td>
+      <td>0.132067</td>
+      <td>0.251894</td>
     </tr>
     <tr>
       <th>27</th>
@@ -1081,16 +1131,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>173165</td>
       <td>...</td>
-      <td>0.000536</td>
-      <td>-0.000179</td>
-      <td>0.001585</td>
-      <td>0.001431</td>
-      <td>0.003103</td>
-      <td>0.001631</td>
-      <td>0.000257</td>
-      <td>2.081454e-03</td>
-      <td>0.000913</td>
-      <td>0.001677</td>
+      <td>-0.072734</td>
+      <td>-0.082032</td>
+      <td>-0.038806</td>
+      <td>-0.047959</td>
+      <td>0.226084</td>
+      <td>0.045132</td>
+      <td>-0.126927</td>
+      <td>0.371727</td>
+      <td>0.060446</td>
+      <td>-0.005538</td>
     </tr>
     <tr>
       <th>28</th>
@@ -1105,16 +1155,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172720</td>
       <td>...</td>
-      <td>0.000584</td>
-      <td>0.000577</td>
-      <td>0.000674</td>
-      <td>0.000536</td>
-      <td>0.000167</td>
-      <td>0.000397</td>
-      <td>0.000507</td>
-      <td>1.705885e-04</td>
-      <td>0.000503</td>
-      <td>0.000481</td>
+      <td>-0.109239</td>
+      <td>-0.095734</td>
+      <td>-0.046736</td>
+      <td>-0.160156</td>
+      <td>-0.108054</td>
+      <td>-0.116374</td>
+      <td>0.049736</td>
+      <td>0.170926</td>
+      <td>0.112000</td>
+      <td>0.250690</td>
     </tr>
     <tr>
       <th>29</th>
@@ -1129,16 +1179,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172720</td>
       <td>...</td>
-      <td>0.003762</td>
-      <td>0.002849</td>
-      <td>0.001487</td>
-      <td>0.002733</td>
-      <td>-0.000099</td>
-      <td>0.000631</td>
-      <td>0.001469</td>
-      <td>4.820824e-04</td>
-      <td>0.002098</td>
-      <td>-0.000244</td>
+      <td>-0.014338</td>
+      <td>-0.047306</td>
+      <td>0.040593</td>
+      <td>0.034276</td>
+      <td>0.086477</td>
+      <td>-0.002776</td>
+      <td>-0.036525</td>
+      <td>0.105931</td>
+      <td>0.075943</td>
+      <td>-0.094462</td>
     </tr>
     <tr>
       <th>30</th>
@@ -1153,16 +1203,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172374</td>
       <td>...</td>
-      <td>0.000155</td>
-      <td>0.000251</td>
-      <td>0.000114</td>
-      <td>0.000134</td>
-      <td>-0.000137</td>
-      <td>-0.000068</td>
-      <td>0.000125</td>
-      <td>4.252791e-05</td>
-      <td>0.000117</td>
-      <td>0.000137</td>
+      <td>-0.114962</td>
+      <td>-0.101682</td>
+      <td>-0.051288</td>
+      <td>-0.167562</td>
+      <td>-0.114795</td>
+      <td>-0.118255</td>
+      <td>0.045381</td>
+      <td>0.164219</td>
+      <td>0.106147</td>
+      <td>0.242618</td>
     </tr>
     <tr>
       <th>31</th>
@@ -1177,16 +1227,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>172374</td>
       <td>...</td>
-      <td>0.000258</td>
-      <td>0.000810</td>
-      <td>0.000308</td>
-      <td>0.000489</td>
-      <td>0.000618</td>
-      <td>0.000236</td>
-      <td>0.000523</td>
-      <td>6.991625e-04</td>
-      <td>0.000155</td>
-      <td>0.000536</td>
+      <td>-0.014739</td>
+      <td>-0.051509</td>
+      <td>0.039989</td>
+      <td>0.034758</td>
+      <td>0.078923</td>
+      <td>-0.006194</td>
+      <td>-0.037574</td>
+      <td>0.102354</td>
+      <td>0.074973</td>
+      <td>-0.093299</td>
     </tr>
     <tr>
       <th>32</th>
@@ -1201,16 +1251,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>170946</td>
       <td>...</td>
-      <td>-0.000651</td>
-      <td>-0.000626</td>
-      <td>-0.000446</td>
-      <td>-0.000290</td>
-      <td>-0.000174</td>
-      <td>-0.000026</td>
-      <td>-0.000154</td>
-      <td>-3.945976e-04</td>
-      <td>-0.000396</td>
-      <td>-0.000499</td>
+      <td>0.017597</td>
+      <td>-0.080504</td>
+      <td>0.049995</td>
+      <td>-0.011808</td>
+      <td>-0.271627</td>
+      <td>-0.061634</td>
+      <td>-0.068092</td>
+      <td>-0.169892</td>
+      <td>-0.139209</td>
+      <td>-0.134266</td>
     </tr>
     <tr>
       <th>33</th>
@@ -1225,16 +1275,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>170946</td>
       <td>...</td>
-      <td>0.014822</td>
-      <td>0.029157</td>
-      <td>0.015316</td>
-      <td>0.007980</td>
-      <td>0.015211</td>
-      <td>0.007929</td>
-      <td>0.010251</td>
-      <td>2.181430e-02</td>
-      <td>0.009214</td>
-      <td>0.024373</td>
+      <td>-0.297318</td>
+      <td>0.036640</td>
+      <td>0.039409</td>
+      <td>0.172793</td>
+      <td>0.131960</td>
+      <td>0.099102</td>
+      <td>-0.127269</td>
+      <td>0.248293</td>
+      <td>0.078142</td>
+      <td>0.244484</td>
     </tr>
     <tr>
       <th>34</th>
@@ -1249,16 +1299,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>233549</td>
       <td>...</td>
-      <td>0.002052</td>
-      <td>0.002637</td>
-      <td>0.003581</td>
-      <td>0.001084</td>
-      <td>-0.001867</td>
-      <td>-0.003804</td>
-      <td>0.003472</td>
-      <td>-1.005411e-03</td>
-      <td>0.003400</td>
-      <td>0.001397</td>
+      <td>0.016951</td>
+      <td>-0.081113</td>
+      <td>0.048497</td>
+      <td>-0.012860</td>
+      <td>-0.272076</td>
+      <td>-0.061712</td>
+      <td>-0.068612</td>
+      <td>-0.168814</td>
+      <td>-0.140736</td>
+      <td>-0.135443</td>
     </tr>
     <tr>
       <th>35</th>
@@ -1273,16 +1323,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>233549</td>
       <td>...</td>
-      <td>-0.002514</td>
-      <td>-0.002176</td>
-      <td>0.001273</td>
-      <td>0.007376</td>
-      <td>0.011271</td>
-      <td>0.019305</td>
-      <td>-0.002886</td>
-      <td>2.035785e-02</td>
-      <td>-0.001660</td>
-      <td>0.006990</td>
+      <td>-0.296372</td>
+      <td>0.026870</td>
+      <td>0.034203</td>
+      <td>0.171992</td>
+      <td>0.132727</td>
+      <td>0.100970</td>
+      <td>-0.133759</td>
+      <td>0.247039</td>
+      <td>0.073710</td>
+      <td>0.242920</td>
     </tr>
     <tr>
       <th>36</th>
@@ -1297,16 +1347,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>179789</td>
       <td>...</td>
-      <td>0.000870</td>
-      <td>0.001771</td>
-      <td>0.002003</td>
-      <td>0.000641</td>
-      <td>-0.002239</td>
-      <td>-0.000491</td>
-      <td>0.001610</td>
-      <td>-6.132126e-04</td>
-      <td>0.002603</td>
-      <td>0.000714</td>
+      <td>0.172656</td>
+      <td>0.238587</td>
+      <td>-0.112662</td>
+      <td>-0.397093</td>
+      <td>-0.048434</td>
+      <td>-0.349497</td>
+      <td>0.178258</td>
+      <td>-0.541721</td>
+      <td>-0.432872</td>
+      <td>-0.115762</td>
     </tr>
     <tr>
       <th>37</th>
@@ -1321,16 +1371,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>179789</td>
       <td>...</td>
-      <td>0.015270</td>
-      <td>0.004848</td>
-      <td>0.011452</td>
-      <td>0.028524</td>
-      <td>0.009958</td>
-      <td>0.013799</td>
-      <td>0.007597</td>
-      <td>2.641273e-02</td>
-      <td>0.009691</td>
-      <td>0.026180</td>
+      <td>-0.587357</td>
+      <td>-0.383792</td>
+      <td>-0.075256</td>
+      <td>0.116061</td>
+      <td>-0.107381</td>
+      <td>-0.537354</td>
+      <td>-0.290173</td>
+      <td>0.274848</td>
+      <td>-0.387343</td>
+      <td>-0.475388</td>
     </tr>
     <tr>
       <th>38</th>
@@ -1345,16 +1395,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>182577</td>
       <td>...</td>
-      <td>-0.000336</td>
-      <td>0.001399</td>
-      <td>0.000511</td>
-      <td>0.000450</td>
-      <td>-0.000501</td>
-      <td>-0.000243</td>
-      <td>-0.001328</td>
-      <td>4.479885e-04</td>
-      <td>0.000544</td>
-      <td>0.002848</td>
+      <td>0.196620</td>
+      <td>0.244671</td>
+      <td>-0.095485</td>
+      <td>-0.382966</td>
+      <td>-0.053531</td>
+      <td>-0.346830</td>
+      <td>0.205384</td>
+      <td>-0.547652</td>
+      <td>-0.427548</td>
+      <td>-0.109037</td>
     </tr>
     <tr>
       <th>39</th>
@@ -1369,16 +1419,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>182577</td>
       <td>...</td>
-      <td>-0.032543</td>
-      <td>-0.033684</td>
-      <td>-0.029430</td>
-      <td>-0.050647</td>
-      <td>-0.030112</td>
-      <td>-0.021851</td>
-      <td>-0.012187</td>
-      <td>-2.968431e-02</td>
-      <td>-0.037312</td>
-      <td>-0.067244</td>
+      <td>-0.598168</td>
+      <td>-0.350979</td>
+      <td>-0.061809</td>
+      <td>0.137094</td>
+      <td>-0.114290</td>
+      <td>-0.549722</td>
+      <td>-0.316452</td>
+      <td>0.281865</td>
+      <td>-0.367328</td>
+      <td>-0.457750</td>
     </tr>
     <tr>
       <th>40</th>
@@ -1393,16 +1443,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>205369</td>
       <td>...</td>
-      <td>-0.001145</td>
-      <td>-0.001371</td>
-      <td>0.000107</td>
-      <td>-0.000453</td>
-      <td>-0.001597</td>
-      <td>-0.000798</td>
-      <td>-0.001882</td>
-      <td>1.063347e-04</td>
-      <td>0.000106</td>
-      <td>0.000086</td>
+      <td>-0.065015</td>
+      <td>-0.134536</td>
+      <td>-0.140023</td>
+      <td>0.024319</td>
+      <td>-0.060507</td>
+      <td>-0.108153</td>
+      <td>-0.149791</td>
+      <td>-0.038775</td>
+      <td>-0.076944</td>
+      <td>-0.118178</td>
     </tr>
     <tr>
       <th>41</th>
@@ -1417,16 +1467,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>205369</td>
       <td>...</td>
-      <td>0.006410</td>
-      <td>0.010421</td>
-      <td>0.008430</td>
-      <td>0.010849</td>
-      <td>-0.004994</td>
-      <td>0.003090</td>
-      <td>-0.004843</td>
-      <td>-9.270430e-03</td>
-      <td>0.008755</td>
-      <td>0.011827</td>
+      <td>-0.138112</td>
+      <td>-0.135524</td>
+      <td>-0.122887</td>
+      <td>0.003460</td>
+      <td>-0.095921</td>
+      <td>-0.142851</td>
+      <td>-0.133408</td>
+      <td>-0.044298</td>
+      <td>-0.079864</td>
+      <td>0.063350</td>
     </tr>
     <tr>
       <th>42</th>
@@ -1441,16 +1491,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>185065</td>
       <td>...</td>
-      <td>0.000849</td>
-      <td>0.001993</td>
-      <td>0.001033</td>
-      <td>-0.000050</td>
-      <td>-0.000534</td>
-      <td>0.000095</td>
-      <td>0.000409</td>
-      <td>-3.244877e-04</td>
-      <td>0.000842</td>
-      <td>0.000388</td>
+      <td>-0.064923</td>
+      <td>-0.134493</td>
+      <td>-0.140439</td>
+      <td>0.024307</td>
+      <td>-0.060060</td>
+      <td>-0.106959</td>
+      <td>-0.150438</td>
+      <td>-0.038277</td>
+      <td>-0.077278</td>
+      <td>-0.118272</td>
     </tr>
     <tr>
       <th>43</th>
@@ -1465,16 +1515,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>185065</td>
       <td>...</td>
-      <td>0.009973</td>
-      <td>0.012482</td>
-      <td>0.003073</td>
-      <td>0.019083</td>
-      <td>0.010606</td>
-      <td>0.000387</td>
-      <td>0.003512</td>
-      <td>7.757962e-03</td>
-      <td>0.011860</td>
-      <td>0.019928</td>
+      <td>-0.138915</td>
+      <td>-0.137064</td>
+      <td>-0.123798</td>
+      <td>0.002397</td>
+      <td>-0.096466</td>
+      <td>-0.143198</td>
+      <td>-0.133723</td>
+      <td>-0.044947</td>
+      <td>-0.080987</td>
+      <td>0.062265</td>
     </tr>
     <tr>
       <th>44</th>
@@ -1489,16 +1539,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>0.002434</td>
-      <td>0.001946</td>
-      <td>0.001824</td>
-      <td>0.000374</td>
-      <td>-0.000416</td>
-      <td>-0.000871</td>
-      <td>0.003142</td>
-      <td>-1.690984e-03</td>
-      <td>0.001557</td>
-      <td>0.002596</td>
+      <td>-0.260050</td>
+      <td>-0.168407</td>
+      <td>-0.271245</td>
+      <td>-0.247335</td>
+      <td>-0.234919</td>
+      <td>-0.383042</td>
+      <td>-0.163728</td>
+      <td>-0.055309</td>
+      <td>-0.088513</td>
+      <td>-0.155641</td>
     </tr>
     <tr>
       <th>45</th>
@@ -1513,16 +1563,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.005434</td>
-      <td>0.003420</td>
-      <td>-0.019319</td>
-      <td>-0.000747</td>
-      <td>0.041849</td>
-      <td>0.022034</td>
-      <td>-0.024061</td>
-      <td>4.308212e-02</td>
-      <td>0.005673</td>
-      <td>-0.007195</td>
+      <td>0.107971</td>
+      <td>0.020257</td>
+      <td>0.216171</td>
+      <td>0.572421</td>
+      <td>0.147785</td>
+      <td>0.106555</td>
+      <td>0.096098</td>
+      <td>0.279161</td>
+      <td>0.162524</td>
+      <td>0.332554</td>
     </tr>
     <tr>
       <th>46</th>
@@ -1537,16 +1587,16 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>0.000210</td>
-      <td>0.000521</td>
-      <td>0.000256</td>
-      <td>0.000118</td>
-      <td>0.000335</td>
-      <td>0.000174</td>
-      <td>0.000136</td>
-      <td>8.502305e-04</td>
-      <td>0.000165</td>
-      <td>0.000544</td>
+      <td>-0.256655</td>
+      <td>-0.163457</td>
+      <td>-0.266899</td>
+      <td>-0.247330</td>
+      <td>-0.232560</td>
+      <td>-0.386224</td>
+      <td>-0.155104</td>
+      <td>-0.059262</td>
+      <td>-0.081452</td>
+      <td>-0.156595</td>
     </tr>
     <tr>
       <th>47</th>
@@ -1561,23 +1611,288 @@ allele_mismatch_with_reference_genome: 26 / 48
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.000382</td>
-      <td>-0.000466</td>
-      <td>-0.000408</td>
-      <td>-0.000091</td>
-      <td>-0.000512</td>
-      <td>-0.000240</td>
-      <td>-0.000283</td>
-      <td>-1.361221e-04</td>
-      <td>-0.000274</td>
-      <td>-0.000745</td>
+      <td>0.100300</td>
+      <td>0.018010</td>
+      <td>0.212837</td>
+      <td>0.573748</td>
+      <td>0.151573</td>
+      <td>0.110227</td>
+      <td>0.088412</td>
+      <td>0.286110</td>
+      <td>0.165036</td>
+      <td>0.329597</td>
     </tr>
   </tbody>
 </table>
 <p>48 rows × 8870 columns</p>
 </div></div></div>
 </div>
-<p>Alternatively, you can pass tsv file with following format where first 4 columns are <code class="docutils literal notranslate"><span class="pre">chrom</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">alt</span></code>.</p>
+<p>Now, we need to match the track labels (agg_1, agg_2, etc.) to their metadata. You can load the metadata as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimaResult</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">DecimaResult</span><span class="o">.</span><span class="n">load</span><span class="p">()</span><span class="o">.</span><span class="n">cell_metadata</span>
+<span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cell_type</th>
+      <th>tissue</th>
+      <th>organ</th>
+      <th>disease</th>
+      <th>study</th>
+      <th>dataset</th>
+      <th>region</th>
+      <th>subregion</th>
+      <th>celltype_coarse</th>
+      <th>n_cells</th>
+      <th>total_counts</th>
+      <th>n_genes</th>
+      <th>size_factor</th>
+      <th>train_pearson</th>
+      <th>val_pearson</th>
+      <th>test_pearson</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>agg_0</th>
+      <td>Amygdala excitatory</td>
+      <td>Amygdala_Amygdala</td>
+      <td>CNS</td>
+      <td>healthy</td>
+      <td>jhpce#tran2021</td>
+      <td>brain_atlas</td>
+      <td>Amygdala</td>
+      <td>Amygdala</td>
+      <td>NaN</td>
+      <td>331</td>
+      <td>1.592883e+07</td>
+      <td>17000</td>
+      <td>41431.465186</td>
+      <td>0.942459</td>
+      <td>0.841377</td>
+      <td>0.865640</td>
+    </tr>
+    <tr>
+      <th>agg_1</th>
+      <td>Amygdala excitatory</td>
+      <td>Amygdala_Basolateral nuclear group (BLN) - lat...</td>
+      <td>CNS</td>
+      <td>healthy</td>
+      <td>SCR_016152</td>
+      <td>brain_atlas</td>
+      <td>Amygdala</td>
+      <td>Basolateral nuclear group (BLN) - lateral nucl...</td>
+      <td>NaN</td>
+      <td>11369</td>
+      <td>2.952133e+08</td>
+      <td>18080</td>
+      <td>40765.341481</td>
+      <td>0.943098</td>
+      <td>0.838936</td>
+      <td>0.861092</td>
+    </tr>
+    <tr>
+      <th>agg_2</th>
+      <td>Amygdala excitatory</td>
+      <td>Amygdala_Bed nucleus of stria terminalis and n...</td>
+      <td>CNS</td>
+      <td>healthy</td>
+      <td>SCR_016152</td>
+      <td>brain_atlas</td>
+      <td>Amygdala</td>
+      <td>Bed nucleus of stria terminalis and nearby - BNST</td>
+      <td>NaN</td>
+      <td>139</td>
+      <td>2.593231e+06</td>
+      <td>15418</td>
+      <td>42556.387020</td>
+      <td>0.952170</td>
+      <td>0.854544</td>
+      <td>0.866654</td>
+    </tr>
+    <tr>
+      <th>agg_3</th>
+      <td>Amygdala excitatory</td>
+      <td>Amygdala_Central nuclear group - CEN</td>
+      <td>CNS</td>
+      <td>healthy</td>
+      <td>SCR_016152</td>
+      <td>brain_atlas</td>
+      <td>Amygdala</td>
+      <td>Central nuclear group - CEN</td>
+      <td>NaN</td>
+      <td>3892</td>
+      <td>9.946371e+07</td>
+      <td>17959</td>
+      <td>42884.641430</td>
+      <td>0.959744</td>
+      <td>0.863585</td>
+      <td>0.881554</td>
+    </tr>
+    <tr>
+      <th>agg_4</th>
+      <td>Amygdala excitatory</td>
+      <td>Amygdala_Corticomedial nuclear group (CMN) - a...</td>
+      <td>CNS</td>
+      <td>healthy</td>
+      <td>SCR_016152</td>
+      <td>brain_atlas</td>
+      <td>Amygdala</td>
+      <td>Corticomedial nuclear group (CMN) - anterior c...</td>
+      <td>NaN</td>
+      <td>2945</td>
+      <td>1.281619e+08</td>
+      <td>17885</td>
+      <td>41816.741933</td>
+      <td>0.951365</td>
+      <td>0.854304</td>
+      <td>0.868902</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>agg_9533</th>
+      <td>vascular associated smooth muscle cell</td>
+      <td>upper lobe of right lung</td>
+      <td>lung</td>
+      <td>NA</td>
+      <td>ENCODE</td>
+      <td>scimilarity</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>21</td>
+      <td>3.483375e+04</td>
+      <td>8515</td>
+      <td>35404.911768</td>
+      <td>0.735213</td>
+      <td>0.665647</td>
+      <td>0.654491</td>
+    </tr>
+    <tr>
+      <th>agg_9535</th>
+      <td>vascular associated smooth muscle cell</td>
+      <td>urinary bladder</td>
+      <td>urinary</td>
+      <td>healthy</td>
+      <td>GSE129845</td>
+      <td>scimilarity</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>24</td>
+      <td>8.498500e+04</td>
+      <td>7337</td>
+      <td>26189.415789</td>
+      <td>0.809852</td>
+      <td>0.690022</td>
+      <td>0.656160</td>
+    </tr>
+    <tr>
+      <th>agg_9536</th>
+      <td>vascular associated smooth muscle cell</td>
+      <td>uterus</td>
+      <td>uterus</td>
+      <td>NA</td>
+      <td>ENCODE</td>
+      <td>scimilarity</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>272</td>
+      <td>5.700762e+05</td>
+      <td>14769</td>
+      <td>44938.403867</td>
+      <td>0.915329</td>
+      <td>0.808941</td>
+      <td>0.839993</td>
+    </tr>
+    <tr>
+      <th>agg_9537</th>
+      <td>vascular associated smooth muscle cell</td>
+      <td>uterus</td>
+      <td>uterus</td>
+      <td>healthy</td>
+      <td>e5f58829-1a66-40b5-a624-9046778e74f5</td>
+      <td>scimilarity</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>472</td>
+      <td>1.089170e+07</td>
+      <td>14514</td>
+      <td>30145.422152</td>
+      <td>0.852339</td>
+      <td>0.717682</td>
+      <td>0.727469</td>
+    </tr>
+    <tr>
+      <th>agg_9538</th>
+      <td>vascular associated smooth muscle cell</td>
+      <td>vasculature</td>
+      <td>vasculature</td>
+      <td>healthy</td>
+      <td>e5f58829-1a66-40b5-a624-9046778e74f5</td>
+      <td>scimilarity</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>1853</td>
+      <td>5.992697e+07</td>
+      <td>16764</td>
+      <td>36464.273371</td>
+      <td>0.909855</td>
+      <td>0.780413</td>
+      <td>0.796351</td>
+    </tr>
+  </tbody>
+</table>
+<p>8856 rows × 16 columns</p>
+</div></div></div>
+</div>
+<p>Instead of a vcf, you can also pass a tsv file with the following format where the first 4 columns are <code class="docutils literal notranslate"><span class="pre">chrom</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">alt</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>data/variants.tsv<span class="w"> </span><span class="p">|</span><span class="w"> </span>column<span class="w"> </span>-t<span class="w"> </span>-s<span class="w"> </span><span class="s1">$&#39;\t&#39;</span><span class="w"> </span>
@@ -1595,41 +1910,32 @@ chr1   109728807  T    GG
 </div>
 </div>
 </div>
-<p>You can only run predictions for the variants closer to tss than 100kbp anyway these are the ones likely to be most impactful on the gene expression.</p>
+<p>You can limit predictions to variant-gene pairs with a maximum distance (say 100kbp).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>vep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;data/variants.tsv&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;vep_results.parquet&quot;</span><span class="w"> </span>--max-distance<span class="w"> </span>100_000<span class="w"> </span>--max-distance-type<span class="w"> </span><span class="s2">&quot;tss&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>vep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;data/variants.tsv&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;vep_results.parquet&quot;</span><span class="w"> </span>--max-distance<span class="w"> </span>100_000<span class="w"> </span>--distance-type<span class="w"> </span><span class="s2">&quot;tss&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima.vep - INFO - Using device: cuda and genome: hg38
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">celikm5</span> (<span class=" -Color -Color-Yellow">celikm5-genentech</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1276.1MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.1 (1916.9MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1417.4MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+decima - INFO - Performing predictions on VariantDataset(33 variants from [&#39;chr1&#39;] between 598861 and 110072228 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/varian ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/logger_connector.py:76: UserWarning: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `pytorch_lightning` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
-Predicting DataLoader 0: 100%|██████████████████| 66/66 [00:13&lt;00:00,  4.88it/s]
-decima.vep - INFO - Warnings:
-decima.vep - INFO - allele_mismatch_with_reference_genome: 10 alleles out of 33 predictions mismatched with the genome file /home/celikm5/.local/share/genomes/hg38/hg38.fa.If this is not expected, please check if you are using the correct genome version.
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 66/66 <span class=" -Color -Color-Faint">0:00:31 • 0:00:00</span> <span class=" -Color -Color-Faint">2.09it/s</span> it/s it/s 
+?25hdecima - WARNING - Warnings:
+decima - WARNING - allele_mismatch_with_reference_genome: 5 alleles out of 33 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>If you have already have mapping genes and variant, you can use this mapping so predictions only will be conducted between this pairs.</p>
+<p>If you have already have a mapping between genes and variants, you can use this mapping so predictions will only will be computed between these pairs. Otherwise, the variant effect will be computed for all genes within Decima’s distance window.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>vep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;data/variants_gene.tsv&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;vep_gene_results.parquet&quot;</span><span class="w"> </span>--gene-col<span class="w"> </span><span class="s2">&quot;gene&quot;</span>
@@ -1637,26 +1943,17 @@ decima.vep - INFO - allele_mismatch_with_reference_genome: 10 alleles out of 33 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima.vep - INFO - Using device: cuda and genome: hg38
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">celikm5</span> (<span class=" -Color -Color-Yellow">celikm5-genentech</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1311.1MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.1 (1900.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1475.9MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+decima - INFO - Performing predictions on VariantDataset(2 variants from [&#39;chr1&#39;] between 837298 and 1361586 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/varian ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/logger_connector.py:76: UserWarning: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `pytorch_lightning` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
-Predicting DataLoader 0: 100%|████████████████████| 4/4 [00:01&lt;00:00,  3.79it/s]
-
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 4/4 <span class=" -Color -Color-Faint">0:00:02 • 0:00:00</span> <span class=" -Color -Color-Faint">1.65it/s</span> [2;4m1.97it/s 
+?25h
 </pre></div>
 </div>
 </div>
@@ -1723,16 +2020,16 @@ Predicting DataLoader 0: 100%|████████████████�
       <td>163840</td>
       <td>177242</td>
       <td>...</td>
-      <td>-0.000746</td>
-      <td>0.002301</td>
-      <td>0.005067</td>
-      <td>0.000135</td>
-      <td>-0.000559</td>
-      <td>-0.003155</td>
-      <td>0.006503</td>
-      <td>-0.001059</td>
-      <td>-0.000566</td>
-      <td>0.000964</td>
+      <td>-0.757413</td>
+      <td>-0.096282</td>
+      <td>-0.507625</td>
+      <td>-1.093171</td>
+      <td>-0.618375</td>
+      <td>-1.054209</td>
+      <td>-0.035263</td>
+      <td>-0.046396</td>
+      <td>-0.040251</td>
+      <td>-0.128908</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1747,23 +2044,23 @@ Predicting DataLoader 0: 100%|████████████████�
       <td>163840</td>
       <td>177242</td>
       <td>...</td>
-      <td>0.007558</td>
-      <td>0.004934</td>
-      <td>0.007966</td>
-      <td>0.007595</td>
-      <td>-0.001943</td>
-      <td>0.001598</td>
-      <td>0.007838</td>
-      <td>0.002528</td>
-      <td>0.007137</td>
-      <td>0.009534</td>
+      <td>0.960004</td>
+      <td>0.592360</td>
+      <td>1.353235</td>
+      <td>2.281869</td>
+      <td>0.917179</td>
+      <td>0.980594</td>
+      <td>0.889794</td>
+      <td>1.287064</td>
+      <td>0.981355</td>
+      <td>1.071923</td>
     </tr>
   </tbody>
 </table>
 <p>2 rows × 8870 columns</p>
 </div></div></div>
 </div>
-<p>The vep api reads n (default=10_000) number of variants from vcf file performs predictions on these variants, saves them to parquet file then performs predictios for next next chuck. You can change chucksize:</p>
+<p>The vep api reads n (default=10_000) number of variants from vcf file, performs predictions on these variants, saves them to a parquet file,  then performs predictions for the next chunk. You can change the chunksize:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>decima<span class="w"> </span>vep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;data/sample.vcf&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;vep_vcf_results.parquet&quot;</span><span class="w"> </span>--chunksize<span class="w"> </span><span class="m">1</span>
@@ -1771,61 +2068,34 @@ Predicting DataLoader 0: 100%|████████████████�
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima.vep - INFO - Using device: cuda and genome: hg38
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">celikm5</span> (<span class=" -Color -Color-Yellow">celikm5-genentech</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1365.3MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.2 (1851.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1323.7MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>decima - INFO - Using device: 0 and genome: hg38
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+decima - INFO - Performing predictions on VariantDataset(22 variants from [&#39;chr1&#39;] between 516455 and 1525617 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/sample ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/logger_connector.py:76: UserWarning: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `pytorch_lightning` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
-Predicting DataLoader 0: 100%|██████████████████| 44/44 [00:09&lt;00:00,  4.86it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1340.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.1 (1944.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.4 (1576.5MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 44/44 <span class=" -Color -Color-Faint">0:00:18 • 0:00:00</span> <span class=" -Color -Color-Faint">2.31it/s</span> it/s it/s 
+?25hdecima - INFO - Performing predictions on VariantDataset(13 variants from [&#39;chr1&#39;] between 109259481 and 110234512 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/sample ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
-Predicting DataLoader 0: 100%|██████████████████| 26/26 [00:05&lt;00:00,  4.98it/s]
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1359.5MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.1 (1939.7MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1425.5MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 26/26 <span class=" -Color -Color-Faint">0:00:10 • 0:00:00</span> <span class=" -Color -Color-Faint">2.31it/s</span> [2;4m2.40it/s 
+?25hdecima - INFO - Performing predictions on VariantDataset(13 variants from [&#39;chr1&#39;] between 109259481 and 110234512 bp from TSS)
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python3.11 /home/lala8/.local/bin/decima vep -v data/sample ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
-Predicting DataLoader 0: 100%|██████████████████| 26/26 [00:05&lt;00:00,  4.97it/s]
-decima.vep - INFO - Warnings:
-decima.vep - INFO - allele_mismatch_with_reference_genome: 26 alleles out of 48 predictions mismatched with the genome file /home/celikm5/.local/share/genomes/hg38/hg38.fa.If this is not expected, please check if you are using the correct genome version.
+Predicting <span class=" -Color -Color-Magenta">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 26/26 <span class=" -Color -Color-Faint">0:00:18 • 0:00:00</span> <span class=" -Color -Color-Faint">1.41it/s</span> [2;4m1.35it/s 
+?25hdecima - WARNING - Warnings:
+decima - WARNING - allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
 
 </pre></div>
 </div>
@@ -1919,7 +2189,63 @@ decima.vep - INFO - allele_mismatch_with_reference_genome: 26 alleles out of 48 
 </table>
 </div></div></div>
 </div>
-<p>Simply pass your dataframe to <code class="docutils literal notranslate"><span class="pre">predict_variat_effect</span></code> function which will return dataframe for the prediction. You can pass <code class="docutils literal notranslate"><span class="pre">tasks</span></code> query to subset predictions for specific cells. Moreover, by default decima model for replicate 0 is used to use other replicates pass model=<code class="docutils literal notranslate"><span class="pre">1</span></code> , <code class="docutils literal notranslate"><span class="pre">2</span></code> or <code class="docutils literal notranslate"><span class="pre">3</span></code> to use other replicates or pass your custom model. If you pass <code class="docutils literal notranslate"><span class="pre">include_cols</span></code> argument the columns in the input will maintained in the output. To further variants based on distance to tss use <code class="docutils literal notranslate"><span class="pre">max_dist_tss</span></code> argument.</p>
+<p>Simply pass your dataframe to <code class="docutils literal notranslate"><span class="pre">predict_variant_effect</span></code> function which will return dataframe for the prediction. You can pass <code class="docutils literal notranslate"><span class="pre">tasks</span></code> query to subset predictions for specific cells. Moreover, by default the ensemble of 4 replicates is used. To use a specific replicate, pass model= <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code> , <code class="docutils literal notranslate"><span class="pre">2</span></code> or <code class="docutils literal notranslate"><span class="pre">3</span></code> or pass your custom model. If you pass <code class="docutils literal notranslate"><span class="pre">include_cols</span></code> argument the columns in the input will be maintained in the output. To further select variants based on distance to tss use the <code class="docutils literal notranslate"><span class="pre">max_distance</span></code> argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>predict_variant_effect<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Signature:</span>
+predict_variant_effect(
+    df_variant: Union[pandas.core.frame.DataFrame, str],
+    output_pq: Optional[str] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    tasks: Union[str, List[str], NoneType] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    model: Union[int, str, List[str]] = <span class=" -Color -Color-Yellow">&#39;ensemble&#39;</span>,
+    metadata_anndata: Optional[str] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    chunksize: int = <span class=" -Color -Color-Green">10000</span>,
+    batch_size: int = <span class=" -Color -Color-Green">1</span>,
+    num_workers: int = <span class=" -Color -Color-Green">16</span>,
+    device: Optional[str] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    include_cols: Optional[List[str]] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    gene_col: Optional[str] = <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>,
+    distance_type: Optional[str] = <span class=" -Color -Color-Yellow">&#39;tss&#39;</span>,
+    min_distance: Optional[float] = <span class=" -Color -Color-Green">0</span>,
+    max_distance: Optional[float] = inf,
+    genome: str = <span class=" -Color -Color-Yellow">&#39;hg38&#39;</span>,
+    save_replicates: bool = <span class=" -Color -Color-Bold -Color-Bold-C28">False</span>,
+    reference_cache: bool = <span class=" -Color -Color-Bold -Color-Bold-C28">True</span>,
+    float_precision: str = <span class=" -Color -Color-Yellow">&#39;32&#39;</span>,
+) -&gt; <span class=" -Color -Color-Bold -Color-Bold-C28">None</span>
+<span class=" -Color -Color-Red">Docstring:</span>
+Predict variant effect and save to parquet
+
+Args:
+    df_variant (pd.DataFrame or str): DataFrame with variant information or path to variant file
+    output_pq (str, optional): Path to save the parquet file. Defaults to None.
+    tasks (str, optional): Tasks to predict. Defaults to None.
+    model (int, optional): Model to use. Defaults to DEFAULT_ENSEMBLE.
+    metadata_anndata (str, optional): Path to anndata file. Defaults to None.
+    chunksize (int, optional): Number of variants to predict in each chunk. Defaults to 10_000.
+    batch_size (int, optional): Batch size. Defaults to 1.
+    num_workers (int, optional): Number of workers. Defaults to 16.
+    device (str, optional): Device to use. Defaults to None.
+    include_cols (list, optional): Columns to include in the output. Defaults to None.
+    gene_col (str, optional): Column name for gene names. Defaults to None.
+    distance_type (str, optional): Type of distance. Defaults to &quot;tss&quot;.
+    min_distance (float, optional): Minimum distance from the end of the gene. Defaults to 0 (inclusive).
+    max_distance (float, optional): Maximum distance from the TSS. Defaults to inf (exclusive).
+    genome (str, optional): Genome name or path to the genome fasta file. Defaults to &quot;hg38&quot;.
+    save_replicates (bool, optional): Save the replicates in the output. Defaults to False.
+    reference_cache (bool, optional): Whether to use reference cache. Defaults to True.
+    float_precision (str, optional): Floating-point precision. Defaults to &quot;32&quot;.
+<span class=" -Color -Color-Red">File:</span>      ~/decima/src/decima/vep/vep.py
+<span class=" -Color -Color-Red">Type:</span>      function
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predict_variant_effect</span><span class="p">(</span><span class="n">df_variant</span><span class="p">)</span>
@@ -1927,25 +2253,24 @@ decima.vep - INFO - allele_mismatch_with_reference_genome: 26 alleles out of 48 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Currently logged in as: <span class=" -Color -Color-Yellow">celikm5</span> (<span class=" -Color -Color-Yellow">celikm5-genentech</span>) to <span class=" -Color -Color-Green">https://api.wandb.ai</span>. Use <span class=" -Color -Color-Bold">`wandb login --relogin`</span> to force relogin
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1339.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.2 (1791.0MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1495.3MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/logger_connector.py:76: UserWarning: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `pytorch_lightning` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a73a894cc53a4b2f98c395e3b8c6bf72", "version_major": 2, "version_minor": 0}</script><div class="output text_html"><div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/rich/live.py:260: UserWarning: 
+install "ipywidgets" for Jupyter support
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warnings:
+allele_mismatch_with_reference_genome: 13 alleles out of 82 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
+</pre></div>
+</div>
+<div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -2000,16 +2325,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.003487</td>
-      <td>-0.006149</td>
-      <td>-0.003175</td>
-      <td>-0.002726</td>
-      <td>-0.003147</td>
-      <td>-0.001746</td>
-      <td>-0.002291</td>
-      <td>-0.005283</td>
-      <td>-0.003393</td>
-      <td>-0.006694</td>
+      <td>-0.006633</td>
+      <td>-0.043378</td>
+      <td>-0.031300</td>
+      <td>-0.002222</td>
+      <td>0.046180</td>
+      <td>-0.025395</td>
+      <td>-0.086669</td>
+      <td>0.013435</td>
+      <td>-0.037723</td>
+      <td>-0.062421</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2024,16 +2349,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.000096</td>
-      <td>-0.000190</td>
-      <td>-0.000135</td>
-      <td>-0.000043</td>
-      <td>-0.000076</td>
-      <td>-0.000072</td>
-      <td>-0.000106</td>
-      <td>0.000029</td>
-      <td>-0.000055</td>
-      <td>-0.000119</td>
+      <td>-0.245506</td>
+      <td>-0.190218</td>
+      <td>-0.137243</td>
+      <td>0.051545</td>
+      <td>0.003048</td>
+      <td>-0.128578</td>
+      <td>-0.236718</td>
+      <td>0.017593</td>
+      <td>-0.094332</td>
+      <td>-0.070269</td>
     </tr>
     <tr>
       <th>2</th>
@@ -2048,16 +2373,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.002595</td>
-      <td>-0.004256</td>
-      <td>-0.002759</td>
-      <td>-0.001601</td>
-      <td>-0.002601</td>
-      <td>-0.001238</td>
-      <td>-0.001756</td>
-      <td>-0.002918</td>
-      <td>-0.001914</td>
-      <td>-0.003244</td>
+      <td>-0.005553</td>
+      <td>-0.041326</td>
+      <td>-0.028948</td>
+      <td>0.001374</td>
+      <td>0.048067</td>
+      <td>-0.024705</td>
+      <td>-0.086391</td>
+      <td>0.017870</td>
+      <td>-0.035195</td>
+      <td>-0.059956</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2072,16 +2397,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.000587</td>
-      <td>-0.000894</td>
-      <td>-0.000563</td>
-      <td>-0.000324</td>
-      <td>-0.000471</td>
-      <td>-0.000258</td>
-      <td>-0.000382</td>
-      <td>-0.000683</td>
-      <td>-0.000459</td>
-      <td>-0.000757</td>
+      <td>-0.241619</td>
+      <td>-0.187318</td>
+      <td>-0.135041</td>
+      <td>0.050612</td>
+      <td>0.005031</td>
+      <td>-0.125195</td>
+      <td>-0.233266</td>
+      <td>0.019467</td>
+      <td>-0.093385</td>
+      <td>-0.068222</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2096,16 +2421,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170729</td>
       <td>...</td>
-      <td>-0.002933</td>
-      <td>-0.004738</td>
-      <td>-0.003541</td>
-      <td>-0.001943</td>
-      <td>-0.002958</td>
-      <td>-0.001370</td>
-      <td>-0.002272</td>
-      <td>-0.003326</td>
-      <td>-0.002195</td>
-      <td>-0.003648</td>
+      <td>0.152952</td>
+      <td>0.291293</td>
+      <td>-0.198963</td>
+      <td>-0.430064</td>
+      <td>0.270837</td>
+      <td>-0.239649</td>
+      <td>0.068286</td>
+      <td>-0.406054</td>
+      <td>-0.293787</td>
+      <td>-0.101794</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2144,16 +2469,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.004391</td>
-      <td>0.004506</td>
-      <td>-0.017141</td>
-      <td>0.000025</td>
-      <td>0.042810</td>
-      <td>0.024843</td>
-      <td>-0.022073</td>
-      <td>0.043973</td>
-      <td>0.005934</td>
-      <td>-0.006544</td>
+      <td>-0.390896</td>
+      <td>-0.056248</td>
+      <td>-0.131846</td>
+      <td>0.002266</td>
+      <td>0.052115</td>
+      <td>-0.073442</td>
+      <td>-0.171080</td>
+      <td>0.151064</td>
+      <td>-0.122629</td>
+      <td>0.059758</td>
     </tr>
     <tr>
       <th>78</th>
@@ -2168,16 +2493,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.129386</td>
-      <td>-0.144098</td>
-      <td>-0.077484</td>
-      <td>-0.091391</td>
-      <td>-0.104009</td>
-      <td>-0.034113</td>
-      <td>-0.096020</td>
-      <td>-0.063028</td>
-      <td>-0.079460</td>
-      <td>-0.102111</td>
+      <td>-0.026459</td>
+      <td>-0.118378</td>
+      <td>0.084991</td>
+      <td>-0.022175</td>
+      <td>-0.209899</td>
+      <td>-0.091537</td>
+      <td>0.038770</td>
+      <td>-0.119916</td>
+      <td>-0.181460</td>
+      <td>-0.167976</td>
     </tr>
     <tr>
       <th>79</th>
@@ -2192,16 +2517,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>0.000218</td>
-      <td>0.000532</td>
-      <td>0.000263</td>
-      <td>0.000122</td>
-      <td>0.000352</td>
-      <td>0.000184</td>
-      <td>0.000139</td>
-      <td>0.000887</td>
-      <td>0.000173</td>
-      <td>0.000558</td>
+      <td>-0.413859</td>
+      <td>-0.029041</td>
+      <td>-0.079324</td>
+      <td>0.070361</td>
+      <td>0.022809</td>
+      <td>-0.047733</td>
+      <td>-0.206144</td>
+      <td>0.133108</td>
+      <td>-0.046837</td>
+      <td>-0.011002</td>
     </tr>
     <tr>
       <th>80</th>
@@ -2216,16 +2541,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.000218</td>
-      <td>-0.000109</td>
-      <td>-0.000204</td>
-      <td>0.000009</td>
-      <td>-0.000265</td>
-      <td>-0.000104</td>
-      <td>-0.000189</td>
-      <td>0.000523</td>
-      <td>-0.000149</td>
-      <td>-0.000385</td>
+      <td>-0.085005</td>
+      <td>-0.115757</td>
+      <td>-0.085665</td>
+      <td>-0.038702</td>
+      <td>0.006083</td>
+      <td>-0.039524</td>
+      <td>-0.157262</td>
+      <td>-0.003096</td>
+      <td>-0.075535</td>
+      <td>-0.172014</td>
     </tr>
     <tr>
       <th>81</th>
@@ -2240,16 +2565,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.001127</td>
-      <td>-0.002115</td>
-      <td>-0.001278</td>
-      <td>-0.000581</td>
-      <td>-0.001344</td>
-      <td>-0.000724</td>
-      <td>-0.000569</td>
-      <td>-0.003553</td>
-      <td>-0.000857</td>
-      <td>-0.002281</td>
+      <td>-0.223234</td>
+      <td>-0.099899</td>
+      <td>-0.119575</td>
+      <td>0.070561</td>
+      <td>-0.016501</td>
+      <td>-0.110469</td>
+      <td>-0.208272</td>
+      <td>0.088579</td>
+      <td>-0.018304</td>
+      <td>0.014062</td>
     </tr>
   </tbody>
 </table>
@@ -2264,23 +2589,23 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1289.8MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.2 (1774.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1430.2MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f9c815b42b1b4ba6ad1edb5427a53db6", "version_major": 2, "version_minor": 0}</script></div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/rich/live.py:260: UserWarning: 
+install "ipywidgets" for Jupyter support
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warnings:
+allele_mismatch_with_reference_genome: 13 alleles out of 82 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2344,16 +2669,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.003487</td>
-      <td>-0.006149</td>
-      <td>-0.003175</td>
-      <td>-0.002726</td>
-      <td>-0.003147</td>
-      <td>-0.001746</td>
-      <td>-0.002291</td>
-      <td>-0.005283</td>
-      <td>-0.003393</td>
-      <td>-0.006694</td>
+      <td>-0.006633</td>
+      <td>-0.043378</td>
+      <td>-0.031300</td>
+      <td>-0.002222</td>
+      <td>0.046180</td>
+      <td>-0.025395</td>
+      <td>-0.086669</td>
+      <td>0.013435</td>
+      <td>-0.037723</td>
+      <td>-0.062421</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2368,16 +2693,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.000096</td>
-      <td>-0.000190</td>
-      <td>-0.000135</td>
-      <td>-0.000043</td>
-      <td>-0.000076</td>
-      <td>-0.000072</td>
-      <td>-0.000106</td>
-      <td>0.000029</td>
-      <td>-0.000055</td>
-      <td>-0.000119</td>
+      <td>-0.245506</td>
+      <td>-0.190218</td>
+      <td>-0.137243</td>
+      <td>0.051545</td>
+      <td>0.003048</td>
+      <td>-0.128578</td>
+      <td>-0.236718</td>
+      <td>0.017593</td>
+      <td>-0.094332</td>
+      <td>-0.070269</td>
     </tr>
     <tr>
       <th>2</th>
@@ -2392,16 +2717,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.002595</td>
-      <td>-0.004256</td>
-      <td>-0.002759</td>
-      <td>-0.001601</td>
-      <td>-0.002601</td>
-      <td>-0.001238</td>
-      <td>-0.001756</td>
-      <td>-0.002918</td>
-      <td>-0.001914</td>
-      <td>-0.003244</td>
+      <td>-0.005553</td>
+      <td>-0.041326</td>
+      <td>-0.028948</td>
+      <td>0.001374</td>
+      <td>0.048067</td>
+      <td>-0.024705</td>
+      <td>-0.086391</td>
+      <td>0.017870</td>
+      <td>-0.035195</td>
+      <td>-0.059956</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2416,16 +2741,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.000587</td>
-      <td>-0.000894</td>
-      <td>-0.000563</td>
-      <td>-0.000324</td>
-      <td>-0.000471</td>
-      <td>-0.000258</td>
-      <td>-0.000382</td>
-      <td>-0.000683</td>
-      <td>-0.000459</td>
-      <td>-0.000757</td>
+      <td>-0.241619</td>
+      <td>-0.187318</td>
+      <td>-0.135041</td>
+      <td>0.050612</td>
+      <td>0.005031</td>
+      <td>-0.125195</td>
+      <td>-0.233266</td>
+      <td>0.019467</td>
+      <td>-0.093385</td>
+      <td>-0.068222</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2440,16 +2765,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170729</td>
       <td>...</td>
-      <td>-0.002933</td>
-      <td>-0.004738</td>
-      <td>-0.003541</td>
-      <td>-0.001943</td>
-      <td>-0.002958</td>
-      <td>-0.001370</td>
-      <td>-0.002272</td>
-      <td>-0.003326</td>
-      <td>-0.002195</td>
-      <td>-0.003648</td>
+      <td>0.152952</td>
+      <td>0.291293</td>
+      <td>-0.198963</td>
+      <td>-0.430064</td>
+      <td>0.270837</td>
+      <td>-0.239649</td>
+      <td>0.068286</td>
+      <td>-0.406054</td>
+      <td>-0.293787</td>
+      <td>-0.101794</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2488,16 +2813,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.004391</td>
-      <td>0.004506</td>
-      <td>-0.017141</td>
-      <td>0.000025</td>
-      <td>0.042810</td>
-      <td>0.024843</td>
-      <td>-0.022073</td>
-      <td>0.043973</td>
-      <td>0.005934</td>
-      <td>-0.006544</td>
+      <td>-0.390896</td>
+      <td>-0.056248</td>
+      <td>-0.131846</td>
+      <td>0.002266</td>
+      <td>0.052115</td>
+      <td>-0.073442</td>
+      <td>-0.171080</td>
+      <td>0.151064</td>
+      <td>-0.122629</td>
+      <td>0.059758</td>
     </tr>
     <tr>
       <th>78</th>
@@ -2512,16 +2837,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.129386</td>
-      <td>-0.144098</td>
-      <td>-0.077484</td>
-      <td>-0.091391</td>
-      <td>-0.104009</td>
-      <td>-0.034113</td>
-      <td>-0.096020</td>
-      <td>-0.063028</td>
-      <td>-0.079460</td>
-      <td>-0.102111</td>
+      <td>-0.026459</td>
+      <td>-0.118378</td>
+      <td>0.084991</td>
+      <td>-0.022175</td>
+      <td>-0.209899</td>
+      <td>-0.091537</td>
+      <td>0.038770</td>
+      <td>-0.119916</td>
+      <td>-0.181460</td>
+      <td>-0.167976</td>
     </tr>
     <tr>
       <th>79</th>
@@ -2536,16 +2861,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>0.000218</td>
-      <td>0.000532</td>
-      <td>0.000263</td>
-      <td>0.000122</td>
-      <td>0.000352</td>
-      <td>0.000184</td>
-      <td>0.000139</td>
-      <td>0.000887</td>
-      <td>0.000173</td>
-      <td>0.000558</td>
+      <td>-0.413859</td>
+      <td>-0.029041</td>
+      <td>-0.079324</td>
+      <td>0.070361</td>
+      <td>0.022809</td>
+      <td>-0.047733</td>
+      <td>-0.206144</td>
+      <td>0.133108</td>
+      <td>-0.046837</td>
+      <td>-0.011002</td>
     </tr>
     <tr>
       <th>80</th>
@@ -2560,16 +2885,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.000218</td>
-      <td>-0.000109</td>
-      <td>-0.000204</td>
-      <td>0.000009</td>
-      <td>-0.000265</td>
-      <td>-0.000104</td>
-      <td>-0.000189</td>
-      <td>0.000523</td>
-      <td>-0.000149</td>
-      <td>-0.000385</td>
+      <td>-0.085005</td>
+      <td>-0.115757</td>
+      <td>-0.085665</td>
+      <td>-0.038702</td>
+      <td>0.006083</td>
+      <td>-0.039524</td>
+      <td>-0.157262</td>
+      <td>-0.003096</td>
+      <td>-0.075535</td>
+      <td>-0.172014</td>
     </tr>
     <tr>
       <th>81</th>
@@ -2584,23 +2909,23 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.001127</td>
-      <td>-0.002115</td>
-      <td>-0.001278</td>
-      <td>-0.000581</td>
-      <td>-0.001344</td>
-      <td>-0.000724</td>
-      <td>-0.000569</td>
-      <td>-0.003553</td>
-      <td>-0.000857</td>
-      <td>-0.002281</td>
+      <td>-0.223234</td>
+      <td>-0.099899</td>
+      <td>-0.119575</td>
+      <td>0.070561</td>
+      <td>-0.016501</td>
+      <td>-0.110469</td>
+      <td>-0.208272</td>
+      <td>0.088579</td>
+      <td>-0.018304</td>
+      <td>0.014062</td>
     </tr>
   </tbody>
 </table>
 <p>82 rows × 8870 columns</p>
 </div></div></div>
 </div>
-<p>Or variant effect can be performed on vcf file.</p>
+<p>Or variant effect prediction can be performed on a vcf file.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predict_variant_effect</span><span class="p">(</span><span class="s2">&quot;data/sample.vcf&quot;</span><span class="p">,</span> <span class="n">output_pq</span><span class="o">=</span><span class="s2">&quot;vep_results_vcf_py.parquet&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
@@ -2608,23 +2933,23 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1272.2MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.2 (1862.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1514.0MB/s)
-Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib ...
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6c19dcc02b5f43c89ea51643583f352d", "version_major": 2, "version_minor": 0}</script></div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/gpfs/scratchfs01/site/u/lala8/conda/envs/decima/lib/python3.11/site-packages/rich/live.py:260: UserWarning: 
+install "ipywidgets" for Jupyter support
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warnings:
+allele_mismatch_with_reference_genome: 10 alleles out of 48 predictions mismatched with the genome file /home/lala8/.local/share/genomes/hg38/hg38.fa. If this is not expected, please check if you are using the correct genome version.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2688,16 +3013,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172672</td>
       <td>...</td>
-      <td>-0.000096</td>
-      <td>-0.000190</td>
-      <td>-0.000135</td>
-      <td>-0.000043</td>
-      <td>-0.000076</td>
-      <td>-0.000072</td>
-      <td>-0.000106</td>
-      <td>0.000029</td>
-      <td>-0.000055</td>
-      <td>-0.000119</td>
+      <td>-0.038816</td>
+      <td>-0.132628</td>
+      <td>0.012945</td>
+      <td>-0.057034</td>
+      <td>-0.045095</td>
+      <td>-0.019845</td>
+      <td>-0.048861</td>
+      <td>-0.248287</td>
+      <td>-0.157361</td>
+      <td>-0.202191</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2712,16 +3037,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178946</td>
       <td>...</td>
-      <td>-0.000587</td>
-      <td>-0.000894</td>
-      <td>-0.000563</td>
-      <td>-0.000324</td>
-      <td>-0.000471</td>
-      <td>-0.000258</td>
-      <td>-0.000382</td>
-      <td>-0.000683</td>
-      <td>-0.000459</td>
-      <td>-0.000757</td>
+      <td>0.007422</td>
+      <td>-0.040294</td>
+      <td>0.037184</td>
+      <td>-0.039102</td>
+      <td>-0.069273</td>
+      <td>-0.089758</td>
+      <td>0.085668</td>
+      <td>-0.100051</td>
+      <td>0.199948</td>
+      <td>-0.228135</td>
     </tr>
     <tr>
       <th>2</th>
@@ -2736,16 +3061,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170729</td>
       <td>...</td>
-      <td>-0.000845</td>
-      <td>-0.001181</td>
-      <td>-0.000784</td>
-      <td>-0.000442</td>
-      <td>-0.000589</td>
-      <td>-0.000313</td>
-      <td>-0.000526</td>
-      <td>-0.000856</td>
-      <td>-0.000637</td>
-      <td>-0.000881</td>
+      <td>-0.039081</td>
+      <td>-0.132857</td>
+      <td>0.012576</td>
+      <td>-0.057286</td>
+      <td>-0.044211</td>
+      <td>-0.019335</td>
+      <td>-0.049245</td>
+      <td>-0.247860</td>
+      <td>-0.158028</td>
+      <td>-0.202599</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2760,16 +3085,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>165050</td>
       <td>...</td>
-      <td>-0.001767</td>
-      <td>-0.002189</td>
-      <td>-0.001705</td>
-      <td>-0.001091</td>
-      <td>-0.001184</td>
-      <td>-0.000717</td>
-      <td>-0.001306</td>
-      <td>-0.001550</td>
-      <td>-0.001349</td>
-      <td>-0.001550</td>
+      <td>0.007090</td>
+      <td>-0.040752</td>
+      <td>0.036865</td>
+      <td>-0.038709</td>
+      <td>-0.069798</td>
+      <td>-0.090022</td>
+      <td>0.085745</td>
+      <td>-0.100093</td>
+      <td>0.199475</td>
+      <td>-0.228633</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2784,16 +3109,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>166306</td>
       <td>...</td>
-      <td>-0.000098</td>
-      <td>0.000052</td>
-      <td>-0.000040</td>
-      <td>-0.000051</td>
-      <td>0.000037</td>
-      <td>0.000028</td>
-      <td>-0.000024</td>
-      <td>0.000093</td>
-      <td>-0.000080</td>
-      <td>-0.000203</td>
+      <td>0.384038</td>
+      <td>0.383892</td>
+      <td>0.209059</td>
+      <td>0.197611</td>
+      <td>0.147189</td>
+      <td>0.214235</td>
+      <td>0.429188</td>
+      <td>0.046692</td>
+      <td>0.232973</td>
+      <td>0.122444</td>
     </tr>
     <tr>
       <th>5</th>
@@ -2808,16 +3133,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>167179</td>
       <td>...</td>
-      <td>-0.000603</td>
-      <td>-0.000860</td>
-      <td>-0.000584</td>
-      <td>-0.000328</td>
-      <td>-0.000361</td>
-      <td>-0.000211</td>
-      <td>-0.000395</td>
-      <td>-0.000428</td>
-      <td>-0.000371</td>
-      <td>-0.000468</td>
+      <td>0.128468</td>
+      <td>0.201122</td>
+      <td>0.096130</td>
+      <td>0.117577</td>
+      <td>-0.126177</td>
+      <td>-0.059776</td>
+      <td>0.184826</td>
+      <td>-0.009697</td>
+      <td>0.305417</td>
+      <td>-0.107728</td>
     </tr>
     <tr>
       <th>6</th>
@@ -2832,16 +3157,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>198383</td>
       <td>...</td>
-      <td>-0.000358</td>
-      <td>-0.000528</td>
-      <td>-0.000338</td>
-      <td>-0.000193</td>
-      <td>-0.000205</td>
-      <td>-0.000113</td>
-      <td>-0.000245</td>
-      <td>-0.000265</td>
-      <td>-0.000241</td>
-      <td>-0.000347</td>
+      <td>0.382609</td>
+      <td>0.387782</td>
+      <td>0.206949</td>
+      <td>0.192670</td>
+      <td>0.148521</td>
+      <td>0.211755</td>
+      <td>0.428720</td>
+      <td>0.039945</td>
+      <td>0.232015</td>
+      <td>0.117866</td>
     </tr>
     <tr>
       <th>7</th>
@@ -2856,16 +3181,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>184493</td>
       <td>...</td>
-      <td>0.001338</td>
-      <td>0.000849</td>
-      <td>0.000867</td>
-      <td>0.000903</td>
-      <td>0.001198</td>
-      <td>0.001515</td>
-      <td>0.001150</td>
-      <td>0.001019</td>
-      <td>0.000498</td>
-      <td>0.001034</td>
+      <td>0.127029</td>
+      <td>0.199535</td>
+      <td>0.092907</td>
+      <td>0.114106</td>
+      <td>-0.132683</td>
+      <td>-0.060256</td>
+      <td>0.180594</td>
+      <td>-0.008448</td>
+      <td>0.303062</td>
+      <td>-0.112591</td>
     </tr>
     <tr>
       <th>8</th>
@@ -2880,16 +3205,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>168975</td>
       <td>...</td>
-      <td>-0.000518</td>
-      <td>-0.000364</td>
-      <td>-0.000522</td>
-      <td>-0.000307</td>
-      <td>-0.000214</td>
-      <td>-0.000158</td>
-      <td>-0.000330</td>
-      <td>-0.000363</td>
-      <td>-0.000348</td>
-      <td>-0.000509</td>
+      <td>-0.065035</td>
+      <td>-0.009808</td>
+      <td>-0.089304</td>
+      <td>-0.123990</td>
+      <td>-0.237687</td>
+      <td>-0.145043</td>
+      <td>-0.027265</td>
+      <td>-0.172405</td>
+      <td>-0.209000</td>
+      <td>-0.169588</td>
     </tr>
     <tr>
       <th>9</th>
@@ -2904,16 +3229,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>173223</td>
       <td>...</td>
-      <td>0.000109</td>
-      <td>0.000011</td>
-      <td>0.000054</td>
-      <td>0.000009</td>
-      <td>-0.000056</td>
-      <td>-0.000199</td>
-      <td>-0.000207</td>
-      <td>-0.000112</td>
-      <td>0.000043</td>
-      <td>0.000051</td>
+      <td>0.149715</td>
+      <td>0.036652</td>
+      <td>0.236477</td>
+      <td>-0.033082</td>
+      <td>-0.059123</td>
+      <td>-0.109544</td>
+      <td>-0.116550</td>
+      <td>-0.056748</td>
+      <td>0.238428</td>
+      <td>-0.066090</td>
     </tr>
     <tr>
       <th>10</th>
@@ -2928,16 +3253,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170339</td>
       <td>...</td>
-      <td>-0.000278</td>
-      <td>-0.000460</td>
-      <td>-0.000305</td>
-      <td>-0.000142</td>
-      <td>-0.000220</td>
-      <td>-0.000106</td>
-      <td>-0.000170</td>
-      <td>-0.000272</td>
-      <td>-0.000170</td>
-      <td>-0.000231</td>
+      <td>-0.064055</td>
+      <td>-0.008839</td>
+      <td>-0.088600</td>
+      <td>-0.123287</td>
+      <td>-0.236878</td>
+      <td>-0.144462</td>
+      <td>-0.026132</td>
+      <td>-0.171725</td>
+      <td>-0.208052</td>
+      <td>-0.169746</td>
     </tr>
     <tr>
       <th>11</th>
@@ -2952,16 +3277,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>177242</td>
       <td>...</td>
-      <td>0.007892</td>
-      <td>0.005266</td>
-      <td>0.008324</td>
-      <td>0.007764</td>
-      <td>-0.001580</td>
-      <td>0.002468</td>
-      <td>0.008656</td>
-      <td>0.002925</td>
-      <td>0.007485</td>
-      <td>0.010022</td>
+      <td>0.148965</td>
+      <td>0.036048</td>
+      <td>0.236015</td>
+      <td>-0.033107</td>
+      <td>-0.059445</td>
+      <td>-0.110096</td>
+      <td>-0.117363</td>
+      <td>-0.057286</td>
+      <td>0.237902</td>
+      <td>-0.067406</td>
     </tr>
     <tr>
       <th>12</th>
@@ -2976,16 +3301,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>166924</td>
       <td>...</td>
-      <td>-0.000308</td>
-      <td>-0.000433</td>
-      <td>-0.000336</td>
-      <td>-0.000197</td>
-      <td>-0.000195</td>
-      <td>-0.000144</td>
-      <td>-0.000220</td>
-      <td>-0.000190</td>
-      <td>-0.000199</td>
-      <td>-0.000302</td>
+      <td>0.025167</td>
+      <td>0.316047</td>
+      <td>0.052610</td>
+      <td>-0.128209</td>
+      <td>-0.025701</td>
+      <td>0.018469</td>
+      <td>0.071030</td>
+      <td>0.035337</td>
+      <td>0.035106</td>
+      <td>0.198629</td>
     </tr>
     <tr>
       <th>13</th>
@@ -3000,16 +3325,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>166653</td>
       <td>...</td>
-      <td>-0.000255</td>
-      <td>-0.000385</td>
-      <td>-0.000261</td>
-      <td>-0.000158</td>
-      <td>-0.000164</td>
-      <td>-0.000123</td>
-      <td>-0.000158</td>
-      <td>-0.000281</td>
-      <td>-0.000191</td>
-      <td>-0.000319</td>
+      <td>-0.060978</td>
+      <td>0.136151</td>
+      <td>0.222250</td>
+      <td>0.180415</td>
+      <td>-0.077709</td>
+      <td>0.059230</td>
+      <td>-0.152584</td>
+      <td>0.021212</td>
+      <td>0.387905</td>
+      <td>0.087836</td>
     </tr>
     <tr>
       <th>14</th>
@@ -3024,16 +3349,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>199838</td>
       <td>...</td>
-      <td>-0.000901</td>
-      <td>-0.001054</td>
-      <td>-0.000771</td>
-      <td>-0.001977</td>
-      <td>-0.000437</td>
-      <td>-0.000555</td>
-      <td>-0.001084</td>
-      <td>-0.000583</td>
-      <td>-0.001613</td>
-      <td>-0.000536</td>
+      <td>0.024651</td>
+      <td>0.315260</td>
+      <td>0.050833</td>
+      <td>-0.121852</td>
+      <td>-0.024862</td>
+      <td>0.020706</td>
+      <td>0.065433</td>
+      <td>0.039559</td>
+      <td>0.038879</td>
+      <td>0.207624</td>
     </tr>
     <tr>
       <th>15</th>
@@ -3048,16 +3373,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>178999</td>
       <td>...</td>
-      <td>-0.000146</td>
-      <td>-0.000230</td>
-      <td>-0.000180</td>
-      <td>-0.000099</td>
-      <td>-0.000132</td>
-      <td>-0.000082</td>
-      <td>-0.000092</td>
-      <td>-0.000189</td>
-      <td>-0.000112</td>
-      <td>-0.000195</td>
+      <td>-0.069684</td>
+      <td>0.130147</td>
+      <td>0.214494</td>
+      <td>0.163851</td>
+      <td>-0.088984</td>
+      <td>0.049194</td>
+      <td>-0.161672</td>
+      <td>0.012433</td>
+      <td>0.376862</td>
+      <td>0.079508</td>
     </tr>
     <tr>
       <th>16</th>
@@ -3072,16 +3397,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>168116</td>
       <td>...</td>
-      <td>-0.000458</td>
-      <td>-0.000697</td>
-      <td>-0.000491</td>
-      <td>-0.000359</td>
-      <td>-0.000367</td>
-      <td>-0.000241</td>
-      <td>-0.000268</td>
-      <td>-0.000487</td>
-      <td>-0.000344</td>
-      <td>-0.000595</td>
+      <td>-0.068721</td>
+      <td>-0.131200</td>
+      <td>-0.095311</td>
+      <td>0.046062</td>
+      <td>0.058227</td>
+      <td>-0.014569</td>
+      <td>-0.110806</td>
+      <td>0.156508</td>
+      <td>0.050760</td>
+      <td>0.086102</td>
     </tr>
     <tr>
       <th>17</th>
@@ -3096,16 +3421,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>183816</td>
       <td>...</td>
-      <td>-0.000815</td>
-      <td>-0.001141</td>
-      <td>-0.000897</td>
-      <td>-0.000674</td>
-      <td>-0.000717</td>
-      <td>-0.000515</td>
-      <td>-0.000520</td>
-      <td>-0.000780</td>
-      <td>-0.000614</td>
-      <td>-0.001010</td>
+      <td>-0.000722</td>
+      <td>-0.065477</td>
+      <td>-0.015448</td>
+      <td>-0.048512</td>
+      <td>0.080478</td>
+      <td>0.044108</td>
+      <td>-0.040190</td>
+      <td>-0.109651</td>
+      <td>0.016822</td>
+      <td>-0.062620</td>
     </tr>
     <tr>
       <th>18</th>
@@ -3120,16 +3445,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>181059</td>
       <td>...</td>
-      <td>-0.000748</td>
-      <td>-0.001163</td>
-      <td>-0.000843</td>
-      <td>-0.000615</td>
-      <td>-0.000704</td>
-      <td>-0.000456</td>
-      <td>-0.000404</td>
-      <td>-0.000761</td>
-      <td>-0.000572</td>
-      <td>-0.000986</td>
+      <td>-0.068239</td>
+      <td>-0.130473</td>
+      <td>-0.095077</td>
+      <td>0.046099</td>
+      <td>0.058977</td>
+      <td>-0.014226</td>
+      <td>-0.110129</td>
+      <td>0.156933</td>
+      <td>0.051034</td>
+      <td>0.086115</td>
     </tr>
     <tr>
       <th>19</th>
@@ -3144,16 +3469,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>176946</td>
       <td>...</td>
-      <td>0.000021</td>
-      <td>0.000008</td>
-      <td>0.000037</td>
-      <td>0.000035</td>
-      <td>0.000096</td>
-      <td>0.000057</td>
-      <td>0.000009</td>
-      <td>0.000184</td>
-      <td>0.000039</td>
-      <td>0.000044</td>
+      <td>-0.000799</td>
+      <td>-0.065457</td>
+      <td>-0.015547</td>
+      <td>-0.048479</td>
+      <td>0.080698</td>
+      <td>0.044615</td>
+      <td>-0.040375</td>
+      <td>-0.109146</td>
+      <td>0.016773</td>
+      <td>-0.063049</td>
     </tr>
     <tr>
       <th>20</th>
@@ -3168,16 +3493,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>177982</td>
       <td>...</td>
-      <td>-0.000325</td>
-      <td>-0.000491</td>
-      <td>-0.000359</td>
-      <td>-0.000260</td>
-      <td>-0.000322</td>
-      <td>-0.000207</td>
-      <td>-0.000179</td>
-      <td>-0.000336</td>
-      <td>-0.000235</td>
-      <td>-0.000382</td>
+      <td>0.144724</td>
+      <td>0.096923</td>
+      <td>0.053529</td>
+      <td>0.178255</td>
+      <td>0.186835</td>
+      <td>-0.086366</td>
+      <td>0.078235</td>
+      <td>0.339634</td>
+      <td>0.164180</td>
+      <td>0.351917</td>
     </tr>
     <tr>
       <th>21</th>
@@ -3192,16 +3517,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172928</td>
       <td>...</td>
-      <td>-0.000077</td>
-      <td>-0.000098</td>
-      <td>-0.000090</td>
-      <td>-0.000067</td>
-      <td>-0.000092</td>
-      <td>-0.000057</td>
-      <td>-0.000034</td>
-      <td>-0.000212</td>
-      <td>-0.000063</td>
-      <td>-0.000159</td>
+      <td>-0.204588</td>
+      <td>-0.164875</td>
+      <td>-0.161451</td>
+      <td>-0.077614</td>
+      <td>0.001604</td>
+      <td>-0.079316</td>
+      <td>-0.283131</td>
+      <td>-0.060867</td>
+      <td>-0.083952</td>
+      <td>-0.061946</td>
     </tr>
     <tr>
       <th>22</th>
@@ -3216,16 +3541,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>180515</td>
       <td>...</td>
-      <td>0.000103</td>
-      <td>0.000070</td>
-      <td>0.000060</td>
-      <td>0.000038</td>
-      <td>0.000027</td>
-      <td>0.000055</td>
-      <td>0.000078</td>
-      <td>0.000277</td>
-      <td>0.000062</td>
-      <td>0.000245</td>
+      <td>0.145371</td>
+      <td>0.099419</td>
+      <td>0.055633</td>
+      <td>0.177352</td>
+      <td>0.190575</td>
+      <td>-0.084158</td>
+      <td>0.083270</td>
+      <td>0.344398</td>
+      <td>0.166967</td>
+      <td>0.355001</td>
     </tr>
     <tr>
       <th>23</th>
@@ -3240,16 +3565,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>180515</td>
       <td>...</td>
-      <td>0.003317</td>
-      <td>0.005164</td>
-      <td>0.002698</td>
-      <td>0.001438</td>
-      <td>0.001558</td>
-      <td>0.001273</td>
-      <td>0.001937</td>
-      <td>0.005484</td>
-      <td>0.002190</td>
-      <td>0.005321</td>
+      <td>-0.216764</td>
+      <td>-0.175109</td>
+      <td>-0.172126</td>
+      <td>-0.086336</td>
+      <td>-0.018204</td>
+      <td>-0.098414</td>
+      <td>-0.295143</td>
+      <td>-0.081368</td>
+      <td>-0.096516</td>
+      <td>-0.078732</td>
     </tr>
     <tr>
       <th>24</th>
@@ -3264,16 +3589,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>179428</td>
       <td>...</td>
-      <td>0.002225</td>
-      <td>0.001688</td>
-      <td>0.001366</td>
-      <td>0.001251</td>
-      <td>0.001342</td>
-      <td>0.000177</td>
-      <td>0.001402</td>
-      <td>0.000480</td>
-      <td>0.001663</td>
-      <td>0.001764</td>
+      <td>0.125082</td>
+      <td>0.187445</td>
+      <td>0.094098</td>
+      <td>0.073541</td>
+      <td>0.153524</td>
+      <td>0.122184</td>
+      <td>0.178186</td>
+      <td>0.325020</td>
+      <td>0.131711</td>
+      <td>0.251710</td>
     </tr>
     <tr>
       <th>25</th>
@@ -3288,16 +3613,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>179428</td>
       <td>...</td>
-      <td>-0.004184</td>
-      <td>-0.003700</td>
-      <td>-0.003180</td>
-      <td>-0.004169</td>
-      <td>-0.003774</td>
-      <td>-0.003399</td>
-      <td>-0.003382</td>
-      <td>0.000949</td>
-      <td>-0.002237</td>
-      <td>-0.002981</td>
+      <td>-0.072443</td>
+      <td>-0.081550</td>
+      <td>-0.038486</td>
+      <td>-0.047714</td>
+      <td>0.226176</td>
+      <td>0.045261</td>
+      <td>-0.126760</td>
+      <td>0.371777</td>
+      <td>0.060598</td>
+      <td>-0.005164</td>
     </tr>
     <tr>
       <th>26</th>
@@ -3312,16 +3637,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>173165</td>
       <td>...</td>
-      <td>-0.000055</td>
-      <td>-0.000036</td>
-      <td>0.000088</td>
-      <td>-0.000085</td>
-      <td>0.000037</td>
-      <td>-0.000040</td>
-      <td>-0.000056</td>
-      <td>-0.000044</td>
-      <td>-0.000046</td>
-      <td>-0.000027</td>
+      <td>0.125229</td>
+      <td>0.187538</td>
+      <td>0.094372</td>
+      <td>0.073884</td>
+      <td>0.154733</td>
+      <td>0.122949</td>
+      <td>0.178414</td>
+      <td>0.326226</td>
+      <td>0.132067</td>
+      <td>0.251894</td>
     </tr>
     <tr>
       <th>27</th>
@@ -3336,16 +3661,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>173165</td>
       <td>...</td>
-      <td>0.000644</td>
-      <td>-0.000063</td>
-      <td>0.001706</td>
-      <td>0.001486</td>
-      <td>0.003162</td>
-      <td>0.001671</td>
-      <td>0.000299</td>
-      <td>0.002102</td>
-      <td>0.001007</td>
-      <td>0.001831</td>
+      <td>-0.072734</td>
+      <td>-0.082032</td>
+      <td>-0.038806</td>
+      <td>-0.047959</td>
+      <td>0.226084</td>
+      <td>0.045132</td>
+      <td>-0.126927</td>
+      <td>0.371727</td>
+      <td>0.060446</td>
+      <td>-0.005538</td>
     </tr>
     <tr>
       <th>28</th>
@@ -3360,16 +3685,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172720</td>
       <td>...</td>
-      <td>0.000533</td>
-      <td>0.000539</td>
-      <td>0.000585</td>
-      <td>0.000474</td>
-      <td>0.000076</td>
-      <td>0.000280</td>
-      <td>0.000422</td>
-      <td>-0.000033</td>
-      <td>0.000436</td>
-      <td>0.000369</td>
+      <td>-0.109239</td>
+      <td>-0.095734</td>
+      <td>-0.046736</td>
+      <td>-0.160156</td>
+      <td>-0.108054</td>
+      <td>-0.116374</td>
+      <td>0.049736</td>
+      <td>0.170926</td>
+      <td>0.112000</td>
+      <td>0.250690</td>
     </tr>
     <tr>
       <th>29</th>
@@ -3384,16 +3709,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172720</td>
       <td>...</td>
-      <td>0.003902</td>
-      <td>0.002963</td>
-      <td>0.001609</td>
-      <td>0.002841</td>
-      <td>0.000024</td>
-      <td>0.000726</td>
-      <td>0.001582</td>
-      <td>0.000497</td>
-      <td>0.002237</td>
-      <td>-0.000092</td>
+      <td>-0.014338</td>
+      <td>-0.047306</td>
+      <td>0.040593</td>
+      <td>0.034276</td>
+      <td>0.086477</td>
+      <td>-0.002776</td>
+      <td>-0.036525</td>
+      <td>0.105931</td>
+      <td>0.075943</td>
+      <td>-0.094462</td>
     </tr>
     <tr>
       <th>30</th>
@@ -3408,16 +3733,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172374</td>
       <td>...</td>
-      <td>0.000144</td>
-      <td>0.000244</td>
-      <td>0.000101</td>
-      <td>0.000130</td>
-      <td>-0.000119</td>
-      <td>-0.000066</td>
-      <td>0.000112</td>
-      <td>0.000059</td>
-      <td>0.000113</td>
-      <td>0.000135</td>
+      <td>-0.114962</td>
+      <td>-0.101682</td>
+      <td>-0.051288</td>
+      <td>-0.167562</td>
+      <td>-0.114795</td>
+      <td>-0.118255</td>
+      <td>0.045381</td>
+      <td>0.164219</td>
+      <td>0.106147</td>
+      <td>0.242618</td>
     </tr>
     <tr>
       <th>31</th>
@@ -3432,16 +3757,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>172374</td>
       <td>...</td>
-      <td>0.000287</td>
-      <td>0.000869</td>
-      <td>0.000338</td>
-      <td>0.000516</td>
-      <td>0.000702</td>
-      <td>0.000260</td>
-      <td>0.000547</td>
-      <td>0.000815</td>
-      <td>0.000190</td>
-      <td>0.000561</td>
+      <td>-0.014739</td>
+      <td>-0.051509</td>
+      <td>0.039989</td>
+      <td>0.034758</td>
+      <td>0.078923</td>
+      <td>-0.006194</td>
+      <td>-0.037574</td>
+      <td>0.102354</td>
+      <td>0.074973</td>
+      <td>-0.093299</td>
     </tr>
     <tr>
       <th>32</th>
@@ -3456,16 +3781,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170946</td>
       <td>...</td>
-      <td>-0.000685</td>
-      <td>-0.000671</td>
-      <td>-0.000490</td>
-      <td>-0.000305</td>
-      <td>-0.000203</td>
-      <td>-0.000045</td>
-      <td>-0.000183</td>
-      <td>-0.000423</td>
-      <td>-0.000412</td>
-      <td>-0.000544</td>
+      <td>0.017597</td>
+      <td>-0.080504</td>
+      <td>0.049995</td>
+      <td>-0.011808</td>
+      <td>-0.271627</td>
+      <td>-0.061634</td>
+      <td>-0.068092</td>
+      <td>-0.169892</td>
+      <td>-0.139209</td>
+      <td>-0.134266</td>
     </tr>
     <tr>
       <th>33</th>
@@ -3480,16 +3805,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>170946</td>
       <td>...</td>
-      <td>0.014859</td>
-      <td>0.029183</td>
-      <td>0.015364</td>
-      <td>0.007996</td>
-      <td>0.015255</td>
-      <td>0.007950</td>
-      <td>0.010278</td>
-      <td>0.021851</td>
-      <td>0.009230</td>
-      <td>0.024402</td>
+      <td>-0.297318</td>
+      <td>0.036640</td>
+      <td>0.039409</td>
+      <td>0.172793</td>
+      <td>0.131960</td>
+      <td>0.099102</td>
+      <td>-0.127269</td>
+      <td>0.248293</td>
+      <td>0.078142</td>
+      <td>0.244484</td>
     </tr>
     <tr>
       <th>34</th>
@@ -3504,16 +3829,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>233549</td>
       <td>...</td>
-      <td>0.002294</td>
-      <td>0.002954</td>
-      <td>0.003762</td>
-      <td>0.001515</td>
-      <td>-0.001879</td>
-      <td>-0.003638</td>
-      <td>0.004167</td>
-      <td>-0.000977</td>
-      <td>0.003568</td>
-      <td>0.001709</td>
+      <td>0.016951</td>
+      <td>-0.081113</td>
+      <td>0.048497</td>
+      <td>-0.012860</td>
+      <td>-0.272076</td>
+      <td>-0.061712</td>
+      <td>-0.068612</td>
+      <td>-0.168814</td>
+      <td>-0.140736</td>
+      <td>-0.135443</td>
     </tr>
     <tr>
       <th>35</th>
@@ -3528,16 +3853,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>233549</td>
       <td>...</td>
-      <td>-0.002409</td>
-      <td>-0.002181</td>
-      <td>0.001515</td>
-      <td>0.007504</td>
-      <td>0.011276</td>
-      <td>0.019385</td>
-      <td>-0.002945</td>
-      <td>0.020405</td>
-      <td>-0.001569</td>
-      <td>0.007003</td>
+      <td>-0.296372</td>
+      <td>0.026870</td>
+      <td>0.034203</td>
+      <td>0.171992</td>
+      <td>0.132727</td>
+      <td>0.100970</td>
+      <td>-0.133759</td>
+      <td>0.247039</td>
+      <td>0.073710</td>
+      <td>0.242920</td>
     </tr>
     <tr>
       <th>36</th>
@@ -3552,16 +3877,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>179789</td>
       <td>...</td>
-      <td>0.000565</td>
-      <td>0.001265</td>
-      <td>0.001679</td>
-      <td>-0.000034</td>
-      <td>-0.002686</td>
-      <td>-0.000878</td>
-      <td>0.001329</td>
-      <td>-0.001112</td>
-      <td>0.002059</td>
-      <td>0.000288</td>
+      <td>0.172656</td>
+      <td>0.238587</td>
+      <td>-0.112662</td>
+      <td>-0.397093</td>
+      <td>-0.048434</td>
+      <td>-0.349497</td>
+      <td>0.178258</td>
+      <td>-0.541721</td>
+      <td>-0.432872</td>
+      <td>-0.115762</td>
     </tr>
     <tr>
       <th>37</th>
@@ -3576,16 +3901,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>179789</td>
       <td>...</td>
-      <td>0.015521</td>
-      <td>0.005221</td>
-      <td>0.011660</td>
-      <td>0.028807</td>
-      <td>0.010368</td>
-      <td>0.014050</td>
-      <td>0.007810</td>
-      <td>0.026553</td>
-      <td>0.009914</td>
-      <td>0.026500</td>
+      <td>-0.587357</td>
+      <td>-0.383792</td>
+      <td>-0.075256</td>
+      <td>0.116061</td>
+      <td>-0.107381</td>
+      <td>-0.537354</td>
+      <td>-0.290173</td>
+      <td>0.274848</td>
+      <td>-0.387343</td>
+      <td>-0.475388</td>
     </tr>
     <tr>
       <th>38</th>
@@ -3600,16 +3925,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>182577</td>
       <td>...</td>
-      <td>-0.000140</td>
-      <td>0.001370</td>
-      <td>0.000755</td>
-      <td>0.000528</td>
-      <td>-0.000446</td>
-      <td>-0.000184</td>
-      <td>-0.001062</td>
-      <td>0.000593</td>
-      <td>0.000575</td>
-      <td>0.002940</td>
+      <td>0.196620</td>
+      <td>0.244671</td>
+      <td>-0.095485</td>
+      <td>-0.382966</td>
+      <td>-0.053531</td>
+      <td>-0.346830</td>
+      <td>0.205384</td>
+      <td>-0.547652</td>
+      <td>-0.427548</td>
+      <td>-0.109037</td>
     </tr>
     <tr>
       <th>39</th>
@@ -3624,16 +3949,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>182577</td>
       <td>...</td>
-      <td>-0.032480</td>
-      <td>-0.033616</td>
-      <td>-0.029502</td>
-      <td>-0.050562</td>
-      <td>-0.030190</td>
-      <td>-0.021981</td>
-      <td>-0.012192</td>
-      <td>-0.029633</td>
-      <td>-0.037296</td>
-      <td>-0.067220</td>
+      <td>-0.598168</td>
+      <td>-0.350979</td>
+      <td>-0.061809</td>
+      <td>0.137094</td>
+      <td>-0.114290</td>
+      <td>-0.549722</td>
+      <td>-0.316452</td>
+      <td>0.281865</td>
+      <td>-0.367328</td>
+      <td>-0.457750</td>
     </tr>
     <tr>
       <th>40</th>
@@ -3648,16 +3973,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>205369</td>
       <td>...</td>
-      <td>-0.001281</td>
-      <td>-0.001583</td>
-      <td>-0.000117</td>
-      <td>-0.000501</td>
-      <td>-0.001837</td>
-      <td>-0.001011</td>
-      <td>-0.002222</td>
-      <td>0.000031</td>
-      <td>0.000068</td>
-      <td>0.000062</td>
+      <td>-0.065015</td>
+      <td>-0.134536</td>
+      <td>-0.140023</td>
+      <td>0.024319</td>
+      <td>-0.060507</td>
+      <td>-0.108153</td>
+      <td>-0.149791</td>
+      <td>-0.038775</td>
+      <td>-0.076944</td>
+      <td>-0.118178</td>
     </tr>
     <tr>
       <th>41</th>
@@ -3672,16 +3997,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>205369</td>
       <td>...</td>
-      <td>0.006389</td>
-      <td>0.010391</td>
-      <td>0.008292</td>
-      <td>0.010647</td>
-      <td>-0.005511</td>
-      <td>0.002638</td>
-      <td>-0.004853</td>
-      <td>-0.009829</td>
-      <td>0.008542</td>
-      <td>0.011590</td>
+      <td>-0.138112</td>
+      <td>-0.135524</td>
+      <td>-0.122887</td>
+      <td>0.003460</td>
+      <td>-0.095921</td>
+      <td>-0.142851</td>
+      <td>-0.133408</td>
+      <td>-0.044298</td>
+      <td>-0.079864</td>
+      <td>0.063350</td>
     </tr>
     <tr>
       <th>42</th>
@@ -3696,16 +4021,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>185065</td>
       <td>...</td>
-      <td>0.001077</td>
-      <td>0.002305</td>
-      <td>0.001138</td>
-      <td>-0.000056</td>
-      <td>-0.000738</td>
-      <td>0.000059</td>
-      <td>0.000456</td>
-      <td>-0.000396</td>
-      <td>0.000904</td>
-      <td>0.000512</td>
+      <td>-0.064923</td>
+      <td>-0.134493</td>
+      <td>-0.140439</td>
+      <td>0.024307</td>
+      <td>-0.060060</td>
+      <td>-0.106959</td>
+      <td>-0.150438</td>
+      <td>-0.038277</td>
+      <td>-0.077278</td>
+      <td>-0.118272</td>
     </tr>
     <tr>
       <th>43</th>
@@ -3720,16 +4045,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>185065</td>
       <td>...</td>
-      <td>0.009587</td>
-      <td>0.012155</td>
-      <td>0.002769</td>
-      <td>0.018908</td>
-      <td>0.010602</td>
-      <td>0.000302</td>
-      <td>0.003231</td>
-      <td>0.007630</td>
-      <td>0.011715</td>
-      <td>0.019595</td>
+      <td>-0.138915</td>
+      <td>-0.137064</td>
+      <td>-0.123798</td>
+      <td>0.002397</td>
+      <td>-0.096466</td>
+      <td>-0.143198</td>
+      <td>-0.133723</td>
+      <td>-0.044947</td>
+      <td>-0.080987</td>
+      <td>0.062265</td>
     </tr>
     <tr>
       <th>44</th>
@@ -3744,16 +4069,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>0.001978</td>
-      <td>0.001395</td>
-      <td>0.001501</td>
-      <td>0.000012</td>
-      <td>-0.000538</td>
-      <td>-0.000914</td>
-      <td>0.002817</td>
-      <td>-0.001998</td>
-      <td>0.001149</td>
-      <td>0.002069</td>
+      <td>-0.260050</td>
+      <td>-0.168407</td>
+      <td>-0.271245</td>
+      <td>-0.247335</td>
+      <td>-0.234919</td>
+      <td>-0.383042</td>
+      <td>-0.163728</td>
+      <td>-0.055309</td>
+      <td>-0.088513</td>
+      <td>-0.155641</td>
     </tr>
     <tr>
       <th>45</th>
@@ -3768,16 +4093,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>227488</td>
       <td>...</td>
-      <td>-0.004803</td>
-      <td>0.004060</td>
-      <td>-0.018828</td>
-      <td>-0.000383</td>
-      <td>0.042374</td>
-      <td>0.022364</td>
-      <td>-0.023450</td>
-      <td>0.043353</td>
-      <td>0.006033</td>
-      <td>-0.006614</td>
+      <td>0.107971</td>
+      <td>0.020257</td>
+      <td>0.216171</td>
+      <td>0.572421</td>
+      <td>0.147785</td>
+      <td>0.106555</td>
+      <td>0.096098</td>
+      <td>0.279161</td>
+      <td>0.162524</td>
+      <td>0.332554</td>
     </tr>
     <tr>
       <th>46</th>
@@ -3792,16 +4117,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>0.000218</td>
-      <td>0.000532</td>
-      <td>0.000263</td>
-      <td>0.000122</td>
-      <td>0.000352</td>
-      <td>0.000184</td>
-      <td>0.000139</td>
-      <td>0.000887</td>
-      <td>0.000173</td>
-      <td>0.000558</td>
+      <td>-0.256655</td>
+      <td>-0.163457</td>
+      <td>-0.266899</td>
+      <td>-0.247330</td>
+      <td>-0.232560</td>
+      <td>-0.386224</td>
+      <td>-0.155104</td>
+      <td>-0.059262</td>
+      <td>-0.081452</td>
+      <td>-0.156595</td>
     </tr>
     <tr>
       <th>47</th>
@@ -3816,16 +4141,16 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       <td>163840</td>
       <td>174642</td>
       <td>...</td>
-      <td>-0.000386</td>
-      <td>-0.000480</td>
-      <td>-0.000415</td>
-      <td>-0.000092</td>
-      <td>-0.000513</td>
-      <td>-0.000241</td>
-      <td>-0.000285</td>
-      <td>-0.000141</td>
-      <td>-0.000277</td>
-      <td>-0.000758</td>
+      <td>0.100300</td>
+      <td>0.018010</td>
+      <td>0.212837</td>
+      <td>0.573748</td>
+      <td>0.151573</td>
+      <td>0.110227</td>
+      <td>0.088412</td>
+      <td>0.286110</td>
+      <td>0.165036</td>
+      <td>0.329597</td>
     </tr>
   </tbody>
 </table>
@@ -3842,13 +4167,6 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">VariantDataset</span>
 
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">VariantDataset</span><span class="p">(</span><span class="n">df_variant</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_metadata:latest, 628.05MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1290.4MB/s)
 </pre></div>
 </div>
 </div>
@@ -4051,10 +4369,10 @@ Done. 0:0:0.5 (1290.4MB/s)
       <td>+</td>
       <td>163840</td>
       <td>227488</td>
-      <td>180346</td>
+      <td>180345</td>
       <td>TTT</td>
       <td>G</td>
-      <td>16506</td>
+      <td>16505</td>
     </tr>
     <tr>
       <th>78</th>
@@ -4068,10 +4386,10 @@ Done. 0:0:0.5 (1290.4MB/s)
       <td>+</td>
       <td>163840</td>
       <td>227488</td>
-      <td>180867</td>
+      <td>180866</td>
       <td>T</td>
       <td>GG</td>
-      <td>17027</td>
+      <td>17026</td>
     </tr>
     <tr>
       <th>79</th>
@@ -4129,22 +4447,12 @@ Done. 0:0:0.5 (1290.4MB/s)
 <p>82 rows × 14 columns</p>
 </div></div></div>
 </div>
-<p>Let’s load model</p>
+<p>Let’s load the ensemble model of all 4 Decima replicates:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decima.hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_decima_model</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">load_decima_model</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact decima_rep0:latest, 2155.88MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:1.2 (1808.4MB/s)
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: Downloading large artifact human_state_dict_fold0:latest, 709.30MB. 1 files... 
-<span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>:   1 of 1 files downloaded.  
-Done. 0:0:0.5 (1487.8MB/s)
 </pre></div>
 </div>
 </div>
@@ -4157,17 +4465,17 @@ Done. 0:0:0.5 (1487.8MB/s)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using default `ModelCheckpoint`. Consider installing `litmodels` package to enable `LitModelCheckpoint` for automatic upload to the Lightning model registry.
-GPU available: True (cuda), used: True
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+💡 Tip: For seamless cloud uploads and versioning, try installing [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the Lightning model registry.
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-/home/celikm5/miniforge3/envs/decima/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:425: PossibleUserWarning: The &#39;predict_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=95` in the `DataLoader` to improve performance.
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "24aebc5e88744bd7b1361c1fde3bcd26", "version_major": 2, "version_minor": 0}</script></div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">preds</span></code> are predicted expression for <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">-</span> <span class="pre">ref</span></code> alleles for each variant:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">preds</span></code> are the difference between <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">-</span> <span class="pre">ref</span></code> allele predictions for each variant-gene pair, i.e. the predicted log fold change in gene expression.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
@@ -4187,19 +4495,19 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-3.1028390e-03, -3.5525560e-03, -3.5931766e-03, ...,
-        -5.2702725e-03, -3.3913553e-03, -6.6891909e-03],
-       [ 1.1469424e-04,  1.7350912e-04,  8.1568956e-05, ...,
-         1.3417006e-04,  1.1980534e-05, -2.7149916e-05],
-       [ 6.0230494e-05, -8.2150102e-05, -2.6747584e-05, ...,
-        -2.7078092e-03, -1.8020868e-03, -3.0442923e-03],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-2.8989162e-02, -3.0541826e-02, -2.7764369e-02, ...,
+        -1.3684332e-02,  8.4971692e-03,  1.4721267e-03],
+       [-2.7411431e-04, -2.8015859e-04, -1.4923699e-04, ...,
+        -4.4744834e-04,  1.4175382e-04, -1.6565435e-04],
+       [ 4.0262192e-04, -7.6846220e-05, -2.2572372e-04, ...,
+         2.9184297e-04,  8.5824914e-04,  2.2569953e-03],
        ...,
-       [ 5.8137625e-04,  6.4936280e-04,  4.9999356e-04, ...,
-         8.4596872e-04,  1.6248971e-04,  5.3709745e-04],
-       [ 2.6370510e-03,  2.7481169e-03,  1.8703863e-03, ...,
-         5.3109229e-04, -1.4962628e-04, -3.7675351e-04],
-       [-2.8469041e-03, -3.2258853e-03, -2.4763122e-03, ...,
-        -3.5528541e-03, -8.5747242e-04, -2.2805035e-03]], dtype=float32)
+       [-2.1296535e-02, -2.1238890e-02, -2.0570286e-02, ...,
+        -1.9429259e-02, -2.6463622e-02, -2.1707583e-02],
+       [ 2.5475025e-04,  5.4145232e-04,  3.5906211e-04, ...,
+         3.4752116e-04,  5.1470287e-04,  5.6060962e-04],
+       [ 2.3415126e-03,  1.7900020e-03,  2.0225085e-03, ...,
+        -1.5570819e-03,  2.8256699e-03, -2.7912110e-04]], dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -4211,7 +4519,8 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;allele_mismatch_with_reference_genome&#39;: 26, &#39;unknown&#39;: 0})
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;allele_mismatch_with_reference_genome&#39;: tensor(13),
+         &#39;unknown&#39;: tensor(0)})
 </pre></div>
 </div>
 </div>
@@ -4263,7 +4572,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;gene expression for alt allele&#39;)
 </pre></div>
 </div>
-<img alt="../_images/0c83ceee171bd3f3fdb0290a607f5d1cf48287849e6507b5a6aaf434662f0f0d.png" src="../_images/0c83ceee171bd3f3fdb0290a607f5d1cf48287849e6507b5a6aaf434662f0f0d.png" />
+<img alt="../_images/c44693c06fee44ec707da1f8ef9403cc603d398dbce4c02ea45830fbb8b9d823.png" src="../_images/c44693c06fee44ec707da1f8ef9403cc603d398dbce4c02ea45830fbb8b9d823.png" />
 </div>
 </div>
 </section>
@@ -4341,7 +4650,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=1c28bd9a"></script>
+</div><script src="../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
