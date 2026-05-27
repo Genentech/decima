@@ -12,10 +12,20 @@ Examples:
 """
 
 import logging
+import os
 import warnings
 from pathlib import Path
 from collections import Counter
 from typing import Optional, Union, List
+
+# Must be set before any CUDA context is initialised to enable deterministic
+# CuBLAS matrix-multiply kernels (required for reproducibility with CUDA>=10.2).
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+
+import torch
+torch.set_float32_matmul_precision("highest")
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
 
 import pandas as pd
 from grelu.transforms.prediction_transforms import Aggregate
