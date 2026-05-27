@@ -59,7 +59,7 @@ def load_decima_model(
         return LightningModel.load_safetensor(model, device=device)
 
     if model in MODEL_METADATA:
-        if "model_path" in MODEL_METADATA[model]:
+        if "model_path" in MODEL_METADATA[model] and Path(MODEL_METADATA[model]["model_path"]).exists():
             return load_decima_model(MODEL_METADATA[model]["model_path"], device, host)
         name = MODEL_METADATA[model]["name"]
         art = _get_artifact(name, host)
