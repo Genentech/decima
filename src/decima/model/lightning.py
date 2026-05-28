@@ -549,23 +549,31 @@ class EnsembleLightningModel(LightningModel):
         compare_func: Optional[Union[str, Callable]] = None,
         float_precision: str = "32",
     ):
-        preds = super().predict_on_dataset(
-            dataset=dataset,
-            device=device,
-            num_workers=num_workers,
-            batch_size=batch_size,
-            augment_aggfunc=augment_aggfunc,
-            compare_func=compare_func,
-            float_precision=float_precision,
-        )
-        expression = rearrange(
-            preds["expression"],
-            "(e b) t -> e b t",
-            e=len(self.models),
-        )
+        # Run each constituent model independently so that allele ordering and
+        # variant ordering are handled correctly by LightningModel.predict_on_dataset.
+        # The previous approach (super().predict_on_dataset via a shared trainer) had
+        # two bugs:
+        # 1. With batch_size=1 the 4-model concat in predict_step scrambled the allele
+        #    dimension, computing cross-model differences instead of alt-ref LFC.
+        # 2. With n_seqs > 1 the subsequent "(e b) t -> e b t" rearrange treated model
+        #    index as the outer dimension, but the actual ordering coming out of the
+        #    shared trainer is variant-outer, mixing LFCs across models and genes.
+        all_preds = [
+            model.predict_on_dataset(
+                dataset=dataset,
+                device=device,
+                num_workers=num_workers,
+                batch_size=batch_size,
+                augment_aggfunc=augment_aggfunc,
+                compare_func=compare_func,
+                float_precision=float_precision,
+            )
+            for model in self.models
+        ]
+        expression = np.stack([p["expression"] for p in all_preds])  # (e, b, T)
         return {
-            "expression": expression.mean(axis=0),
-            "warnings": preds["warnings"],
+            "expression": expression.mean(axis=0),  # (b, T)
+            "warnings": all_preds[0]["warnings"],
             "ensemble_preds": expression,
         }
 
