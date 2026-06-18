@@ -207,7 +207,7 @@ class LightningModel(pl.LightningModule):
         """
         return sum(p.numel() for p in self.model.parameters() if p.requires_grad)
 
-    def parse_logger(self) -> str:
+    def parse_logger(self, checkpoint_path=None) -> str:
         """
         Parses the name of the logger supplied in train_params.
         """
@@ -218,7 +218,13 @@ class LightningModel(pl.LightningModule):
                 save_dir=self.train_params["save_dir"],
             )
         elif self.train_params["logger"] == "csv":
-            logger = CSVLogger(name=self.name, save_dir=self.train_params["save_dir"])
+            import re
+            version = None
+            if checkpoint_path is not None:
+                match = re.search(r"version_(\d+)", checkpoint_path)
+                if match:
+                    version = int(match.group(1))
+            logger = CSVLogger(name=self.name, save_dir=self.train_params["save_dir"], version=version)
         else:
             raise NotImplementedError
         return logger
@@ -310,15 +316,17 @@ class LightningModel(pl.LightningModule):
         torch.set_float32_matmul_precision("medium")
 
         # Set up logging
-        logger = self.parse_logger()
+        logger = self.parse_logger(checkpoint_path=checkpoint_path)
 
         # Set up trainer
+        devices = make_list(self.train_params["devices"])
         trainer = pl.Trainer(
             max_epochs=self.train_params["max_epochs"],
             accelerator="gpu",
-            devices=make_list(self.train_params["devices"]),
+            devices=devices,
+            strategy="ddp" if len(devices) > 1 else "auto",
             logger=logger,
-            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"])],
+            callbacks=[ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=self.train_params["save_top_k"], save_last=True)],
             default_root_dir=self.train_params["save_dir"],
             accumulate_grad_batches=self.train_params["accumulate_grad_batches"],
             gradient_clip_val=self.train_params["clip"],

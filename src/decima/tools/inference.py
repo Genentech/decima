@@ -86,7 +86,7 @@ def evaluate_gene_expression_predictions(ad):
 
     n_pbs = ad.shape[0]
     n_genes = ad.shape[1]
-    truth = ad.X
+    truth = ad.X.toarray() if hasattr(ad.X, "toarray") else np.asarray(ad.X)
     preds = ad.layers["preds"]
 
     # Compute Pearson correlation per gene

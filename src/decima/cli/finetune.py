@@ -45,6 +45,7 @@ from decima.data.dataset import HDF5Dataset
 @click.option("--logger", default="wandb", type=str, help="Logger.")
 @click.option("--num-workers", default=16, type=int, help="Number of workers.")
 @click.option("--seed", default=0, type=int, help="Random seed.")
+@click.option("--checkpoint", default=None, type=str, help="Path to a checkpoint to resume training from.")
 def cli_finetune(
     name,
     model,
@@ -63,6 +64,7 @@ def cli_finetune(
     logger,
     num_workers,
     seed,
+    checkpoint,
 ):
     """Finetune the Decima model.
 
@@ -102,8 +104,11 @@ def cli_finetune(
     )
     val_dataset = HDF5Dataset(h5_file=h5_file, ad=ad, key="val", max_seq_shift=0)
 
-    if isinstance(device, str) and device.isdigit():
-        device = int(device)
+    if isinstance(device, str):
+        if "," in device:
+            device = [int(d) for d in device.split(",")]
+        elif device.isdigit():
+            device = int(device)
 
     train_params = {
         "batch_size": batch_size,
@@ -137,7 +142,7 @@ def cli_finetune(
         run = wandb.init(project="decima", dir=name, name=name)
 
     logger.info("Training")
-    model.train_on_dataset(train_dataset, val_dataset)
+    model.train_on_dataset(train_dataset, val_dataset, checkpoint_path=checkpoint)
     train_dataset.close()
     val_dataset.close()
     if logger == "wandb":
