@@ -77,7 +77,7 @@ def predict_save_attributions(
         off_tasks: Off tasks to attribute for prediction either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
         model: Model to attribute for prediction default is 0. Can be replicate number (0-3) or path to custom model.
         metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
-        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients". Default is "inputxgradient".
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap". Default is "inputxgradient".
         transform: Transform to use for attribution analysis available options: "specificity", "aggregate". Default is "specificity".
         batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.
         genes: Genes to attribute for prediction if not provided, all genes will be used. Can be list of gene symbols or IDs.
@@ -378,7 +378,7 @@ def predict_attributions_seqlet_calling(
         tasks: List of cell types to analyze attributions for either list of task names or query string to filter cell types to analyze attributions for (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be analyzed.
         off_tasks: Optional list of cell types to contrast against either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, all tasks will be used as off tasks.
         model: Optional model to use for attribution analysis either replicate number or path to the model.
-        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap".
         device: Device to use for attribution analysis (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.
         dpi: DPI for attribution plots.
 
