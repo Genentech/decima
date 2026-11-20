@@ -314,3 +314,15 @@ def test_engine_does_not_compile_on_cpu():
     engine = Engine(SmallDecima().eval(), torch.ones(N_TASKS), compile=True)
     assert not engine.compile
     assert engine._rule(engine_module.max_pool_rule) is engine_module.max_pool_rule
+
+
+def test_tf32_matmul_is_restored(model):
+    for previous in (False, True):
+        torch.backends.cuda.matmul.allow_tf32 = previous
+        with dls._tf32_matmul():
+            assert torch.backends.cuda.matmul.allow_tf32
+        assert torch.backends.cuda.matmul.allow_tf32 is previous
+
+    torch.backends.cuda.matmul.allow_tf32 = False
+    deep_lift_shap(model, make_inputs(1), tasks=[0], off_tasks=[1], n_shuffles=3, random_state=0)
+    assert not torch.backends.cuda.matmul.allow_tf32

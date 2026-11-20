@@ -185,6 +185,17 @@ def _references(x: Tensor, n_shuffles: int, random_state: int) -> Tensor:
     return dinucleotide_shuffle(x[None].expand(n_shuffles, -1, -1), n=1, random_state=seeds)[:, 0]
 
 
+@contextlib.contextmanager
+def _tf32_matmul():
+    """Allow TF32 in CUDA matrix products inside the context, as cuDNN convolutions allow it by default."""
+    previous = torch.backends.cuda.matmul.allow_tf32
+    torch.backends.cuda.matmul.allow_tf32 = True
+    try:
+        yield
+    finally:
+        torch.backends.cuda.matmul.allow_tf32 = previous
+
+
 def _prefetch(function, n: int):
     """Yield function(0), ..., function(n - 1), computing each on a thread while the caller uses the one before."""
     with ThreadPoolExecutor(max_workers=1) as pool:
@@ -260,7 +271,8 @@ def deep_lift_shap(
     on the model's modules, with the attention run through `HookableAttention`. The fast path computes the same
     attributions from a forward and a backward pass written out for Decima's architecture, with tangermeme's rules
     and references: each sequence is forwarded once rather than once per reference, and the backward pass runs over
-    one row per sequence-reference pair rather than two. The two paths agree up to floating-point rounding.
+    one row per sequence-reference pair rather than two. On CUDA its matrix products run in TF32, as PyTorch's
+    convolutions do by default. The two paths agree up to that rounding.
 
     The fast path is used when `fast` is True and the model is built as the fast path expects. The first time a model
     is attributed in a process, for each `output`, input length and device type, the first sequence is attributed
@@ -361,7 +373,8 @@ def deep_lift_shap(
         engines = [Engine(r, weights, output=output, device=device, compile=_COMPILE) for r in replicates]
 
         def engine(x_, mask_, references_):
-            results = [e.attribute(x_, mask_, references_) for e in engines]
+            with _tf32_matmul():
+                results = [e.attribute(x_, mask_, references_) for e in engines]
             attributions = sum(r[0] for r in results) / len(results)
             return attributions.cpu(), [r[1:] for r in results]
 
