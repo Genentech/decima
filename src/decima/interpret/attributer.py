@@ -21,6 +21,10 @@ def get_attribution_method(method: str):
         return InputXGradient
     elif method == "integratedgradients":
         return IntegratedGradients
+    elif method == "deepliftshap":
+        from decima.interpret.deep_lift_shap import deep_lift_shap
+
+        return deep_lift_shap
     return method
 
 
@@ -32,7 +36,7 @@ class DecimaAttributer:
         model: Model to attribute.
         tasks: Tasks to attribute.
         off_tasks: Off tasks to attribute.
-        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+        method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap".
         transform: Transform to use for attribution analysis.
 
     Examples:
@@ -75,18 +79,28 @@ class DecimaAttributer:
         self.model.eval()
 
         attribution_method = get_attribution_method(method)
-        self._attributer = attribution_method(self.model)
+        if method == "deepliftshap":
+            self.tasks, self.off_tasks = tasks, off_tasks
+            self._attributer = attribution_method
+        else:
+            self._attributer = attribution_method(self.model)
 
     def attribute(self, inputs, **kwargs):
         """Attribute inputs.
 
         Args:
             inputs: Inputs to attribute.
-            **kwargs: Additional arguments to pass to the attribution method.
+            **kwargs: Additional arguments to pass to the attribution method. For "deepliftshap", those of
+                `decima.interpret.deep_lift_shap.deep_lift_shap`, such as `output`, `n_shuffles` and `random_state`.
 
         Returns:
             torch.Tensor: Attribution analysis results for the gene and tasks
         """
+        if self.method == "deepliftshap":
+            return self._attributer(
+                self.model, inputs, tasks=self.tasks, off_tasks=self.off_tasks, transform=self.transform, **kwargs
+            )
+
         inputs = inputs.to(self.model.device)
 
         if self.method == "saliency":
@@ -112,7 +126,7 @@ class DecimaAttributer:
             model_name: Model name to load.
             tasks: Tasks to attribute.
             off_tasks: Off tasks to attribute.
-            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap".
             transform: Transform to use for attribution analysis.
             device: Device to use for attribution analysis.
         """

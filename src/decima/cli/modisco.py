@@ -62,7 +62,7 @@ from decima.interpret.modisco import (
 )
 @click.option(
     "--method",
-    type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    type=click.Choice(["saliency", "inputxgradient", "integratedgradients", "deepliftshap"]),
     default="saliency",
     show_default=True,
     help="Method to use for attribution analysis.",
@@ -349,7 +349,7 @@ def cli_modisco_seqlet_bed(
 )
 @click.option(
     "--method",
-    type=click.Choice(["saliency", "inputxgradient", "integratedgradients"]),
+    type=click.Choice(["saliency", "inputxgradient", "integratedgradients", "deepliftshap"]),
     default="saliency",
     show_default=True,
     help="Method to use for attribution analysis.",

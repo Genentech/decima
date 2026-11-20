@@ -279,7 +279,7 @@ class DecimaResult:
             tasks: List of cells to use as on task
             off_tasks: List of cells to use as off task
             transform: Attribution transform method
-            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap".
             threshold: Threshold for attribution analysis
             min_seqlet_len: Minimum length for seqlet calling
             max_seqlet_len: Maximum length for seqlet calling

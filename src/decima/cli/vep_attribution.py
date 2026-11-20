@@ -39,7 +39,7 @@ from decima.vep.attributions import variant_effect_attribution
     "--method",
     type=str,
     default="inputxgradient",
-    help="Method to use for attribution analysis. Available options: 'inputxgradient', 'saliency', 'integratedgradients'.",
+    help="Method to use for attribution analysis. Available options: 'inputxgradient', 'saliency', 'integratedgradients', 'deepliftshap'.",
 )
 @click.option(
     "--transform",

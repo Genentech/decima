@@ -62,7 +62,7 @@ def predict_save_modisco_attributions(
         off_tasks: Off tasks to analyze for modisco attribution either list of task names or query string to filter cell types to contrast against (e.g. 'cell_type == 'classical monocyte''). If not provided, no contrast will be performed.
         model: Model to use for attribution analysis default is 0. Can be replicate number (0-3) or path to custom model.
         metadata_anndata: Metadata anndata path or DecimaResult object. If not provided, the default metadata will be downloaded from wandb.
-        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap". For MoDISco, "saliency" is often preferred for pattern discovery.
         transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
         batch_size: Batch size for attribution analysis default is 1. Increasing batch size may speed up computation but requires more memory.
         genes: Genes to analyze for modisco attribution if not provided, all genes will be used. Can be list of gene symbols or IDs to focus analysis on specific genes.
@@ -498,7 +498,7 @@ def modisco(
         correct_grad: Whether to correct gradient for attribution analysis default is True. Applies gradient correction for better attribution quality.
         num_workers: Number of workers for parallel processing default is 4. Increasing number of workers will speed up the process but requires more memory.
         genome: Genome reference to use default is "hg38". Can be genome name or path to custom genome fasta file.
-        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients". For MoDISco, "saliency" is often preferred for pattern discovery.
+        method: Method to use for attribution analysis default is "saliency". Available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap". For MoDISco, "saliency" is often preferred for pattern discovery.
         transform: Transform to use for attribution analysis default is "specificity". Available options: "specificity", "aggregate". Specificity transform is recommended for MoDISco to highlight cell-type-specific patterns.
         batch_size: Batch size for attribution analysis default is 2. Increasing batch size may speed up computation but requires more memory.
         device: Device to use for computation (e.g. 'cuda', 'cpu'). If not provided, the best available device will be used automatically.

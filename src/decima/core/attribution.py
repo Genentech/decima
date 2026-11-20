@@ -215,7 +215,7 @@ class Attribution:
             off_tasks: List of cell types to contrast against
             model: Model to use for attribution analysis
             transform: Transformation to apply to attributions
-            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients".
+            method: Method to use for attribution analysis available options: "saliency", "inputxgradient", "integratedgradients", "deepliftshap".
             device: Device to use for attribution analysis
             result: Result object or path to result object or name of the model to load the result for.
             gene: Gene name
