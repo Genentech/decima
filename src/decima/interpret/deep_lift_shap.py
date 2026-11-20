@@ -25,6 +25,8 @@ import contextlib
 import gc
 import logging
 import warnings
+import weakref
+from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional, Union
 
 import numpy as np
@@ -55,6 +57,17 @@ _CHECK_PEARSON_MIN = 0.9999
 _CHECK_REL_L2_MAX = 1e-2
 """The fast path agrees with the default path when the Pearson correlation of their attributions is at least
 `_CHECK_PEARSON_MIN` and their relative L2 distance at most `_CHECK_REL_L2_MAX`."""
+
+_COMPILE_MIN_PAIRS = 160
+"""`deep_lift_shap` compiles the fast path's rules for a call with at least this many sequence-reference pairs
+over its replicates, and from then on in the process. On an H200 the compiled rules save 0.07 seconds per pair and
+their first calls take 6 seconds."""
+
+_COMPILE = False
+
+_CHECKED = weakref.WeakKeyDictionary()
+"""For each replicate whose fast path has agreed with the default path in this process, the (output, length, device
+type, compiled) combinations it agreed for. `deep_lift_shap` does not check those again."""
 
 
 class HookableAttention(nn.Module):
@@ -172,6 +185,17 @@ def _references(x: Tensor, n_shuffles: int, random_state: int) -> Tensor:
     return dinucleotide_shuffle(x[None].expand(n_shuffles, -1, -1), n=1, random_state=seeds)[:, 0]
 
 
+def _prefetch(function, n: int):
+    """Yield function(0), ..., function(n - 1), computing each on a thread while the caller uses the one before."""
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        pending = pool.submit(function, 0)
+        for i in range(n):
+            current = pending.result()
+            if i + 1 < n:
+                pending = pool.submit(function, i + 1)
+            yield current
+
+
 def _default(replicates, weights, output, x, mask, references, batch_size, warning_threshold, device, verbose):
     """The hypothetical attributions of the sequences x (n, 4, length) averaged over their references
     (n, K, 4, length) and over the replicates, with tangermeme's `deep_lift_shap`."""
@@ -238,12 +262,17 @@ def deep_lift_shap(
     and references: each sequence is forwarded once rather than once per reference, and the backward pass runs over
     one row per sequence-reference pair rather than two. The two paths agree up to floating-point rounding.
 
-    The fast path is used when `fast` is True and the model is built as the fast path expects. The first sequence is
-    then attributed against its first reference with both paths. When the two disagree beyond rounding, with a
+    The fast path is used when `fast` is True and the model is built as the fast path expects. The first time a model
+    is attributed in a process, for each `output`, input length and device type, the first sequence is attributed
+    against its first reference with both paths. When the two disagree beyond rounding, with a
     Pearson correlation below 0.9999 or a relative L2 distance above 1e-2, or when the fast path raises, a
     `RuntimeWarning` gives the reason and the default path attributes everything. The default path needs several
     times the memory of the fast path (68 GB against 15 GB for a 524,288 bp input). When it runs out of GPU memory
     during the check, a `RuntimeWarning` says so and the fast path is used unchecked.
+
+    On CUDA, a call with at least 160 sequence-reference pairs over the model's replicates runs the fast path's
+    softmax and max-pooling rules under `torch.compile`, as do later calls in the process. Their first calls
+    compile.
 
     Both paths draw the same references: reference k of every sequence is its dinucleotide shuffle drawn with the
     seed ``random_state + k``. With `random_state` None, a seed is drawn once per call.
@@ -327,49 +356,58 @@ def deep_lift_shap(
 
     reason = None
     try:
-        engines = [Engine(replicate, weights, output=output, device=device) for replicate in replicates]
+        global _COMPILE
+        _COMPILE = _COMPILE or n * n_shuffles * len(replicates) >= _COMPILE_MIN_PAIRS
+        engines = [Engine(r, weights, output=output, device=device, compile=_COMPILE) for r in replicates]
 
         def engine(x_, mask_, references_):
             results = [e.attribute(x_, mask_, references_) for e in engines]
             attributions = sum(r[0] for r in results) / len(results)
             return attributions.cpu(), [r[1:] for r in results]
 
-        first = references_of(0)
+        # Reference draws run one sequence ahead of the device, on a thread.
+        drawn = _prefetch(references_of, n)
+        first = next(drawn)
         check = min(_CHECK_REFERENCES, n_shuffles)
-        # The default path keeps both rows of a pair for every hooked module, several times the fast path's memory,
-        # so it can run out of memory where the fast path fits. The error is handled outside the except clause: its
-        # traceback holds the failed batch's tensors, which must be freed before the cache is emptied.
-        stock = None
-        try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                stock = _default(
-                    replicates,
-                    weights,
-                    output,
-                    x[:1],
-                    mask[:1],
-                    first[None, :check].float(),
-                    1,
-                    threshold,
-                    device,
-                    False,
-                )[0]
-        except torch.cuda.OutOfMemoryError:
-            pass
+        key = (output, x.shape[-1], device.type, _COMPILE)
+        pearson, rel_l2 = 1.0, 0.0
+        if not all(key in _CHECKED.get(replicate, ()) for replicate in replicates):
+            # The default path keeps both rows of a pair for every hooked module, several times the fast path's
+            # memory, so it can run out of memory where the fast path fits. The error is handled outside the except
+            # clause: its traceback holds the failed batch's tensors, which must be freed before the cache is emptied.
+            stock = None
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", RuntimeWarning)
+                    stock = _default(
+                        replicates,
+                        weights,
+                        output,
+                        x[:1],
+                        mask[:1],
+                        first[None, :check].float(),
+                        1,
+                        threshold,
+                        device,
+                        False,
+                    )[0]
+            except torch.cuda.OutOfMemoryError:
+                pass
 
-        if stock is None:
-            gc.collect()
-            torch.cuda.empty_cache()
-            warnings.warn(
-                "deep_lift_shap could not check the fast path against the default path, which ran out of GPU "
-                "memory. The fast path's convergence deltas are still checked.",
-                RuntimeWarning,
-                stacklevel=2,
-            )
-            pearson, rel_l2 = 1.0, 0.0
-        else:
-            pearson, rel_l2 = _agreement(engine(x[0], mask[0], first[:check])[0], stock)
+            if stock is None:
+                gc.collect()
+                torch.cuda.empty_cache()
+                warnings.warn(
+                    "deep_lift_shap could not check the fast path against the default path, which ran out of GPU "
+                    "memory. The fast path's convergence deltas are still checked.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+            else:
+                pearson, rel_l2 = _agreement(engine(x[0], mask[0], first[:check])[0], stock)
+                if pearson >= _CHECK_PEARSON_MIN and rel_l2 <= _CHECK_REL_L2_MAX:
+                    for replicate in replicates:
+                        _CHECKED.setdefault(replicate, set()).add(key)
 
         if not (pearson >= _CHECK_PEARSON_MIN and rel_l2 <= _CHECK_REL_L2_MAX):
             reason = (
@@ -379,7 +417,7 @@ def deep_lift_shap(
         else:
             attributions, deltas, differences = [], [], []
             for i in tqdm(range(n), disable=not verbose, desc="DeepLIFT/SHAP"):
-                attribution, outputs = engine(x[i], mask[i], first if i == 0 else references_of(i))
+                attribution, outputs = engine(x[i], mask[i], first if i == 0 else next(drawn))
                 attributions.append(attribution)
                 for y, y_ref, delta in outputs:
                     deltas.append(delta.cpu())

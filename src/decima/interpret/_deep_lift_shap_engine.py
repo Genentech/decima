@@ -9,8 +9,8 @@ for Decima's architecture (the Borzoi trunk of gReLU and a convolutional head):
   chunks.
 * The backward pass runs over one row per pair. tangermeme's rules give both rows of a pair the same multipliers, so
   the reference half carries no additional information.
-* Only the inputs of the rules are kept from the forward pass: the output of every pooled convolution and a few
-  small tensors per transformer block. The attention logits and weights are recomputed in the backward pass.
+* Only the inputs of the rules are kept from the forward pass: the output of every pooled convolution, and the
+  attention logits and a few small tensors per transformer block.
 * The rules are tangermeme's: the rescale rule for every GELU and ReLU (and for the exponential, when the expression
   is attributed), the max-pooling rule, the closed-form LayerNorm rule, the softmax rule and the midpoint rule for
   the two bilinear products of the attention. BatchNorm in evaluation mode, the convolutions, the linear layers, the
@@ -127,6 +127,7 @@ class _TransformerSaved(NamedTuple):
     q: Tensor  # (R, h, N, d) the scaled queries
     k: Tensor  # (R, h, N, d)
     v: Tensor  # (R, h, N, dv)
+    logits: Tensor  # (R, h, N, N) the softmax's input
     x_ffn: Tensor  # (R, N, C) the feed-forward network's input
     u: Tensor  # (R, N, 2C) the ReLU's input
 
@@ -365,6 +366,49 @@ def softmax_rule(grad: Tensor, delta_y_over_delta_log_y: Tensor, mult_x_to_a: Te
     return numerator.addcmul_(mult_x_to_a, total)
 
 
+def softmax_backward(grad: Tensor, logits: Tensor, logits_ref: Tensor):
+    """tangermeme's softmax rule in one call: the gradient at the logits, and the midpoint of the two softmax
+    outputs, given the gradient at the softmax's output and the logits of both rows of the pairs."""
+    midpoint, *terms = softmax_terms(logits, logits_ref)
+    return softmax_rule(grad, *terms), midpoint
+
+
+class _Compiled:
+    """A rule under `torch.compile`, which fuses its elementwise passes over the largest tensors of a step into a
+    few kernels. It is compiled for any shape, so that the max-pooling rule compiles once and not once per level of
+    the convolutional tower. A rule that fails to compile runs as written from then on."""
+
+    def __init__(self, function):
+        self.function = function
+        self.compiled = torch.compile(function, fullgraph=True, dynamic=True)
+
+    def __call__(self, *args):
+        if self.compiled is not None:
+            try:
+                return self.compiled(*args)
+            except torch.cuda.OutOfMemoryError:
+                raise
+            except Exception as exc:
+                logger.warning(
+                    "compiling %s failed (%s: %s); running it uncompiled",
+                    self.function.__name__,
+                    type(exc).__name__,
+                    str(exc).strip().split("\n")[0],
+                )
+                self.compiled = None
+        return self.function(*args)
+
+
+_COMPILED = {}
+"""The compiled rules of this process, by name, shared by every engine."""
+
+
+def _compiled(function):
+    if function.__name__ not in _COMPILED:
+        _COMPILED[function.__name__] = _Compiled(function)
+    return _COMPILED[function.__name__]
+
+
 def relative_shift_transpose(grad: Tensor) -> Tensor:
     """The transpose of `relative_shift`: the gradient at its input, of shape (..., N, 2N - 1), given the one at its
     output, of shape (..., N, N)."""
@@ -395,8 +439,11 @@ class Engine:
             sum of their exponentials.
         device: Where the passes run. None means the model's device.
         pairs_per_step: The number of references of a sequence that are forwarded and back-propagated together. On
-            an H200 and a 524,288 bp input, each takes about 9 GB and 20 references take 7.5 seconds at 1 and 6.8 at
-            10. An out-of-memory error halves it.
+            an H200 and a 524,288 bp input, the time per reference does not depend on it and each takes about 13 GB.
+            An out-of-memory error halves it.
+        compile: Whether to run the softmax and max-pooling rules under `torch.compile` on CUDA. Their first calls
+            in a process then compile, which took 6 seconds on an H200, and 20 references take 5.1 seconds rather
+            than 6.6.
     """
 
     def __init__(
@@ -406,6 +453,7 @@ class Engine:
         output: str = "logits",
         device: Optional[torch.device] = None,
         pairs_per_step: int = 1,
+        compile: bool = False,
     ):
         _require(not model.training, "it is in training mode")
         _require(output in ("logits", "expression"), f"output {output}")
@@ -415,6 +463,7 @@ class Engine:
         self.device = device = torch.device(device)
         self.output = output
         self.pairs_per_step = pairs_per_step
+        self.compile = compile and device.type == "cuda"
 
         tower = trunk.conv_tower.blocks
         stem = tower[0]
@@ -477,6 +526,10 @@ class Engine:
         positional = torch.einsum("b h i d, h j d -> b h i j", q + t.rel_pos_bias, self._positional_keys(t, q.shape[2]))
         return content.add_(relative_shift(positional))
 
+    def _rule(self, function):
+        """A rule, compiled when the engine compiles."""
+        return _compiled(function) if self.compile else function
+
     def forward(self, x: Tensor) -> _Saved:
         """Run the model on x, of shape (R, 5, L), keeping what the backward rules read. Every operation is row-wise."""
         z = [self.stem(x)]
@@ -490,14 +543,13 @@ class Engine:
             q = _heads(F.linear(normed, t.to_q), t.n_heads) / (t.key_len**0.5)
             k = _heads(F.linear(normed, t.to_k), t.n_heads)
             v = _heads(F.linear(normed, t.to_v), t.n_heads)
-            attention = self._logits(t, q, k).softmax(dim=-1)
-            mixed = _merge(torch.einsum("b h i j, b h j d -> b h i d", attention, v))
-            del attention
+            logits = self._logits(t, q, k)
+            mixed = _merge(torch.einsum("b h i j, b h j d -> b h i d", logits.softmax(dim=-1), v))
             x_ffn = h + F.linear(mixed, t.to_out_weight, t.to_out_bias)
 
             normed = F.layer_norm(x_ffn, x_ffn.shape[-1:], t.ffn_norm_weight, t.ffn_norm_bias, t.ffn_norm_eps)
             u = F.linear(normed, t.linear1_weight, t.linear1_bias)
-            transformers.append(_TransformerSaved(h, q, k, v, x_ffn, u))
+            transformers.append(_TransformerSaved(h, q, k, v, logits, x_ffn, u))
             h = x_ffn + F.linear(F.relu(u), t.linear2_weight, t.linear2_bias)
 
         h = h.transpose(1, 2)
@@ -526,12 +578,11 @@ class Engine:
         grad = grad + g
 
         # The attention, with the midpoint rule for its two bilinear products and the softmax rule between them.
-        midpoint, *terms = softmax_terms(self._logits(t, s.q, s.k), self._logits(t, r.q, r.k))
-        g = _heads(grad @ t.to_out_weight, t.n_heads)
-        g_v = midpoint.transpose(-1, -2) @ g
-        del midpoint
-        g = softmax_rule(g @ (0.5 * (s.v + r.v)).transpose(-1, -2), *terms)
-        del terms
+        g_mixed = _heads(grad @ t.to_out_weight, t.n_heads)
+        g = g_mixed @ (0.5 * (s.v + r.v)).transpose(-1, -2)
+        g, midpoint = self._rule(softmax_backward)(g, s.logits, r.logits)
+        g_v = midpoint.transpose(-1, -2) @ g_mixed
+        del midpoint, g_mixed
 
         g_k = g.transpose(-1, -2) @ (0.5 * (s.q + r.q) + t.rel_content_bias)
         g_q = g @ (0.5 * (s.k + r.k))
@@ -592,7 +643,7 @@ class Engine:
         # The convolutional tower, last block first: the max-pooling rule, then BatchNorm, GELU and the convolution.
         skips = {len(s.z) - 1: skips[1], len(s.z) - 2: skips[0]}
         for i in range(len(s.z) - 1, -1, -1):
-            grad = max_pool_rule(grad, s.z[i], r.z[i])
+            grad = self._rule(max_pool_rule)(grad, s.z[i], r.z[i])
             if i in skips:
                 grad += skips.pop(i)
             if i > 0:
@@ -657,5 +708,9 @@ class Engine:
                 total += (multipliers - (ref * multipliers).sum(dim=1, keepdim=True)).sum(dim=0)
                 del multipliers, ref
                 start += step
+
+        # Compiling leaves the traced tensors in reference cycles, which only the cyclic garbage collector frees.
+        if self.compile:
+            gc.collect()
 
         return total / n_references, y, torch.cat(y_ref), torch.cat(deltas)

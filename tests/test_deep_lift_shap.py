@@ -1,4 +1,5 @@
 import warnings
+import weakref
 
 import pytest
 import torch
@@ -12,6 +13,7 @@ from grelu.model.trunks.borzoi import BorzoiTrunk
 from grelu.transforms.prediction_transforms import Aggregate, Specificity
 from tangermeme.utils import random_one_hot
 
+from decima.interpret import _deep_lift_shap_engine as engine_module
 from decima.interpret import deep_lift_shap as dls
 from decima.interpret._deep_lift_shap_engine import Engine, UnsupportedArchitecture, relative_shift_transpose
 from decima.interpret.attributer import get_attribution_method
@@ -236,6 +238,7 @@ def test_deep_lift_shap_disagreement(model, monkeypatch):
     kwargs = dict(tasks=[0], off_tasks=[1], n_shuffles=3, random_state=0)
     expected = deep_lift_shap(model, inputs, fast=False, **kwargs)
 
+    monkeypatch.setattr(dls, "_CHECKED", weakref.WeakKeyDictionary())
     attribute = Engine.attribute
 
     def scaled(self, *args):
@@ -256,7 +259,58 @@ def test_deep_lift_shap_unchecked(model, monkeypatch):
     def out_of_memory(*args, **kwargs):
         raise torch.cuda.OutOfMemoryError("CUDA out of memory.")
 
+    monkeypatch.setattr(dls, "_CHECKED", weakref.WeakKeyDictionary())
     monkeypatch.setattr(dls, "_default", out_of_memory)
-    with pytest.warns(RuntimeWarning, match="could not check the fast path"):
-        attributions = deep_lift_shap(model, inputs, **kwargs)
-    assert torch.equal(attributions, expected)
+    for _ in range(2):  # an unchecked model is checked again on the next call
+        with pytest.warns(RuntimeWarning, match="could not check the fast path"):
+            attributions = deep_lift_shap(model, inputs, **kwargs)
+        assert torch.equal(attributions, expected)
+
+
+def test_deep_lift_shap_checks_once(model, monkeypatch):
+    inputs = make_inputs(1)
+    kwargs = dict(tasks=[0], off_tasks=[1], n_shuffles=3, random_state=0)
+    calls, default = [], dls._default
+
+    def counted(*args):
+        calls.append(args[2])
+        return default(*args)
+
+    monkeypatch.setattr(dls, "_CHECKED", weakref.WeakKeyDictionary())
+    monkeypatch.setattr(dls, "_default", counted)
+    first = deep_lift_shap(model, inputs, **kwargs)
+    assert torch.equal(deep_lift_shap(model, inputs, **kwargs), first)
+    assert calls == ["logits"]
+
+    deep_lift_shap(model, inputs, output="expression", **kwargs)
+    assert calls == ["logits", "expression"]
+
+
+def test_prefetch():
+    seen = []
+
+    def draw(i):
+        seen.append(i)
+        return i * i
+
+    assert list(dls._prefetch(draw, 4)) == [0, 1, 4, 9]
+    assert seen == [0, 1, 2, 3]
+
+
+def test_compiled_rule_falls_back():
+    def double(x):
+        return x * 2
+
+    def broken(*args):
+        raise RuntimeError("no compiler")
+
+    rule = engine_module._Compiled.__new__(engine_module._Compiled)
+    rule.function, rule.compiled = double, broken
+    assert rule(torch.ones(2)).tolist() == [2.0, 2.0]
+    assert rule.compiled is None
+
+
+def test_engine_does_not_compile_on_cpu():
+    engine = Engine(SmallDecima().eval(), torch.ones(N_TASKS), compile=True)
+    assert not engine.compile
+    assert engine._rule(engine_module.max_pool_rule) is engine_module.max_pool_rule
