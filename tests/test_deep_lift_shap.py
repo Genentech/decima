@@ -256,15 +256,20 @@ def test_deep_lift_shap_unchecked(model, monkeypatch):
     kwargs = dict(tasks=[0], off_tasks=[1], n_shuffles=3, random_state=0)
     expected = deep_lift_shap(model, inputs, **kwargs)
 
+    calls = []
+
     def out_of_memory(*args, **kwargs):
+        calls.append(1)
         raise torch.cuda.OutOfMemoryError("CUDA out of memory.")
 
     monkeypatch.setattr(dls, "_CHECKED", weakref.WeakKeyDictionary())
+    monkeypatch.setattr(dls, "_UNCHECKABLE", weakref.WeakKeyDictionary())
     monkeypatch.setattr(dls, "_default", out_of_memory)
-    for _ in range(2):  # an unchecked model is checked again on the next call
+    for _ in range(2):  # the warning repeats; the attempt does not
         with pytest.warns(RuntimeWarning, match="could not check the fast path"):
             attributions = deep_lift_shap(model, inputs, **kwargs)
         assert torch.equal(attributions, expected)
+    assert len(calls) == 1
 
 
 def test_deep_lift_shap_checks_once(model, monkeypatch):
@@ -326,3 +331,36 @@ def test_tf32_matmul_is_restored(model):
     torch.backends.cuda.matmul.allow_tf32 = False
     deep_lift_shap(model, make_inputs(1), tasks=[0], off_tasks=[1], n_shuffles=3, random_state=0)
     assert not torch.backends.cuda.matmul.allow_tf32
+
+
+def test_engine_recomputes_logits():
+    model = SmallDecima().double().eval()
+    inputs = make_inputs(1)
+    x, mask = inputs[0, :4], inputs[0, 4:]
+    references = dls._references(x, 3, 0).double()
+    kept = Engine(model, torch.ones(N_TASKS)).attribute(x, mask, references)
+    engine = Engine(model, torch.ones(N_TASKS), keep_logits=False)
+    with torch.no_grad():
+        assert all(t.logits is None for t in engine.forward(inputs).transformers)
+    assert torch.allclose(engine.attribute(x, mask, references)[0], kept[0], rtol=0, atol=1e-14)
+
+
+def test_engine_drops_logits_when_out_of_memory(monkeypatch):
+    model = SmallDecima().double().eval()
+    inputs = make_inputs(1)
+    x, mask = inputs[0, :4], inputs[0, 4:]
+    references = dls._references(x, 3, 0).double()
+    expected = Engine(model, torch.ones(N_TASKS)).attribute(x, mask, references)[0]
+
+    backward = Engine.backward
+
+    def limited(self, s, r):
+        if s.transformers[0].logits is not None:
+            raise torch.cuda.OutOfMemoryError("CUDA out of memory.")
+        return backward(self, s, r)
+
+    monkeypatch.setattr(Engine, "backward", limited)
+    engine = Engine(model, torch.ones(N_TASKS), pairs_per_step=2)
+    attributions = engine.attribute(x, mask, references)[0]
+    assert not engine.keep_logits and engine.pairs_per_step == 1
+    assert torch.allclose(attributions, expected, rtol=0, atol=1e-14)

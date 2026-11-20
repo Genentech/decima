@@ -69,6 +69,10 @@ _CHECKED = weakref.WeakKeyDictionary()
 """For each replicate whose fast path has agreed with the default path in this process, the (output, length, device
 type, compiled) combinations it agreed for. `deep_lift_shap` does not check those again."""
 
+_UNCHECKABLE = weakref.WeakKeyDictionary()
+"""The same, for the combinations whose check ran out of GPU memory in the default path. `deep_lift_shap` does not
+attempt those again, and warns on every call that the fast path is unchecked."""
+
 
 class HookableAttention(nn.Module):
     """gReLU's `Attention`, with its softmax and its two bilinear products as modules.
@@ -279,8 +283,11 @@ def deep_lift_shap(
     against its first reference with both paths. When the two disagree beyond rounding, with a
     Pearson correlation below 0.9999 or a relative L2 distance above 1e-2, or when the fast path raises, a
     `RuntimeWarning` gives the reason and the default path attributes everything. The default path needs several
-    times the memory of the fast path (68 GB against 15 GB for a 524,288 bp input). When it runs out of GPU memory
-    during the check, a `RuntimeWarning` says so and the fast path is used unchecked.
+    times the memory of the fast path: for a 524,288 bp input, 68 GB against 24 GB, or 15 GB when the fast path
+    recomputes the attention logits in its backward pass, which it does after running out of memory. When the
+    default path runs out of GPU memory during the check, a `RuntimeWarning` says so, on that call and on later
+    ones, and the fast path is used unchecked. Under simulated memory limits the fast path ran with 20 GB and not
+    with 16 GB.
 
     On CUDA, a call with at least 160 sequence-reference pairs over the model's replicates runs the fast path's
     softmax and max-pooling rules under `torch.compile`, as do later calls in the process. Their first calls
@@ -389,25 +396,28 @@ def deep_lift_shap(
             # memory, so it can run out of memory where the fast path fits. The error is handled outside the except
             # clause: its traceback holds the failed batch's tensors, which must be freed before the cache is emptied.
             stock = None
-            try:
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", RuntimeWarning)
-                    stock = _default(
-                        replicates,
-                        weights,
-                        output,
-                        x[:1],
-                        mask[:1],
-                        first[None, :check].float(),
-                        1,
-                        threshold,
-                        device,
-                        False,
-                    )[0]
-            except torch.cuda.OutOfMemoryError:
-                pass
+            if not all(key in _UNCHECKABLE.get(replicate, ()) for replicate in replicates):
+                try:
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", RuntimeWarning)
+                        stock = _default(
+                            replicates,
+                            weights,
+                            output,
+                            x[:1],
+                            mask[:1],
+                            first[None, :check].float(),
+                            1,
+                            threshold,
+                            device,
+                            False,
+                        )[0]
+                except torch.cuda.OutOfMemoryError:
+                    pass
 
             if stock is None:
+                for replicate in replicates:
+                    _UNCHECKABLE.setdefault(replicate, set()).add(key)
                 gc.collect()
                 torch.cuda.empty_cache()
                 warnings.warn(

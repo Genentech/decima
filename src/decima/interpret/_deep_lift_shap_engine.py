@@ -10,7 +10,8 @@ for Decima's architecture (the Borzoi trunk of gReLU and a convolutional head):
 * The backward pass runs over one row per pair. tangermeme's rules give both rows of a pair the same multipliers, so
   the reference half carries no additional information.
 * Only the inputs of the rules are kept from the forward pass: the output of every pooled convolution, and the
-  attention logits and a few small tensors per transformer block.
+  attention logits and a few small tensors per transformer block. When the device runs out of memory, the logits
+  are recomputed in the backward pass instead.
 * The rules are tangermeme's: the rescale rule for every GELU and ReLU (and for the exponential, when the expression
   is attributed), the max-pooling rule, the closed-form LayerNorm rule, the softmax rule and the midpoint rule for
   the two bilinear products of the attention. BatchNorm in evaluation mode, the convolutions, the linear layers, the
@@ -127,7 +128,7 @@ class _TransformerSaved(NamedTuple):
     q: Tensor  # (R, h, N, d) the scaled queries
     k: Tensor  # (R, h, N, d)
     v: Tensor  # (R, h, N, dv)
-    logits: Tensor  # (R, h, N, N) the softmax's input
+    logits: Optional[Tensor]  # (R, h, N, N) the softmax's input, or None when it is recomputed
     x_ffn: Tensor  # (R, N, C) the feed-forward network's input
     u: Tensor  # (R, N, 2C) the ReLU's input
 
@@ -441,6 +442,9 @@ class Engine:
         pairs_per_step: The number of references of a sequence that are forwarded and back-propagated together. On
             an H200 and a 524,288 bp input, the time per reference does not depend on it and each takes about 13 GB.
             An out-of-memory error halves it.
+        keep_logits: Whether to keep the attention logits of a forward pass for the backward pass, which otherwise
+            recomputes them. Keeping them takes 23.8 GB rather than 15.2 GB for a 524,288 bp input and one reference
+            per step. An out-of-memory error at one reference per step turns it off.
         compile: Whether to run the softmax and max-pooling rules under `torch.compile` on CUDA. Their first calls
             in a process then compile, which took 6 seconds on an H200, and 20 references take 5.1 seconds rather
             than 6.6.
@@ -454,6 +458,7 @@ class Engine:
         device: Optional[torch.device] = None,
         pairs_per_step: int = 1,
         compile: bool = False,
+        keep_logits: bool = True,
     ):
         _require(not model.training, "it is in training mode")
         _require(output in ("logits", "expression"), f"output {output}")
@@ -464,6 +469,7 @@ class Engine:
         self.output = output
         self.pairs_per_step = pairs_per_step
         self.compile = compile and device.type == "cuda"
+        self.keep_logits = keep_logits
 
         tower = trunk.conv_tower.blocks
         stem = tower[0]
@@ -530,6 +536,10 @@ class Engine:
         """A rule, compiled when the engine compiles."""
         return _compiled(function) if self.compile else function
 
+    def _saved_logits(self, t: _Transformer, saved: _TransformerSaved) -> Tensor:
+        """The attention logits of a forward pass: those it kept, or recomputed from its queries and keys."""
+        return saved.logits if saved.logits is not None else self._logits(t, saved.q, saved.k)
+
     def forward(self, x: Tensor) -> _Saved:
         """Run the model on x, of shape (R, 5, L), keeping what the backward rules read. Every operation is row-wise."""
         z = [self.stem(x)]
@@ -549,7 +559,7 @@ class Engine:
 
             normed = F.layer_norm(x_ffn, x_ffn.shape[-1:], t.ffn_norm_weight, t.ffn_norm_bias, t.ffn_norm_eps)
             u = F.linear(normed, t.linear1_weight, t.linear1_bias)
-            transformers.append(_TransformerSaved(h, q, k, v, logits, x_ffn, u))
+            transformers.append(_TransformerSaved(h, q, k, v, logits if self.keep_logits else None, x_ffn, u))
             h = x_ffn + F.linear(F.relu(u), t.linear2_weight, t.linear2_bias)
 
         h = h.transpose(1, 2)
@@ -580,7 +590,7 @@ class Engine:
         # The attention, with the midpoint rule for its two bilinear products and the softmax rule between them.
         g_mixed = _heads(grad @ t.to_out_weight, t.n_heads)
         g = g_mixed @ (0.5 * (s.v + r.v)).transpose(-1, -2)
-        g, midpoint = self._rule(softmax_backward)(g, s.logits, r.logits)
+        g, midpoint = self._rule(softmax_backward)(g, self._saved_logits(t, s), self._saved_logits(t, r))
         g_v = midpoint.transpose(-1, -2) @ g_mixed
         del midpoint, g_mixed
 
@@ -651,6 +661,13 @@ class Engine:
 
         return self.stem.transpose(grad)[:, :4]
 
+    def _drop_logits(self, where: str) -> None:
+        """Stop keeping the attention logits, after an out-of-memory error, and free what the failed pass held."""
+        self.keep_logits = False
+        gc.collect()
+        torch.cuda.empty_cache()
+        logger.warning("out of GPU memory in %s; recomputing the attention logits in the backward pass", where)
+
     def attribute(self, x: Tensor, mask: Tensor, references: Tensor):
         """The hypothetical attributions of one sequence, averaged over its references.
 
@@ -670,7 +687,16 @@ class Engine:
         n_references = references.shape[0]
 
         with torch.no_grad():
-            s = self.forward(torch.cat([x, mask], dim=1))
+            try:
+                s = self.forward(torch.cat([x, mask], dim=1))
+            except torch.cuda.OutOfMemoryError:
+                if not self.keep_logits:
+                    raise
+                s = None
+
+            if s is None:
+                self._drop_logits("the sequence's forward pass")
+                s = self.forward(torch.cat([x, mask], dim=1))
             y = self.outputs(s)[0]
 
             total = torch.zeros_like(x[0])
@@ -687,12 +713,17 @@ class Engine:
                     y_ref.append(self.outputs(r))
                     del r
                 except torch.cuda.OutOfMemoryError as exc:
-                    if step == 1:
+                    if step == 1 and not self.keep_logits:
                         raise
                     failed = str(exc).strip().split("\n")[0]
 
                 if failed is not None:
                     r = multipliers = ref = None
+                    if step == 1:
+                        s = s._replace(transformers=[t._replace(logits=None) for t in s.transformers])
+                        self._drop_logits("one reference per step")
+                        continue
+
                     gc.collect()
                     torch.cuda.empty_cache()
                     logger.warning(
